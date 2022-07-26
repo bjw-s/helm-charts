@@ -21,21 +21,53 @@ jobs:
           app_id: ${{ secrets.BJWS_APP_ID }}
           private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
 
-      - name: Checkout
+      - name: Checkout charts branch
         uses: actions/checkout@v3
         with:
           token: ${{ steps.get-app-token.outputs.token }}
+          path: 'src'
+          fetch-depth: 0
 
-      - name: Configure Git
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.get-app-token.outputs.token }}
+          path: 'dest'
+          ref: 'gh-pages'
+          fetch-depth: 0
+
+      - name: Install Helm
+        uses: Azure/setup-helm@v3.3
+
+      - name: Package Helm Charts
+        shell: bash
+        env:
+          SRC_DIR: "src/charts"
+          DEST_DIR: "dest"
+        run: |
+          CHARTS=$(find "$SRC_DIR" -type f -name 'Chart.yaml' | sed -r 's|/[^/]+$||' | sort | uniq)
+
+          for CHART in $CHARTS ; do
+            mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
+            CHART_TYPE=${CHART_PATH_PARTS[2]}
+
+            helm dep up "$CHART"
+            helm package "$CHART" -u -d "$DEST_DIR/$CHART_TYPE"
+          done
+
+      - name: Create new index
+        shell: bash
+        working-directory: dest
+        run: |
+          helm repo index . --url https://bjw-s.github.io/helm-charts/
+
+      - name: Push changes
+        shell: bash
+        working-directory: dest
         run: |
           git config user.name "bjw-s-bot[bot]"
           git config user.email "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"
-
-      - name: Publish Helm charts
-        uses: stefanprodan/helm-gh-pages@v1.5.0
-        with:
-          token: ${{ steps.get-app-token.outputs.token }}
-          charts_url: https://bjw-s.github.io/library-charts/
-          charts_dir: charts
-          target_dir: charts
-          index_dir: .
+          git add $(git ls-files -o --exclude-standard)
+          git add index.yaml
+          git commit -m "Updated from ref: $GITHUB_SHA"
+          git push
