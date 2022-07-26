@@ -35,6 +35,7 @@ jobs:
         uses: stefanprodan/helm-gh-pages@v1.5.0
         with:
           token: ${{ steps.get-app-token.outputs.token }}
+          charts_url: https://bjw-s.github.io/library-charts/
           charts_dir: charts
           target_dir: charts
           index_dir: .
