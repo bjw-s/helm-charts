@@ -1,0 +1,40 @@
+name: "Charts: Release"
+
+concurrency: helm-release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "charts/**"
+
+jobs:
+  release-charts:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Get k8s-at-home token
+        id: get-app-token
+        uses: getsentry/action-github-app-token@v1
+        with:
+          app_id: ${{ secrets.BJWS_APP_ID }}
+          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.get-app-token.outputs.token }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "bjw-s-bot[bot]"
+          git config user.email "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"
+
+      - name: Publish Helm charts
+        uses: stefanprodan/helm-gh-pages@v1.5.0
+        with:
+          token: ${{ steps.get-app-token.outputs.token }}
+          charts_dir: charts
+          target_dir: charts
+          index_dir: .
