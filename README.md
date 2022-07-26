@@ -1,2 +1,2 @@
-# library-charts
-Helm library charts
+# helm-charts
+A collection of Helm charts
