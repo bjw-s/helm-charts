@@ -40,8 +40,11 @@ jobs:
         if: inputs.chartChanges != ''
         run: |
           EXCLUDED=$(yq eval '.excluded-charts-install | .. style="flow"' .ci/ct/ct.yaml)
-          CHARTS_JSON=$(yq --null-input eval "\"${{ inputs.chartChanges }}\" | split(\" \") | .. style=\"flow\"")
+          echo $EXCLUDED
+          CHARTS_JSON=$(yq --null-input eval '"${{ inputs.chartChanges }}" | split(" ") | .. style="flow"')
+          echo $CHARTS_JSON
           OUTPUT_JSON=$(yq --null-input eval "$CHARTS_JSON - $EXCLUDED | .. style=\"flow\"")
+          echo $OUTPUT_JSON
           echo ::set-output name=charts::${OUTPUT_JSON}
           if [[ $(echo ${OUTPUT_JSON} | jq -c '. | length') -gt 0 ]]; then
             echo "::set-output name=detected::true"
