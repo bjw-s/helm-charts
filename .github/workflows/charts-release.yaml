@@ -55,19 +55,38 @@ jobs:
             helm package "$CHART" -u -d "$DEST_DIR/$CHART_TYPE"
           done
 
-      - name: Create new index
-        shell: bash
-        working-directory: dest
-        run: |
-          helm repo index . --url https://bjw-s.github.io/helm-charts/
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push changes
+      - name: Push Charts to GHCR
         shell: bash
-        working-directory: dest
+        env:
+          DEST_DIR: "dest"
         run: |
-          git config user.name "bjw-s-bot[bot]"
-          git config user.email "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"
-          git add $(git ls-files -o --exclude-standard)
-          git add index.yaml
-          git commit -m "Updated from ref: $GITHUB_SHA"
-          git push
+          for pkg in $DEST_DIR/**/*; do
+            if [ -z "${pkg:-}" ]; then
+              break
+            fi
+            helm push "${pkg}" oci://ghcr.io/${GITHUB_REPOSITORY_OWNER}/helm-charts
+          done
+
+      # - name: Create new index
+      #   shell: bash
+      #   working-directory: dest
+      #   run: |
+      #     helm repo index . --url https://bjw-s.github.io/helm-charts/
+
+      # - name: Push changes
+      #   shell: bash
+      #   working-directory: dest
+      #   run: |
+      #     git config user.name "bjw-s-bot[bot]"
+      #     git config user.email "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"
+      #     git add $(git ls-files -o --exclude-standard)
+      #     git add index.yaml
+      #     git commit -m "Updated from ref: $GITHUB_SHA"
+      #     git push
