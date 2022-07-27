@@ -9,6 +9,9 @@ on:
       chartChangesDetected:
         required: true
         type: string
+      chartChanges:
+        required: true
+        type: string
 
 jobs:
   lint:
@@ -34,20 +37,20 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.2.1
 
-      - name: Collect changes
-        id: list-changed
-        if: inputs.chartChangesDetected == 'true'
-        run: |
-          EXCLUDED=$(yq eval -o=json '.excluded-charts // []' .ci/ct/ct-lint.yaml)
-          CHARTS=$(ct list-changed --config .ci/ct/ct-lint.yaml)
-          CHARTS_JSON=$(echo "${CHARTS}" | jq -R -s -c 'split("\n")[:-1]')
-          OUTPUT_JSON=$(echo "{\"excluded\": ${EXCLUDED}, \"all\": ${CHARTS_JSON}}" | jq -c '.all-.excluded')
-          echo ::set-output name=charts::${OUTPUT_JSON}
-          if [[ $(echo ${OUTPUT_JSON} | jq -c '. | length') -gt 0 ]]; then
-            echo "::set-output name=detected::true"
-          fi
+      # - name: Collect changes
+      #   id: list-changed
+      #   if: inputs.chartChangesDetected == 'true'
+      #   run: |
+      #     EXCLUDED=$(yq eval -o=json '.excluded-charts // []' .ci/ct/ct-lint.yaml)
+      #     CHARTS=$(ct list-changed --config .ci/ct/ct-lint.yaml)
+      #     CHARTS_JSON=$(echo "${CHARTS}" | jq -R -s -c 'split("\n")[:-1]')
+      #     OUTPUT_JSON=$(echo "{\"excluded\": ${EXCLUDED}, \"all\": ${CHARTS_JSON}}" | jq -c '.all-.excluded')
+      #     echo ::set-output name=charts::${OUTPUT_JSON}
+      #     if [[ $(echo ${OUTPUT_JSON} | jq -c '. | length') -gt 0 ]]; then
+      #       echo "::set-output name=detected::true"
+      #     fi
 
       - name: Run chart-testing (lint)
         id: lint
-        if: steps.list-changed.outputs.detected == 'true'
+        if: inputs.chartChanges != ''
         run: ct lint --config .ci/ct/ct-lint.yaml
