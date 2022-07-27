@@ -60,3 +60,5 @@ jobs:
       - name: Collect changes
         id: collect-changes
         uses: ./.github/actions/collect-changes
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
