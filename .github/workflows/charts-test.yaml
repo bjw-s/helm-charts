@@ -11,39 +11,39 @@ on:
         type: string
 
 jobs:
-  unit-test:
-    name: Run unit tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: ${{ inputs.checkoutCommit }}
+  # unit-test:
+  #   name: Run unit tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
+  #         ref: ${{ inputs.checkoutCommit }}
 
-      - name: Install Kubernetes tools
-        uses: yokawasa/action-setup-kube-tools@v0.8.2
-        with:
-          setup-tools: |
-            helmv3
-          helm: "3.8.0"
+  #     - name: Install Kubernetes tools
+  #       uses: yokawasa/action-setup-kube-tools@v0.8.2
+  #       with:
+  #         setup-tools: |
+  #           helmv3
+  #         helm: "3.8.0"
 
-      - name: Install Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.7
+  #     - name: Install Ruby
+  #       uses: ruby/setup-ruby@v1
+  #       with:
+  #         ruby-version: 2.7
 
-      - name: Install dependencies
-        env:
-          RUBYJQ_USE_SYSTEM_LIBRARIES: 1
-        run: |
-          sudo apt-get update
-          sudo apt-get install libjq-dev
-          bundle install
+  #     - name: Install dependencies
+  #       env:
+  #         RUBYJQ_USE_SYSTEM_LIBRARIES: 1
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install libjq-dev
+  #         bundle install
 
-      - name: Run tests
-        run: |
-          bundle exec m -r ./test/
+  #     - name: Run tests
+  #       run: |
+  #         bundle exec m -r ./test/
 
   generate-install-matrix:
     name: Generate matrix for install
@@ -51,7 +51,8 @@ jobs:
     outputs:
       matrix: |
         {
-          "chart": ${{ steps.list-changed.outputs.charts }}
+          "chart": ${{ steps.list-changed.outputs.charts }},
+          "k8s_version": ["v1.21", "v1.24"]
         }
       detected: ${{ steps.list-changed.outputs.detected }}
     steps:
@@ -109,14 +110,14 @@ jobs:
       - name: Create k3d cluster
         uses: nolar/setup-k3d-k3s@v1
         with:
-          version: v1.19
+          version: ${{ matrix.k8s_version }}
 
       - name: Remove node taints
         run: |
           kubectl taint --all=true nodes node.cloudprovider.kubernetes.io/uninitialized- || true
 
       - name: Run chart-testing (install)
-        run: ct install --config .github/ct-install.yaml --charts ${{ matrix.chart }}
+        run: ct install --config .ci/ct/ct.yaml --charts ${{ matrix.chart }}
 
   # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
   install_success:
