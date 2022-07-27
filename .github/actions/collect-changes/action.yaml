@@ -10,7 +10,7 @@ outputs:
     value: ${{ steps.filter.outputs.addedOrModified_files }}
   addedOrModifiedCharts:
     description: "A list of the charts changed"
-    value: ${{ steps.filter-charts.outputs.addedOrModified }}
+    value: ${{ steps.filter-charts.outputs.addedOrModifiedCharts }}
 
 runs:
   using: "composite"
@@ -24,22 +24,34 @@ runs:
           addedOrModified:
             - added|modified: 'charts/*/**'
 
+    # - name: Collect changed charts
+    #   if: |
+    #     steps.filter.outputs.addedOrModified == 'true'
+    #   id: filter-charts
+    #   shell: bash
+    #   run: |
+    #     CHARTS=()
+    #     PATHS=(${{ steps.filter.outputs.addedOrModified_files }})
+    #     # Get only the chart paths
+    #     for CHARTPATH in "${PATHS[@]}"
+    #     do
+    #       IFS='/' read -r -a path_parts <<< "${CHARTPATH}"
+    #       CHARTS+=("${path_parts[1]}/${path_parts[2]}")
+    #     done
+
+    #     # Remove duplicates
+    #     CHARTS=( `printf "%s\n" "${CHARTS[@]}" | sort -u` )
+    #     # Set output to changed charts
+    #     printf "::set-output name=addedOrModifiedCharts::%s\n" "${CHARTS[*]}"
+
+    - name: Set up chart-testing
+      uses: helm/chart-testing-action@v2.2.1
+
     - name: Collect changed charts
-      if: |
-        steps.filter.outputs.addedOrModified == 'true'
-      id: filter-charts
+      id: changed-charts
       shell: bash
       run: |
-        CHARTS=()
-        PATHS=(${{ steps.filter.outputs.addedOrModified_files }})
-        # Get only the chart paths
-        for CHARTPATH in "${PATHS[@]}"
-        do
-          IFS='/' read -r -a path_parts <<< "${CHARTPATH}"
-          CHARTS+=("${path_parts[1]}/${path_parts[2]}")
-        done
-
-        # Remove duplicates
-        CHARTS=( `printf "%s\n" "${CHARTS[@]}" | sort -u` )
+        CHARTS=$(ct list-changed --config .ci/ct/ct-lint.yaml)
+        echo "Charts: ${CHARTS}"
         # Set output to changed charts
-        printf "::set-output name=addedOrModified::%s\n" "${CHARTS[*]}"
+        printf "::set-output name=addedOrModifiedCharts::%s\n" "${CHARTS[*]}"
