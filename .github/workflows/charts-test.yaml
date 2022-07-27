@@ -110,6 +110,9 @@ jobs:
     needs:
       - generate-test-matrix
     if: needs.generate-test-matrix.outputs.detected == 'true'
+    strategy:
+      matrix: ${{ fromJson(needs.generate-test-matrix.outputs.matrix) }}
+      fail-fast: false
     steps:
       - name: Checkout
         uses: actions/checkout@v3
