@@ -7,7 +7,6 @@ version: 6.3.2
 kubeVersion: ">=1.16.0-0"
 keywords:
   - airsonic
-  - trigger_ci
 home: https://github.com/k8s-at-home/charts/tree/master/charts/stable/airsonic
 icon: https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/airsonic-logo.png
 sources:

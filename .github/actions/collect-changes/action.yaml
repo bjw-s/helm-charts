@@ -1,6 +1,15 @@
 name: "Collect changes"
 description: "Collects and stores changed files/charts"
 
+inputs:
+  token:
+    required: true
+    description: "The Github API token to use"
+  working-directory:
+    required: false
+    description: "The working dir to use when checking for changes"
+    default: "."
+
 outputs:
   changesDetected:
     description: "Whether or not changes to files have been detected"
@@ -18,13 +27,12 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Set up chart-testing
-      uses: helm/chart-testing-action@v2.2.1
-
     - name: Collect changed files
       uses: dorny/paths-filter@v2
       id: filter
       with:
+        token: ${{ inputs.token }}
+        working-directory: ${{ inputs.working-directory }}
         list-files: shell
         filters: |
           addedOrModified:
@@ -36,6 +44,18 @@ runs:
       id: changed-charts
       shell: bash
       run: |
-        CHARTS=$(ct list-changed --config .ci/ct/ct-lint.yaml)
+        CHARTS=()
+        PATHS=(${{ steps.filter.outputs.chartsAddedOrModified_files }})
+
+        # Get only the chart paths
+        for CHARTPATH in "${PATHS[@]}"
+        do
+          IFS='/' read -r -a path_parts <<< "${CHARTPATH}"
+          CHARTS+=("${path_parts[1]}/${path_parts[2]}")
+        done
+
+        # Remove duplicates
+        CHARTS=( `printf "%s\n" "${CHARTS[@]}" | sort -u` )
+
         # Set output to changed charts
         printf "::set-output name=addedOrModifiedCharts::%s\n" "${CHARTS[*]}"

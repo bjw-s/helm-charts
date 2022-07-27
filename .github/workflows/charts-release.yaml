@@ -4,6 +4,11 @@ concurrency: helm-release
 
 on:
   workflow_dispatch:
+    inputs:
+      chart:
+        description: "Chart to release"
+        default: "_all_"
+        required: true
   push:
     branches:
       - main
@@ -12,6 +17,7 @@ on:
 
 jobs:
   release-charts:
+    name: Release charts
     runs-on: ubuntu-22.04
     steps:
       - name: Get k8s-at-home token
@@ -29,33 +35,27 @@ jobs:
           fetch-depth: 0
 
       - name: Collect changes
-        uses: dorny/paths-filter@v2
-        id: filter
+        id: collect-changes
+        uses: ./src/.github/actions/collect-changes
         with:
-          list-files: shell
+          token: ${{ steps.get-app-token.outputs.token }}
           working-directory: src
-          filters: |
-            chartsAddedOrModified:
-              - added|modified: 'charts/*/**'
 
-      - name: Collect changed charts
-        if: |
-          steps.filter.outputs.chartsAddedOrModified == 'true'
-        id: filter-charts
+      - name: Determine charts to release
+        id: charts-to-release
         shell: bash
         run: |
           CHARTS=()
-          PATHS=(${{ steps.filter.outputs.chartsAddedOrModified_files }})
-          # Get only the chart paths
-          for CHARTPATH in "${PATHS[@]}"
-          do
-            IFS='/' read -r -a path_parts <<< "${CHARTPATH}"
-            CHARTS+=("${path_parts[1]}/${path_parts[2]}")
-          done
-          # Remove duplicates
-          CHARTS=( `printf "%s\n" "${CHARTS[@]}" | sort -u` )
-          # Set output to changed charts
-          printf "::set-output name=addedOrModifiedCharts::%s\n" "${CHARTS[*]}"
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            if [ "${{ github.event.inputs.chart }}" == "_all_" ]; then
+              CHARTS=($(find "src/charts" -type f -name 'Chart.yaml' | sed -r 's|/[^/]+$||' | sed 's|src/charts/||' | sort | uniq))
+            else
+              CHARTS=(${{ github.event.inputs.chart }})
+            fi
+          elif [ "${{ steps.collect-changes.outputs.chartsAddedOrModified }}" == "true" ]; then
+            CHARTS=(${{ steps.collect-changes.outputs.addedOrModifiedCharts }})
+          fi
+          printf "::set-output name=charts::%s\n" "${CHARTS[*]}"
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v3
@@ -67,35 +67,37 @@ jobs:
 
       - name: Install Helm
         uses: Azure/setup-helm@v3.3
+        with:
+          token: ${{ steps.get-app-token.outputs.token }}
 
       - name: Package Helm Charts
         shell: bash
         env:
           SRC_DIR: "src/charts"
           DEST_DIR: "dest"
-          CHARTS: "${{ steps.filter-charts.outputs.addedOrModifiedCharts }}"
+          CHARTS: "${{ steps.charts-to-release.outputs.charts }}"
         run: |
           for CHART in $CHARTS ; do
             mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
-            CHART_TYPE=${CHART_PATH_PARTS[2]}
+            CHART_TYPE=${CHART_PATH_PARTS[0]}
 
             helm dep up "${SRC_DIR}/${CHART}"
             helm package "${SRC_DIR}/${CHART}" -u -d "${DEST_DIR}/${CHART_TYPE}"
           done
 
-      # - name: Create new index
-      #   shell: bash
-      #   working-directory: dest
-      #   run: |
-      #     helm repo index . --url https://bjw-s.github.io/helm-charts/
+      - name: Update chart index
+        shell: bash
+        working-directory: dest
+        run: |
+          helm repo index . --url https://bjw-s.github.io/helm-charts/
 
-      # - name: Push changes
-      #   shell: bash
-      #   working-directory: dest
-      #   run: |
-      #     git config user.name "bjw-s-bot[bot]"
-      #     git config user.email "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"
-      #     git add $(git ls-files -o --exclude-standard)
-      #     git add index.yaml
-      #     git commit -m "Updated from ref: $GITHUB_SHA"
-      #     git push
+      - name: Commit changes
+        shell: bash
+        working-directory: dest
+        run: |
+          git config user.name "bjw-s-bot[bot]"
+          git config user.email "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"
+          git add $(git ls-files -o --exclude-standard)
+          git add index.yaml
+          git commit -m "Updated from ref: $GITHUB_SHA"
+          git push
