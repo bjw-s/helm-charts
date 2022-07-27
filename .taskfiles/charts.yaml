@@ -1,15 +1,23 @@
 ---
 version: "3"
 
+vars:
+  CT_IMAGE: quay.io/helmpack/chart-testing:v3.6.0
+  CT_CONFIG_FILE: .ci/ct/ct.yaml
+  CHARTS_EXCLUDED_FROM_LINT:
+    sh: yq eval '.excluded-charts-lint | join(",")' {{.CT_CONFIG_FILE}}
+  CHARTS_EXCLUDED_FROM_INSTALL:
+    sh: yq eval '.excluded-charts-install | join(",")' {{.CT_CONFIG_FILE}}
+
 tasks:
   lint:
     desc: Run ct-lint on charts
     cmds:
-      - docker run --rm -it --workdir=/data --volume $(pwd):/data quay.io/helmpack/chart-testing:v3.6.0 ct lint --config .ci/ct/ct-lint.yaml
+      - docker run --rm -it --workdir=/data --volume $(pwd):/data {{.CT_IMAGE}} ct lint --config {{.CT_CONFIG_FILE}} --excluded-charts "{{.CHARTS_EXCLUDED_FROM_LINT}}"
     silent: true
 
   lint-all:
     desc: Run ct-lint on all charts
     cmds:
-      - docker run --rm -it --workdir=/data --volume $(pwd):/data quay.io/helmpack/chart-testing:v3.6.0 ct lint --config .ci/ct/ct-lint.yaml --all
+      - docker run --rm -it --workdir=/data --volume $(pwd):/data {{.CT_IMAGE}} ct lint --config {{.CT_CONFIG_FILE}} --all --excluded-charts "{{.CHARTS_EXCLUDED_FROM_LINT}}"
     silent: true
