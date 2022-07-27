@@ -25,7 +25,7 @@ runs:
         list-files: shell
         filters: |
           addedOrModified:
-            - added|modified: 'src/charts/*/**'
+            - added|modified: 'charts/*/**'
 
     # - name: Collect changed charts
     #   if: |
@@ -50,8 +50,10 @@ runs:
     - name: Collect changed charts
       id: changed-charts
       shell: bash
-      working-directory: src
       run: |
+        pwd
+        ls
+        which ct
         CHARTS=$(ct list-changed --config .ci/ct/ct-lint.yaml)
         # Set output to changed charts
         printf "::set-output name=addedOrModifiedCharts::%s\n" "${CHARTS[*]}"
