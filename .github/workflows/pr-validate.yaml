@@ -42,7 +42,7 @@ jobs:
       - pr-metadata
       # - charts-changelog
     with:
-      checkoutCommit: ${GITHUB_SHA}
+      checkoutCommit: ${{ github.sha }}
       chartChangesDetected: ${{ needs.pr-metadata.outputs.chartChangesDetected }}
       chartChanges: ${{ needs.pr-metadata.outputs.addedOrModifiedCharts }}
 
