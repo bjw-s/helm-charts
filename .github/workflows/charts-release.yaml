@@ -71,7 +71,7 @@ jobs:
       - name: Package Helm Charts
         shell: bash
         env:
-          SRC_DIR: "src/charts"
+          SRC_DIR: "src"
           DEST_DIR: "dest"
           CHARTS: "${{ steps.filter-charts.outputs.addedOrModifiedCharts }}"
         run: |
@@ -79,8 +79,8 @@ jobs:
             mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
             CHART_TYPE=${CHART_PATH_PARTS[2]}
 
-            helm dep up "$CHART"
-            helm package "$CHART" -u -d "$DEST_DIR/$CHART_TYPE"
+            helm dep up "${SRC_DIR}/${CHART}"
+            helm package "${SRC_DIR}/${CHART}" -u -d "${DEST_DIR}/${CHART_TYPE}"
           done
 
       # - name: Create new index
