@@ -51,9 +51,7 @@ runs:
       id: changed-charts
       shell: bash
       run: |
-        pwd
-        ls
-        which ct
+        ct list-changed --config .ci/ct/ct-lint.yaml
         CHARTS=$(ct list-changed --config .ci/ct/ct-lint.yaml)
         # Set output to changed charts
         printf "::set-output name=addedOrModifiedCharts::%s\n" "${CHARTS[*]}"
