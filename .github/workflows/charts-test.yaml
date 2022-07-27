@@ -98,7 +98,9 @@ jobs:
         with:
           setup-tools: |
             helmv3
+            kubectl
           helm: "3.6.3"
+          kubectl: "${{ matrix.k8s_version }}"
 
       - uses: actions/setup-python@v4
         with:
