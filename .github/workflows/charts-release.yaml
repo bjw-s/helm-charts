@@ -33,9 +33,10 @@ jobs:
         id: filter
         with:
           list-files: shell
+          working-directory: src
           filters: |
             chartsAddedOrModified:
-              - added|modified: 'src/charts/*/**'
+              - added|modified: 'charts/*/**'
 
       - name: Collect changed charts
         if: |
