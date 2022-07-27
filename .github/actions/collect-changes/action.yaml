@@ -10,11 +10,14 @@ outputs:
     value: ${{ steps.filter.outputs.addedOrModified_files }}
   addedOrModifiedCharts:
     description: "A list of the charts changed"
-    value: ${{ steps.filter-charts.outputs.addedOrModifiedCharts }}
+    value: ${{ steps.changed-charts.outputs.addedOrModifiedCharts }}
 
 runs:
   using: "composite"
   steps:
+    - name: Set up chart-testing
+      uses: helm/chart-testing-action@v2.2.1
+
     - name: Collect changed files
       uses: dorny/paths-filter@v2
       id: filter
@@ -22,7 +25,7 @@ runs:
         list-files: shell
         filters: |
           addedOrModified:
-            - added|modified: 'charts/*/**'
+            - added|modified: 'src/charts/*/**'
 
     # - name: Collect changed charts
     #   if: |
@@ -44,14 +47,11 @@ runs:
     #     # Set output to changed charts
     #     printf "::set-output name=addedOrModifiedCharts::%s\n" "${CHARTS[*]}"
 
-    - name: Set up chart-testing
-      uses: helm/chart-testing-action@v2.2.1
-
     - name: Collect changed charts
       id: changed-charts
       shell: bash
+      working-directory: src
       run: |
         CHARTS=$(ct list-changed --config .ci/ct/ct-lint.yaml)
-        echo "Charts: ${CHARTS}"
         # Set output to changed charts
         printf "::set-output name=addedOrModifiedCharts::%s\n" "${CHARTS[*]}"
