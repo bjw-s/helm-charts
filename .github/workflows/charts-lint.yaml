@@ -10,6 +10,9 @@ on:
         required: true
         type: string
 
+env:
+  HELM_VERSION: 3.9.2
+
 jobs:
   lint:
     name: Lint charts
@@ -26,10 +29,7 @@ jobs:
         with:
           setup-tools: |
             helmv3
-          helm: "3.8.0"
-
-      - name: Install Helm
-        uses: Azure/setup-helm@v3.3
+          helm: "${{ env.HELM_VERSION }}"
 
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.2.1
