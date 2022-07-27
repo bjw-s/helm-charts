@@ -43,7 +43,6 @@ jobs:
       # - charts-changelog
     with:
       checkoutCommit: ${{ github.sha }}
-      chartChangesDetected: ${{ needs.pr-metadata.outputs.chartChangesDetected }}
       chartChanges: ${{ needs.pr-metadata.outputs.addedOrModifiedCharts }}
 
   # charts-test:
