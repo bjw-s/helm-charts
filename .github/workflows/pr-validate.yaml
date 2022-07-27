@@ -20,12 +20,12 @@ jobs:
   pr-metadata:
     uses: bjw-s/helm-charts/.github/workflows/pr-metadata.yaml@main
 
-  # pre-commit-check:
-  #   uses: bjw-s/helm-charts/.github/workflows/pre-commit-check.yaml@main
-  #   needs:
-  #     - pr-metadata
-  #   with:
-  #     modifiedFiles: ${{ needs.pr-metadata.outputs.addedOrModifiedFiles }}
+  pre-commit-check:
+    uses: bjw-s/helm-charts/.github/workflows/pre-commit-check.yaml@main
+    needs:
+      - pr-metadata
+    with:
+      modifiedFiles: ${{ needs.pr-metadata.outputs.addedOrModifiedFiles }}
 
   # charts-changelog:
   #   uses: bjw-s/helm-charts/.github/workflows/charts-changelog.yaml@main
