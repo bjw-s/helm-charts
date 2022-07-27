@@ -89,7 +89,7 @@ jobs:
           kubectl taint --all=true nodes node.cloudprovider.kubernetes.io/uninitialized- || true
 
       - name: Run chart-testing (install)
-        run: ct install --config .ci/ct/ct.yaml --charts ${{ matrix.chart }}
+        run: ct install --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
 
   # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
   install_success:
@@ -131,7 +131,8 @@ jobs:
       - name: Run tests
         run: |
           helm plugin install https://github.com/vbehar/helm3-unittest --version v1.0.16
-          cd ${{ matrix.chart }}
+          cd "charts/${{ matrix.chart }}"
+          helm dep update
           helm unittest -f "tests/**/*_test.yaml" .
 
   # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
