@@ -39,7 +39,7 @@ jobs:
         id: list-changed
         if: inputs.chartChanges != ''
         run: |
-          EXCLUDED=$(yq eval '.excluded-charts-install | .. style="flow"' .ci/ct/ct.yaml)
+          EXCLUDED=$(yq -o json eval '.excluded-charts-install' .ci/ct/ct.yaml)
           CHARTS_JSON=$(yq --null-input -o json eval '"${{ inputs.chartChanges }}" | split(" ")')
           OUTPUT_JSON=$(yq --null-input -o json eval "$CHARTS_JSON - $EXCLUDED")
           echo ::set-output name=charts::${OUTPUT_JSON}
