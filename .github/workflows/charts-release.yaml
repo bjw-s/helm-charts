@@ -55,7 +55,7 @@ jobs:
             else
               CHARTS=(${{ github.event.inputs.chart }})
             fi
-          elif [ "${{ steps.collect-changes.outputs.chartsAddedOrModified }}" == "true" ]; then
+          elif [ "${{ steps.collect-changes.outputs.chartChangesDetected }}" == "true" ]; then
             CHARTS=(${{ steps.collect-changes.outputs.addedOrModifiedCharts }})
           fi
           printf "::set-output name=charts::%s\n" "${CHARTS[*]}"

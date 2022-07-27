@@ -8,7 +8,8 @@ helm-extra-args: --timeout 600s
 
 chart-dirs:
   - charts/library
-  - charts/stable
+  - charts/apps
+  - charts/other
 
 excluded-charts-lint: []
 

@@ -10,7 +10,7 @@ keywords:
   - telegram
   - bot
   - alerting
-home: https://github.com/k8s-at-home/charts/tree/master/charts/stable/alertmanager-bot
+home: https://github.com/k8s-at-home/charts/tree/master/charts/apps/alertmanager-bot
 icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
 sources:
   - https://hub.docker.com/r/metalmatze/alertmanager-bot

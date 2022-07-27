@@ -1,0 +1,18 @@
+suite: configmap Pod metadata
+templates:
+  - common.yaml
+tests:
+  - it: default metadata should pass
+    set:
+      configmap:
+        config:
+          enabled: true
+    asserts:
+      - documentIndex: &ControllerDoc 1
+        isKind:
+          of: Deployment
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.template.metadata.annotations
+          value:
+            checksum/config: 13f83afec54139bc9b797ac55ba4d79494f6fd94c0159101836ef127bec95a28
