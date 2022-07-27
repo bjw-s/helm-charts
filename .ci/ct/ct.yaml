@@ -13,7 +13,8 @@ chart-dirs:
 
 excluded-charts-lint: []
 
-excluded-charts-install: []
+excluded-charts-install:
+  - library/common
 
 chart-repos:
   - bitnami=https://charts.bitnami.com/bitnami
