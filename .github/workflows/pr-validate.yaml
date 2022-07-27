@@ -52,4 +52,4 @@ jobs:
       # - charts-changelog
     with:
       checkoutCommit: ${{ github.sha }}
-      chartChangesDetected: ${{ needs.pr-metadata.outputs.addedOrModified }}
+      chartChanges: ${{ needs.pr-metadata.outputs.addedOrModifiedCharts }}
