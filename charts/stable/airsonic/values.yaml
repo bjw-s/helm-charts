@@ -1,0 +1,99 @@
+#
+# IMPORTANT NOTE
+#
+# This chart inherits from our common library chart. You can check the default values/options here:
+# https://github.com/k8s-at-home/library-charts/tree/main/charts/stable/common/values.yaml
+#
+
+image:
+  # -- image repository
+  repository: airsonicadvanced/airsonic-advanced
+  # -- image tag
+  # The specific digest is for the `amd64` image, but arm compatible images are also available.
+  tag: latest@sha256:f7cbafac28063dce99b443037547b4fe40ae270b7bc5e47efea9bb5d6751ca9d
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+
+# -- environment variables.
+# @default -- See below
+env:
+  # -- Set the container timezone
+  TZ: UTC
+  # -- Used to set the base path for reverse proxies eg. /airsonic, /music, etc.
+  CONTEXT_PATH:  # "url-base"
+  # -- For passing additional java options. For some reverse proxies, you may need to pass `JAVA_OPTS=-Dserver.use-forward-headers=true` for airsonic to generate the proper URL schemes.
+  JAVA_OPTS:
+
+# -- Enable Kubernetes service links.
+# Disabled by default, since AIRSONIC_* environment vars potentially clash with the application.
+enableServiceLinks: false
+
+# -- Configures service settings for the chart. Normally this does not need to be modified.
+# @default -- See values.yaml
+service:
+  main:
+    ports:
+      http:
+        port: 4040
+
+ingress:
+  # -- Enable and configure ingress settings for the chart under this key.
+  # @default -- See values.yaml
+  main:
+    enabled: false
+
+# -- Configure persistence settings for the chart under this key.
+# @default -- See values.yaml
+persistence:
+  config:
+    enabled: false
+    mountPath: /var/airsonic
+  music:
+    enabled: false
+    mountPath: /var/music
+  playlists:
+    enabled: false
+    mountPath: /var/playlists
+  podcasts:
+    enabled: false
+    mountPath: /var/podcasts
+  media:
+    enabled: false
+    mountPath: /var/media
+
+# -- Configures the probes for the main Pod.
+# @default -- See values.yaml
+probes:
+  liveness:
+    enabled: true
+    custom: true
+    spec:
+      httpGet:
+        path: /rest/ping
+        port: http
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      timeoutSeconds: 1
+      failureThreshold: 3
+  readiness:
+    enabled: true
+    custom: true
+    spec:
+      httpGet:
+        path: /rest/ping
+        port: http
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      timeoutSeconds: 1
+      failureThreshold: 3
+  startup:
+    enabled: true
+    custom: true
+    spec:
+      httpGet:
+        path: /rest/ping
+        port: http
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      timeoutSeconds: 1
+      failureThreshold: 30
