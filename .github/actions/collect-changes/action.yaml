@@ -3,8 +3,11 @@ description: "Collects and stores changed files/charts"
 
 outputs:
   changesDetected:
-    description: "Whether or not changes to charts have been detected"
+    description: "Whether or not changes to files have been detected"
     value: ${{ steps.filter.outputs.addedOrModified }}
+  chartChangesDetected:
+    description: "Whether or not changes to charts have been detected"
+    value: ${{ steps.filter.outputs.chartsAddedOrModified }}
   addedOrModifiedFiles:
     description: "A list of the files changed"
     value: ${{ steps.filter.outputs.addedOrModified_files }}
@@ -26,6 +29,8 @@ runs:
         filters: |
           addedOrModified:
             - added|modified: '**'
+          chartsAddedOrModified:
+            - added|modified: 'charts/*/**'
 
     - name: Collect changed charts
       id: changed-charts

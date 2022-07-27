@@ -36,14 +36,15 @@ jobs:
   #     isRenovatePR: ${{ needs.pr-metadata.outputs.isRenovatePR }}
   #     modifiedCharts: ${{ needs.pr-metadata.outputs.addedOrModifiedCharts }}
 
-  # charts-lint:
-  #   uses: bjw-s/helm-charts/.github/workflows/charts-lint.yaml@main
-  #   needs:
-  #     - pr-metadata
-  #     - charts-changelog
-  #   with:
-  #     checkoutCommit: ${{ needs.charts-changelog.outputs.commitHash }}
-  #     chartChangesDetected: ${{ needs.pr-metadata.outputs.addedOrModified }}
+  charts-lint:
+    uses: bjw-s/helm-charts/.github/workflows/charts-lint.yaml@main
+    needs:
+      - pr-metadata
+      # - charts-changelog
+    with:
+      checkoutCommit: ${GITHUB_SHA}
+      chartChangesDetected: ${{ needs.pr-metadata.outputs.chartChangesDetected }}
+      chartChanges: ${{ needs.pr-metadata.outputs.addedOrModifiedCharts }}
 
   # charts-test:
   #   uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml@main
