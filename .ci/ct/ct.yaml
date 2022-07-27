@@ -8,11 +8,13 @@ helm-extra-args: --timeout 600s
 
 chart-dirs:
   - charts/library
-  - charts/stable
+  - charts/apps
+  - charts/other
 
 excluded-charts-lint: []
 
-excluded-charts-install: []
+excluded-charts-install:
+  - library/common
 
 chart-repos:
   - bitnami=https://charts.bitnami.com/bitnami

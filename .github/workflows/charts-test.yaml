@@ -35,16 +35,13 @@ jobs:
           fetch-depth: 0
           ref: ${{ inputs.checkoutCommit }}
 
-      - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2.2.1
-
       - name: Run chart-testing (list-changed)
         id: list-changed
         if: inputs.chartChanges != ''
         run: |
-          EXCLUDED=$(yq eval '.excluded-charts-install | join(",")' .ci/ct/ct.yaml)
-          CHARTS=$(ct list-changed --config .ci/ct/ct.yaml --excluded-charts "${EXCLUDED}")
-          OUTPUT_JSON=$(echo "${CHARTS}" | jq -R -s -c 'split("\n")[:-1]')
+          EXCLUDED=$(yq -o json eval '.excluded-charts-install' .ci/ct/ct.yaml)
+          CHARTS_JSON=$(echo "${{ inputs.chartChanges }}" | yq -o json eval 'split(" ")' -)
+          OUTPUT_JSON=$(yq --null-input "$CHARTS_JSON - $EXCLUDED | .. style= \"flow\"")
           echo ::set-output name=charts::${OUTPUT_JSON}
           if [[ $(echo ${OUTPUT_JSON} | jq -c '. | length') -gt 0 ]]; then
             echo "::set-output name=detected::true"

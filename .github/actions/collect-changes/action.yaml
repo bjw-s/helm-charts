@@ -18,8 +18,11 @@ outputs:
     description: "Whether or not changes to charts have been detected"
     value: ${{ steps.filter.outputs.chartsAddedOrModified }}
   addedOrModifiedFiles:
-    description: "A list of the files changed"
+    description: "A list of the files that changed"
     value: ${{ steps.filter.outputs.addedOrModified_files }}
+  addedOrModifiedChartFiles:
+    description: "A list of the chart files that changed"
+    value: ${{ steps.filter.outputs.chartsAddedOrModified_files }}
   addedOrModifiedCharts:
     description: "A list of the charts changed"
     value: ${{ steps.changed-charts.outputs.addedOrModifiedCharts }}

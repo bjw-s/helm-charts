@@ -1,0 +1,95 @@
+suite: container ports
+templates:
+  - common.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].ports[0]
+          value:
+            containerPort: null
+            name: http
+            protocol: TCP
+
+  - it: custom port should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              enabled: false
+            server:
+              enabled: true
+              port: 8080
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].ports[0]
+          value:
+            containerPort: 8080
+            name: server
+            protocol: TCP
+
+  - it: HTTP protocol should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              protocol: HTTP
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].ports[0]
+          value:
+            containerPort: null
+            name: http
+            protocol: TCP
+
+  - it: HTTPS protocol should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              protocol: HTTPS
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].ports[0]
+          value:
+            containerPort: null
+            name: http
+            protocol: TCP
+
+  - it: UDP protocol should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              protocol: UDP
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].ports[0]
+          value:
+            containerPort: null
+            name: http
+            protocol: UDP
