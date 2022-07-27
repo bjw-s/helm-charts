@@ -45,11 +45,11 @@ jobs:
       checkoutCommit: ${{ github.sha }}
       chartChanges: ${{ needs.pr-metadata.outputs.addedOrModifiedCharts }}
 
-  # charts-test:
-  #   uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml@main
-  #   needs:
-  #     - pr-metadata
-  #     - charts-changelog
-  #   with:
-  #     checkoutCommit: ${{ needs.charts-changelog.outputs.commitHash }}
-  #     chartChangesDetected: ${{ needs.pr-metadata.outputs.addedOrModified }}
+  charts-test:
+    uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml@main
+    needs:
+      - pr-metadata
+      # - charts-changelog
+    with:
+      checkoutCommit: ${{ github.sha }}
+      chartChangesDetected: ${{ needs.pr-metadata.outputs.addedOrModified }}
