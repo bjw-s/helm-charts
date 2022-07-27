@@ -15,6 +15,9 @@ on:
     paths:
       - "charts/**"
 
+env:
+  HELM_VERSION: 3.9.2
+
 jobs:
   release-charts:
     name: Release charts
@@ -31,7 +34,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ steps.get-app-token.outputs.token }}
-          path: 'src'
+          path: "src"
           fetch-depth: 0
 
       - name: Collect changes
@@ -61,14 +64,16 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ steps.get-app-token.outputs.token }}
-          path: 'dest'
-          ref: 'gh-pages'
+          path: "dest"
+          ref: "gh-pages"
           fetch-depth: 0
 
-      - name: Install Helm
-        uses: Azure/setup-helm@v3.3
+      - name: Install Kubernetes tools
+        uses: yokawasa/action-setup-kube-tools@v0.8.2
         with:
-          token: ${{ steps.get-app-token.outputs.token }}
+          setup-tools: |
+            helmv3
+          helm: "${{ env.HELM_VERSION }}"
 
       - name: Package Helm Charts
         shell: bash
