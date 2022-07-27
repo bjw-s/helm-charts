@@ -71,7 +71,7 @@ jobs:
       - name: Package Helm Charts
         shell: bash
         env:
-          SRC_DIR: "src"
+          SRC_DIR: "src/charts"
           DEST_DIR: "dest"
           CHARTS: "${{ steps.filter-charts.outputs.addedOrModifiedCharts }}"
         run: |
