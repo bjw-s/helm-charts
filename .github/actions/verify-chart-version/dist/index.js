@@ -62,6 +62,12 @@ function run() {
                 core.setFailed(`${chart} is not a valid Helm chart folder!`);
                 return;
             }
+            const octokit = github.getOctokit(githubToken);
+            const originalChartYamlContent = yield octokit.rest.repos.getContent({
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
+                path: `${chartYamlPath}z`
+            });
             const updatedChartYamlContent = yield fs.readFile(chartYamlPath, 'utf8');
             const updatedChartYaml = yield YAML.parse(updatedChartYamlContent);
             if (!updatedChartYaml.version) {

@@ -24,6 +24,13 @@ async function run() {
       return;
     }
 
+    const octokit = github.getOctokit(githubToken);
+    const originalChartYamlContent = await octokit.rest.repos.getContent({
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      path: `${chartYamlPath}z`
+    })
+
     const updatedChartYamlContent = await fs.readFile(chartYamlPath, 'utf8');
     const updatedChartYaml = await YAML.parse(updatedChartYamlContent);
     if (!updatedChartYaml.version) {
