@@ -7,7 +7,37 @@ entries:
           description: Upgraded `common` chart dependency to version 4.4.2
     apiVersion: v2
     appVersion: 10.6.2
-    created: "2022-07-27T18:03:58.260833176Z"
+    created: "2022-07-28T15:01:56.210316877Z"
+    dependencies:
+    - name: common
+      repository: https://library-charts.k8s-at-home.com
+      version: 4.4.2
+    description: Airsonic is a Free and Open Source community driven media server
+    digest: 4bb7bc8841228d46c2878b7bb6e3262132217f4bcce86730b399c450eb0bd35f
+    home: https://github.com/k8s-at-home/charts/tree/master/charts/apps/airsonic
+    icon: https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/airsonic-logo.png
+    keywords:
+    - airsonic
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - name: Patricol
+      url: https://patricol.co/
+    - email: me@bjw-s.dev
+      name: bjw-s
+    name: airsonic
+    sources:
+    - https://github.com/airsonic-advanced/airsonic-advanced
+    - https://github.com/k8s-at-home/charts/tree/master/charts/airsonic
+    urls:
+    - https://bjw-s.github.io/helm-charts/apps/airsonic-6.3.3.tgz
+    version: 6.3.3
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: Upgraded `common` chart dependency to version 4.4.2
+    apiVersion: v2
+    appVersion: 10.6.2
+    created: "2022-07-28T15:01:56.216059654Z"
     dependencies:
     - name: common
       repository: https://library-charts.k8s-at-home.com
@@ -38,7 +68,7 @@ entries:
           description: Upgraded `common` chart dependency to version 4.4.2
     apiVersion: v2
     appVersion: 0.4.3
-    created: "2022-07-27T18:03:58.264244101Z"
+    created: "2022-07-28T15:01:56.227151801Z"
     dependencies:
     - name: common
       repository: https://library-charts.k8s-at-home.com
@@ -65,7 +95,7 @@ entries:
     version: 6.3.2
   common:
   - apiVersion: v2
-    created: "2022-07-27T18:03:58.257263351Z"
+    created: "2022-07-28T15:01:56.212655008Z"
     description: Function library for k8s-at-home charts
     digest: c2c1a2dbd47879af2d1db15a577af39b8e838abddcb1ae58630c58fc6c4f52e0
     home: https://github.com/k8s-at-home/library-charts/tree/main/stable/common
@@ -85,4 +115,4 @@ entries:
     urls:
     - https://bjw-s.github.io/helm-charts/library/common-4.4.2.tgz
     version: 4.4.2
-generated: "2022-07-27T18:03:58.253852227Z"
+generated: "2022-07-28T15:01:56.207108534Z"
