@@ -22,4 +22,3 @@ jobs:
         id: verify-chart-version
         with:
           chart: charts/apps/airsonic
-          ref: heads/main
