@@ -37,7 +37,10 @@ async function run() {
       originalChartYamlFile = await octokit.rest.repos.getContent({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
-        path: `${chartYamlPath}`
+        path: `${chartYamlPath}`,
+        mediaType: {
+          format: "raw"
+        }
       });
     }
     catch (error){
