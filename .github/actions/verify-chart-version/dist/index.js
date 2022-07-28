@@ -110,12 +110,12 @@ function run() {
                 return;
             }
             if (originalChartVersion) {
+                if (updatedChartVersion == originalChartVersion) {
+                    core.setFailed(`Chart version has not been updated!`);
+                }
                 if (!semver.gt(updatedChartVersion, originalChartVersion)) {
                     core.setFailed(`Updated chart version ${updatedChartVersion} is < ${originalChartVersion}!`);
                     return;
-                }
-                if (updatedChartVersion == originalChartVersion) {
-                    core.setFailed(`Chart version has not been updated!`);
                 }
                 core.info(`Old chart version: ${originalChartVersion}`);
             }
