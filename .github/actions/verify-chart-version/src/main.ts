@@ -46,7 +46,8 @@ async function run() {
 
     if (originalChartYamlFile && "content" in originalChartYamlFile.data){
       const originalChartYamlContent = originalChartYamlFile.data.content.toString();
-      const originalChartYaml = await YAML.parse(originalChartYamlContent)
+      core.info(originalChartYamlContent);
+      const originalChartYaml = await YAML.parse(originalChartYamlContent);
       core.info(`Old chart version: ${originalChartYaml.version}`);
 
       if (updatedChartYaml.version == originalChartYaml.version) {
