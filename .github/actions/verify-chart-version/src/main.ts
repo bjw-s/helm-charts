@@ -1,10 +1,11 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import * as YAML from 'yaml';
 
 const fs = require('fs-extra');
 
 function getErrorMessage(error: unknown) {
-  if (error instanceof Error) return error.message
+  if (error instanceof Error) return error.message;
   return String(error)
 }
 
@@ -22,6 +23,14 @@ async function run() {
       core.setFailed(`${chart} is not a valid Helm chart folder!`);
       return;
     }
+
+    const updatedChartYamlContent = await fs.readFile(chartYamlPath, 'utf8');
+    const updatedChartYaml = await YAML.parse(updatedChartYamlContent);
+    if (!updatedChartYaml.version) {
+      core.setFailed(`${chartYamlPath} does not contain a version!`);
+      return;
+    }
+    core.info(`New version: ${updatedChartYaml.version}`);
   }
   catch (error) {
     core.setFailed(getErrorMessage(error));
