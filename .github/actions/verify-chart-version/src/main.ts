@@ -38,9 +38,6 @@ async function run() {
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
         path: `${chartYamlPath}`,
-        mediaType: {
-          format: "raw"
-        }
       });
     }
     catch (error){
@@ -48,7 +45,7 @@ async function run() {
     }
 
     if (originalChartYamlFile && "content" in originalChartYamlFile.data){
-      const originalChartYamlContent = originalChartYamlFile.data.content.toString();
+      const originalChartYamlContent = Buffer.from(originalChartYamlFile.data.content, 'base64').toString('utf-8');
       core.info(originalChartYamlContent);
       const originalChartYaml = await YAML.parse(originalChartYamlContent);
       core.info(`Old chart version: ${originalChartYaml.version}`);
