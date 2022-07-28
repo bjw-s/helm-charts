@@ -50,6 +50,7 @@ function getErrorMessage(error) {
     return String(error);
 }
 function run() {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (github.context.eventName !== "pull_request") {
@@ -58,23 +59,25 @@ function run() {
             }
             const githubToken = core.getInput("token");
             const chart = core.getInput("chart", { required: true });
-            const compareAgainstRef = core.getInput("ref");
+            const base = core.getInput("base", { required: false });
             const chartYamlPath = `${chart}/Chart.yaml`;
             if (!(yield fs.pathExists(chartYamlPath))) {
                 core.setFailed(`${chart} is not a valid Helm chart folder!`);
                 return;
             }
             const octokit = github.getOctokit(githubToken);
-            if (compareAgainstRef) {
+            const defaultBranch = (_a = github.context.payload.repository) === null || _a === void 0 ? void 0 : _a.default_branch;
+            core.info(defaultBranch);
+            if (base) {
                 try {
                     yield octokit.rest.git.getRef({
                         owner: github.context.repo.owner,
                         repo: github.context.repo.repo,
-                        ref: compareAgainstRef,
+                        ref: base || defaultBranch,
                     });
                 }
                 catch (error) {
-                    core.setFailed(`Ref ${compareAgainstRef} was not found for this repository!`);
+                    core.setFailed(`Ref ${base} was not found for this repository!`);
                     return;
                 }
             }
@@ -85,7 +88,7 @@ function run() {
                     owner: github.context.repo.owner,
                     repo: github.context.repo.repo,
                     path: `${chartYamlPath}`,
-                    ref: compareAgainstRef,
+                    ref: base,
                 });
             }
             catch (error) {
@@ -107,15 +110,18 @@ function run() {
                 core.setFailed(`${updatedChartVersion} is not a valid SemVer version!`);
                 return;
             }
-            if (!semver.gt(updatedChartVersion, originalChartVersion)) {
-                core.setFailed(`Updated chart version ${updatedChartVersion} is < ${originalChartVersion}!`);
-                return;
+            if (originalChartVersion) {
+                if (!semver.gt(updatedChartVersion, originalChartVersion)) {
+                    core.setFailed(`Updated chart version ${updatedChartVersion} is < ${originalChartVersion}!`);
+                    return;
+                }
+                if (updatedChartVersion == originalChartVersion) {
+                    core.setFailed(`Chart version has not been updated!`);
+                }
+                core.info(`Old chart version: ${originalChartVersion}`);
             }
-            core.info(`Old chart version: ${originalChartVersion}`);
             core.info(`New chart version: ${updatedChartVersion}`);
-            if (updatedChartVersion == originalChartVersion) {
-                core.setFailed(`Chart version has not been updated!`);
-            }
+            core.info(`New chart version verified succesfully.`);
         }
         catch (error) {
             core.setFailed(getErrorMessage(error));

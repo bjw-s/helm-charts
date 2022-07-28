@@ -4,7 +4,7 @@ inputs:
   chart:
     description: 'Which chart to check'
     required: true
-  ref:
+  base:
     description: 'Ref to compare against'
     required: false
   token:
