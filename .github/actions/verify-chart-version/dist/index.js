@@ -57,8 +57,8 @@ function run() {
                 return;
             }
             const githubToken = core.getInput("token");
-            const chart = core.getInput('chart', { required: true });
-            const compareAgainstRef = core.getInput('ref');
+            const chart = core.getInput("chart", { required: true });
+            const compareAgainstRef = core.getInput("ref");
             const chartYamlPath = `${chart}/Chart.yaml`;
             if (!(yield fs.pathExists(chartYamlPath))) {
                 core.setFailed(`${chart} is not a valid Helm chart folder!`);
@@ -68,12 +68,14 @@ function run() {
             var originalChartVersion;
             const octokit = github.getOctokit(githubToken);
             if (compareAgainstRef) {
-                const githubRef = yield octokit.rest.git.getRef({
-                    owner: github.context.repo.owner,
-                    repo: github.context.repo.repo,
-                    ref: compareAgainstRef
-                });
-                if (!githubRef) {
+                try {
+                    yield octokit.rest.git.getRef({
+                        owner: github.context.repo.owner,
+                        repo: github.context.repo.repo,
+                        ref: compareAgainstRef,
+                    });
+                }
+                catch (error) {
                     core.setFailed(`${compareAgainstRef} was not found for this repository!`);
                     return;
                 }
@@ -83,18 +85,18 @@ function run() {
                     owner: github.context.repo.owner,
                     repo: github.context.repo.repo,
                     path: `${chartYamlPath}`,
-                    ref: compareAgainstRef
+                    ref: compareAgainstRef,
                 });
             }
             catch (error) {
                 core.warning(`Could not find original Chart.yaml for ${chart}, assuming this is a new chart.`);
             }
             if (originalChartYamlFile && "content" in originalChartYamlFile.data) {
-                const originalChartYamlContent = Buffer.from(originalChartYamlFile.data.content, 'base64').toString('utf-8');
+                const originalChartYamlContent = Buffer.from(originalChartYamlFile.data.content, "base64").toString("utf-8");
                 const originalChartYaml = yield YAML.parse(originalChartYamlContent);
                 originalChartVersion = originalChartYaml.version;
             }
-            const updatedChartYamlContent = yield fs.readFile(chartYamlPath, 'utf8');
+            const updatedChartYamlContent = yield fs.readFile(chartYamlPath, "utf8");
             const updatedChartYaml = yield YAML.parse(updatedChartYamlContent);
             if (!updatedChartYaml.version) {
                 core.setFailed(`${chartYamlPath} does not contain a version!`);

@@ -1,13 +1,13 @@
-import * as core from '@actions/core';
-import * as github from '@actions/github';
-import * as YAML from 'yaml';
+import * as core from "@actions/core";
+import * as github from "@actions/github";
+import * as YAML from "yaml";
 
-import * as semver from 'semver';
-import * as fs from 'fs-extra';
+import * as semver from "semver";
+import * as fs from "fs-extra";
 
 function getErrorMessage(error: unknown) {
   if (error instanceof Error) return error.message;
-  return String(error)
+  return String(error);
 }
 
 async function run() {
@@ -18,10 +18,10 @@ async function run() {
     }
 
     const githubToken = core.getInput("token");
-    const chart = core.getInput('chart', { required: true });
-    const compareAgainstRef = core.getInput('ref');
+    const chart = core.getInput("chart", { required: true });
+    const compareAgainstRef = core.getInput("ref");
     const chartYamlPath = `${chart}/Chart.yaml`;
-    if (!await fs.pathExists(chartYamlPath)) {
+    if (!(await fs.pathExists(chartYamlPath))) {
       core.setFailed(`${chart} is not a valid Helm chart folder!`);
       return;
     }
@@ -31,13 +31,16 @@ async function run() {
     const octokit = github.getOctokit(githubToken);
 
     if (compareAgainstRef) {
-      const githubRef = await octokit.rest.git.getRef({
+      try {
+        await octokit.rest.git.getRef({
           owner: github.context.repo.owner,
           repo: github.context.repo.repo,
-          ref: compareAgainstRef
+          ref: compareAgainstRef,
         });
-      if (!githubRef) {
-        core.setFailed(`${compareAgainstRef} was not found for this repository!`);
+      } catch (error) {
+        core.setFailed(
+          `${compareAgainstRef} was not found for this repository!`
+        );
         return;
       }
     }
@@ -47,20 +50,24 @@ async function run() {
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
         path: `${chartYamlPath}`,
-        ref: compareAgainstRef
+        ref: compareAgainstRef,
       });
-    }
-    catch (error){
-      core.warning(`Could not find original Chart.yaml for ${chart}, assuming this is a new chart.`);
+    } catch (error) {
+      core.warning(
+        `Could not find original Chart.yaml for ${chart}, assuming this is a new chart.`
+      );
     }
 
-    if (originalChartYamlFile && "content" in originalChartYamlFile.data){
-      const originalChartYamlContent = Buffer.from(originalChartYamlFile.data.content, 'base64').toString('utf-8');
+    if (originalChartYamlFile && "content" in originalChartYamlFile.data) {
+      const originalChartYamlContent = Buffer.from(
+        originalChartYamlFile.data.content,
+        "base64"
+      ).toString("utf-8");
       const originalChartYaml = await YAML.parse(originalChartYamlContent);
-      originalChartVersion = originalChartYaml.version
+      originalChartVersion = originalChartYaml.version;
     }
 
-    const updatedChartYamlContent = await fs.readFile(chartYamlPath, 'utf8');
+    const updatedChartYamlContent = await fs.readFile(chartYamlPath, "utf8");
     const updatedChartYaml = await YAML.parse(updatedChartYamlContent);
     if (!updatedChartYaml.version) {
       core.setFailed(`${chartYamlPath} does not contain a version!`);
@@ -73,7 +80,9 @@ async function run() {
     }
 
     if (!semver.gt(updatedChartVersion, originalChartVersion)) {
-      core.setFailed(`Updated chart version ${updatedChartVersion} is < ${originalChartVersion}!`);
+      core.setFailed(
+        `Updated chart version ${updatedChartVersion} is < ${originalChartVersion}!`
+      );
       return;
     }
 
@@ -81,12 +90,11 @@ async function run() {
     core.info(`New chart version: ${updatedChartVersion}`);
 
     if (updatedChartVersion == originalChartVersion) {
-      core.setFailed(`Chart version has not been updated!`)
+      core.setFailed(`Chart version has not been updated!`);
     }
-  }
-  catch (error) {
+  } catch (error) {
     core.setFailed(getErrorMessage(error));
   }
 }
 
-run()
+run();
