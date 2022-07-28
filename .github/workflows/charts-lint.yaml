@@ -67,7 +67,9 @@ jobs:
       - name: Check chart version update
         shell: bash
         run: |
-          zx .ci/scripts/check_chart_version.mjs "charts/${{ matrix.chart }}"
+          if ! zx .ci/scripts/check_chart_version.mjs "charts/${{ matrix.chart }}" ; then
+            echo "::error::Chart version has not been updated!" && exit 1
+          fi
 
       - name: Install Kubernetes tools
         uses: yokawasa/action-setup-kube-tools@v0.8.2
