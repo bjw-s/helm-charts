@@ -14,7 +14,24 @@ chart-dirs:
 excluded-charts-lint: []
 
 excluded-charts-install:
+  - incubator/sdtd
   - library/common
+  - stable/alertmanager-bot
+  - stable/alertmanager-discord
+  - stable/amcrest2mqtt
+  - stable/facebox
+  - stable/factorio
+  - stable/foundryvtt
+  - stable/heimdall
+  - stable/multus
+  - stable/pod-gateway
+  - stable/promcord
+  - stable/reg
+  - stable/ser2sock
+  - stable/satisfactory
+  - stable/zalando-postgres-cluster
+  - stable/zigbee2mqtt
+  - stable/wireguard
 
 chart-repos:
   - bitnami=https://charts.bitnami.com/bitnami
