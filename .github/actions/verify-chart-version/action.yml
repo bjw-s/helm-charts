@@ -4,9 +4,12 @@ inputs:
   chart:
     description: 'Which chart to check'
     required: true
+  base:
+    description: 'Ref to compare against'
+    required: false
   token:
     description: 'GitHub token'
-    default: $
+    default: '${{ github.token }}'
     required: true
 runs:
   using: 'node16'
