@@ -58,6 +58,7 @@ function run() {
             }
             const githubToken = core.getInput("token");
             const chart = core.getInput('chart', { required: true });
+            const compareAgainstRef = core.getInput('ref');
             const chartYamlPath = `${chart}/Chart.yaml`;
             if (!(yield fs.pathExists(chartYamlPath))) {
                 core.setFailed(`${chart} is not a valid Helm chart folder!`);
@@ -66,11 +67,23 @@ function run() {
             var originalChartYamlFile;
             var originalChartVersion;
             const octokit = github.getOctokit(githubToken);
+            if (compareAgainstRef) {
+                const githubRef = yield octokit.rest.git.getRef({
+                    owner: github.context.repo.owner,
+                    repo: github.context.repo.repo,
+                    ref: compareAgainstRef
+                });
+                if (!githubRef) {
+                    core.setFailed(`${compareAgainstRef} was not found for this repository!`);
+                    return;
+                }
+            }
             try {
                 originalChartYamlFile = yield octokit.rest.repos.getContent({
                     owner: github.context.repo.owner,
                     repo: github.context.repo.repo,
                     path: `${chartYamlPath}`,
+                    ref: compareAgainstRef
                 });
             }
             catch (error) {
@@ -92,9 +105,13 @@ function run() {
                 core.setFailed(`${updatedChartVersion} is not a valid SemVer version!`);
                 return;
             }
+            if (!semver.gt(updatedChartVersion, originalChartVersion)) {
+                core.setFailed(`Updated chart version ${updatedChartVersion} is < ${originalChartVersion}!`);
+                return;
+            }
             core.info(`Old chart version: ${originalChartVersion}`);
-            core.info(`New chart version: ${updatedChartYaml.version}`);
-            if (updatedChartYaml.version == originalChartVersion) {
+            core.info(`New chart version: ${updatedChartVersion}`);
+            if (updatedChartVersion == originalChartVersion) {
                 core.setFailed(`Chart version has not been updated!`);
             }
         }

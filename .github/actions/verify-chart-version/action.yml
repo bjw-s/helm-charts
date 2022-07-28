@@ -4,6 +4,9 @@ inputs:
   chart:
     description: 'Which chart to check'
     required: true
+  ref:
+    description: 'Ref to compare against'
+    required: false
   token:
     description: 'GitHub token'
     default: '${{ github.token }}'
