@@ -68,7 +68,8 @@ jobs:
       - name: Check chart version update
         shell: bash
         run: |
-          npm i zx
+          npm i -g zx
+          npm link zx
           zx .ci/scripts/check_chart_version.mjs "charts/${{ matrix.chart }}"
 
       - name: Set up chart-testing
