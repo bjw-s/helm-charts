@@ -15,6 +15,10 @@ async function run() {
 
     const githubToken = core.getInput("token");
     const chart = core.getInput('chart');
+
+    if (!chart) {
+      throw new Error('No chart has been specified.')
+    }
   }
   catch (error) {
     core.setFailed(getErrorMessage(error));
