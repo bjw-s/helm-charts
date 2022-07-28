@@ -22,21 +22,20 @@ async function run() {
     const base = core.getInput("base", { required: false });
     const chartYamlPath = `${chart}/Chart.yaml`;
 
+    const defaultBranch = github.context.payload.repository?.default_branch;
+    const octokit = github.getOctokit(githubToken);
+
     if (!(await fs.pathExists(chartYamlPath))) {
       core.setFailed(`${chart} is not a valid Helm chart folder!`);
       return;
     }
 
-    const octokit = github.getOctokit(githubToken);
-
-    const defaultBranch = github.context.payload.repository?.default_branch;
-    core.info(defaultBranch);
     if (base) {
       try {
         await octokit.rest.git.getRef({
           owner: github.context.repo.owner,
           repo: github.context.repo.repo,
-          ref: base || defaultBranch,
+          ref: base,
         });
       } catch (error) {
         core.setFailed(`Ref ${base} was not found for this repository!`);
@@ -51,7 +50,7 @@ async function run() {
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
         path: `${chartYamlPath}`,
-        ref: base,
+        ref: base || `heads/${defaultBranch}`,
       });
     } catch (error) {
       core.warning(
