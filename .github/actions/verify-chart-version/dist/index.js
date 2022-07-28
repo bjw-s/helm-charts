@@ -53,7 +53,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (github.context.eventName !== "pull_request") {
-                core.setFailed("Can only run on pull requests!");
+                core.setFailed("This action can only run on pull requests!");
                 return;
             }
             const githubToken = core.getInput("token");
@@ -64,8 +64,6 @@ function run() {
                 core.setFailed(`${chart} is not a valid Helm chart folder!`);
                 return;
             }
-            var originalChartYamlFile;
-            var originalChartVersion;
             const octokit = github.getOctokit(githubToken);
             if (compareAgainstRef) {
                 try {
@@ -80,6 +78,8 @@ function run() {
                     return;
                 }
             }
+            var originalChartYamlFile;
+            var originalChartVersion;
             try {
                 originalChartYamlFile = yield octokit.rest.repos.getContent({
                     owner: github.context.repo.owner,

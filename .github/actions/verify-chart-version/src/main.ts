@@ -13,7 +13,7 @@ function getErrorMessage(error: unknown) {
 async function run() {
   try {
     if (github.context.eventName !== "pull_request") {
-      core.setFailed("Can only run on pull requests!");
+      core.setFailed("This action can only run on pull requests!");
       return;
     }
 
@@ -21,13 +21,12 @@ async function run() {
     const chart = core.getInput("chart", { required: true });
     const compareAgainstRef = core.getInput("ref");
     const chartYamlPath = `${chart}/Chart.yaml`;
+
     if (!(await fs.pathExists(chartYamlPath))) {
       core.setFailed(`${chart} is not a valid Helm chart folder!`);
       return;
     }
 
-    var originalChartYamlFile;
-    var originalChartVersion;
     const octokit = github.getOctokit(githubToken);
 
     if (compareAgainstRef) {
@@ -45,6 +44,8 @@ async function run() {
       }
     }
 
+    var originalChartYamlFile;
+    var originalChartVersion;
     try {
       originalChartYamlFile = await octokit.rest.repos.getContent({
         owner: github.context.repo.owner,
