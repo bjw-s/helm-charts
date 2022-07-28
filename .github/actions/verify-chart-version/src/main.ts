@@ -37,18 +37,17 @@ async function run() {
       originalChartYamlFile = await octokit.rest.repos.getContent({
         owner: github.context.repo.owner,
         repo: github.context.repo.repo,
-        path: `${chartYamlPath}`
-      })
+        path: `${chartYamlPath}z`
+      });
     }
     catch (error){
-      core.warning(`Could not find original Chart.yaml for ${chart}, assuming this is a new chart.`)
+      core.warning(`Could not find original Chart.yaml for ${chart}, assuming this is a new chart.`);
     }
 
     if (originalChartYamlFile){
       const originalChartYamlContent = originalChartYamlFile.data.toString();
-      core.info(originalChartYamlContent);
       const originalChartYaml = await YAML.parse(originalChartYamlContent)
-      core.info(originalChartYaml);
+      core.info(`Old version: ${originalChartYaml.version}`);
     }
 
     core.info(`New version: ${updatedChartYaml.version}`);
