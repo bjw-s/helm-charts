@@ -2,7 +2,7 @@
   "name": "verify-chart-version-bump",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json"
   },
