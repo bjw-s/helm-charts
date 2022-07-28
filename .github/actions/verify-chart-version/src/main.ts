@@ -80,15 +80,16 @@ async function run() {
     }
 
     if (originalChartVersion) {
+      if (updatedChartVersion == originalChartVersion) {
+        core.setFailed(`Chart version has not been updated!`);
+        return;
+      }
+
       if (!semver.gt(updatedChartVersion, originalChartVersion)) {
         core.setFailed(
           `Updated chart version ${updatedChartVersion} is < ${originalChartVersion}!`
         );
         return;
-      }
-
-      if (updatedChartVersion == originalChartVersion) {
-        core.setFailed(`Chart version has not been updated!`);
       }
 
       core.info(`Old chart version: ${originalChartVersion}`);
