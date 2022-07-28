@@ -21,4 +21,4 @@ jobs:
         uses: ./.github/actions/verify-chart-version
         id: verify-chart-version
         with:
-          chart: charts/stable/airsonic
+          chart: charts/apps/airsonic
