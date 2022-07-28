@@ -13,12 +13,8 @@ async function run() {
       return;
     }
 
-    const githubToken = core.getInput("token");
-    const chart = core.getInput('chart');
-
-    if (!chart) {
-      throw new Error('No chart has been specified.')
-    }
+    const githubToken = core.getInput("token", { required: true });
+    const chart = core.getInput('chart', { required: true });
   }
   catch (error) {
     core.setFailed(getErrorMessage(error));
