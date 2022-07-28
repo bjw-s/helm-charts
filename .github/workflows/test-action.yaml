@@ -20,5 +20,5 @@ jobs:
       - name: Verify version bump step
         uses: ./.github/actions/verify-chart-version-bump
         id: verify-chart-version-bump
-        with:
-          chart: stable/airsonic
+        # with:
+        #   chart: stable/airsonic
