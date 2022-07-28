@@ -14,8 +14,42 @@ env:
   HELM_VERSION: 3.9.2
 
 jobs:
-  lint:
+  generate-lint-matrix:
+    name: Generate matrix for linting
+    runs-on: ubuntu-22.04
+    outputs:
+      lint-matrix: |
+        {
+          "chart": ${{ steps.list-changed.outputs.charts }}
+        }
+      detected: ${{ steps.list-changed.outputs.detected }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.checkoutCommit }}
+
+      - name: Run chart-testing (list-changed)
+        id: list-changed
+        if: inputs.chartChanges != ''
+        run: |
+          EXCLUDED=$(yq -o json eval '.excluded-charts-lint' .ci/ct/ct.yaml)
+          CHARTS_JSON=$(yq --null-input -o json eval '"${{ inputs.chartChanges }}" | split(" ")')
+          OUTPUT_JSON=$(yq --null-input -o json eval "$CHARTS_JSON - $EXCLUDED")
+          echo ::set-output name=charts::${OUTPUT_JSON}
+          if [[ $(echo ${OUTPUT_JSON} | jq -c '. | length') -gt 0 ]]; then
+            echo "::set-output name=detected::true"
+          fi
+
+  lint-charts:
+    needs:
+      - generate-lint-matrix
+    if: needs.generate-lint-matrix.outputs.detected == 'true'
     name: Lint charts
+    strategy:
+      matrix: ${{ fromJson(needs.generate-lint-matrix.outputs.lint-matrix) }}
+      fail-fast: false
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -34,7 +68,19 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.2.1
 
-      - name: Run chart-testing (lint)
-        id: lint
-        if: inputs.chartChanges != ''
-        run: ct lint --config .ci/ct/ct.yaml
+      - name: Run chart-testing (install)
+        run: ct lint --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
+
+  # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
+  lint_success:
+    needs:
+      - generate-lint-matrix
+      - lint-charts
+    if: |
+      always()
+    name: Lint successful
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check lint matrix status
+        if: ${{ (needs.generate-lint-matrix.outputs.detected == 'true') && (needs.lint-charts.result != 'success') }}
+        run: exit 1
