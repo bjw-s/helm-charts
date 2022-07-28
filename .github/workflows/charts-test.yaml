@@ -47,11 +47,11 @@ jobs:
             echo "::set-output name=detected::true"
           fi
 
-  install-charts:
+  install-chart:
     needs:
       - generate-test-matrix
     if: needs.generate-test-matrix.outputs.detected == 'true'
-    name: Install charts
+    name: Install chart
     strategy:
       matrix: ${{ fromJson(needs.generate-test-matrix.outputs.install-matrix) }}
       fail-fast: false
@@ -95,18 +95,18 @@ jobs:
   install_success:
     needs:
       - generate-test-matrix
-      - install-charts
+      - install-chart
     if: |
       always()
     name: Install successful
     runs-on: ubuntu-22.04
     steps:
       - name: Check install matrix status
-        if: ${{ (needs.generate-test-matrix.outputs.detected == 'true') && (needs.install-charts.result != 'success') }}
+        if: ${{ (needs.generate-test-matrix.outputs.detected == 'true') && (needs.install-chart.result != 'success') }}
         run: exit 1
 
-  unittest:
-    name: Run unit tests
+  unittest-chart:
+    name: Unit-test chart
     runs-on: ubuntu-20.04
     needs:
       - generate-test-matrix
@@ -139,12 +139,12 @@ jobs:
   unittest_success:
     needs:
       - generate-test-matrix
-      - unittest
+      - unittest-chart
     if: |
       always()
     name: Unittest successful
     runs-on: ubuntu-22.04
     steps:
       - name: Check unittest matrix status
-        if: ${{ (needs.generate-test-matrix.outputs.detected == 'true') && (needs.unittest.result != 'success') }}
+        if: ${{ (needs.generate-test-matrix.outputs.detected == 'true') && (needs.unittest-chart.result != 'success') }}
         run: exit 1
