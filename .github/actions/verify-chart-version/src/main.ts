@@ -25,11 +25,21 @@ async function run() {
     }
 
     const octokit = github.getOctokit(githubToken);
-    const originalChartYamlContent = await octokit.rest.repos.getContent({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      path: `${chartYamlPath}z`
-    })
+    try {
+      const originalChartYamlContent = await octokit.rest.repos.getContent({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        path: `${chartYamlPath}z`
+      })
+    }
+    catch (error){
+      throw error;
+      // core.info(instanceof error)
+      // if (error instanceof Error) {
+      //   core.info(error.name);
+      //   core.setFailed(getErrorMessage(error));
+      // }
+    }
 
     const updatedChartYamlContent = await fs.readFile(chartYamlPath, 'utf8');
     const updatedChartYaml = await YAML.parse(updatedChartYamlContent);
@@ -40,7 +50,8 @@ async function run() {
     core.info(`New version: ${updatedChartYaml.version}`);
   }
   catch (error) {
-    core.setFailed(getErrorMessage(error));
+    throw error;
+    // core.setFailed(getErrorMessage(error));
   }
 }
 

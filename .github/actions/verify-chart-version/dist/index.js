@@ -63,11 +63,21 @@ function run() {
                 return;
             }
             const octokit = github.getOctokit(githubToken);
-            const originalChartYamlContent = yield octokit.rest.repos.getContent({
-                owner: github.context.repo.owner,
-                repo: github.context.repo.repo,
-                path: `${chartYamlPath}z`
-            });
+            try {
+                const originalChartYamlContent = yield octokit.rest.repos.getContent({
+                    owner: github.context.repo.owner,
+                    repo: github.context.repo.repo,
+                    path: `${chartYamlPath}z`
+                });
+            }
+            catch (error) {
+                throw error;
+                // core.info(instanceof error)
+                // if (error instanceof Error) {
+                //   core.info(error.name);
+                //   core.setFailed(getErrorMessage(error));
+                // }
+            }
             const updatedChartYamlContent = yield fs.readFile(chartYamlPath, 'utf8');
             const updatedChartYaml = yield YAML.parse(updatedChartYamlContent);
             if (!updatedChartYaml.version) {
@@ -77,7 +87,8 @@ function run() {
             core.info(`New version: ${updatedChartYaml.version}`);
         }
         catch (error) {
-            core.setFailed(getErrorMessage(error));
+            throw error;
+            // core.setFailed(getErrorMessage(error));
         }
     });
 }
