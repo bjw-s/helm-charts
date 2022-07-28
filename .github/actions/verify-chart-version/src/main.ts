@@ -17,9 +17,9 @@ async function run() {
 
     const githubToken = core.getInput("token");
     const chart = core.getInput('chart', { required: true });
-    const chartYamlPath = `${chart}/Chart.yamlz`;
+    const chartYamlPath = `${chart}/Chart.yaml`;
     if (!await fs.pathExists(chartYamlPath)) {
-      core.setFailed(`${chartYamlPath} does not exist!`);
+      core.setFailed(`${chart} is not a valid Helm chart folder!`);
       return;
     }
   }

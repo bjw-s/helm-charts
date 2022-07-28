@@ -10,15 +10,15 @@ on:
       - synchronize
 
 jobs:
-  verify-chart-version-bump:
+  verify-chart-version:
     runs-on: ubuntu-latest
     name: A job to say hello
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Verify version bump step
-        uses: ./.github/actions/verify-chart-version-bump
-        id: verify-chart-version-bump
+      - name: Verify chart version
+        uses: ./.github/actions/verify-chart-version
+        id: verify-chart-version
         with:
-          chart: stable/airsonic
+          chart: charts/stable/airsonic
