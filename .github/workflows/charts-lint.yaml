@@ -58,19 +58,23 @@ jobs:
           fetch-depth: 0
           ref: ${{ inputs.checkoutCommit }}
 
+      - name: Install zx
+        shell: bash
+        run: |
+          npm i --location=global zx
+          npm link zx
+
+      - name: Check chart version update
+        shell: bash
+        run: |
+          zx .ci/scripts/check_chart_version.mjs "charts/${{ matrix.chart }}"
+
       - name: Install Kubernetes tools
         uses: yokawasa/action-setup-kube-tools@v0.8.2
         with:
           setup-tools: |
             helmv3
           helm: "${{ env.HELM_VERSION }}"
-
-      - name: Check chart version update
-        shell: bash
-        run: |
-          npm i -g zx
-          npm link zx
-          zx .ci/scripts/check_chart_version.mjs "charts/${{ matrix.chart }}"
 
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.2.1
