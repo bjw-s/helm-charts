@@ -62,25 +62,26 @@ function run() {
                 core.setFailed(`${chart} is not a valid Helm chart folder!`);
                 return;
             }
-            const octokit = github.getOctokit(githubToken);
-            try {
-                const originalChartYamlContent = yield octokit.rest.repos.getContent({
-                    owner: github.context.repo.owner,
-                    repo: github.context.repo.repo,
-                    path: `${chartYamlPath}z`
-                });
-            }
-            catch (error) {
-                if (error instanceof Error) {
-                    core.info(error.name);
-                    core.setFailed(getErrorMessage(error));
-                }
-            }
             const updatedChartYamlContent = yield fs.readFile(chartYamlPath, 'utf8');
             const updatedChartYaml = yield YAML.parse(updatedChartYamlContent);
             if (!updatedChartYaml.version) {
                 core.setFailed(`${chartYamlPath} does not contain a version!`);
                 return;
+            }
+            var originalChartYamlFile;
+            const octokit = github.getOctokit(githubToken);
+            try {
+                originalChartYamlFile = yield octokit.rest.repos.getContent({
+                    owner: github.context.repo.owner,
+                    repo: github.context.repo.repo,
+                    path: `${chartYamlPath}z`
+                });
+            }
+            catch (error) { }
+            if (originalChartYamlFile) {
+                const originalChartYamlContent = originalChartYamlFile.data.toString();
+                const originalChartYaml = yield YAML.parse(originalChartYamlContent);
+                console.log(originalChartYaml);
             }
             core.info(`New version: ${updatedChartYaml.version}`);
         }

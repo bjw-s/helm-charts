@@ -24,27 +24,29 @@ async function run() {
       return;
     }
 
-    const octokit = github.getOctokit(githubToken);
-    try {
-      const originalChartYamlContent = await octokit.rest.repos.getContent({
-        owner: github.context.repo.owner,
-        repo: github.context.repo.repo,
-        path: `${chartYamlPath}z`
-      })
-    }
-    catch (error){
-      if (error instanceof Error) {
-        core.info(error.name);
-        core.setFailed(getErrorMessage(error));
-      }
-    }
-
     const updatedChartYamlContent = await fs.readFile(chartYamlPath, 'utf8');
     const updatedChartYaml = await YAML.parse(updatedChartYamlContent);
     if (!updatedChartYaml.version) {
       core.setFailed(`${chartYamlPath} does not contain a version!`);
       return;
     }
+
+    var originalChartYamlFile;
+    const octokit = github.getOctokit(githubToken);
+    try {
+      originalChartYamlFile = await octokit.rest.repos.getContent({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        path: `${chartYamlPath}`
+      })
+    }
+    catch (error){}
+    if (originalChartYamlFile){
+      const originalChartYamlContent = originalChartYamlFile.data.toString();
+      const originalChartYaml = await YAML.parse(originalChartYamlContent)
+      console.log(originalChartYaml)
+    }
+
     core.info(`New version: ${updatedChartYaml.version}`);
   }
   catch (error) {
