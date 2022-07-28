@@ -6,7 +6,8 @@ inputs:
     required: true
   token:
     description: 'GitHub token'
-    required: false
+    default: $
+    required: true
 runs:
   using: 'node16'
   main: 'dist/index.js'

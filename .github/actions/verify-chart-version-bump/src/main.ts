@@ -9,11 +9,11 @@ function getErrorMessage(error: unknown) {
 async function run() {
   try {
     if (github.context.eventName !== "pull_request") {
-      core.info("This function Can only run on pull requests!");
+      core.setFailed("Can only run on pull requests!");
       return;
     }
 
-    const githubToken = core.getInput("token", { required: true });
+    const githubToken = core.getInput("token");
     const chart = core.getInput('chart', { required: true });
   }
   catch (error) {

@@ -43,14 +43,11 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (github.context.eventName !== "pull_request") {
-                core.info("This function Can only run on pull requests!");
+                core.setFailed("Can only run on pull requests!");
                 return;
             }
             const githubToken = core.getInput("token");
-            const chart = core.getInput('chart');
-            if (!chart) {
-                throw new Error('No chart has been specified.');
-            }
+            const chart = core.getInput('chart', { required: true });
         }
         catch (error) {
             core.setFailed(getErrorMessage(error));
