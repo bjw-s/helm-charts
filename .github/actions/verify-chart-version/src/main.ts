@@ -44,17 +44,17 @@ async function run() {
       core.warning(`Could not find original Chart.yaml for ${chart}, assuming this is a new chart.`);
     }
 
-    if (originalChartYamlFile){
-      const originalChartYamlContent = originalChartYamlFile.data.toString();
+    if (originalChartYamlFile && "content" in originalChartYamlFile.data){
+      const originalChartYamlContent = originalChartYamlFile.data.content;
       const originalChartYaml = await YAML.parse(originalChartYamlContent)
-      core.info(`Old version: ${originalChartYaml.version}`);
+      core.info(`Old chart version: ${originalChartYaml.version}`);
 
       if (updatedChartYaml.version == originalChartYaml.version) {
         core.info(`Chart version has not been updated!`)
       }
     }
 
-    core.info(`New version: ${updatedChartYaml.version}`);
+    core.info(`New chart version: ${updatedChartYaml.version}`);
   }
   catch (error) {
     core.setFailed(getErrorMessage(error));
