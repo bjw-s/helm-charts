@@ -76,7 +76,7 @@ function run() {
                     });
                 }
                 catch (error) {
-                    core.setFailed(`${compareAgainstRef} was not found for this repository!`);
+                    core.setFailed(`Ref ${compareAgainstRef} was not found for this repository!`);
                     return;
                 }
             }

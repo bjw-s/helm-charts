@@ -39,7 +39,7 @@ async function run() {
         });
       } catch (error) {
         core.setFailed(
-          `${compareAgainstRef} was not found for this repository!`
+          `Ref ${compareAgainstRef} was not found for this repository!`
         );
         return;
       }
