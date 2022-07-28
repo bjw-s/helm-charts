@@ -81,7 +81,7 @@ function run() {
                 core.warning(`Could not find original Chart.yaml for ${chart}, assuming this is a new chart.`);
             }
             if (originalChartYamlFile && "content" in originalChartYamlFile.data) {
-                const originalChartYamlContent = originalChartYamlFile.data.content;
+                const originalChartYamlContent = originalChartYamlFile.data.content.toString();
                 const originalChartYaml = yield YAML.parse(originalChartYamlContent);
                 core.info(`Old chart version: ${originalChartYaml.version}`);
                 if (updatedChartYaml.version == originalChartYaml.version) {
