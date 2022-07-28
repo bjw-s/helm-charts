@@ -34,6 +34,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(require("@actions/core"));
 const github = __importStar(require("@actions/github"));
+const fs = require('fs-extra');
 function getErrorMessage(error) {
     if (error instanceof Error)
         return error.message;
@@ -48,6 +49,11 @@ function run() {
             }
             const githubToken = core.getInput("token");
             const chart = core.getInput('chart', { required: true });
+            const chartYamlPath = `${chart}/Chart.yamlz`;
+            if (!(yield fs.pathExists(chartYamlPath))) {
+                core.setFailed(`${chartYamlPath} does not exist!`);
+                return;
+            }
         }
         catch (error) {
             core.setFailed(getErrorMessage(error));
