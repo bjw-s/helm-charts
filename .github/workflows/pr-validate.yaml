@@ -53,3 +53,21 @@ jobs:
     with:
       checkoutCommit: ${{ github.sha }}
       chartsToTest: ${{ needs.pr-metadata.outputs.chartsToInstall }}
+
+  library-charts-test:
+    uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml@main
+    needs:
+      - pr-metadata
+    with:
+      checkoutCommit: ${{ github.sha }}
+      chartsToTest: |-
+        ${{
+          (
+            contains(fromJSON(needs.pr-metadata.outputs.addedOrModifiedCharts), 'library/common') &&
+            '["other/kah-common-chart"]'
+          ) || '[]'
+        }}
+      overrideDeps: |-
+        [
+          {"name": "common", "repository": "file://../../library/common", "version": "*"}
+        ]

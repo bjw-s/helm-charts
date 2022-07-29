@@ -34,9 +34,9 @@ spec:
   serviceName: {{ include "common.names.fullname" . }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with include ("common.podAnnotations") . }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+        {{- . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "common.labels.selectorLabels" . | nindent 8 }}

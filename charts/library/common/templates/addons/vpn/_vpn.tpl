@@ -12,6 +12,10 @@ It will include / inject the required templates based on the given values.
     {{- include "common.addon.wireguard" . }}
   {{- end -}}
 
+  {{- if eq "gluetun" .Values.addons.vpn.type -}}
+    {{- include "common.addon.gluetun" . }}
+  {{- end -}}
+
   {{/* Include the configmap if not empty */}}
   {{- $configmap := include "common.addon.vpn.configmap" . -}}
   {{- if $configmap -}}
