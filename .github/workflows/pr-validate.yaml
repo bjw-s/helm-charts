@@ -67,11 +67,10 @@ jobs:
             fromJSON('["other/kah-common-chart"]')
           ) || 'none'
         }}
-
-      # symlinkDeps: |
-      #   [
-      #     {
-      #       "dep": "common"
-      #       "source": "library/common"
-      #     }
-      #   ]
+      symlinkDeps: |
+        [
+          {
+            "dep": "common"
+            "source": "library/common"
+          }
+        ]

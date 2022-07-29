@@ -11,6 +11,12 @@ on:
           A JSON encoded array of charts to lint
         required: true
         type: string
+      symlinkDeps:
+        description: >
+          A JSON encoded array of dependencies to symlink before testing
+        required: false
+        default: '[]'
+        type: string
 
 env:
   HELM_VERSION: 3.9.2
@@ -56,6 +62,11 @@ jobs:
       - name: Remove node taints
         run: |
           kubectl taint --all=true nodes node.cloudprovider.kubernetes.io/uninitialized- || true
+
+      - name: Symlink dependencies
+        if: ${{ inputs.symlinkDeps != '[]' }}
+        run: |
+          echo "${{ inputs.symlinkDeps }}"
 
       - name: Run chart-testing (install)
         run: ct install --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
