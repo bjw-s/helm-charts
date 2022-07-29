@@ -6,6 +6,11 @@ inputs:
       GitHub token for GitHub API requests.
     required: true
     default: '${{ github.token }}'
+  chartsFolder:
+    description: >
+      Base folder containing all the charts
+    required: true
+    default: 'charts'
   repoConfigFile:
     description: >
       Path to the repo config file that contains which charts

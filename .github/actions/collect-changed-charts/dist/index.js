@@ -48,7 +48,7 @@ function getErrorMessage(error) {
     return String(error);
 }
 function run() {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (github.context.eventName !== "pull_request") {
@@ -56,6 +56,7 @@ function run() {
                 return;
             }
             const githubToken = core.getInput("token", { required: true });
+            const chartsFolder = core.getInput("chartsFolder", { required: true });
             const repoConfigFilePath = core.getInput("repoConfigFile", {
                 required: true,
             });
@@ -72,6 +73,31 @@ function run() {
             // Ensure that the base and head properties are set on the payload.
             if (!base || !head) {
                 core.setFailed(`The base and head commits are missing from the payload for this PR.`);
+                return;
+            }
+            const octokit = github.getOctokit(githubToken);
+            // Use GitHub's compare two commits API.
+            const response = yield octokit.rest.repos.compareCommits({
+                base,
+                head,
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo,
+            });
+            // Ensure that the request was successful.
+            if (response.status !== 200) {
+                core.setFailed(`The GitHub API for comparing the base and head commits for this PR event returned ${response.status}, expected 200.`);
+                return;
+            }
+            // Ensure that the head commit is ahead of the base commit.
+            if (response.data.status !== "ahead") {
+                core.setFailed(`The head commit for this ${github.context.eventName} event is not ahead of the base commit.`);
+                return;
+            }
+            // Get the changed files from the response payload.
+            const addedModifiedChartFiles = ((_e = response.data.files) === null || _e === void 0 ? void 0 : _e.filter((file) => file.filename.startsWith(`${chartsFolder}/`))) || [];
+            for (const file of addedModifiedChartFiles) {
+                const filename = file.filename;
+                core.info(filename);
             }
         }
         catch (error) {
