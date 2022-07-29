@@ -66,7 +66,14 @@ jobs:
       - name: Symlink dependencies
         if: ${{ inputs.symlinkDeps != '[]' }}
         run: |
-          echo "${{ inputs.symlinkDeps }}"
+          dependencies=( $(yq --null-input e -o=j -I=0 '${{ inputs.symlinkDeps }}[]' ) )
+
+          for dependency in "${dependencies[@]}"; do
+            source=$(echo "$dependency" | yq e '.source' -)
+            destination=$(echo "$dependency" | yq e '.destination' -)
+            echo $source
+          done
+
 
       - name: Run chart-testing (install)
         run: ct install --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
