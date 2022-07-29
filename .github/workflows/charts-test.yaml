@@ -59,8 +59,9 @@ jobs:
             const excludedCharts = ctConfig["excluded-charts-install"];
             const chartsToInstall = chartChanges.filter(x => !excludedCharts.includes(x))
 
-            console.log(`Excluded charts: ${excludedCharts}`);
-            console.log(`Charts to install: ${chartsToInstall}`);
+            console.log(`Charts with changes: ${JSON.stringify(chartChanges, undefined, 2)}`);
+            console.log(`Excluded charts: ${JSON.stringify(excludedCharts, undefined, 2)}`);
+            console.log(`Charts to install: ${JSON.stringify(chartsToInstall, undefined, 2)}`);
             core.setOutput('charts', chartsToInstall);
             core.setOutput('detected', (chartsToInstall.length > 0));
 
