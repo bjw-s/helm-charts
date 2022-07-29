@@ -108,10 +108,11 @@ function run() {
             filteredResponseFiles.forEach((file) => {
                 const absoluteChartsFolder = path.resolve(chartsFolder);
                 const absoluteChartFolder = path.resolve(path.dirname(file.filename));
-                const chart = absoluteChartFolder.slice(absoluteChartsFolder.length);
+                const chart = absoluteChartFolder.slice(absoluteChartsFolder.length + 1);
                 changedCharts.push(chart);
             });
-            core.info(JSON.stringify(changedCharts));
+            core.info(`Changed charts: ${JSON.stringify(changedCharts)}`);
+            core.setOutput("changedCharts", changedCharts);
         }
         catch (error) {
             core.setFailed(getErrorMessage(error));
