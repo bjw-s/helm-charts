@@ -15,4 +15,4 @@ tests:
         equal:
           path: spec.template.metadata.annotations
           value:
-            checksum/config: 13f83afec54139bc9b797ac55ba4d79494f6fd94c0159101836ef127bec95a28
+            checksum/config: 08f1047e9078ea3a6e593bffc1bf2d1b7db4163b9bb0c8203d8c70f2a6a5e551
