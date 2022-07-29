@@ -61,7 +61,7 @@ jobs:
     with:
       checkoutCommit: ${{ github.sha }}
       chartsToTest: |
-        ["other/kah-common-chart"]
+        ${{ (false && '["other/kah-common-chart"]') || '[]' }}
       symlinkDeps: |
         [
           {
