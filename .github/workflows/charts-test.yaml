@@ -51,7 +51,7 @@ jobs:
       - name: Install prerequisites
         if: inputs.chartChanges != ''
         run: |
-          npm install yaml
+          npm install yaml@~2.1.1
 
       - uses: actions/github-script@v6
         id: list-changed-new
@@ -68,10 +68,12 @@ jobs:
             const ctConfig = YAML.parse(ctConfigRaw);
             const excludedCharts = ctConfig["excluded-charts-install"];
 
+            const chartsToInstall = chartChanges.filter(x => !excludedCharts.includes(x))
+
             console.log(`Changed charts: ${chartChanges}`);
             console.log(`Excluded charts: ${excludedCharts}`);
-            console.log(`Resulting charts: ${chartChanges.filter(x => !excludedCharts.includes(x))}`);
-            core.setOutput('SELECTED_COLOR', 'green');
+            console.log(`Resulting charts: ${chartsToInstall}`);
+            core.setOutput('charts', chartsToInstall);
 
   install-chart:
     needs:
