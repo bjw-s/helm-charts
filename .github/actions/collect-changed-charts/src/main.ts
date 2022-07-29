@@ -70,17 +70,12 @@ async function run() {
 
     // Get the changed files from the response payload.
     const responseFiles = response.data.files || [];
-    const addedModifiedChartFiles = responseFiles.filter((file) => {
-      let result: string[] = [];
-      const filename = file.filename;
+    const addedModifiedChartFiles = responseFiles.filter((x) => {
+      const filename = x.filename;
       const rel = path.relative(chartsFolder, filename);
-
-      if (!rel.startsWith("../") && rel !== "..") {
-        result.push(filename);
-      }
-
-      return result;
+      return !rel.startsWith("../") && rel !== "..";
     });
+
     core.info(JSON.stringify(addedModifiedChartFiles));
   } catch (error) {
     core.setFailed(getErrorMessage(error));
