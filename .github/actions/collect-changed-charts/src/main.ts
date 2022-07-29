@@ -16,15 +16,29 @@ async function run() {
       return;
     }
 
-    const githubToken = core.getInput("token", {required: true});
+    const githubToken = core.getInput("token", { required: true });
+    const repoConfigFilePath = core.getInput("repoConfigFile", {
+      required: true,
+    });
 
-    const repoConfigFilePath = core.getInput("token", {required: true})
     // Ensure that the repo config file exists.
     if (!(await fs.pathExists(repoConfigFilePath))) {
       core.setFailed(`${repoConfigFilePath} Does not exist!`);
       return;
     }
 
+    // Define the base and head commits to be extracted from the payload.
+    let base = github.context.payload.pull_request?.base?.sha;
+    let head = github.context.payload.pull_request?.head?.sha;
+    core.info(`Base commit: ${base}`);
+    core.info(`Head commit: ${head}`);
+
+    // Ensure that the base and head properties are set on the payload.
+    if (!base || !head) {
+      core.setFailed(
+        `The base and head commits are missing from the payload for this PR.`
+      );
+    }
   } catch (error) {
     core.setFailed(getErrorMessage(error));
   }

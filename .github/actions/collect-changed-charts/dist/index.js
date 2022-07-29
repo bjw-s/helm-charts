@@ -48,6 +48,7 @@ function getErrorMessage(error) {
     return String(error);
 }
 function run() {
+    var _a, _b, _c, _d;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (github.context.eventName !== "pull_request") {
@@ -55,11 +56,22 @@ function run() {
                 return;
             }
             const githubToken = core.getInput("token", { required: true });
-            const repoConfigFilePath = core.getInput("token", { required: true });
+            const repoConfigFilePath = core.getInput("repoConfigFile", {
+                required: true,
+            });
             // Ensure that the repo config file exists.
             if (!(yield fs.pathExists(repoConfigFilePath))) {
                 core.setFailed(`${repoConfigFilePath} Does not exist!`);
                 return;
+            }
+            // Define the base and head commits to be extracted from the payload.
+            let base = (_b = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
+            let head = (_d = (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
+            core.info(`Base commit: ${base}`);
+            core.info(`Head commit: ${head}`);
+            // Ensure that the base and head properties are set on the payload.
+            if (!base || !head) {
+                core.setFailed(`The base and head commits are missing from the payload for this PR.`);
             }
         }
         catch (error) {

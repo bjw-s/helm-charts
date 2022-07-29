@@ -6,7 +6,7 @@ inputs:
       GitHub token for GitHub API requests.
     required: true
     default: '${{ github.token }}'
-  configFile:
+  repoConfigFile:
     description: >
       Path to the repo config file that contains which charts
       should be excluded from linting/testing.
