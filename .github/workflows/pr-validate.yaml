@@ -58,9 +58,17 @@ jobs:
     uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml@library-chart
     needs:
       - pr-metadata
+    if: ${{ contains(fromJSON(needs.pr-metadata.outputs.chartsToInstall), 'library/common') }}
     with:
       checkoutCommit: ${{ github.sha }}
       chartsToTest: |
         [
-          "library/common"
+          "other/kah-common-chart"
+        ]
+      symlinkDeps: |
+        [
+          {
+            "dep": "common"
+            "source": "library/common"
+          }
         ]
