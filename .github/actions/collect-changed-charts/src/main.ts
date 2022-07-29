@@ -1,6 +1,6 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
-import * as path from 'path';
+import * as path from "path";
 import * as YAML from "yaml";
 import * as fs from "fs-extra";
 
@@ -69,14 +69,16 @@ async function run() {
     }
 
     // Get the changed files from the response payload.
-    const addedModifiedChartFiles =
-      response.data.files?.filter((file) =>
-        file.filename.startsWith(`${chartsFolder}/`)
-      ) || [];
-    for (const file of addedModifiedChartFiles) {
-      const filename = file.filename;
-      core.info(JSON.stringify(path.parse(filename)));
-    }
+    const addedModifiedChartFiles = response.data.files?.filter(function (
+      file
+    ) {
+      let result: string[] = [];
+      if (path.dirname(file.filename).startsWith(chartsFolder)) {
+        result.push(file.filename);
+      }
+      return result;
+    }) || [];
+      core.info(JSON.stringify(addedModifiedChartFiles));
   } catch (error) {
     core.setFailed(getErrorMessage(error));
   }

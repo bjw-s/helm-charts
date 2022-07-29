@@ -95,11 +95,14 @@ function run() {
                 return;
             }
             // Get the changed files from the response payload.
-            const addedModifiedChartFiles = ((_e = response.data.files) === null || _e === void 0 ? void 0 : _e.filter((file) => file.filename.startsWith(`${chartsFolder}/`))) || [];
-            for (const file of addedModifiedChartFiles) {
-                const filename = file.filename;
-                core.info(JSON.stringify(path.parse(filename)));
-            }
+            const addedModifiedChartFiles = ((_e = response.data.files) === null || _e === void 0 ? void 0 : _e.filter(function (file) {
+                let result = [];
+                if (path.dirname(file.filename).startsWith(chartsFolder)) {
+                    result.push(file.filename);
+                }
+                return result;
+            })) || [];
+            core.info(JSON.stringify(addedModifiedChartFiles));
         }
         catch (error) {
             core.setFailed(getErrorMessage(error));
