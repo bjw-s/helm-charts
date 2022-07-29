@@ -1,7 +1,7 @@
 import * as core from "@actions/core";
 import * as github from "@actions/github";
+import * as path from 'path';
 import * as YAML from "yaml";
-
 import * as fs from "fs-extra";
 
 function getErrorMessage(error: unknown) {
@@ -75,7 +75,7 @@ async function run() {
       ) || [];
     for (const file of addedModifiedChartFiles) {
       const filename = file.filename;
-      core.info(filename);
+      core.info(path.dirname(filename));
     }
   } catch (error) {
     core.setFailed(getErrorMessage(error));

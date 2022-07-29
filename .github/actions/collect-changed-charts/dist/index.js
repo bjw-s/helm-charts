@@ -41,6 +41,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
+const path = __importStar(__nccwpck_require__(5622));
 const fs = __importStar(__nccwpck_require__(5630));
 function getErrorMessage(error) {
     if (error instanceof Error)
@@ -97,7 +98,7 @@ function run() {
             const addedModifiedChartFiles = ((_e = response.data.files) === null || _e === void 0 ? void 0 : _e.filter((file) => file.filename.startsWith(`${chartsFolder}/`))) || [];
             for (const file of addedModifiedChartFiles) {
                 const filename = file.filename;
-                core.info(filename);
+                core.info(path.dirname(filename));
             }
         }
         catch (error) {
