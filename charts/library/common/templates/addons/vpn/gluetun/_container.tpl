@@ -1,10 +1,10 @@
 {{/*
-The Wireguard sidecar container to be inserted.
+The gluetun sidecar container to be inserted.
 */}}
-{{- define "common.addon.wireguard.container" -}}
-name: wireguard
-image: "{{ .Values.addons.vpn.wireguard.image.repository }}:{{ .Values.addons.vpn.wireguard.image.tag }}"
-imagePullPolicy: {{ .Values.addons.vpn.wireguard.pullPolicy }}
+{{- define "common.addon.gluetun.container" -}}
+name: gluetun
+image: "{{ .Values.addons.vpn.gluetun.image.repository }}:{{ .Values.addons.vpn.gluetun.image.tag }}"
+imagePullPolicy: {{ .Values.addons.vpn.gluetun.pullPolicy }}
 {{- with .Values.addons.vpn.securityContext }}
 securityContext:
   {{- toYaml . | nindent 2 }}
@@ -25,17 +25,17 @@ args:
 volumeMounts:
 {{- if or .Values.addons.vpn.configFile .Values.addons.vpn.configFileSecret }}
   - name: vpnconfig
-    mountPath: /etc/wireguard/wg0.conf
+    mountPath: /gluetun/config.conf
     subPath: vpnConfigfile
 {{- end }}
 {{- if .Values.addons.vpn.scripts.up }}
   - name: vpnscript
-    mountPath: /config/up.sh
+    mountPath: /gluetun/scripts/up.sh
     subPath: up.sh
 {{- end }}
 {{- if .Values.addons.vpn.scripts.down }}
   - name: vpnscript
-    mountPath: /config/down.sh
+    mountPath: /gluetun/scripts/down.sh
     subPath: down.sh
 {{- end }}
 {{- if .Values.persistence.shared.enabled }}

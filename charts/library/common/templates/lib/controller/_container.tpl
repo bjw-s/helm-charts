@@ -47,7 +47,7 @@
         {{- if hasKey $value "value" }}
             {{- $value = $value.value -}}
         {{- else if hasKey $value "valueFrom" }}
-          {{- toYaml $value | nindent 6 }}
+          {{- dict "valueFrom" $value.valueFrom | toYaml | nindent 6 }}
         {{- else }}
           {{- dict "valueFrom" $value | toYaml | nindent 6 }}
         {{- end }}

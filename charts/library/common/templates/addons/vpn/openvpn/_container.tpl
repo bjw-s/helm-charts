@@ -11,14 +11,15 @@ securityContext:
 {{- end }}
 {{- with .Values.addons.vpn.env }}
 env:
-{{- range $k, $v := . }}
-  - name: {{ $k }}
-    value: {{ $v | quote }}
+  {{- . | toYaml | nindent 2 }}
 {{- end }}
+{{- with .Values.addons.vpn.envFrom }}
+envFrom:
+  {{- . | toYaml | nindent 2 }}
 {{- end }}
+{{- with .Values.addons.vpn.args }}
 args:
-{{- range .Values.addons.vpn.args }}
-- {{ . | quote }}
+  {{- . | toYaml | nindent 2 }}
 {{- end }}
 {{- if or .Values.addons.vpn.openvpn.auth .Values.addons.vpn.openvpn.authSecret }}
 envFrom:
