@@ -60,4 +60,7 @@ jobs:
       - pr-metadata
     with:
       checkoutCommit: ${{ github.sha }}
-      chartsToTest: '["library/common"]'
+      chartsToTest: |
+        [
+          "library/common"
+        ]
