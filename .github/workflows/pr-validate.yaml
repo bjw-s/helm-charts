@@ -67,10 +67,7 @@ jobs:
             '["other/kah-common-chart"]'
           ) || '[]'
         }}
-      symlinkDeps: |-
+      overrideDeps: |-
         [
-          {
-            "dep": "common",
-            "source": "library/common"
-          }
+          {"name": "common", "repository": "file://../../library/common", version: "*"}
         ]

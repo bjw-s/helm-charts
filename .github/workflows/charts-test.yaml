@@ -11,9 +11,9 @@ on:
           A JSON encoded array of charts to lint
         type: string
         required: true
-      symlinkDeps:
+      overrideDeps:
         description: >
-          A JSON encoded array of dependencies to symlink before testing
+          A JSON encoded array of dependencies to override before testing
         type: string
         required: false
         default: '[]'
@@ -63,17 +63,20 @@ jobs:
         run: |
           kubectl taint --all=true nodes node.cloudprovider.kubernetes.io/uninitialized- || true
 
-      - name: Symlink dependencies
-        if: ${{ inputs.symlinkDeps != '[]' }}
+      - name: Override dependencies
+        if: ${{ inputs.overrideDeps != '[]' }}
         run: |
-          dependencies=( $(yq --null-input e -o=j -I=0 '${{ inputs.symlinkDeps }}[]' ) )
+          overrides=( $(yq --null-input e -o=j -I=0 '${{ inputs.overrideDeps }}[]' ) )
+          chartFile="charts/${{ matrix.chart }}/Chart.yaml"
 
-          for dependency in "${dependencies[@]}"; do
-            source=$(echo "$dependency" | yq e '.source' -)
-            destination=$(echo "$dependency" | yq e '.destination' -)
-            echo $source
+          for override in "${overrides[@]}"; do
+            name=$(echo "$dependency" | yq e '.name' -)
+            repository=$(echo "$dependency" | yq e '.repository' -)
+            version=$(echo "$dependency" | yq e '.version' -)
+
+            yq -i "(.dependencies[] | select(.name == \"$name\").repository) |= \"$repository\"" "${chartFile}"
+            yq -i "(.dependencies[] | select(.name == \"$name\").version) |= \"$version\"" "${chartFile}"
           done
-
 
       - name: Run chart-testing (install)
         run: ct install --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
@@ -113,12 +116,26 @@ jobs:
             helmv3
           helm: "${{ env.HELM_VERSION }}"
 
+      - name: Override dependencies
+        if: ${{ inputs.overrideDeps != '[]' }}
+        run: |
+          overrides=( $(yq --null-input e -o=j -I=0 '${{ inputs.overrideDeps }}[]' ) )
+          chartFile="charts/${{ matrix.chart }}/Chart.yaml"
+
+          for override in "${overrides[@]}"; do
+            name=$(echo "$dependency" | yq e '.name' -)
+            repository=$(echo "$dependency" | yq e '.repository' -)
+            version=$(echo "$dependency" | yq e '.version' -)
+
+            yq -i "(.dependencies[] | select(.name == \"$name\").repository) |= \"$repository\"" "${chartFile}"
+            yq -i "(.dependencies[] | select(.name == \"$name\").version) |= \"$version\"" "${chartFile}"
+          done
+
       - name: Run tests
         run: |
           helm plugin install https://github.com/vbehar/helm3-unittest --version v1.0.16
-          cd "charts/${{ matrix.chart }}"
-          helm dep update
-          helm unittest -f "tests/**/*_test.yaml" .
+          helm dep update "charts/${{ matrix.chart }}"
+          helm unittest -f "tests/**/*_test.yaml" "charts/${{ matrix.chart }}"
 
   # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
   unittest_success:
