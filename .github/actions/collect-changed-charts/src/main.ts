@@ -64,6 +64,9 @@ function filterChangedCharts(files: string[], parentFolder: string) {
     const chart = absoluteChartFolder.slice(absoluteParentFolder.length + 1);
     changedCharts.push(chart);
   });
+
+  // Return only unique items
+  return changedCharts.filter((item, index) => changedCharts.indexOf(item) === index);
 }
 
 async function run() {
