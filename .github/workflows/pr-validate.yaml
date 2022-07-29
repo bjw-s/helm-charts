@@ -69,5 +69,5 @@ jobs:
         }}
       overrideDeps: |-
         [
-          {"name": "common", "repository": "file://../../library/common", version: "*"}
+          {"name": "common", "repository": "file://../../library/common", "version": "*"}
         ]

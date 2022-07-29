@@ -63,20 +63,12 @@ jobs:
         run: |
           kubectl taint --all=true nodes node.cloudprovider.kubernetes.io/uninitialized- || true
 
-      - name: Override dependencies
+      - name: Override chart dependencies
+        uses: ./.github/actions/override-chart-deps
         if: ${{ inputs.overrideDeps != '[]' }}
-        run: |
-          overrides=( $(yq --null-input e -o=j -I=0 '${{ inputs.overrideDeps }}[]' ) )
-          chartFile="charts/${{ matrix.chart }}/Chart.yaml"
-
-          for override in "${overrides[@]}"; do
-            name=$(echo "$dependency" | yq e '.name' -)
-            repository=$(echo "$dependency" | yq e '.repository' -)
-            version=$(echo "$dependency" | yq e '.version' -)
-
-            yq -i "(.dependencies[] | select(.name == \"$name\").repository) |= \"$repository\"" "${chartFile}"
-            yq -i "(.dependencies[] | select(.name == \"$name\").version) |= \"$version\"" "${chartFile}"
-          done
+        with:
+          chart: ${{ matrix.chart }}
+          overrides: ${{ fromJSON(inputs.overrideDeps) }}
 
       - name: Run chart-testing (install)
         run: ct install --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
@@ -116,20 +108,12 @@ jobs:
             helmv3
           helm: "${{ env.HELM_VERSION }}"
 
-      - name: Override dependencies
+      - name: Override chart dependencies
+        uses: ./.github/actions/override-chart-deps
         if: ${{ inputs.overrideDeps != '[]' }}
-        run: |
-          overrides=( $(yq --null-input e -o=j -I=0 '${{ inputs.overrideDeps }}[]' ) )
-          chartFile="charts/${{ matrix.chart }}/Chart.yaml"
-
-          for override in "${overrides[@]}"; do
-            name=$(echo "$dependency" | yq e '.name' -)
-            repository=$(echo "$dependency" | yq e '.repository' -)
-            version=$(echo "$dependency" | yq e '.version' -)
-
-            yq -i "(.dependencies[] | select(.name == \"$name\").repository) |= \"$repository\"" "${chartFile}"
-            yq -i "(.dependencies[] | select(.name == \"$name\").version) |= \"$version\"" "${chartFile}"
-          done
+        with:
+          chart: ${{ matrix.chart }}
+          overrides: ${{ fromJSON(inputs.overrideDeps) }}
 
       - name: Run tests
         run: |
