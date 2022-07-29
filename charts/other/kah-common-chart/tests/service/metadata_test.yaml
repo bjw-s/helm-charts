@@ -17,7 +17,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: kah-common-chart
-            helm.sh/chart: common-test-0.1.0
+            helm.sh/chart: kah-common-chart-1.1.2
 
   - it: custom metadata should pass
     set:
@@ -43,7 +43,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: kah-common-chart
-            helm.sh/chart: common-test-0.1.0
+            helm.sh/chart: kah-common-chart-1.1.2
             test_label: test
 
   - it: custom metadata with global metadata should pass
@@ -77,5 +77,5 @@ tests:
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: kah-common-chart
             global_label: test
-            helm.sh/chart: common-test-0.1.0
+            helm.sh/chart: kah-common-chart-1.1.2
             test_label: test
