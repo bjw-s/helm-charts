@@ -75,7 +75,7 @@ async function run() {
       ) || [];
     for (const file of addedModifiedChartFiles) {
       const filename = file.filename;
-      core.info(path.dirname(filename));
+      core.info(JSON.stringify(path.parse(filename)));
     }
   } catch (error) {
     core.setFailed(getErrorMessage(error));

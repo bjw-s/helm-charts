@@ -98,7 +98,7 @@ function run() {
             const addedModifiedChartFiles = ((_e = response.data.files) === null || _e === void 0 ? void 0 : _e.filter((file) => file.filename.startsWith(`${chartsFolder}/`))) || [];
             for (const file of addedModifiedChartFiles) {
                 const filename = file.filename;
-                core.info(path.dirname(filename));
+                core.info(JSON.stringify(path.parse(filename)));
             }
         }
         catch (error) {
