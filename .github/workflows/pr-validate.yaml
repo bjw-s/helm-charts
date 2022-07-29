@@ -63,8 +63,9 @@ jobs:
       chartsToTest: |
         ${{
           (
-            contains(fromJSON(needs.pr-metadata.outputs.chartsToInstall), 'library/common') && '[ "other/kah-common-chart" ]'
-          ) || '[]'
+            contains(fromJSON(needs.pr-metadata.outputs.chartsToInstall), 'library/common') &&
+            toJSON(["other/kah-common-chart"])
+          ) || toJSON([])
         }}
 
       # symlinkDeps: |
