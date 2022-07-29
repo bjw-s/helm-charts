@@ -51,6 +51,17 @@ async function requestAddedModifiedFiles(
   return result;
 }
 
+async function getRepoConfig(configPath: string) {
+  // Ensure that the repo config file exists.
+  if (!(await fs.pathExists(configPath))) {
+    throw new Error(`${configPath} Does not exist!`);
+  }
+
+  const repoConfigRaw = await fs.readFile(configPath, "utf8");
+  const repoConfig = await YAML.parse(repoConfigRaw);
+  return repoConfig;
+}
+
 function filterChangedCharts(files: string[], parentFolder: string) {
   const filteredChartFiles = files.filter((file) => {
     const rel = path.relative(parentFolder, file);
@@ -66,7 +77,9 @@ function filterChangedCharts(files: string[], parentFolder: string) {
   });
 
   // Return only unique items
-  return changedCharts.filter((item, index) => changedCharts.indexOf(item) === index);
+  return changedCharts.filter(
+    (item, index) => changedCharts.indexOf(item) === index
+  );
 }
 
 async function run() {
@@ -81,27 +94,26 @@ async function run() {
       required: true,
     });
 
-    // Ensure that the repo config file exists.
-    if (!(await fs.pathExists(repoConfigFilePath))) {
-      throw new Error(`${repoConfigFilePath} Does not exist!`);
-    }
+    const repoConfig = await getRepoConfig(repoConfigFilePath);
+    core.info(`Repo configuration: ${JSON.stringify(repoConfig)}`);
 
     // Define the base and head commits to be extracted from the payload.
-    const base = github.context.payload.pull_request?.base?.sha;
-    const head = github.context.payload.pull_request?.head?.sha;
-    core.info(`Base commit: ${base}`);
-    core.info(`Head commit: ${head}`);
+    const baseCommit = github.context.payload.pull_request?.base?.sha;
+    const headCommit = github.context.payload.pull_request?.head?.sha;
 
     // Ensure that the base and head properties are set on the payload.
-    if (!base || !head) {
+    if (!baseCommit || !headCommit) {
       throw new Error(
         `The base and head commits are missing from the payload for this PR.`
       );
     }
 
+    core.info(`Base commit: ${baseCommit}`);
+    core.info(`Head commit: ${headCommit}`);
+
     const responseFiles = await requestAddedModifiedFiles(
-      base,
-      head,
+      baseCommit,
+      headCommit,
       githubToken
     );
     const changedCharts = filterChangedCharts(responseFiles, chartsFolder);
