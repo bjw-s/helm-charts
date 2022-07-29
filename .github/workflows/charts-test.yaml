@@ -36,25 +36,13 @@ jobs:
           fetch-depth: 0
           ref: ${{ inputs.checkoutCommit }}
 
-      # - name: Determine changed charts
-      #   id: list-changed
-      #   if: inputs.chartChanges != ''
-      #   run: |
-      #     EXCLUDED=$(yq -o json eval '.excluded-charts-install' .ci/ct/ct.yaml)
-      #     CHARTS_JSON=$(yq --null-input -o json eval '"${{ inputs.chartChanges }}" | split(" ")')
-      #     OUTPUT_JSON=$(yq --null-input -o json eval "$CHARTS_JSON - $EXCLUDED")
-      #     echo ::set-output name=charts::${OUTPUT_JSON}
-      #     if [[ $(echo ${OUTPUT_JSON} | jq -c '. | length') -gt 0 ]]; then
-      #       echo "::set-output name=detected::true"
-      #     fi
-
       - name: Install prerequisites
         if: inputs.chartChanges != ''
         run: |
           npm install yaml@~2.1.1
 
       - uses: actions/github-script@v6
-        id: list-changed-new
+        id: list-changed
         if: inputs.chartChanges != ''
         env:
           CHART_CHANGES: "${{ inputs.chartChanges }}"
@@ -62,18 +50,19 @@ jobs:
           script: |
             const fs = require('fs');
             const YAML = require('yaml');
+
             const chartChanges = process.env.CHART_CHANGES.split(" ");
 
             const ctConfigRaw = fs.readFileSync('.ci/ct/ct.yaml', "utf8");
             const ctConfig = YAML.parse(ctConfigRaw);
-            const excludedCharts = ctConfig["excluded-charts-install"];
 
+            const excludedCharts = ctConfig["excluded-charts-install"];
             const chartsToInstall = chartChanges.filter(x => !excludedCharts.includes(x))
 
-            console.log(`Changed charts: ${chartChanges}`);
             console.log(`Excluded charts: ${excludedCharts}`);
-            console.log(`Resulting charts: ${chartsToInstall}`);
+            console.log(`Charts to install: ${chartsToInstall}`);
             core.setOutput('charts', chartsToInstall);
+            core.setOutput('detected', (chartsToInstall.length > 0));
 
   install-chart:
     needs:
