@@ -4,6 +4,8 @@ on:
   workflow_call:
     inputs:
       modifiedFiles:
+        description: >
+          A JSON-formatted array of files to check
         required: true
         type: string
 
@@ -18,4 +20,4 @@ jobs:
       - name: Run against changes
         uses: pre-commit/action@v3.0.0
         with:
-          extra_args: --files ${{ inputs.modifiedFiles }} --config .ci/pre-commit/config.yaml
+          extra_args: --files ${{ inputs.modifiedFiles.join(" ") }} --config .ci/pre-commit/config.yaml
