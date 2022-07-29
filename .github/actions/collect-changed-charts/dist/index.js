@@ -49,7 +49,7 @@ function getErrorMessage(error) {
     return String(error);
 }
 function run() {
-    var _a, _b, _c, _d, _e;
+    var _a, _b, _c, _d;
     return __awaiter(this, void 0, void 0, function* () {
         try {
             if (github.context.eventName !== "pull_request") {
@@ -95,7 +95,8 @@ function run() {
                 return;
             }
             // Get the changed files from the response payload.
-            const addedModifiedChartFiles = (_e = response.data.files) === null || _e === void 0 ? void 0 : _e.filter((file) => {
+            const responseFiles = response.data.files || [];
+            const addedModifiedChartFiles = responseFiles.filter((file) => {
                 let result = [];
                 const filename = file.filename;
                 const rel = path.relative(chartsFolder, filename);

@@ -69,7 +69,8 @@ async function run() {
     }
 
     // Get the changed files from the response payload.
-    const addedModifiedChartFiles = response.data.files?.filter((file) => {
+    const responseFiles = response.data.files || [];
+    const addedModifiedChartFiles = responseFiles.filter((file) => {
       let result: string[] = [];
       const filename = file.filename;
       const rel = path.relative(chartsFolder, filename);
