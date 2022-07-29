@@ -10,8 +10,7 @@ on:
         description: >
           A JSON encoded array of charts to lint
         type: string
-        required: false
-        default: '[]'
+        required: true
       symlinkDeps:
         description: >
           A JSON encoded array of dependencies to symlink before testing
@@ -23,6 +22,11 @@ env:
   HELM_VERSION: 3.9.2
 
 jobs:
+  debug:
+    runs-on: ubuntu-22.04
+    steps:
+      - run: echo "|${{ inputs.chartsToTest }}|"
+
   install-chart:
     name: Install chart
     runs-on: ubuntu-22.04
