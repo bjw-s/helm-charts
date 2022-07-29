@@ -97,7 +97,8 @@ function run() {
             // Get the changed files from the response payload.
             const addedModifiedChartFiles = (_e = response.data.files) === null || _e === void 0 ? void 0 : _e.filter((file) => {
                 let result = [];
-                if (path.dirname(file.filename).startsWith(`${chartsFolder}/`)) {
+                const filename = file.filename;
+                if (path.dirname(filename).startsWith(`${chartsFolder}/`)) {
                     result.push(file.filename);
                 }
                 return result;
