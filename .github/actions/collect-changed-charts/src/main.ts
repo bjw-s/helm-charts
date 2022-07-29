@@ -73,7 +73,7 @@ async function run() {
       file
     ) {
       let result: string[] = [];
-      if (path.dirname(file.filename).startsWith(chartsFolder)) {
+      if (path.dirname(file.filename).startsWith(`${chartsFolder}/`)) {
         result.push(file.filename);
       }
       return result;
