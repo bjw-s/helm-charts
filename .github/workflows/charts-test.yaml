@@ -25,7 +25,7 @@ jobs:
   install-chart:
     name: Install chart
     runs-on: ubuntu-22.04
-    if: ${{ inputs.chartsToTest != '' && inputs.chartsToTest != '[]' }}
+    if: ${{ fromJSON(inputs.chartsToTest) }}
     strategy:
       matrix:
         chart: ${{ fromJSON(inputs.chartsToTest) }}
@@ -81,13 +81,13 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Check install matrix status
-        if: ${{ (inputs.chartsToTest != '' && inputs.chartsToTest != '[]') && needs.install-chart.result != 'success' }}
+        if: ${{ fromJSON(inputs.chartsToTest) && needs.install-chart.result != 'success' }}
         run: exit 1
 
   unittest-chart:
     name: Unit-test chart
     runs-on: ubuntu-20.04
-    if: ${{ inputs.chartsToTest != '' && inputs.chartsToTest != '[]' }}
+    if: ${{ fromJSON(inputs.chartsToTest) }}
     strategy:
       matrix:
         chart: ${{ fromJSON(inputs.chartsToTest) }}
@@ -123,5 +123,5 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Check unittest matrix status
-        if: ${{ (inputs.chartsToTest != '' && inputs.chartsToTest != '[]') && needs.unittest-chart.result != 'success' }}
+        if: ${{ fromJSON(inputs.chartsToTest) && needs.unittest-chart.result != 'success' }}
         run: exit 1
