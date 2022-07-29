@@ -63,7 +63,7 @@ jobs:
             const fs = require('fs');
             const YAML = require('yaml');
             const chartChanges = process.env.CHART_CHANGES.split(" ");
-            const ctConfigRaw = fs.readFile('.ci/ct/ct.yaml', "utf8");
+            const ctConfigRaw = fs.readFileSync('.ci/ct/ct.yaml', "utf8");
             const ctConfig = YAML.parse(ctConfigRaw);
 
             console.log(chartChanges);
