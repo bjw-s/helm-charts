@@ -56,17 +56,19 @@ jobs:
       - uses: actions/github-script@v6
         id: list-changed-new
         if: inputs.chartChanges != ''
+        env:
+          CHART_CHANGES: "${{ inputs.chartChanges }}"
         with:
-          chartChanges: ${{ inputs.chartChanges }}
           script: |
+            const fs = require('fs');
             const YAML = require('yaml');
-
-            const chartChangesInput = core.getInput("chartChanges", { required: true });
-            const chartChanges = chartChangesInput.split(" ");
+            const chartChanges = process.env.CHART_CHANGES.split(" ");
+            const ctConfigRaw = fs.readFile('.ci/ct/ct.yaml', "utf8");
+            const ctConfig = YAML.parse(ctConfigRaw);
 
             console.log(chartChanges);
+            console.log(ctConfig.excluded-charts-install);
             core.setOutput('SELECTED_COLOR', 'green');
-
 
   install-chart:
     needs:
