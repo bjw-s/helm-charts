@@ -117,7 +117,7 @@ function run() {
                 required: true,
             });
             const repoConfig = yield getRepoConfig(repoConfigFilePath);
-            core.info(`Repo configuration: ${JSON.stringify(repoConfig)}`);
+            core.info(`Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`);
             // Define the base and head commits to be extracted from the payload.
             const baseCommit = (_b = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
             const headCommit = (_d = (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
@@ -129,7 +129,7 @@ function run() {
             core.info(`Head commit: ${headCommit}`);
             const responseFiles = yield requestAddedModifiedFiles(baseCommit, headCommit, githubToken);
             const changedCharts = filterChangedCharts(responseFiles, chartsFolder);
-            core.info(`Changed charts: ${JSON.stringify(changedCharts)}`);
+            core.info(`Changed charts: ${JSON.stringify(changedCharts, undefined, 2)}`);
             core.setOutput("changedCharts", changedCharts);
         }
         catch (error) {
