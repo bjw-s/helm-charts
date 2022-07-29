@@ -65,10 +65,10 @@ jobs:
         [
           "other/kah-common-chart"
         ]
-      symlinkDeps: |
-        [
-          {
-            "dep": "common"
-            "source": "library/common"
-          }
-        ]
+      # symlinkDeps: |
+      #   [
+      #     {
+      #       "dep": "common"
+      #       "source": "library/common"
+      #     }
+      #   ]
