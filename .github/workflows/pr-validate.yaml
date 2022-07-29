@@ -62,7 +62,10 @@ jobs:
       checkoutCommit: ${{ github.sha }}
       chartsToTest: |-
         ${{
-          (false && '["other/kah-common-chart"]') || '[]'
+          (
+            contains(fromJSON(needs.pr-metadata.outputs.addedOrModifiedCharts), 'library/common') &&
+            '["other/kah-common-chart"]'
+          ) || '[]'
         }}
       symlinkDeps: |-
         [
