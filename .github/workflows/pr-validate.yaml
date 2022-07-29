@@ -70,7 +70,7 @@ jobs:
       symlinkDeps: |-
         [
           {
-            "dep": "common"
+            "dep": "common",
             "source": "library/common"
           }
         ]
