@@ -18,17 +18,17 @@ concurrency:
 
 jobs:
   pr-metadata:
-    uses: bjw-s/helm-charts/.github/workflows/pr-metadata.yaml@main
+    uses: bjw-s/helm-charts/.github/workflows/pr-metadata.yaml@library-chart
 
   pre-commit-check:
-    uses: bjw-s/helm-charts/.github/workflows/pre-commit-check.yaml@main
+    uses: bjw-s/helm-charts/.github/workflows/pre-commit-check.yaml@library-chart
     needs:
       - pr-metadata
     with:
       modifiedFiles: ${{ needs.pr-metadata.outputs.addedOrModifiedFiles }}
 
   # charts-changelog:
-  #   uses: bjw-s/helm-charts/.github/workflows/charts-changelog.yaml@main
+  #   uses: bjw-s/helm-charts/.github/workflows/charts-changelog.yaml@library-chart
   #   needs:
   #     - pr-metadata
   #     - pre-commit-check
@@ -37,7 +37,7 @@ jobs:
   #     modifiedCharts: ${{ needs.pr-metadata.outputs.addedOrModifiedCharts }}
 
   charts-lint:
-    uses: bjw-s/helm-charts/.github/workflows/charts-lint.yaml@main
+    uses: bjw-s/helm-charts/.github/workflows/charts-lint.yaml@library-chart
     needs:
       - pr-metadata
       # - charts-changelog
@@ -46,10 +46,18 @@ jobs:
       chartsToLint: ${{ needs.pr-metadata.outputs.chartsToLint }}
 
   charts-test:
-    uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml@main
+    uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml@library-chart
     needs:
       - pr-metadata
       # - charts-changelog
     with:
       checkoutCommit: ${{ github.sha }}
       chartsToTest: ${{ needs.pr-metadata.outputs.chartsToInstall }}
+
+  library-charts-test:
+    uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml@library-chart
+    needs:
+      - pr-metadata
+    with:
+      checkoutCommit: ${{ github.sha }}
+      chartsToTest: '[library/common]'
