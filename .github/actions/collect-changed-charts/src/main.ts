@@ -95,7 +95,9 @@ async function run() {
     });
 
     const repoConfig = await getRepoConfig(repoConfigFilePath);
-    core.info(`Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`);
+    core.info(
+      `Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`
+    );
 
     // Define the base and head commits to be extracted from the payload.
     const baseCommit = github.context.payload.pull_request?.base?.sha;
@@ -117,9 +119,22 @@ async function run() {
       githubToken
     );
     const changedCharts = filterChangedCharts(responseFiles, chartsFolder);
+    const chartsToInstall = changedCharts.filter(
+      (x) => !repoConfig["excluded-charts-install"].includes(x)
+    );
+    const chartsToLint = changedCharts.filter(
+      (x) => !repoConfig["excluded-charts-lint"].includes(x)
+    );
 
     core.info(`Changed charts: ${JSON.stringify(changedCharts, undefined, 2)}`);
+    core.info(`Charts to lint: ${JSON.stringify(chartsToLint, undefined, 2)}`);
+    core.info(
+      `Charts to install: ${JSON.stringify(chartsToInstall, undefined, 2)}`
+    );
+
     core.setOutput("changedCharts", changedCharts);
+    core.setOutput("chartsToInstall", chartsToInstall);
+    core.setOutput("chartsToLint", chartsToLint);
   } catch (error) {
     core.setFailed(getErrorMessage(error));
   }

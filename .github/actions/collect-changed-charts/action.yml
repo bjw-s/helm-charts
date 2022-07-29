@@ -21,6 +21,12 @@ outputs:
   changedCharts:
     description: >
       An array of all the Helm charts that contain changes
+  chartsToInstall:
+    description: >
+      An array of the charts that should be installed
+  chartsToLint:
+    description: >
+      An array of the charts that should be linted
 runs:
   using: 'node16'
   main: 'dist/index.js'

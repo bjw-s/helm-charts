@@ -129,8 +129,14 @@ function run() {
             core.info(`Head commit: ${headCommit}`);
             const responseFiles = yield requestAddedModifiedFiles(baseCommit, headCommit, githubToken);
             const changedCharts = filterChangedCharts(responseFiles, chartsFolder);
+            const chartsToInstall = changedCharts.filter((x) => !repoConfig["excluded-charts-install"].includes(x));
+            const chartsToLint = changedCharts.filter((x) => !repoConfig["excluded-charts-lint"].includes(x));
             core.info(`Changed charts: ${JSON.stringify(changedCharts, undefined, 2)}`);
+            core.info(`Charts to lint: ${JSON.stringify(chartsToLint, undefined, 2)}`);
+            core.info(`Charts to install: ${JSON.stringify(chartsToInstall, undefined, 2)}`);
             core.setOutput("changedCharts", changedCharts);
+            core.setOutput("chartsToInstall", chartsToInstall);
+            core.setOutput("chartsToLint", chartsToLint);
         }
         catch (error) {
             core.setFailed(getErrorMessage(error));
