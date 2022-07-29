@@ -18,7 +18,7 @@ tests:
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-test
+            app.kubernetes.io/name: kah-common-chart
             helm.sh/chart: common-test-0.1.0
 
   - it: retain enabled should pass
@@ -41,7 +41,7 @@ tests:
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-test
+            app.kubernetes.io/name: kah-common-chart
             helm.sh/chart: common-test-0.1.0
 
   - it: custom metadata should pass
@@ -67,7 +67,7 @@ tests:
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-test
+            app.kubernetes.io/name: kah-common-chart
             helm.sh/chart: common-test-0.1.0
             test_label: test
 
@@ -100,7 +100,7 @@ tests:
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-test
+            app.kubernetes.io/name: kah-common-chart
             global_label: test
             helm.sh/chart: common-test-0.1.0
             test_label: test

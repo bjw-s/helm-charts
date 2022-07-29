@@ -97,8 +97,10 @@ function filterChangedCharts(files, parentFolder) {
     let changedCharts = [];
     filteredChartFiles.forEach((file) => {
         const absoluteParentFolder = path.resolve(parentFolder);
-        const absoluteChartFolder = path.resolve(path.dirname(file));
-        const chart = absoluteChartFolder.slice(absoluteParentFolder.length + 1);
+        const absoluteFileDirname = path.resolve(path.dirname(file));
+        const relativeFileDirname = absoluteFileDirname.slice(absoluteParentFolder.length + 1);
+        const chartPathParts = relativeFileDirname.split("/");
+        const chart = `${chartPathParts[0]}/${chartPathParts[1]}`;
         changedCharts.push(chart);
     });
     // Return only unique items
