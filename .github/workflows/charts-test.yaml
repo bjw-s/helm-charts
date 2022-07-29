@@ -9,14 +9,15 @@ on:
       chartsToTest:
         description: >
           A JSON encoded array of charts to lint
-        required: true
         type: string
+        required: false
+        default: '[]'
       symlinkDeps:
         description: >
           A JSON encoded array of dependencies to symlink before testing
+        type: string
         required: false
         default: '[]'
-        type: string
 
 env:
   HELM_VERSION: 3.9.2
@@ -25,10 +26,10 @@ jobs:
   install-chart:
     name: Install chart
     runs-on: ubuntu-22.04
-    if: ${{ fromJSON(inputs.chartsToTest) }}
+    if: ${{ inputs.chartsToTest != '[]' && inputs.chartsToTest != '' }}
     strategy:
       matrix:
-        chart: ${{ fromJSON(inputs.chartsToTest) || fromJSON('[]') }}
+        chart: ${{ fromJSON(inputs.chartsToTest) }}
         k8s_version: ["v1.22.12", "v1.24.3"]
       fail-fast: false
     steps:
@@ -81,16 +82,16 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Check install matrix status
-        if: ${{ fromJSON(inputs.chartsToTest) && needs.install-chart.result != 'success' }}
+        if: ${{ (inputs.chartsToTest != '[]' && inputs.chartsToTest != '') && needs.install-chart.result != 'success' }}
         run: exit 1
 
   unittest-chart:
     name: Unit-test chart
     runs-on: ubuntu-20.04
-    if: ${{ fromJSON(inputs.chartsToTest) }}
+    if: ${{ inputs.chartsToTest != '[]' && inputs.chartsToTest != '' }}
     strategy:
       matrix:
-        chart: ${{ fromJSON(inputs.chartsToTest) || fromJSON('[]') }}
+        chart: ${{ fromJSON(inputs.chartsToTest) }}
       fail-fast: false
     steps:
       - name: Checkout
@@ -123,5 +124,5 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Check unittest matrix status
-        if: ${{ fromJSON(inputs.chartsToTest) && needs.unittest-chart.result != 'success' }}
+        if: ${{ (inputs.chartsToTest != '[]' && inputs.chartsToTest != '') && needs.unittest-chart.result != 'success' }}
         run: exit 1
