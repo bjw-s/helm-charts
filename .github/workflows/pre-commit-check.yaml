@@ -5,7 +5,7 @@ on:
     inputs:
       modifiedFiles:
         description: >
-          A JSON-formatted array of files to check
+          A JSON array of files to check
         required: true
         type: string
 
