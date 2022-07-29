@@ -45,11 +45,11 @@ jobs:
       checkoutCommit: ${{ github.sha }}
       chartsToLint: ${{ needs.pr-metadata.outputs.chartsToLint }}
 
-  # charts-test:
-  #   uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml@update-workflow
-  #   needs:
-  #     - pr-metadata
-  #     # - charts-changelog
-  #   with:
-  #     checkoutCommit: ${{ github.sha }}
-  #     chartChanges: ${{ needs.pr-metadata.outputs.addedOrModifiedCharts }}
+  charts-test:
+    uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml@update-workflow
+    needs:
+      - pr-metadata
+      # - charts-changelog
+    with:
+      checkoutCommit: ${{ github.sha }}
+      chartsToTest: ${{ needs.pr-metadata.outputs.chartsToTest }}
