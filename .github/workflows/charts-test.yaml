@@ -36,24 +36,31 @@ jobs:
           fetch-depth: 0
           ref: ${{ inputs.checkoutCommit }}
 
-      - name: Determine changed charts
-        id: list-changed
+      # - name: Determine changed charts
+      #   id: list-changed
+      #   if: inputs.chartChanges != ''
+      #   run: |
+      #     EXCLUDED=$(yq -o json eval '.excluded-charts-install' .ci/ct/ct.yaml)
+      #     CHARTS_JSON=$(yq --null-input -o json eval '"${{ inputs.chartChanges }}" | split(" ")')
+      #     OUTPUT_JSON=$(yq --null-input -o json eval "$CHARTS_JSON - $EXCLUDED")
+      #     echo ::set-output name=charts::${OUTPUT_JSON}
+      #     if [[ $(echo ${OUTPUT_JSON} | jq -c '. | length') -gt 0 ]]; then
+      #       echo "::set-output name=detected::true"
+      #     fi
+
+      - name: Install prerequisites
         if: inputs.chartChanges != ''
         run: |
-          EXCLUDED=$(yq -o json eval '.excluded-charts-install' .ci/ct/ct.yaml)
-          CHARTS_JSON=$(yq --null-input -o json eval '"${{ inputs.chartChanges }}" | split(" ")')
-          OUTPUT_JSON=$(yq --null-input -o json eval "$CHARTS_JSON - $EXCLUDED")
-          echo ::set-output name=charts::${OUTPUT_JSON}
-          if [[ $(echo ${OUTPUT_JSON} | jq -c '. | length') -gt 0 ]]; then
-            echo "::set-output name=detected::true"
-          fi
+          npm install yaml
 
       - uses: actions/github-script@v6
         id: list-changed-new
         if: inputs.chartChanges != ''
         with:
           script: |
-            const YAML = require('yaml')
+            const YAML = require('yaml');
+            const chartChanges = core.getInput("chartChanges", { required: true });
+
             core.setOutput('SELECTED_COLOR', 'green');
 
 
