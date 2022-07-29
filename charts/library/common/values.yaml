@@ -483,7 +483,7 @@ addons:
     # -- Enable running a VPN in the pod to route traffic through a VPN
     enabled: false
 
-    # -- Specify the VPN type. Valid options are openvpn or wireguard
+    # -- Specify the VPN type. Valid options are `openvpn`, `wireguard` and `gluetun`.
     type: openvpn
 
     # -- OpenVPN specific configuration
@@ -512,6 +512,18 @@ addons:
         # -- Specify the WireGuard image tag
         tag: v1.0.20210914
         # -- Specify the WireGuard image pull policy
+        pullPolicy: IfNotPresent
+
+    # -- Gluetun specific configuration
+    # -- Make sure to read the [documentation](https://github.com/qdm12/gluetun/wiki) to see how to configure this addon!
+    # @default -- See below
+    gluetun:
+      image:
+        # -- Specify the Gluetun image
+        repository: docker.io/qmcgaw/gluetun
+        # -- Specify the Gluetun image tag
+        tag: v3.30.0
+        # -- Specify the Gluetun image pull policy
         pullPolicy: IfNotPresent
 
     # -- Set the VPN container securityContext
@@ -605,9 +617,9 @@ addons:
 
     image:
       # -- Specify the code-server image
-      repository: codercom/code-server
+      repository: ghcr.io/coder/code-server
       # -- Specify the code-server image tag
-      tag: 3.9.2
+      tag: 4.5.1
       # -- Specify the code-server image pull policy
       pullPolicy: IfNotPresent
 
@@ -671,6 +683,11 @@ addons:
         # kubernetes.io/tls-acme: "true"
 
       labels: {}
+
+      # -- Set the ingressClass that is used for this ingress.
+      # Requires Kubernetes >=1.19
+      ingressClassName:  # "nginx"
+
       hosts:
         - host: code.chart-example.local
           paths:
@@ -693,9 +710,9 @@ addons:
 
     image:
       # -- Specify the promtail image
-      repository: grafana/promtail
+      repository: docker.io/grafana/promtail
       # -- Specify the promtail image tag
-      tag: 2.2.0
+      tag: 2.6.1
       # -- Specify the promtail image pull policy
       pullPolicy: IfNotPresent
 
@@ -731,11 +748,11 @@ addons:
 
     image:
       # -- Specify the netshoot image
-      repository: nicolaka/netshoot
+      repository: ghcr.io/nicolaka/netshoot
       # -- Specify the netshoot image tag
-      tag: latest
+      tag: v0.7
       # -- Specify the netshoot image pull policy
-      pullPolicy: Always
+      pullPolicy: IfNotPresent
 
     # -- Set any environment variables for netshoot here
     env: {}

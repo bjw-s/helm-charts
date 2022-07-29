@@ -65,7 +65,7 @@ tests:
           value:
             name: configmap
             configMap:
-              name: RELEASE-NAME-common-test-config
+              name: RELEASE-NAME-kah-common-chart-config
 
   - it: secret persistence type should pass
     set:

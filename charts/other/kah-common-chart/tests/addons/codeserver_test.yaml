@@ -45,7 +45,7 @@ tests:
       - documentIndex: *AddonServiceDocument
         equal:
           path: metadata.name
-          value: RELEASE-NAME-common-test
+          value: RELEASE-NAME-kah-common-chart
 
   - it: addon enabled with deployKey should pass
     set:
@@ -83,11 +83,11 @@ tests:
               items:
                 - key: id_rsa
                   path: id_rsa
-              secretName: RELEASE-NAME-common-test-deploykey
+              secretName: RELEASE-NAME-kah-common-chart-deploykey
       - documentIndex: *AddonDeployKeySecretDocument
         equal:
           path: metadata.name
-          value: RELEASE-NAME-common-test-deploykey
+          value: RELEASE-NAME-kah-common-chart-deploykey
 
   - it: addon enabled with InlineBase64 deployKey should pass
     set:
@@ -125,11 +125,11 @@ tests:
               items:
                 - key: id_rsa
                   path: id_rsa
-              secretName: RELEASE-NAME-common-test-deploykey
+              secretName: RELEASE-NAME-kah-common-chart-deploykey
       - documentIndex: *AddonDeployKeySecretDocument
         equal:
           path: metadata.name
-          value: RELEASE-NAME-common-test-deploykey
+          value: RELEASE-NAME-kah-common-chart-deploykey
 
   - it: addon enabled with existingSecret deployKey should pass
     set:

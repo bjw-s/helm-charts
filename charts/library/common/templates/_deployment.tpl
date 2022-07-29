@@ -39,9 +39,9 @@ spec:
       {{- include "common.labels.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{ if .Values.podAnnotations }}
+      {{- with include ("common.podAnnotations") . }}
       annotations:
-        {{- tpl (toYaml .Values.podAnnotations) . | nindent 8 }}
+        {{- . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "common.labels.selectorLabels" . | nindent 8 }}

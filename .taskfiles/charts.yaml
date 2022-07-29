@@ -22,3 +22,11 @@ tasks:
     cmds:
       - docker run --rm -it --workdir=/data --volume $(pwd):/data {{.CT_IMAGE}} ct lint --config {{.CT_CONFIG_FILE}} --all --excluded-charts "{{.CHARTS_EXCLUDED_FROM_LINT}}"
     silent: true
+
+  dependency-cleanup:
+    desc: clean up chart dependencies
+    dir: "{{.PROJECT_DIR}}/charts"
+    cmds:
+    - find {{.PROJECT_DIR}}/charts/ -type f -name 'Chart.lock' -mindepth 1 -print0 | xargs -r -0 rm
+    - find {{.PROJECT_DIR}}/charts/ -type d -name 'charts' -mindepth 1 -print0 | xargs -r -0 rm -rf
+    silent: true

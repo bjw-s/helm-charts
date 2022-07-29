@@ -1,6 +1,6 @@
 # common
 
-![Version: 4.4.2](https://img.shields.io/badge/Version-4.4.2-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 4.5.0](https://img.shields.io/badge/Version-4.5.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for k8s-at-home charts
 
@@ -45,7 +45,7 @@ N/A
 
 ## Values
 
-**Important**: When deploying an application Helm chart you can add more values from our common library chart [here](https://github.com/k8s-at-home/library-charts/tree/main/charts/apps/common)
+**Important**: When deploying an application Helm chart you can add more values from our common library chart [here](https://github.com/k8s-at-home/library-charts/tree/main/charts/stable/common)
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -60,25 +60,26 @@ N/A
 | addons.codeserver.git.deployKeyBase64 | string | `""` | Base64-encoded SSH private key. When both variables are set, the raw SSH key takes precedence. |
 | addons.codeserver.git.deployKeySecret | string | `""` | Existing secret containing SSH private key The chart expects it to be present under the `id_rsa` key. |
 | addons.codeserver.image.pullPolicy | string | `"IfNotPresent"` | Specify the code-server image pull policy |
-| addons.codeserver.image.repository | string | `"codercom/code-server"` | Specify the code-server image |
-| addons.codeserver.image.tag | string | `"3.9.2"` | Specify the code-server image tag |
+| addons.codeserver.image.repository | string | `"ghcr.io/coder/code-server"` | Specify the code-server image |
+| addons.codeserver.image.tag | string | `"4.5.1"` | Specify the code-server image tag |
 | addons.codeserver.ingress.enabled | bool | `false` | Enable an ingress for the code-server add-on. |
+| addons.codeserver.ingress.ingressClassName | string | `nil` | Set the ingressClass that is used for this ingress. Requires Kubernetes >=1.19 |
 | addons.codeserver.service.enabled | bool | `true` | Enable a service for the code-server add-on. |
 | addons.codeserver.volumeMounts | list | `[]` | Specify a list of volumes that get mounted in the code-server container. At least 1 volumeMount is required! |
 | addons.codeserver.workingDir | string | `""` | Specify the working dir that will be opened when code-server starts If not given, the app will default to the mountpah of the first specified volumeMount |
 | addons.netshoot | object | See values.yaml | The common library supports adding a netshoot add-on to troubleshoot network issues within a Pod. It can be configured under this key. |
 | addons.netshoot.enabled | bool | `false` | Enable running a netshoot container in the pod |
 | addons.netshoot.env | object | `{}` | Set any environment variables for netshoot here |
-| addons.netshoot.image.pullPolicy | string | `"Always"` | Specify the netshoot image pull policy |
-| addons.netshoot.image.repository | string | `"nicolaka/netshoot"` | Specify the netshoot image |
-| addons.netshoot.image.tag | string | `"latest"` | Specify the netshoot image tag |
+| addons.netshoot.image.pullPolicy | string | `"IfNotPresent"` | Specify the netshoot image pull policy |
+| addons.netshoot.image.repository | string | `"ghcr.io/nicolaka/netshoot"` | Specify the netshoot image |
+| addons.netshoot.image.tag | string | `"v0.7"` | Specify the netshoot image tag |
 | addons.promtail | object | See values.yaml | The common library supports adding a promtail add-on to to access logs and ship them to loki. It can be configured under this key. |
 | addons.promtail.args | list | `[]` | Set promtail command line arguments |
 | addons.promtail.enabled | bool | `false` | Enable running a promtail container in the pod |
 | addons.promtail.env | object | `{}` | Set any environment variables for promtail here |
 | addons.promtail.image.pullPolicy | string | `"IfNotPresent"` | Specify the promtail image pull policy |
-| addons.promtail.image.repository | string | `"grafana/promtail"` | Specify the promtail image |
-| addons.promtail.image.tag | string | `"2.2.0"` | Specify the promtail image tag |
+| addons.promtail.image.repository | string | `"docker.io/grafana/promtail"` | Specify the promtail image |
+| addons.promtail.image.tag | string | `"2.6.1"` | Specify the promtail image tag |
 | addons.promtail.logs | list | `[]` | The paths to logs on the volume |
 | addons.promtail.loki | string | `""` | The URL to Loki |
 | addons.promtail.volumeMounts | list | `[]` | Specify a list of volumes that get mounted in the promtail container. At least 1 volumeMount is required! |
@@ -88,6 +89,10 @@ N/A
 | addons.vpn.configFileSecret | string | `nil` | Reference an existing secret that contains the VPN configuration file The chart expects it to be present under the `vpnConfigfile` key. |
 | addons.vpn.enabled | bool | `false` | Enable running a VPN in the pod to route traffic through a VPN |
 | addons.vpn.env | object | `{}` | All variables specified here will be added to the vpn sidecar container See the documentation of the VPN image for all config values |
+| addons.vpn.gluetun | object | See below | Gluetun specific configuration -- Make sure to read the [documentation](https://github.com/qdm12/gluetun/wiki) to see how to configure this addon! |
+| addons.vpn.gluetun.image.pullPolicy | string | `"IfNotPresent"` | Specify the Gluetun image pull policy |
+| addons.vpn.gluetun.image.repository | string | `"docker.io/qmcgaw/gluetun"` | Specify the Gluetun image |
+| addons.vpn.gluetun.image.tag | string | `"v3.30.0"` | Specify the Gluetun image tag |
 | addons.vpn.livenessProbe | object | `{}` | Optionally specify a livenessProbe, e.g. to check if the connection is still being protected by the VPN |
 | addons.vpn.networkPolicy.annotations | object | `{}` | Provide additional annotations which may be required. |
 | addons.vpn.networkPolicy.egress | string | `nil` | The egress configuration for your network policy, All outbound traffic from the pod will be blocked unless specified here. [[ref]](https://kubernetes.io/docs/concepts/services-networking/network-policies/) [[recipes]](https://github.com/ahmetb/kubernetes-network-policy-recipes) |
@@ -102,7 +107,7 @@ N/A
 | addons.vpn.openvpn.image.tag | string | `"latest"` | Specify the openvpn client image tag |
 | addons.vpn.scripts | object | See values.yaml | Provide custom up/down scripts that can be used by the vpn configuration. |
 | addons.vpn.securityContext | object | See values.yaml | Set the VPN container securityContext |
-| addons.vpn.type | string | `"openvpn"` | Specify the VPN type. Valid options are openvpn or wireguard |
+| addons.vpn.type | string | `"openvpn"` | Specify the VPN type. Valid options are `openvpn`, `wireguard` and `gluetun`. |
 | addons.vpn.wireguard | object | See below | WireGuard specific configuration |
 | addons.vpn.wireguard.image.pullPolicy | string | `"IfNotPresent"` | Specify the WireGuard image pull policy |
 | addons.vpn.wireguard.image.repository | string | `"ghcr.io/k8s-at-home/wireguard"` | Specify the WireGuard image |
@@ -231,6 +236,25 @@ All notable changes to this library Helm chart will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+### [4.5.0]
+
+#### Added
+
+- Support checksum/config annotations for configMaps to automate roll deployments/daemonsets/statefulsets after config changes.
+- Support Gluetun VPN client add-on. Please see [the project repository](https://github.com/qdm12/gluetun) for more information and how to configure.
+- Added support for the `envFrom` field in the VPN add-on.
+
+#### Changed
+
+- Updated and pinned `netshoot` add-on image to `v0.7`.
+- Updated `code-server` add-on image to `4.5.1`.
+- Updated `promtail` add-on image to `2.6.1`.
+
+#### Fixed
+
+- Added `ingressClassName` description under the `code-server` add-on.
+- `valueFrom` now works correctly when `env` is a list of variables.
 
 ### [4.4.2]
 
