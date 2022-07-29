@@ -23,10 +23,13 @@ runs:
         fi
 
         for override in "${overrides[@]}"; do
-          name=$(echo "$dependency" | yq e '.name' -)
-          repository=$(echo "$dependency" | yq e '.repository' -)
-          version=$(echo "$dependency" | yq e '.version' -)
+          name=$(echo "$override" | yq e '.name' -)
+          repository=$(echo "$override" | yq e '.repository' -)
+          version=$(echo "$override" | yq e '.version' -)
 
           yq -i "(.dependencies[] | select(.name == \"$name\").repository) |= \"$repository\"" "${chartFile}"
           yq -i "(.dependencies[] | select(.name == \"$name\").version) |= \"$version\"" "${chartFile}"
         done
+
+        echo "Resulting chart:"
+        cat ${chartFile}
