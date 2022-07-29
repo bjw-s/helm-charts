@@ -43,7 +43,7 @@ jobs:
       # - charts-changelog
     with:
       checkoutCommit: ${{ github.sha }}
-      chartChanges: ${{ needs.pr-metadata.outputs.addedOrModifiedCharts }}
+      chartsToLint: ${{ needs.pr-metadata.outputs.chartsToLint }}
 
   charts-test:
     uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml@main
@@ -52,4 +52,4 @@ jobs:
       # - charts-changelog
     with:
       checkoutCommit: ${{ github.sha }}
-      chartChanges: ${{ needs.pr-metadata.outputs.addedOrModifiedCharts }}
+      chartsToTest: ${{ needs.pr-metadata.outputs.chartsToInstall }}

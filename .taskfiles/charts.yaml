@@ -3,11 +3,12 @@ version: "3"
 
 vars:
   CT_IMAGE: quay.io/helmpack/chart-testing:v3.6.0
+  REPO_CONFIG_FILE: .ci/repo-config.yaml
   CT_CONFIG_FILE: .ci/ct/ct.yaml
   CHARTS_EXCLUDED_FROM_LINT:
-    sh: yq eval '.excluded-charts-lint | join(",")' {{.CT_CONFIG_FILE}}
+    sh: yq eval '.excluded-charts-lint | join(",")' {{.REPO_CONFIG_FILE}}
   CHARTS_EXCLUDED_FROM_INSTALL:
-    sh: yq eval '.excluded-charts-install | join(",")' {{.CT_CONFIG_FILE}}
+    sh: yq eval '.excluded-charts-install | join(",")' {{.REPO_CONFIG_FILE}}
 
 tasks:
   lint:

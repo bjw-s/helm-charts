@@ -9,15 +9,19 @@ on:
       isFork:
         description: "Is the PR coming from a forked repo?"
         value: ${{ jobs.pr-metadata.outputs.isFork }}
-      addedOrModified:
+      addedOrModifiedFilesDetected:
         description: "Does the PR contain any changes?"
-        value: ${{ jobs.pr-changes.outputs.addedOrModified }}
+        value: ${{ jobs.pr-changes.outputs.addedOrModifiedFilesDetected }}
       addedOrModifiedFiles:
         description: "A list of the files changed in this PR"
         value: ${{ jobs.pr-changes.outputs.addedOrModifiedFiles }}
       addedOrModifiedCharts:
         description: "A list of the charts changed in this PR"
         value: ${{ jobs.pr-changes.outputs.addedOrModifiedCharts }}
+      chartsToLint:
+        value: ${{ jobs.pr-changes.outputs.chartsToLint }}
+      chartsToInstall:
+        value: ${{ jobs.pr-changes.outputs.chartsToInstall }}
 
 jobs:
   pr-metadata:
@@ -48,17 +52,26 @@ jobs:
     name: Collect PR changes
     runs-on: ubuntu-22.04
     outputs:
-      addedOrModified: ${{ steps.collect-changes.outputs.changesDetected }}
-      addedOrModifiedFiles: ${{ steps.collect-changes.outputs.addedOrModifiedFiles }}
-      addedOrModifiedCharts: ${{ steps.collect-changes.outputs.addedOrModifiedCharts }}
+      addedOrModifiedFilesDetected: ${{ steps.changed-files.outputs.allAddedOrModified }}
+      addedOrModifiedFiles: ${{ steps.changed-files.outputs.allAddedOrModified_files }}
+      addedOrModifiedCharts: ${{ steps.changed-charts.outputs.changedCharts }}
+      chartsToLint: ${{ steps.changed-charts.outputs.chartsToLint }}
+      chartsToInstall: ${{ steps.changed-charts.outputs.chartsToInstall }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Collect changes
-        id: collect-changes
-        uses: ./.github/actions/collect-changes
+      - name: Collect changed files
+        uses: dorny/paths-filter@v2
+        id: changed-files
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          list-files: json
+          filters: |
+            allAddedOrModified:
+              - added|modified: '**'
+
+      - name: Collect changed charts
+        uses: ./.github/actions/collect-changed-charts
+        id: changed-charts

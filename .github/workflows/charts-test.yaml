@@ -6,7 +6,9 @@ on:
       checkoutCommit:
         required: true
         type: string
-      chartChanges:
+      chartsToTest:
+        description: >
+          A JSON encoded array of charts to lint
         required: true
         type: string
 
@@ -14,48 +16,15 @@ env:
   HELM_VERSION: 3.9.2
 
 jobs:
-  generate-test-matrix:
-    name: Generate matrix for install
-    runs-on: ubuntu-22.04
-    outputs:
-      install-matrix: |
-        {
-          "chart": ${{ steps.list-changed.outputs.charts }},
-          "k8s_version": ["v1.22.12", "v1.24.3"]
-        }
-      unittest-matrix: |
-        {
-          "chart": ${{ steps.list-changed.outputs.charts }}
-        }
-      detected: ${{ steps.list-changed.outputs.detected }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: ${{ inputs.checkoutCommit }}
-
-      - name: Run chart-testing (list-changed)
-        id: list-changed
-        if: inputs.chartChanges != ''
-        run: |
-          EXCLUDED=$(yq -o json eval '.excluded-charts-install' .ci/ct/ct.yaml)
-          CHARTS_JSON=$(yq --null-input -o json eval '"${{ inputs.chartChanges }}" | split(" ")')
-          OUTPUT_JSON=$(yq --null-input -o json eval "$CHARTS_JSON - $EXCLUDED")
-          echo ::set-output name=charts::${OUTPUT_JSON}
-          if [[ $(echo ${OUTPUT_JSON} | jq -c '. | length') -gt 0 ]]; then
-            echo "::set-output name=detected::true"
-          fi
-
   install-chart:
-    needs:
-      - generate-test-matrix
-    if: needs.generate-test-matrix.outputs.detected == 'true'
     name: Install chart
-    strategy:
-      matrix: ${{ fromJson(needs.generate-test-matrix.outputs.install-matrix) }}
-      fail-fast: false
     runs-on: ubuntu-22.04
+    if: ${{ inputs.chartsToTest != '' && inputs.chartsToTest != '[]' }}
+    strategy:
+      matrix:
+        chart: ${{ fromJSON(inputs.chartsToTest) }}
+        k8s_version: ["v1.22.12", "v1.24.3"]
+      fail-fast: false
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -94,7 +63,6 @@ jobs:
   # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
   install_success:
     needs:
-      - generate-test-matrix
       - install-chart
     if: |
       always()
@@ -102,17 +70,16 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Check install matrix status
-        if: ${{ (needs.generate-test-matrix.outputs.detected == 'true') && (needs.install-chart.result != 'success') }}
+        if: ${{ (inputs.chartsToTest != '' && inputs.chartsToTest != '[]') && needs.install-chart.result != 'success' }}
         run: exit 1
 
   unittest-chart:
     name: Unit-test chart
     runs-on: ubuntu-20.04
-    needs:
-      - generate-test-matrix
-    if: needs.generate-test-matrix.outputs.detected == 'true'
+    if: ${{ inputs.chartsToTest != '' && inputs.chartsToTest != '[]' }}
     strategy:
-      matrix: ${{ fromJson(needs.generate-test-matrix.outputs.unittest-matrix) }}
+      matrix:
+        chart: ${{ fromJSON(inputs.chartsToTest) }}
       fail-fast: false
     steps:
       - name: Checkout
@@ -138,7 +105,6 @@ jobs:
   # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
   unittest_success:
     needs:
-      - generate-test-matrix
       - unittest-chart
     if: |
       always()
@@ -146,5 +112,5 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Check unittest matrix status
-        if: ${{ (needs.generate-test-matrix.outputs.detected == 'true') && (needs.unittest-chart.result != 'success') }}
+        if: ${{ (inputs.chartsToTest != '' && inputs.chartsToTest != '[]') && needs.unittest-chart.result != 'success' }}
         run: exit 1
