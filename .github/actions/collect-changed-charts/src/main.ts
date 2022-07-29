@@ -72,9 +72,9 @@ async function run() {
 
     // Get the changed files from the response payload.
     const responseFiles = response.data.files || [];
-    const addedModifiedChartFiles = responseFiles.filter((x) => {
-      const filename = x.filename as string;
-      const filestatus = x.status as FileStatus;
+    const filteredResponseFiles = responseFiles.filter((file) => {
+      const filename = file.filename as string;
+      const filestatus = file.status as FileStatus;
       const rel = path.relative(chartsFolder, filename);
       return (
         (filestatus == "added" || filestatus == "modified") &&
@@ -83,7 +83,12 @@ async function run() {
       );
     });
 
-    core.info(JSON.stringify(addedModifiedChartFiles));
+    let changedCharts: string[] = [];
+    filteredResponseFiles.forEach((file) => {
+      changedCharts.push(file.filename);
+    });
+
+    core.info(JSON.stringify(changedCharts));
   } catch (error) {
     core.setFailed(getErrorMessage(error));
   }
