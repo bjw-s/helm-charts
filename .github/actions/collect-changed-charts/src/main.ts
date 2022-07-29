@@ -4,6 +4,8 @@ import * as path from "path";
 import * as YAML from "yaml";
 import * as fs from "fs-extra";
 
+type FileStatus = "added" | "modified" | "removed" | "renamed";
+
 function getErrorMessage(error: unknown) {
   if (error instanceof Error) return error.message;
   return String(error);
@@ -71,9 +73,14 @@ async function run() {
     // Get the changed files from the response payload.
     const responseFiles = response.data.files || [];
     const addedModifiedChartFiles = responseFiles.filter((x) => {
-      const filename = x.filename;
+      const filename = x.filename as string;
+      const filestatus = x.status as FileStatus;
       const rel = path.relative(chartsFolder, filename);
-      return !rel.startsWith("../") && rel !== "..";
+      return (
+        (filestatus == "added" || filestatus == "modified") &&
+        !rel.startsWith("../") &&
+        rel !== ".."
+      );
     });
 
     core.info(JSON.stringify(addedModifiedChartFiles));

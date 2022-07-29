@@ -98,8 +98,11 @@ function run() {
             const responseFiles = response.data.files || [];
             const addedModifiedChartFiles = responseFiles.filter((x) => {
                 const filename = x.filename;
+                const filestatus = x.status;
                 const rel = path.relative(chartsFolder, filename);
-                return !rel.startsWith("../") && rel !== "..";
+                return ((filestatus == "added" || filestatus == "modified") &&
+                    !rel.startsWith("../") &&
+                    rel !== "..");
             });
             core.info(JSON.stringify(addedModifiedChartFiles));
         }
