@@ -63,11 +63,14 @@ jobs:
             const fs = require('fs');
             const YAML = require('yaml');
             const chartChanges = process.env.CHART_CHANGES.split(" ");
+
             const ctConfigRaw = fs.readFileSync('.ci/ct/ct.yaml', "utf8");
             const ctConfig = YAML.parse(ctConfigRaw);
+            const excludedCharts = ctConfig["excluded-charts-install"];
 
-            console.log(chartChanges);
-            console.log(ctConfig.excluded-charts-install);
+            console.log(`Changed charts: ${chartChanges}`);
+            console.log(`Excluded charts: ${excludedCharts}`);
+            console.log(`Resulting charts: ${chartChanges.filter(x => !excludedCharts.includes(x))}`);
             core.setOutput('SELECTED_COLOR', 'green');
 
   install-chart:
