@@ -21,7 +21,7 @@ jobs:
     uses: bjw-s/helm-charts/.github/workflows/pr-metadata.yaml@update-workflow
 
   pre-commit-check:
-    uses: bjw-s/helm-charts/.github/workflows/pre-commit-check.yaml@main
+    uses: bjw-s/helm-charts/.github/workflows/pre-commit-check.yaml@update-workflow
     needs:
       - pr-metadata
     with:
