@@ -60,8 +60,11 @@ jobs:
       - pr-metadata
     with:
       checkoutCommit: ${{ github.sha }}
-      chartsToTest: ${{ (false && '["other/kah-common-chart"]') || '[]' }}
-      symlinkDeps: |
+      chartsToTest: |-
+        ${{
+          (false && '["other/kah-common-chart"]') || '[]'
+        }}
+      symlinkDeps: |-
         [
           {
             "dep": "common"
