@@ -61,12 +61,7 @@ jobs:
     with:
       checkoutCommit: ${{ github.sha }}
       chartsToTest: |
-        ${{
-          (
-            contains(fromJSON(needs.pr-metadata.outputs.chartsToInstall), 'library/common') &&
-            fromJSON('["other/kah-common-chart"]')
-          ) || 'none'
-        }}
+        ["other/kah-common-chart"]
       symlinkDeps: |
         [
           {
