@@ -9,6 +9,7 @@ on:
       chartsToTest:
         description: >
           A JSON encoded array of charts to lint
+        default: '[]'
         required: true
         type: string
 

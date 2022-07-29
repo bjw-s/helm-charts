@@ -10,6 +10,7 @@ on:
         description: >
           A JSON encoded array of charts to lint
         required: true
+        default: '[]'
         type: string
 
 env:
