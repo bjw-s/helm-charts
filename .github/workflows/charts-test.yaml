@@ -68,7 +68,7 @@ jobs:
         if: ${{ inputs.overrideDeps != '[]' }}
         with:
           chart: ${{ matrix.chart }}
-          overrides: ${{ fromJSON(inputs.overrideDeps) }}
+          overrides: ${{ inputs.overrideDeps }}
 
       - name: Run chart-testing (install)
         run: ct install --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
@@ -113,7 +113,7 @@ jobs:
         if: ${{ inputs.overrideDeps != '[]' }}
         with:
           chart: ${{ matrix.chart }}
-          overrides: ${{ fromJSON(inputs.overrideDeps) }}
+          overrides: ${{ inputs.overrideDeps }}
 
       - name: Run tests
         run: |
