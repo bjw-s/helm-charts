@@ -85,7 +85,10 @@ async function run() {
 
     let changedCharts: string[] = [];
     filteredResponseFiles.forEach((file) => {
-      changedCharts.push(file.filename);
+      const absoluteChartsFolder = path.resolve(chartsFolder);
+      const absoluteChartFolder = path.resolve(path.dirname(file.filename));
+      const chart = absoluteChartFolder.slice(absoluteChartsFolder.length);
+      changedCharts.push(chart);
     });
 
     core.info(JSON.stringify(changedCharts));
