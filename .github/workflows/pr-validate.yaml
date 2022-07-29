@@ -18,17 +18,17 @@ concurrency:
 
 jobs:
   pr-metadata:
-    uses: bjw-s/helm-charts/.github/workflows/pr-metadata.yaml
+    uses: ./.github/workflows/pr-metadata.yaml@update-workflow
 
   pre-commit-check:
-    uses: bjw-s/helm-charts/.github/workflows/pre-commit-check.yaml
+    uses: ./.github/workflows/pre-commit-check.yaml@update-workflow
     needs:
       - pr-metadata
     with:
       modifiedFiles: ${{ needs.pr-metadata.outputs.addedOrModifiedFiles }}
 
   # charts-changelog:
-  #   uses: bjw-s/helm-charts/.github/workflows/charts-changelog.yaml@main
+  #   uses: ./.github/workflows/charts-changelog.yaml@main
   #   needs:
   #     - pr-metadata
   #     - pre-commit-check
@@ -37,7 +37,7 @@ jobs:
   #     modifiedCharts: ${{ needs.pr-metadata.outputs.addedOrModifiedCharts }}
 
   charts-lint:
-    uses: bjw-s/helm-charts/.github/workflows/charts-lint.yaml
+    uses: ./.github/workflows/charts-lint.yaml@update-workflow
     needs:
       - pr-metadata
       # - charts-changelog
@@ -46,7 +46,7 @@ jobs:
       chartsToLint: ${{ needs.pr-metadata.outputs.chartsToLint }}
 
   charts-test:
-    uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml
+    uses: ./.github/workflows/charts-test.yaml@update-workflow
     needs:
       - pr-metadata
       # - charts-changelog
