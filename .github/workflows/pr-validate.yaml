@@ -65,7 +65,7 @@ jobs:
           (
             contains(fromJSON(needs.pr-metadata.outputs.chartsToInstall), 'library/common') &&
             fromJSON('["other/kah-common-chart"]')
-          ) || fromJSON('[]')
+          ) || '[]'
         }}
 
       # symlinkDeps: |
