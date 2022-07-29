@@ -57,10 +57,14 @@ jobs:
         id: list-changed-new
         if: inputs.chartChanges != ''
         with:
+          chartChanges: ${{ inputs.chartChanges }}
           script: |
             const YAML = require('yaml');
-            const chartChanges = core.getInput("chartChanges", { required: true });
 
+            const chartChangesInput = core.getInput("chartChanges", { required: true });
+            const chartChanges = chartChangesInput.split(" ");
+
+            console.log(chartChanges);
             core.setOutput('SELECTED_COLOR', 'green');
 
 
