@@ -98,8 +98,9 @@ function run() {
             const addedModifiedChartFiles = (_e = response.data.files) === null || _e === void 0 ? void 0 : _e.filter((file) => {
                 let result = [];
                 const filename = file.filename;
-                if (path.dirname(filename).startsWith(`${chartsFolder}/`)) {
-                    result.push(file.filename);
+                const rel = path.relative(chartsFolder, filename);
+                if (!rel.startsWith("../") && rel !== "..") {
+                    result.push(filename);
                 }
                 return result;
             });

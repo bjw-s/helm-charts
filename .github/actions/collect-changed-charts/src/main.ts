@@ -72,9 +72,12 @@ async function run() {
     const addedModifiedChartFiles = response.data.files?.filter((file) => {
       let result: string[] = [];
       const filename = file.filename;
-      if (path.dirname(filename).startsWith(`${chartsFolder}/`)) {
-        result.push(file.filename);
+      const rel = path.relative(chartsFolder, filename);
+
+      if (!rel.startsWith("../") && rel !== "..") {
+        result.push(filename);
       }
+
       return result;
     });
     core.info(JSON.stringify(addedModifiedChartFiles));
