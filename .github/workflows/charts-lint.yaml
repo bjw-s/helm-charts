@@ -10,7 +10,6 @@ on:
         description: >
           A JSON encoded array of charts to lint
         required: true
-        default: '[]'
         type: string
 
 env:
@@ -61,5 +60,5 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Check lint matrix status
-        if: ${{ (inputs.chartsToLint != '[]') && (needs.lint-chart.result != 'success') }}
+        if: ${{ (inputs.chartsToLint != '' && inputs.chartsToLint != '[]') && (needs.lint-chart.result != 'success') }}
         run: exit 1
