@@ -46,7 +46,7 @@ jobs:
       chartChanges: ${{ needs.pr-metadata.outputs.addedOrModifiedCharts }}
 
   charts-test:
-    uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml@main
+    uses: bjw-s/helm-charts/.github/workflows/charts-test.yaml@update-workflow
     needs:
       - pr-metadata
       # - charts-changelog

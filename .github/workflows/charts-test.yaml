@@ -28,6 +28,7 @@ jobs:
           "chart": ${{ steps.list-changed.outputs.charts }}
         }
       detected: ${{ steps.list-changed.outputs.detected }}
+      common-updated: ${{ steps.list-changed.outputs.common-updated }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -35,7 +36,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ inputs.checkoutCommit }}
 
-      - name: Run chart-testing (list-changed)
+      - name: Determine changed charts
         id: list-changed
         if: inputs.chartChanges != ''
         run: |
@@ -46,6 +47,15 @@ jobs:
           if [[ $(echo ${OUTPUT_JSON} | jq -c '. | length') -gt 0 ]]; then
             echo "::set-output name=detected::true"
           fi
+
+      - uses: actions/github-script@v6
+        id: list-changed-new
+        if: inputs.chartChanges != ''
+        with:
+          script: |
+            const YAML = require('yaml')
+            core.setOutput('SELECTED_COLOR', 'green');
+
 
   install-chart:
     needs:
