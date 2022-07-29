@@ -28,7 +28,7 @@ jobs:
     if: ${{ fromJSON(inputs.chartsToTest) }}
     strategy:
       matrix:
-        chart: ${{ fromJSON(inputs.chartsToTest) || [] }}
+        chart: ${{ fromJSON(inputs.chartsToTest) || fromJSON('[]') }}
         k8s_version: ["v1.22.12", "v1.24.3"]
       fail-fast: false
     steps:
@@ -90,7 +90,7 @@ jobs:
     if: ${{ fromJSON(inputs.chartsToTest) }}
     strategy:
       matrix:
-        chart: ${{ fromJSON(inputs.chartsToTest) || [] }}
+        chart: ${{ fromJSON(inputs.chartsToTest) || fromJSON('[]') }}
       fail-fast: false
     steps:
       - name: Checkout
