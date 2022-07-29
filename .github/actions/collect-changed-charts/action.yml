@@ -1,0 +1,21 @@
+name: 'Changed charts'
+description: 'Collects the changed Helm charts and returns the lint/test matrix'
+inputs:
+  token:
+    description: >
+      GitHub token for GitHub API requests.
+    required: true
+    default: '${{ github.token }}'
+  configFile:
+    description: >
+      Path to the repo config file that contains which charts
+      should be excluded from linting/testing.
+    required: true
+    default: '.ci/repo-config.yaml'
+outputs:
+  changedCharts:
+    description: >
+      An array of all the Helm charts that contain changes
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

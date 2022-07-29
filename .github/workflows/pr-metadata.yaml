@@ -48,17 +48,81 @@ jobs:
     name: Collect PR changes
     runs-on: ubuntu-22.04
     outputs:
-      addedOrModified: ${{ steps.collect-changes.outputs.changesDetected }}
-      addedOrModifiedFiles: ${{ steps.collect-changes.outputs.addedOrModifiedFiles }}
-      addedOrModifiedCharts: ${{ steps.collect-changes.outputs.addedOrModifiedCharts }}
+      addedOrModifiedFilesDetected: ${{ steps.changed-files.outputs.allAddedOrModified }}
+      addedOrModifiedFiles: ${{ steps.changed-files.outputs.allAddedOrModified_files }}
+      # addedOrModifiedCharts: ${{ steps.collect-changes.outputs.addedOrModifiedCharts }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Collect changes
-        id: collect-changes
-        uses: ./.github/actions/collect-changes
+      - name: Collect changed files
+        uses: dorny/paths-filter@v2
+        id: changed-files
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          list-files: json
+          filters: |
+            allAddedOrModified:
+              - added|modified: '**'
+
+      - name: Collect changed charts
+        uses: ./.github/actions/collect-changed-charts
+        id: changed-charts
+
+      # - name: Collect changed charts
+      #   id: changed-charts
+      #   shell: bash
+      #   run: |
+      #     CHARTS=()
+      #     PATHS=(${{ steps.filter.outputs.chartsAddedOrModified_files }})
+
+      #     # Get only the chart paths
+      #     for CHARTPATH in "${PATHS[@]}"
+      #     do
+      #       IFS='/' read -r -a path_parts <<< "${CHARTPATH}"
+      #       CHARTS+=("${path_parts[1]}/${path_parts[2]}")
+      #     done
+
+      #     # Remove duplicates
+      #     CHARTS=( `printf "%s\n" "${CHARTS[@]}" | sort -u` )
+
+      #     # Set output to changed charts
+      #     printf "::set-output name=addedOrModifiedCharts::%s\n" "${CHARTS[*]}"
+
+      # - name: Determine changed charts
+      #   uses: actions/github-script@v6
+      #   id: changed-charts
+      #   env:
+      #     CHART_FILES_CHANGED: ${{ steps.filter.outputs.chartsAddedOrModified_files }}
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       const chartFilesChanged = chartChanges.filter(x => !excludedCharts.includes(x))
+
+      #       core.info(`Chart files changed: ${JSON.stringify(chartFilesChanged, undefined, 2)}`);
+
+      # - uses: actions/github-script@v6
+      #   id: generate-matrix
+      #   if: inputs.chartChanges != ''
+      #   env:
+      #     CHART_CHANGES: "${{ inputs.chartChanges }}"
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       const fs = require('fs');
+      #       const YAML = require('yaml');
+
+      #       const chartChanges = process.env.CHART_CHANGES.split(" ");
+
+      #       const ctConfigRaw = fs.readFileSync('.ci/ct/ct.yaml', "utf8");
+      #       const ctConfig = YAML.parse(ctConfigRaw);
+
+      #       const excludedCharts = ctConfig["excluded-charts-install"];
+      #       const chartsToInstall = chartChanges.filter(x => !excludedCharts.includes(x))
+
+      #       core.info(`Charts with changes: ${JSON.stringify(chartChanges, undefined, 2)}`);
+      #       core.info(`Excluded charts: ${JSON.stringify(excludedCharts, undefined, 2)}`);
+      #       core.info(`Charts to install: ${JSON.stringify(chartsToInstall, undefined, 2)}`);
+      #       core.setOutput('charts', chartsToInstall);
+      #       core.setOutput('detected', (chartsToInstall.length > 0));
