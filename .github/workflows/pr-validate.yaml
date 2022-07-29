@@ -18,10 +18,10 @@ concurrency:
 
 jobs:
   pr-metadata:
-    uses: ./.github/workflows/pr-metadata.yaml@update-workflow
+    uses: ./.github/workflows/pr-metadata.yaml
 
   pre-commit-check:
-    uses: ./.github/workflows/pre-commit-check.yaml@update-workflow
+    uses: ./.github/workflows/pre-commit-check.yaml
     needs:
       - pr-metadata
     with:
@@ -37,7 +37,7 @@ jobs:
   #     modifiedCharts: ${{ needs.pr-metadata.outputs.addedOrModifiedCharts }}
 
   charts-lint:
-    uses: ./.github/workflows/charts-lint.yaml@update-workflow
+    uses: ./.github/workflows/charts-lint.yaml
     needs:
       - pr-metadata
       # - charts-changelog
@@ -46,7 +46,7 @@ jobs:
       chartsToLint: ${{ needs.pr-metadata.outputs.chartsToLint }}
 
   charts-test:
-    uses: ./.github/workflows/charts-test.yaml@update-workflow
+    uses: ./.github/workflows/charts-test.yaml
     needs:
       - pr-metadata
       # - charts-changelog
