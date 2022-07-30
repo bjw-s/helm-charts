@@ -67,9 +67,10 @@ jobs:
         env:
           SRC_DIR: "src/charts"
           DEST_DIR: "dest"
-          CHARTS: "${{ steps.collect-charts.outputs.charts }}"
         run: |
-          for CHART in $CHARTS ; do
+          CHARTS=( $(yq --null-input e '${{ steps.collect-charts.outputs.charts }}[]' ) )
+
+          for CHART in "${CHARTS[@]}" ; do
             mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
             CHART_TYPE=${CHART_PATH_PARTS[0]}
 
