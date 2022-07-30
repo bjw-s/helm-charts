@@ -1,0 +1,41 @@
+name: "Test action"
+
+concurrency: helm-release
+
+on:
+  workflow_dispatch:
+    inputs:
+      chart:
+        description: "Chart to release"
+        default: "_all_"
+        required: true
+  push:
+    branches:
+      - development
+    paths:
+      - "charts/**"
+
+jobs:
+  release-charts:
+    name: Release charts
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Get k8s-at-home token
+        id: get-app-token
+        uses: getsentry/action-github-app-token@v1
+        with:
+          app_id: ${{ secrets.BJWS_APP_ID }}
+          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
+
+      - name: Checkout charts branch
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.get-app-token.outputs.token }}
+          path: "src"
+          fetch-depth: 0
+
+      - name: Collect changed charts
+        uses: ./.github/actions/collect-changed-charts
+        id: changed-charts
+        with:
+          token: token

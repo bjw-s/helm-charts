@@ -110,9 +110,6 @@ function run() {
     var _a, _b, _c, _d;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            if (github.context.eventName !== "pull_request") {
-                throw new Error("This action can only run on pull requests!");
-            }
             const githubToken = core.getInput("token", { required: true });
             const chartsFolder = core.getInput("chartsFolder", { required: true });
             const repoConfigFilePath = core.getInput("repoConfigFile", {
@@ -120,9 +117,25 @@ function run() {
             });
             const repoConfig = yield getRepoConfig(repoConfigFilePath);
             core.info(`Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`);
+            // Debug log the payload.
+            core.debug(`Payload keys: ${Object.keys(github.context.payload)}`);
+            // Get event name.
+            const eventName = github.context.eventName;
             // Define the base and head commits to be extracted from the payload.
-            const baseCommit = (_b = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
-            const headCommit = (_d = (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
+            let baseCommit;
+            let headCommit;
+            switch (eventName) {
+                case 'pull_request':
+                    baseCommit = (_b = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
+                    headCommit = (_d = (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
+                    break;
+                case 'push':
+                    baseCommit = github.context.payload.before;
+                    headCommit = github.context.payload.after;
+                    break;
+                default:
+                    throw new Error(`This action only supports pull requests and pushes, ${github.context.eventName} events are not supported. `);
+            }
             // Ensure that the base and head properties are set on the payload.
             if (!baseCommit || !headCommit) {
                 throw new Error(`The base and head commits are missing from the payload for this PR.`);

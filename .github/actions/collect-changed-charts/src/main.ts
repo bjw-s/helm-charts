@@ -88,10 +88,6 @@ function filterChangedCharts(files: string[], parentFolder: string) {
 
 async function run() {
   try {
-    if (github.context.eventName !== "pull_request") {
-      throw new Error("This action can only run on pull requests!");
-    }
-
     const githubToken = core.getInput("token", { required: true });
     const chartsFolder = core.getInput("chartsFolder", { required: true });
     const repoConfigFilePath = core.getInput("repoConfigFile", {
@@ -101,11 +97,32 @@ async function run() {
     const repoConfig = await getRepoConfig(repoConfigFilePath);
     core.info(
       `Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`
-    );
+      );
+
+    // Debug log the payload.
+    core.debug(`Payload keys: ${Object.keys(github.context.payload)}`)
+
+    // Get event name.
+    const eventName = github.context.eventName;
 
     // Define the base and head commits to be extracted from the payload.
-    const baseCommit = github.context.payload.pull_request?.base?.sha;
-    const headCommit = github.context.payload.pull_request?.head?.sha;
+    let baseCommit: string | undefined
+    let headCommit: string | undefined
+
+    switch (eventName) {
+      case 'pull_request':
+        baseCommit = github.context.payload.pull_request?.base?.sha
+        headCommit = github.context.payload.pull_request?.head?.sha
+        break
+      case 'push':
+        baseCommit = github.context.payload.before
+        headCommit = github.context.payload.after
+        break
+      default:
+        throw new Error(
+          `This action only supports pull requests and pushes, ${github.context.eventName} events are not supported. `
+        )
+    }
 
     // Ensure that the base and head properties are set on the payload.
     if (!baseCommit || !headCommit) {
