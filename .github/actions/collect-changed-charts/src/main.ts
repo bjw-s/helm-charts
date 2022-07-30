@@ -12,17 +12,20 @@ function getErrorMessage(error: unknown) {
 }
 
 async function requestAddedModifiedFiles(
-  base: string,
-  head: string,
+  baseCommit: string,
+  headCommit: string,
   githubToken: string
 ) {
   let result: string[] = [];
   const octokit = github.getOctokit(githubToken);
 
+  core.info(`Base commit: ${baseCommit}`);
+  core.info(`Head commit: ${headCommit}`);
+
   // Use GitHub's compare two commits API.
   const response = await octokit.rest.repos.compareCommits({
-    base,
-    head,
+    base: baseCommit,
+    head: headCommit,
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
   });
@@ -30,7 +33,7 @@ async function requestAddedModifiedFiles(
   // Ensure that the request was successful.
   if (response.status !== 200) {
     throw new Error(
-      `The GitHub API for comparing the base and head commits for this PR event returned ${response.status}, expected 200.`
+      `The GitHub API returned ${response.status}, expected 200.`
     );
   }
 
@@ -46,6 +49,38 @@ async function requestAddedModifiedFiles(
     const filestatus = file.status as FileStatus;
     if (filestatus == "added" || filestatus == "modified") {
       result.push(file.filename);
+    }
+  });
+  return result;
+}
+
+async function requestAllFiles(
+  commit: string,
+  githubToken: string
+) {
+  let result: string[] = [];
+  const octokit = github.getOctokit(githubToken);
+
+  core.info(`Commit SHA: ${commit}`);
+
+  const response = await octokit.rest.git.getTree({
+    tree_sha: commit,
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    recursive: "true"
+  });
+
+  // Ensure that the request was successful.
+  if (response.status !== 200) {
+    throw new Error(
+      `The GitHub API returned ${response.status}, expected 200.`
+    );
+  }
+
+  const responseTreeItems = response.data.tree || [];
+  responseTreeItems.forEach((item) => {
+    if (item.type == "blob" && item.path) {
+      result.push(item.path);
     }
   });
   return result;
@@ -99,24 +134,32 @@ async function run() {
       `Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`
       );
 
-    // Debug log the payload.
-    core.debug(`Payload keys: ${Object.keys(github.context.payload)}`)
-
     // Get event name.
     const eventName = github.context.eventName;
 
     // Define the base and head commits to be extracted from the payload.
-    let baseCommit: string | undefined
-    let headCommit: string | undefined
+    let responseFiles: string[]
 
     switch (eventName) {
       case 'pull_request':
-        baseCommit = github.context.payload.pull_request?.base?.sha
-        headCommit = github.context.payload.pull_request?.head?.sha
+        responseFiles = await requestAddedModifiedFiles(
+          github.context.payload.pull_request?.base?.sha,
+          github.context.payload.pull_request?.head?.sha,
+          githubToken
+        );
         break
       case 'push':
-        baseCommit = github.context.payload.before
-        headCommit = github.context.payload.after
+        responseFiles = await requestAddedModifiedFiles(
+          github.context.payload.before,
+          github.context.payload.after,
+          githubToken
+        );
+        break
+      case 'workflow_dispatch':
+        responseFiles = await requestAllFiles(
+          github.context.sha,
+          githubToken
+        );
         break
       default:
         throw new Error(
@@ -124,21 +167,6 @@ async function run() {
         )
     }
 
-    // Ensure that the base and head properties are set on the payload.
-    if (!baseCommit || !headCommit) {
-      throw new Error(
-        `The base and head commits are missing from the payload for this PR.`
-      );
-    }
-
-    core.info(`Base commit: ${baseCommit}`);
-    core.info(`Head commit: ${headCommit}`);
-
-    const responseFiles = await requestAddedModifiedFiles(
-      baseCommit,
-      headCommit,
-      githubToken
-    );
     const changedCharts = filterChangedCharts(responseFiles, chartsFolder);
     const chartsToInstall = changedCharts.filter(
       (x) => !repoConfig["excluded-charts-install"].includes(x)

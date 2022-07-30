@@ -49,20 +49,22 @@ function getErrorMessage(error) {
         return error.message;
     return String(error);
 }
-function requestAddedModifiedFiles(base, head, githubToken) {
+function requestAddedModifiedFiles(baseCommit, headCommit, githubToken) {
     return __awaiter(this, void 0, void 0, function* () {
         let result = [];
         const octokit = github.getOctokit(githubToken);
+        core.info(`Base commit: ${baseCommit}`);
+        core.info(`Head commit: ${headCommit}`);
         // Use GitHub's compare two commits API.
         const response = yield octokit.rest.repos.compareCommits({
-            base,
-            head,
+            base: baseCommit,
+            head: headCommit,
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
         });
         // Ensure that the request was successful.
         if (response.status !== 200) {
-            throw new Error(`The GitHub API for comparing the base and head commits for this PR event returned ${response.status}, expected 200.`);
+            throw new Error(`The GitHub API returned ${response.status}, expected 200.`);
         }
         // Ensure that the head commit is ahead of the base commit.
         if (response.data.status !== "ahead") {
@@ -73,6 +75,30 @@ function requestAddedModifiedFiles(base, head, githubToken) {
             const filestatus = file.status;
             if (filestatus == "added" || filestatus == "modified") {
                 result.push(file.filename);
+            }
+        });
+        return result;
+    });
+}
+function requestAllFiles(commit, githubToken) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let result = [];
+        const octokit = github.getOctokit(githubToken);
+        core.info(`Commit SHA: ${commit}`);
+        const response = yield octokit.rest.git.getTree({
+            tree_sha: commit,
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            recursive: "true"
+        });
+        // Ensure that the request was successful.
+        if (response.status !== 200) {
+            throw new Error(`The GitHub API returned ${response.status}, expected 200.`);
+        }
+        const responseTreeItems = response.data.tree || [];
+        responseTreeItems.forEach((item) => {
+            if (item.type == "blob" && item.path) {
+                result.push(item.path);
             }
         });
         return result;
@@ -117,32 +143,23 @@ function run() {
             });
             const repoConfig = yield getRepoConfig(repoConfigFilePath);
             core.info(`Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`);
-            // Debug log the payload.
-            core.debug(`Payload keys: ${Object.keys(github.context.payload)}`);
             // Get event name.
             const eventName = github.context.eventName;
             // Define the base and head commits to be extracted from the payload.
-            let baseCommit;
-            let headCommit;
+            let responseFiles;
             switch (eventName) {
                 case 'pull_request':
-                    baseCommit = (_b = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
-                    headCommit = (_d = (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
+                    responseFiles = yield requestAddedModifiedFiles((_b = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha, (_d = (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha, githubToken);
                     break;
                 case 'push':
-                    baseCommit = github.context.payload.before;
-                    headCommit = github.context.payload.after;
+                    responseFiles = yield requestAddedModifiedFiles(github.context.payload.before, github.context.payload.after, githubToken);
+                    break;
+                case 'workflow_dispatch':
+                    responseFiles = yield requestAllFiles(github.context.sha, githubToken);
                     break;
                 default:
                     throw new Error(`This action only supports pull requests and pushes, ${github.context.eventName} events are not supported. `);
             }
-            // Ensure that the base and head properties are set on the payload.
-            if (!baseCommit || !headCommit) {
-                throw new Error(`The base and head commits are missing from the payload for this PR.`);
-            }
-            core.info(`Base commit: ${baseCommit}`);
-            core.info(`Head commit: ${headCommit}`);
-            const responseFiles = yield requestAddedModifiedFiles(baseCommit, headCommit, githubToken);
             const changedCharts = filterChangedCharts(responseFiles, chartsFolder);
             const chartsToInstall = changedCharts.filter((x) => !repoConfig["excluded-charts-install"].includes(x));
             const chartsToLint = changedCharts.filter((x) => !repoConfig["excluded-charts-lint"].includes(x));
