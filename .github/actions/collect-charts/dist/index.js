@@ -169,7 +169,8 @@ function run() {
                     headCommit = github.context.sha;
                     break;
                 default:
-                    throw new Error(`This action only supports pull requests and pushes, ${github.context.eventName} events are not supported. `);
+                    throw new Error(`This action only supports pull requests, pushes and workflow_dispatch,` +
+                        `${github.context.eventName} events are not supported.`);
             }
             let responseFiles;
             if (getAllCharts === "true") {

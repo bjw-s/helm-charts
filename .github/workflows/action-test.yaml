@@ -8,7 +8,7 @@ on:
       chart:
         description: "Chart to release"
         default: ""
-        required: true
+        required: false
   push:
     branches:
       - development
@@ -41,10 +41,3 @@ jobs:
           token: ${{ steps.get-app-token.outputs.token }}
           repoConfigFile: ./src/.ci/repo-config.yaml
           overrideCharts: "[${{ inputs.chart }}]"
-
-      - name: Collect charts to release
-        uses: ./src/.github/actions/collect-charts
-        id: collect-charts-2
-        with:
-          token: ${{ steps.get-app-token.outputs.token }}
-          repoConfigFile: ./src/.ci/repo-config.yaml
