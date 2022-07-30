@@ -54,7 +54,7 @@ jobs:
     outputs:
       addedOrModifiedFilesDetected: ${{ steps.changed-files.outputs.allAddedOrModified }}
       addedOrModifiedFiles: ${{ steps.changed-files.outputs.allAddedOrModified_files }}
-      addedOrModifiedCharts: ${{ steps.changed-charts.outputs.changedCharts }}
+      addedOrModifiedCharts: ${{ steps.changed-charts.outputs.charts }}
       chartsToLint: ${{ steps.changed-charts.outputs.chartsToLint }}
       chartsToInstall: ${{ steps.changed-charts.outputs.chartsToInstall }}
     steps:
@@ -73,5 +73,5 @@ jobs:
               - added|modified: '**'
 
       - name: Collect changed charts
-        uses: ./.github/actions/collect-changed-charts
+        uses: ./.github/actions/collect-charts
         id: changed-charts

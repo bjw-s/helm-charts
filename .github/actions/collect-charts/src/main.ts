@@ -12,17 +12,20 @@ function getErrorMessage(error: unknown) {
 }
 
 async function requestAddedModifiedFiles(
-  base: string,
-  head: string,
+  baseCommit: string,
+  headCommit: string,
   githubToken: string
 ) {
   let result: string[] = [];
   const octokit = github.getOctokit(githubToken);
 
+  core.info(`Base commit: ${baseCommit}`);
+  core.info(`Head commit: ${headCommit}`);
+
   // Use GitHub's compare two commits API.
   const response = await octokit.rest.repos.compareCommits({
-    base,
-    head,
+    base: baseCommit,
+    head: headCommit,
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
   });
@@ -30,7 +33,7 @@ async function requestAddedModifiedFiles(
   // Ensure that the request was successful.
   if (response.status !== 200) {
     throw new Error(
-      `The GitHub API for comparing the base and head commits for this PR event returned ${response.status}, expected 200.`
+      `The GitHub API returned ${response.status}, expected 200.`
     );
   }
 
@@ -46,6 +49,35 @@ async function requestAddedModifiedFiles(
     const filestatus = file.status as FileStatus;
     if (filestatus == "added" || filestatus == "modified") {
       result.push(file.filename);
+    }
+  });
+  return result;
+}
+
+async function requestAllFiles(commit: string, githubToken: string) {
+  let result: string[] = [];
+  const octokit = github.getOctokit(githubToken);
+
+  core.info(`Commit SHA: ${commit}`);
+
+  const response = await octokit.rest.git.getTree({
+    tree_sha: commit,
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    recursive: "true",
+  });
+
+  // Ensure that the request was successful.
+  if (response.status !== 200) {
+    throw new Error(
+      `The GitHub API returned ${response.status}, expected 200.`
+    );
+  }
+
+  const responseTreeItems = response.data.tree || [];
+  responseTreeItems.forEach((item) => {
+    if (item.type == "blob" && item.path) {
+      result.push(item.path);
     }
   });
   return result;
@@ -88,40 +120,63 @@ function filterChangedCharts(files: string[], parentFolder: string) {
 
 async function run() {
   try {
-    if (github.context.eventName !== "pull_request") {
-      throw new Error("This action can only run on pull requests!");
-    }
-
     const githubToken = core.getInput("token", { required: true });
     const chartsFolder = core.getInput("chartsFolder", { required: true });
     const repoConfigFilePath = core.getInput("repoConfigFile", {
       required: true,
     });
+    let getAllCharts = core.getInput("getAllCharts", { required: false });
+    const overrideCharts = core.getInput("overrideCharts", { required: false });
 
     const repoConfig = await getRepoConfig(repoConfigFilePath);
     core.info(
       `Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`
     );
 
-    // Define the base and head commits to be extracted from the payload.
-    const baseCommit = github.context.payload.pull_request?.base?.sha;
-    const headCommit = github.context.payload.pull_request?.head?.sha;
+    if (overrideCharts && overrideCharts != "[]") {
+      const responseCharts = YAML.parse(overrideCharts);
+      core.info(`Charts: ${JSON.stringify(responseCharts, undefined, 2)}`);
+      core.setOutput("charts", responseCharts);
+      return;
+    }
 
-    // Ensure that the base and head properties are set on the payload.
-    if (!baseCommit || !headCommit) {
-      throw new Error(
-        `The base and head commits are missing from the payload for this PR.`
+    const eventName = github.context.eventName;
+
+    let baseCommit: string;
+    let headCommit: string;
+
+    switch (eventName) {
+      case "pull_request":
+        baseCommit = github.context.payload.pull_request?.base?.sha;
+        headCommit = github.context.payload.pull_request?.head?.sha;
+        break;
+      case "push":
+        baseCommit = github.context.payload.before;
+        headCommit = github.context.payload.after;
+        break;
+      case "workflow_dispatch":
+        getAllCharts = "true";
+        baseCommit = "";
+        headCommit = github.context.sha;
+        break;
+      default:
+        throw new Error(
+          `This action only supports pull requests, pushes and workflow_dispatch,` +
+            `${github.context.eventName} events are not supported.`
+        );
+    }
+
+    let responseFiles: string[];
+    if (getAllCharts === "true") {
+      responseFiles = await requestAllFiles(headCommit, githubToken);
+    } else {
+      responseFiles = await requestAddedModifiedFiles(
+        baseCommit,
+        headCommit,
+        githubToken
       );
     }
 
-    core.info(`Base commit: ${baseCommit}`);
-    core.info(`Head commit: ${headCommit}`);
-
-    const responseFiles = await requestAddedModifiedFiles(
-      baseCommit,
-      headCommit,
-      githubToken
-    );
     const changedCharts = filterChangedCharts(responseFiles, chartsFolder);
     const chartsToInstall = changedCharts.filter(
       (x) => !repoConfig["excluded-charts-install"].includes(x)
@@ -130,13 +185,13 @@ async function run() {
       (x) => !repoConfig["excluded-charts-lint"].includes(x)
     );
 
-    core.info(`Changed charts: ${JSON.stringify(changedCharts, undefined, 2)}`);
+    core.info(`Charts: ${JSON.stringify(changedCharts, undefined, 2)}`);
     core.info(`Charts to lint: ${JSON.stringify(chartsToLint, undefined, 2)}`);
     core.info(
       `Charts to install: ${JSON.stringify(chartsToInstall, undefined, 2)}`
     );
 
-    core.setOutput("changedCharts", changedCharts);
+    core.setOutput("charts", changedCharts);
     core.setOutput("chartsToInstall", chartsToInstall);
     core.setOutput("chartsToLint", chartsToLint);
   } catch (error) {

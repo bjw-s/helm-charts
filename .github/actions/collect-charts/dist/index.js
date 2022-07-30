@@ -49,20 +49,22 @@ function getErrorMessage(error) {
         return error.message;
     return String(error);
 }
-function requestAddedModifiedFiles(base, head, githubToken) {
+function requestAddedModifiedFiles(baseCommit, headCommit, githubToken) {
     return __awaiter(this, void 0, void 0, function* () {
         let result = [];
         const octokit = github.getOctokit(githubToken);
+        core.info(`Base commit: ${baseCommit}`);
+        core.info(`Head commit: ${headCommit}`);
         // Use GitHub's compare two commits API.
         const response = yield octokit.rest.repos.compareCommits({
-            base,
-            head,
+            base: baseCommit,
+            head: headCommit,
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
         });
         // Ensure that the request was successful.
         if (response.status !== 200) {
-            throw new Error(`The GitHub API for comparing the base and head commits for this PR event returned ${response.status}, expected 200.`);
+            throw new Error(`The GitHub API returned ${response.status}, expected 200.`);
         }
         // Ensure that the head commit is ahead of the base commit.
         if (response.data.status !== "ahead") {
@@ -73,6 +75,30 @@ function requestAddedModifiedFiles(base, head, githubToken) {
             const filestatus = file.status;
             if (filestatus == "added" || filestatus == "modified") {
                 result.push(file.filename);
+            }
+        });
+        return result;
+    });
+}
+function requestAllFiles(commit, githubToken) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let result = [];
+        const octokit = github.getOctokit(githubToken);
+        core.info(`Commit SHA: ${commit}`);
+        const response = yield octokit.rest.git.getTree({
+            tree_sha: commit,
+            owner: github.context.repo.owner,
+            repo: github.context.repo.repo,
+            recursive: "true",
+        });
+        // Ensure that the request was successful.
+        if (response.status !== 200) {
+            throw new Error(`The GitHub API returned ${response.status}, expected 200.`);
+        }
+        const responseTreeItems = response.data.tree || [];
+        responseTreeItems.forEach((item) => {
+            if (item.type == "blob" && item.path) {
+                result.push(item.path);
             }
         });
         return result;
@@ -110,33 +136,56 @@ function run() {
     var _a, _b, _c, _d;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            if (github.context.eventName !== "pull_request") {
-                throw new Error("This action can only run on pull requests!");
-            }
             const githubToken = core.getInput("token", { required: true });
             const chartsFolder = core.getInput("chartsFolder", { required: true });
             const repoConfigFilePath = core.getInput("repoConfigFile", {
                 required: true,
             });
+            let getAllCharts = core.getInput("getAllCharts", { required: false });
+            const overrideCharts = core.getInput("overrideCharts", { required: false });
             const repoConfig = yield getRepoConfig(repoConfigFilePath);
             core.info(`Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`);
-            // Define the base and head commits to be extracted from the payload.
-            const baseCommit = (_b = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
-            const headCommit = (_d = (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
-            // Ensure that the base and head properties are set on the payload.
-            if (!baseCommit || !headCommit) {
-                throw new Error(`The base and head commits are missing from the payload for this PR.`);
+            if (overrideCharts && overrideCharts != "[]") {
+                const responseCharts = YAML.parse(overrideCharts);
+                core.info(`Charts: ${JSON.stringify(responseCharts, undefined, 2)}`);
+                core.setOutput("charts", responseCharts);
+                return;
             }
-            core.info(`Base commit: ${baseCommit}`);
-            core.info(`Head commit: ${headCommit}`);
-            const responseFiles = yield requestAddedModifiedFiles(baseCommit, headCommit, githubToken);
+            const eventName = github.context.eventName;
+            let baseCommit;
+            let headCommit;
+            switch (eventName) {
+                case "pull_request":
+                    baseCommit = (_b = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
+                    headCommit = (_d = (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
+                    break;
+                case "push":
+                    baseCommit = github.context.payload.before;
+                    headCommit = github.context.payload.after;
+                    break;
+                case "workflow_dispatch":
+                    getAllCharts = "true";
+                    baseCommit = "";
+                    headCommit = github.context.sha;
+                    break;
+                default:
+                    throw new Error(`This action only supports pull requests, pushes and workflow_dispatch,` +
+                        `${github.context.eventName} events are not supported.`);
+            }
+            let responseFiles;
+            if (getAllCharts === "true") {
+                responseFiles = yield requestAllFiles(headCommit, githubToken);
+            }
+            else {
+                responseFiles = yield requestAddedModifiedFiles(baseCommit, headCommit, githubToken);
+            }
             const changedCharts = filterChangedCharts(responseFiles, chartsFolder);
             const chartsToInstall = changedCharts.filter((x) => !repoConfig["excluded-charts-install"].includes(x));
             const chartsToLint = changedCharts.filter((x) => !repoConfig["excluded-charts-lint"].includes(x));
-            core.info(`Changed charts: ${JSON.stringify(changedCharts, undefined, 2)}`);
+            core.info(`Charts: ${JSON.stringify(changedCharts, undefined, 2)}`);
             core.info(`Charts to lint: ${JSON.stringify(chartsToLint, undefined, 2)}`);
             core.info(`Charts to install: ${JSON.stringify(chartsToInstall, undefined, 2)}`);
-            core.setOutput("changedCharts", changedCharts);
+            core.setOutput("charts", changedCharts);
             core.setOutput("chartsToInstall", chartsToInstall);
             core.setOutput("chartsToLint", chartsToLint);
         }

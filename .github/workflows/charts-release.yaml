@@ -6,9 +6,11 @@ on:
   workflow_dispatch:
     inputs:
       chart:
-        description: "Chart to release"
-        default: "_all_"
-        required: true
+        description: >
+          Chart to release. Comma-separated string.
+          Defaults to releasing everything.
+        default: ""
+        required: false
   push:
     branches:
       - main
@@ -37,28 +39,13 @@ jobs:
           path: "src"
           fetch-depth: 0
 
-      - name: Collect changes
-        id: collect-changes
-        uses: ./src/.github/actions/collect-changes
+      - name: Collect charts to release
+        uses: ./src/.github/actions/collect-charts
+        id: collect-charts
         with:
           token: ${{ steps.get-app-token.outputs.token }}
-          working-directory: src
-
-      - name: Determine charts to release
-        id: charts-to-release
-        shell: bash
-        run: |
-          CHARTS=()
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            if [ "${{ github.event.inputs.chart }}" == "_all_" ]; then
-              CHARTS=($(find "src/charts" -type f -name 'Chart.yaml' | sed -r 's|/[^/]+$||' | sed 's|src/charts/||' | sort | uniq))
-            else
-              CHARTS=(${{ github.event.inputs.chart }})
-            fi
-          elif [ "${{ steps.collect-changes.outputs.chartChangesDetected }}" == "true" ]; then
-            CHARTS=(${{ steps.collect-changes.outputs.addedOrModifiedCharts }})
-          fi
-          printf "::set-output name=charts::%s\n" "${CHARTS[*]}"
+          repoConfigFile: ./src/.ci/repo-config.yaml
+          overrideCharts: "[${{ inputs.chart }}]"
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v3
@@ -80,9 +67,10 @@ jobs:
         env:
           SRC_DIR: "src/charts"
           DEST_DIR: "dest"
-          CHARTS: "${{ steps.charts-to-release.outputs.charts }}"
         run: |
-          for CHART in $CHARTS ; do
+          CHARTS=( $(yq --null-input e '${{ steps.collect-charts.outputs.charts }}[]' ) )
+
+          for CHART in "${CHARTS[@]}" ; do
             mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
             CHART_TYPE=${CHART_PATH_PARTS[0]}
 
