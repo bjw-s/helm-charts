@@ -49,7 +49,7 @@ jobs:
         run: |
           CHARTS=( $(yq --null-input e '${{ steps.collect-charts.outputs.charts }}[]' ) )
 
-          for CHART in $CHARTS ; do
+          for CHART in "${CHARTS[@]}" ; do
             mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
             CHART_TYPE=${CHART_PATH_PARTS[0]}
 
