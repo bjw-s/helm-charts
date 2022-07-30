@@ -145,13 +145,15 @@ function run() {
             const overrideCharts = core.getInput("overrideCharts", { required: false });
             const repoConfig = yield getRepoConfig(repoConfigFilePath);
             core.info(`Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`);
-            let responseFiles;
             if (overrideCharts) {
-                responseFiles = YAML.parse(overrideCharts);
-                return responseFiles;
+                const responseCharts = YAML.parse(overrideCharts);
+                core.info(`Charts: ${JSON.stringify(responseCharts, undefined, 2)}`);
+                core.setOutput("charts", responseCharts);
+                return;
             }
             // Get event name.
             const eventName = github.context.eventName;
+            let responseFiles;
             switch (eventName) {
                 case "pull_request":
                     responseFiles = yield requestAddedModifiedFiles((_b = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha, (_d = (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha, githubToken);
@@ -168,10 +170,10 @@ function run() {
             const changedCharts = filterChangedCharts(responseFiles, chartsFolder);
             const chartsToInstall = changedCharts.filter((x) => !repoConfig["excluded-charts-install"].includes(x));
             const chartsToLint = changedCharts.filter((x) => !repoConfig["excluded-charts-lint"].includes(x));
-            core.info(`Changed charts: ${JSON.stringify(changedCharts, undefined, 2)}`);
+            core.info(`Charts: ${JSON.stringify(changedCharts, undefined, 2)}`);
             core.info(`Charts to lint: ${JSON.stringify(chartsToLint, undefined, 2)}`);
             core.info(`Charts to install: ${JSON.stringify(chartsToInstall, undefined, 2)}`);
-            core.setOutput("changedCharts", changedCharts);
+            core.setOutput("charts", changedCharts);
             core.setOutput("chartsToInstall", chartsToInstall);
             core.setOutput("chartsToLint", chartsToLint);
         }

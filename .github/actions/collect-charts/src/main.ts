@@ -133,16 +133,16 @@ async function run() {
       `Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`
     );
 
-    let responseFiles: string[];
-
     if (overrideCharts) {
-      responseFiles = YAML.parse(overrideCharts);
-      return responseFiles;
+      const responseCharts = YAML.parse(overrideCharts);
+      core.info(`Charts: ${JSON.stringify(responseCharts, undefined, 2)}`);
+      core.setOutput("charts", responseCharts);
+      return;
     }
 
     // Get event name.
     const eventName = github.context.eventName;
-
+    let responseFiles: string[];
     switch (eventName) {
       case "pull_request":
         responseFiles = await requestAddedModifiedFiles(
@@ -175,13 +175,13 @@ async function run() {
       (x) => !repoConfig["excluded-charts-lint"].includes(x)
     );
 
-    core.info(`Changed charts: ${JSON.stringify(changedCharts, undefined, 2)}`);
+    core.info(`Charts: ${JSON.stringify(changedCharts, undefined, 2)}`);
     core.info(`Charts to lint: ${JSON.stringify(chartsToLint, undefined, 2)}`);
     core.info(
       `Charts to install: ${JSON.stringify(chartsToInstall, undefined, 2)}`
     );
 
-    core.setOutput("changedCharts", changedCharts);
+    core.setOutput("charts", changedCharts);
     core.setOutput("chartsToInstall", chartsToInstall);
     core.setOutput("chartsToLint", chartsToLint);
   } catch (error) {
