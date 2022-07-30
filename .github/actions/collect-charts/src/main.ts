@@ -125,7 +125,7 @@ async function run() {
     const repoConfigFilePath = core.getInput("repoConfigFile", {
       required: true,
     });
-    const getAllCharts = core.getInput("getAllCharts", { required: false });
+    let getAllCharts = core.getInput("getAllCharts", { required: false });
     const overrideCharts = core.getInput("overrideCharts", { required: false });
 
     const repoConfig = await getRepoConfig(repoConfigFilePath);
@@ -151,12 +151,13 @@ async function run() {
         headCommit = github.context.payload.pull_request?.head?.sha;
         break;
       case "push":
-        baseCommit = github.context.payload.before
-        headCommit = github.context.payload.after
+        baseCommit = github.context.payload.before;
+        headCommit = github.context.payload.after;
         break;
       case "workflow_dispatch":
+        getAllCharts = "true";
         baseCommit = "";
-        headCommit = github.context.sha
+        headCommit = github.context.sha;
         break;
       default:
         throw new Error(

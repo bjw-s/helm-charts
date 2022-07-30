@@ -141,7 +141,7 @@ function run() {
             const repoConfigFilePath = core.getInput("repoConfigFile", {
                 required: true,
             });
-            const getAllCharts = core.getInput("getAllCharts", { required: false });
+            let getAllCharts = core.getInput("getAllCharts", { required: false });
             const overrideCharts = core.getInput("overrideCharts", { required: false });
             const repoConfig = yield getRepoConfig(repoConfigFilePath);
             core.info(`Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`);
@@ -164,6 +164,7 @@ function run() {
                     headCommit = github.context.payload.after;
                     break;
                 case "workflow_dispatch":
+                    getAllCharts = "true";
                     baseCommit = "";
                     headCommit = github.context.sha;
                     break;
