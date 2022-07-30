@@ -89,7 +89,7 @@ function requestAllFiles(commit, githubToken) {
             tree_sha: commit,
             owner: github.context.repo.owner,
             repo: github.context.repo.repo,
-            recursive: "true"
+            recursive: "true",
         });
         // Ensure that the request was successful.
         if (response.status !== 200) {
@@ -141,20 +141,25 @@ function run() {
             const repoConfigFilePath = core.getInput("repoConfigFile", {
                 required: true,
             });
+            const getAllCharts = core.getInput("getAllCharts", { required: false });
+            const overrideCharts = core.getInput("overrideCharts", { required: false });
             const repoConfig = yield getRepoConfig(repoConfigFilePath);
             core.info(`Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`);
+            let responseFiles;
+            if (overrideCharts) {
+                responseFiles = YAML.parse(overrideCharts);
+                return responseFiles;
+            }
             // Get event name.
             const eventName = github.context.eventName;
-            // Define the base and head commits to be extracted from the payload.
-            let responseFiles;
             switch (eventName) {
-                case 'pull_request':
+                case "pull_request":
                     responseFiles = yield requestAddedModifiedFiles((_b = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha, (_d = (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha, githubToken);
                     break;
-                case 'push':
+                case "push":
                     responseFiles = yield requestAddedModifiedFiles(github.context.payload.before, github.context.payload.after, githubToken);
                     break;
-                case 'workflow_dispatch':
+                case "workflow_dispatch":
                     responseFiles = yield requestAllFiles(github.context.sha, githubToken);
                     break;
                 default:

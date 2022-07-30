@@ -37,25 +37,9 @@ jobs:
           path: "src"
           fetch-depth: 0
 
-      - name: Collect changed charts
-        uses: ./.github/actions/collect-changed-charts
-        id: changed-charts
-
-      - name: Determine charts to release
-        id: charts-to-release
-        shell: bash
-        run: |
-          CHARTS=()
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            if [ "${{ github.event.inputs.chart }}" == "_all_" ]; then
-              CHARTS=($(find "src/charts" -type f -name 'Chart.yaml' | sed -r 's|/[^/]+$||' | sed 's|src/charts/||' | sort | uniq))
-            else
-              CHARTS=(${{ github.event.inputs.chart }})
-            fi
-          elif [ "${{ steps.collect-changes.outputs.chartChangesDetected }}" == "true" ]; then
-            CHARTS=(${{ steps.collect-changes.outputs.addedOrModifiedCharts }})
-          fi
-          printf "::set-output name=charts::%s\n" "${CHARTS[*]}"
+      - name: Collect charts to release
+        uses: ./.github/actions/collect-charts
+        id: collect-charts
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v3

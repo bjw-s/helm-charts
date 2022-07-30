@@ -1,5 +1,5 @@
-name: 'Changed charts'
-description: 'Collects the changed Helm charts and returns the lint/test matrix'
+name: 'Collect charts'
+description: 'Collects Helm charts based on the inputs and returns the lint/test matrix'
 inputs:
   token:
     description: >
@@ -17,8 +17,20 @@ inputs:
       should be excluded from linting/testing.
     required: true
     default: '.ci/repo-config.yaml'
+  getAllCharts:
+    description: >
+      Instead of finding the changed charts, return
+      all the charts
+    required: false
+    default: 'false'
+  overrideCharts:
+    description: >
+      A JSON encoded array of charts to return instead of finding
+      the changed charts
+    required: false
+    default: '[]'
 outputs:
-  changedCharts:
+  charts:
     description: >
       An array of all the Helm charts that contain changes
   chartsToInstall:

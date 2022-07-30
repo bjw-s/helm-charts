@@ -54,10 +54,7 @@ async function requestAddedModifiedFiles(
   return result;
 }
 
-async function requestAllFiles(
-  commit: string,
-  githubToken: string
-) {
+async function requestAllFiles(commit: string, githubToken: string) {
   let result: string[] = [];
   const octokit = github.getOctokit(githubToken);
 
@@ -67,7 +64,7 @@ async function requestAllFiles(
     tree_sha: commit,
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
-    recursive: "true"
+    recursive: "true",
   });
 
   // Ensure that the request was successful.
@@ -128,43 +125,46 @@ async function run() {
     const repoConfigFilePath = core.getInput("repoConfigFile", {
       required: true,
     });
+    const getAllCharts = core.getInput("getAllCharts", { required: false });
+    const overrideCharts = core.getInput("overrideCharts", { required: false });
 
     const repoConfig = await getRepoConfig(repoConfigFilePath);
     core.info(
       `Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`
-      );
+    );
+
+    let responseFiles: string[];
+
+    if (overrideCharts) {
+      responseFiles = YAML.parse(overrideCharts);
+      return responseFiles;
+    }
 
     // Get event name.
     const eventName = github.context.eventName;
 
-    // Define the base and head commits to be extracted from the payload.
-    let responseFiles: string[]
-
     switch (eventName) {
-      case 'pull_request':
+      case "pull_request":
         responseFiles = await requestAddedModifiedFiles(
           github.context.payload.pull_request?.base?.sha,
           github.context.payload.pull_request?.head?.sha,
           githubToken
         );
-        break
-      case 'push':
+        break;
+      case "push":
         responseFiles = await requestAddedModifiedFiles(
           github.context.payload.before,
           github.context.payload.after,
           githubToken
         );
-        break
-      case 'workflow_dispatch':
-        responseFiles = await requestAllFiles(
-          github.context.sha,
-          githubToken
-        );
-        break
+        break;
+      case "workflow_dispatch":
+        responseFiles = await requestAllFiles(github.context.sha, githubToken);
+        break;
       default:
         throw new Error(
           `This action only supports pull requests and pushes, ${github.context.eventName} events are not supported. `
-        )
+        );
     }
 
     const changedCharts = filterChangedCharts(responseFiles, chartsFolder);

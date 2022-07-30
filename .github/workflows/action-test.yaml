@@ -34,9 +34,11 @@ jobs:
           path: "src"
           fetch-depth: 0
 
-      - name: Collect changed charts
-        uses: ./src/.github/actions/collect-changed-charts
-        id: changed-charts
+      - name: Collect charts to release
+        uses: ./src/.github/actions/collect-charts
+        id: collect-charts
         with:
           token: ${{ steps.get-app-token.outputs.token }}
           repoConfigFile: ./src/.ci/repo-config.yaml
+          overrideCharts: |
+            ["apps/airsonic"]
