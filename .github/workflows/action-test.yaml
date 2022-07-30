@@ -38,5 +38,5 @@ jobs:
         uses: ./src/.github/actions/collect-changed-charts
         id: changed-charts
         with:
-          token: token
+          token: ${{ steps.get-app-token.outputs.token }}
           repoConfigFile: ./src/.ci/repo-config.yaml
