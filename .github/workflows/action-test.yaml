@@ -40,4 +40,4 @@ jobs:
         with:
           token: ${{ steps.get-app-token.outputs.token }}
           repoConfigFile: ./src/.ci/repo-config.yaml
-          overrideCharts: ${{ split(input.chart, ",") }}
+          overrideCharts: "[${{ input.chart }}]"
