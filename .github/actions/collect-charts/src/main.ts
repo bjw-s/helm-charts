@@ -166,7 +166,7 @@ async function run() {
     }
 
     let responseFiles: string[];
-    if (getAllCharts == "true") {
+    if (getAllCharts === "true") {
       responseFiles = await requestAllFiles(headCommit, githubToken);
     } else {
       responseFiles = await requestAddedModifiedFiles(

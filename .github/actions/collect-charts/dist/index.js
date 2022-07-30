@@ -172,7 +172,7 @@ function run() {
                     throw new Error(`This action only supports pull requests and pushes, ${github.context.eventName} events are not supported. `);
             }
             let responseFiles;
-            if (getAllCharts == "true") {
+            if (getAllCharts === "true") {
                 responseFiles = yield requestAllFiles(headCommit, githubToken);
             }
             else {
