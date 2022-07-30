@@ -7,7 +7,7 @@ on:
     inputs:
       chart:
         description: "Chart to release"
-        default: "_all_"
+        default: ""
         required: true
   push:
     branches:
@@ -40,5 +40,4 @@ jobs:
         with:
           token: ${{ steps.get-app-token.outputs.token }}
           repoConfigFile: ./src/.ci/repo-config.yaml
-          overrideCharts: |
-            ["apps/airsonic"]
+          overrideCharts: ${{ split(input.chart, ",") }}
