@@ -6,9 +6,11 @@ on:
   workflow_dispatch:
     inputs:
       chart:
-        description: "Chart to release"
-        default: "_all_"
-        required: true
+        description: >
+          Chart to release. Comma-separated string.
+          Defaults to releasing everything.
+        default: ""
+        required: false
   push:
     branches:
       - main
@@ -38,8 +40,12 @@ jobs:
           fetch-depth: 0
 
       - name: Collect charts to release
-        uses: ./.github/actions/collect-charts
+        uses: ./src/.github/actions/collect-charts
         id: collect-charts
+        with:
+          token: ${{ steps.get-app-token.outputs.token }}
+          repoConfigFile: ./src/.ci/repo-config.yaml
+          overrideCharts: "[${{ inputs.chart }}]"
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v3
@@ -61,7 +67,7 @@ jobs:
         env:
           SRC_DIR: "src/charts"
           DEST_DIR: "dest"
-          CHARTS: "${{ steps.charts-to-release.outputs.charts }}"
+          CHARTS: "${{ steps.collect-charts.outputs.charts }}"
         run: |
           for CHART in $CHARTS ; do
             mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')

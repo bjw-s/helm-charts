@@ -41,3 +41,17 @@ jobs:
           token: ${{ steps.get-app-token.outputs.token }}
           repoConfigFile: ./src/.ci/repo-config.yaml
           overrideCharts: "[${{ inputs.chart }}]"
+
+      - name: Package Helm Charts
+        shell: bash
+        env:
+          SRC_DIR: "src/charts"
+        run: |
+          CHARTS=( $(yq --null-input e -o=j -I=0 '${{ steps.collect-charts.outputs.charts }}[]' ) )
+
+          for CHART in $CHARTS ; do
+            mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
+            CHART_TYPE=${CHART_PATH_PARTS[0]}
+
+            echo "${SRC_DIR}/${CHART}"
+          done

@@ -145,7 +145,7 @@ function run() {
             const overrideCharts = core.getInput("overrideCharts", { required: false });
             const repoConfig = yield getRepoConfig(repoConfigFilePath);
             core.info(`Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`);
-            if (overrideCharts && overrideCharts != '[]') {
+            if (overrideCharts && overrideCharts != "[]") {
                 const responseCharts = YAML.parse(overrideCharts);
                 core.info(`Charts: ${JSON.stringify(responseCharts, undefined, 2)}`);
                 core.setOutput("charts", responseCharts);

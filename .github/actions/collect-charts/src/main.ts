@@ -133,7 +133,7 @@ async function run() {
       `Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`
     );
 
-    if (overrideCharts && overrideCharts != '[]') {
+    if (overrideCharts && overrideCharts != "[]") {
       const responseCharts = YAML.parse(overrideCharts);
       core.info(`Charts: ${JSON.stringify(responseCharts, undefined, 2)}`);
       core.setOutput("charts", responseCharts);
@@ -162,7 +162,7 @@ async function run() {
       default:
         throw new Error(
           `This action only supports pull requests, pushes and workflow_dispatch,` +
-          `${github.context.eventName} events are not supported.`
+            `${github.context.eventName} events are not supported.`
         );
     }
 
