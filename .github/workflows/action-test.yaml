@@ -39,3 +39,4 @@ jobs:
         id: changed-charts
         with:
           token: token
+          repoConfigFile: ./src/.ci/repo-config.yaml
