@@ -151,21 +151,31 @@ function run() {
                 core.setOutput("charts", responseCharts);
                 return;
             }
-            // Get event name.
             const eventName = github.context.eventName;
-            let responseFiles;
+            let baseCommit;
+            let headCommit;
             switch (eventName) {
                 case "pull_request":
-                    responseFiles = yield requestAddedModifiedFiles((_b = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha, (_d = (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha, githubToken);
+                    baseCommit = (_b = (_a = github.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
+                    headCommit = (_d = (_c = github.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
                     break;
                 case "push":
-                    responseFiles = yield requestAddedModifiedFiles(github.context.payload.before, github.context.payload.after, githubToken);
+                    baseCommit = github.context.payload.before;
+                    headCommit = github.context.payload.after;
                     break;
                 case "workflow_dispatch":
-                    responseFiles = yield requestAllFiles(github.context.sha, githubToken);
+                    baseCommit = "";
+                    headCommit = github.context.sha;
                     break;
                 default:
                     throw new Error(`This action only supports pull requests and pushes, ${github.context.eventName} events are not supported. `);
+            }
+            let responseFiles;
+            if (getAllCharts == "true") {
+                responseFiles = yield requestAllFiles(headCommit, githubToken);
+            }
+            else {
+                responseFiles = yield requestAddedModifiedFiles(baseCommit, headCommit, githubToken);
             }
             const changedCharts = filterChangedCharts(responseFiles, chartsFolder);
             const chartsToInstall = changedCharts.filter((x) => !repoConfig["excluded-charts-install"].includes(x));

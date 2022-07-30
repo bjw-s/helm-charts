@@ -140,31 +140,39 @@ async function run() {
       return;
     }
 
-    // Get event name.
     const eventName = github.context.eventName;
-    let responseFiles: string[];
+
+    let baseCommit: string;
+    let headCommit: string;
+
     switch (eventName) {
       case "pull_request":
-        responseFiles = await requestAddedModifiedFiles(
-          github.context.payload.pull_request?.base?.sha,
-          github.context.payload.pull_request?.head?.sha,
-          githubToken
-        );
+        baseCommit = github.context.payload.pull_request?.base?.sha;
+        headCommit = github.context.payload.pull_request?.head?.sha;
         break;
       case "push":
-        responseFiles = await requestAddedModifiedFiles(
-          github.context.payload.before,
-          github.context.payload.after,
-          githubToken
-        );
+        baseCommit = github.context.payload.before
+        headCommit = github.context.payload.after
         break;
       case "workflow_dispatch":
-        responseFiles = await requestAllFiles(github.context.sha, githubToken);
+        baseCommit = "";
+        headCommit = github.context.sha
         break;
       default:
         throw new Error(
           `This action only supports pull requests and pushes, ${github.context.eventName} events are not supported. `
         );
+    }
+
+    let responseFiles: string[];
+    if (getAllCharts == "true") {
+      responseFiles = await requestAllFiles(headCommit, githubToken);
+    } else {
+      responseFiles = await requestAddedModifiedFiles(
+        baseCommit,
+        headCommit,
+        githubToken
+      );
     }
 
     const changedCharts = filterChangedCharts(responseFiles, chartsFolder);
