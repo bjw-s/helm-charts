@@ -133,7 +133,7 @@ async function run() {
       `Repo configuration: ${JSON.stringify(repoConfig, undefined, 2)}`
     );
 
-    if (overrideCharts) {
+    if (overrideCharts && overrideCharts != '[]') {
       const responseCharts = YAML.parse(overrideCharts);
       core.info(`Charts: ${JSON.stringify(responseCharts, undefined, 2)}`);
       core.setOutput("charts", responseCharts);
