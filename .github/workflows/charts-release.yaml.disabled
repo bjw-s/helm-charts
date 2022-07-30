@@ -1,0 +1,105 @@
+name: "Charts: Release"
+
+concurrency: helm-release
+
+on:
+  workflow_dispatch:
+    inputs:
+      chart:
+        description: "Chart to release"
+        default: "_all_"
+        required: true
+  push:
+    branches:
+      - main
+    paths:
+      - "charts/**"
+
+env:
+  HELM_VERSION: 3.9.2
+
+jobs:
+  release-charts:
+    name: Release charts
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Get k8s-at-home token
+        id: get-app-token
+        uses: getsentry/action-github-app-token@v1
+        with:
+          app_id: ${{ secrets.BJWS_APP_ID }}
+          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
+
+      - name: Checkout charts branch
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.get-app-token.outputs.token }}
+          path: "src"
+          fetch-depth: 0
+
+      - name: Collect changed charts
+        uses: ./.github/actions/collect-changed-charts
+        id: changed-charts
+
+      - name: Determine charts to release
+        id: charts-to-release
+        shell: bash
+        run: |
+          CHARTS=()
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            if [ "${{ github.event.inputs.chart }}" == "_all_" ]; then
+              CHARTS=($(find "src/charts" -type f -name 'Chart.yaml' | sed -r 's|/[^/]+$||' | sed 's|src/charts/||' | sort | uniq))
+            else
+              CHARTS=(${{ github.event.inputs.chart }})
+            fi
+          elif [ "${{ steps.collect-changes.outputs.chartChangesDetected }}" == "true" ]; then
+            CHARTS=(${{ steps.collect-changes.outputs.addedOrModifiedCharts }})
+          fi
+          printf "::set-output name=charts::%s\n" "${CHARTS[*]}"
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.get-app-token.outputs.token }}
+          path: "dest"
+          ref: "gh-pages"
+          fetch-depth: 0
+
+      - name: Install Kubernetes tools
+        uses: yokawasa/action-setup-kube-tools@v0.8.2
+        with:
+          setup-tools: |
+            helmv3
+          helm: "${{ env.HELM_VERSION }}"
+
+      - name: Package Helm Charts
+        shell: bash
+        env:
+          SRC_DIR: "src/charts"
+          DEST_DIR: "dest"
+          CHARTS: "${{ steps.charts-to-release.outputs.charts }}"
+        run: |
+          for CHART in $CHARTS ; do
+            mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
+            CHART_TYPE=${CHART_PATH_PARTS[0]}
+
+            helm dep up "${SRC_DIR}/${CHART}"
+            helm package "${SRC_DIR}/${CHART}" -u -d "${DEST_DIR}/${CHART_TYPE}"
+          done
+
+      - name: Update chart index
+        shell: bash
+        working-directory: dest
+        run: |
+          helm repo index . --url https://bjw-s.github.io/helm-charts/
+
+      - name: Commit changes
+        shell: bash
+        working-directory: dest
+        run: |
+          git config user.name "bjw-s-bot[bot]"
+          git config user.email "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"
+          git add $(git ls-files -o --exclude-standard)
+          git add index.yaml
+          git commit -m "Updated from ref: $GITHUB_SHA"
+          git push
