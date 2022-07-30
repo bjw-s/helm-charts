@@ -35,7 +35,7 @@ jobs:
           fetch-depth: 0
 
       - name: Collect changed charts
-        uses: ./.github/actions/collect-changed-charts
+        uses: ./src/.github/actions/collect-changed-charts
         id: changed-charts
         with:
           token: token
