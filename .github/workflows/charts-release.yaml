@@ -11,6 +11,7 @@ on:
           Defaults to releasing everything.
         default: ""
         required: false
+
   push:
     branches:
       - main
@@ -25,22 +26,18 @@ jobs:
     name: Prepare data required for release
     runs-on: ubuntu-22.04
     outputs:
-      token: ${{ steps.get-app-token.outputs.token }}
       charts-to-release: ${{ steps.collect-charts.outputs.charts }}
     steps:
-      - name: Get k8s-at-home token
-        id: get-app-token
-        uses: getsentry/action-github-app-token@v1
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
-          app_id: ${{ secrets.BJWS_APP_ID }}
-          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
+          fetch-depth: 0
 
       - name: Collect charts to release
-        uses: ./src/.github/actions/collect-charts
+        uses: ./.github/actions/collect-charts
         id: collect-charts
         with:
-          token: ${{ steps.get-app-token.outputs.token }}
-          repoConfigFile: ./src/.ci/repo-config.yaml
+          repoConfigFile: ./.ci/repo-config.yaml
           overrideCharts: "[${{ inputs.charts }}]"
 
   release-github-pages:
@@ -49,5 +46,5 @@ jobs:
     needs:
       - prepare
     with:
-      token: ${{ needs.prepare.outputs.token }}
-      charts: "[${{ needs.prepare.outputs.charts-to-release }}]"
+      charts: "${{ needs.prepare.outputs.charts-to-release }}"
+    secrets: inherit

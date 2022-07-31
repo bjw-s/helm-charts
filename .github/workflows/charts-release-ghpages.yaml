@@ -1,15 +1,8 @@
 name: "Charts: Release to GitHub pages"
 
-concurrency: helm-release
-
 on:
   workflow_call:
     inputs:
-      token:
-        required: true
-        default: "${{ github.token }}"
-        description: "The Github API token to use"
-        type: string
       charts:
         description: >
           Json encoded list of Helm charts to release.
@@ -17,6 +10,11 @@ on:
         default: "[]"
         required: false
         type: string
+    secrets:
+      BJWS_APP_ID:
+        required: true
+      BJWS_APP_PRIVATE_KEY:
+        required: true
 
 env:
   HELM_VERSION: 3.9.2
@@ -26,17 +24,24 @@ jobs:
     name: Release charts
     runs-on: ubuntu-22.04
     steps:
+      - name: Get k8s-at-home token
+        id: get-app-token
+        uses: getsentry/action-github-app-token@v1
+        with:
+          app_id: ${{ secrets.BJWS_APP_ID }}
+          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
+
       - name: Checkout charts branch
         uses: actions/checkout@v3
         with:
-          token: ${{ inputs.token }}
+          token: ${{ steps.get-app-token.outputs.token }}
           path: "src"
           fetch-depth: 0
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v3
         with:
-          token: ${{ inputs.token }}
+          token: ${{ steps.get-app-token.outputs.token }}
           path: "dest"
           ref: "gh-pages"
           fetch-depth: 0
