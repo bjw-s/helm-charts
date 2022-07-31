@@ -1,0 +1,82 @@
+name: "Charts: Release to GitHub pages"
+
+concurrency: helm-release
+
+on:
+  workflow_call:
+    inputs:
+      token:
+        required: true
+        default: "${{ github.token }}"
+        description: "The Github API token to use"
+        type: string
+      charts:
+        description: >
+          Json encoded list of Helm charts to release.
+          Defaults to releasing everything.
+        default: "[]"
+        required: false
+        type: string
+
+env:
+  HELM_VERSION: 3.9.2
+
+jobs:
+  release-charts:
+    name: Release charts
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout charts branch
+        uses: actions/checkout@v3
+        with:
+          token: ${{ inputs.token }}
+          path: "src"
+          fetch-depth: 0
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v3
+        with:
+          token: ${{ inputs.token }}
+          path: "dest"
+          ref: "gh-pages"
+          fetch-depth: 0
+
+      - name: Install Kubernetes tools
+        uses: yokawasa/action-setup-kube-tools@v0.8.2
+        with:
+          setup-tools: |
+            helmv3
+          helm: "${{ env.HELM_VERSION }}"
+
+      - name: Package Helm Charts
+        shell: bash
+        env:
+          SRC_DIR: "src/charts"
+          DEST_DIR: "dest"
+        run: |
+          CHARTS=( $(yq --null-input e '${{ inputs.charts }}[]' ) )
+
+          for CHART in "${CHARTS[@]}" ; do
+            mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
+            CHART_TYPE=${CHART_PATH_PARTS[0]}
+
+            helm dep up "${SRC_DIR}/${CHART}"
+            helm package "${SRC_DIR}/${CHART}" -u -d "${DEST_DIR}/${CHART_TYPE}"
+          done
+
+      - name: Update chart index
+        shell: bash
+        working-directory: dest
+        run: |
+          helm repo index . --url https://bjw-s.github.io/helm-charts/
+
+      - name: Commit changes
+        shell: bash
+        working-directory: dest
+        run: |
+          git config user.name "bjw-s-bot[bot]"
+          git config user.email "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"
+          git add $(git ls-files -o --exclude-standard)
+          git add index.yaml
+          git commit -m "Updated from ref: $GITHUB_SHA"
+          git push
