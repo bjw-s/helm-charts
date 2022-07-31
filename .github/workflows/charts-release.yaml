@@ -39,7 +39,7 @@ jobs:
         uses: ./src/.github/actions/collect-charts
         id: collect-charts
         with:
-          token: ${{ inputs.token }}
+          token: ${{ steps.get-app-token.outputs.token }}
           repoConfigFile: ./src/.ci/repo-config.yaml
           overrideCharts: "[${{ inputs.charts }}]"
 
@@ -49,4 +49,5 @@ jobs:
     needs:
       - prepare
     with:
+      token: ${{ needs.prepare.outputs.token }}
       charts: "[${{ needs.prepare.outputs.charts-to-release }}]"
