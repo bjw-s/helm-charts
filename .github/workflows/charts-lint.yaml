@@ -6,6 +6,10 @@ on:
       checkoutCommit:
         required: true
         type: string
+      isRenovatePR:
+        required: true
+        default: 'false'
+        type: string
       chartsToLint:
         description: >
           A JSON encoded array of charts to lint
@@ -34,6 +38,13 @@ jobs:
       - name: Verify chart version
         uses: ./.github/actions/verify-chart-version
         id: verify-chart-version
+        with:
+          chart: "charts/${{ matrix.chart }}"
+
+      - name: Verify chart changelog
+        uses: ./.github/actions/verify-chart-changelog
+        if: inputs.isRenovatePR != 'true'
+        id: verify-chart-changelog
         with:
           chart: "charts/${{ matrix.chart }}"
 
