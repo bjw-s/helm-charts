@@ -14,7 +14,7 @@ condition: str(required=False)
 tags: str(required=False)
 deprecated: bool(required=False)
 kubeVersion: str(required=False)
-annotations: map(str(), str(), required=False)
+annotations: map(str(), str(), required=True)
 type: str(required=False)
 ---
 maintainer:
