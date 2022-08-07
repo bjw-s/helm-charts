@@ -54,7 +54,7 @@ jobs:
         ${{
           (
             contains(fromJSON(needs.pr-metadata.outputs.addedOrModifiedCharts), 'library/common') &&
-            '["other/kah-common-chart"]'
+            '["other/common-chart"]'
           ) || '[]'
         }}
       overrideDeps: |-
