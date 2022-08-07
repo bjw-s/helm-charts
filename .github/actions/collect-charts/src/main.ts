@@ -107,9 +107,12 @@ function filterChangedCharts(files: string[], parentFolder: string) {
     const relativeFileDirname = absoluteFileDirname.slice(
       absoluteParentFolder.length + 1
     );
-    const chartPathParts = relativeFileDirname.split("/");
-    const chart = `${chartPathParts[0]}/${chartPathParts[1]}`;
-    changedCharts.push(chart);
+    const chartPathParts: string[] = relativeFileDirname.split("/");
+    const chartType: string = chartPathParts[0];
+    const chartName: string = chartPathParts[1];
+    if (chartType && chartName) {
+      changedCharts.push(`${chartType}/${chartName}`);
+    }
   });
 
   // Return only unique items
