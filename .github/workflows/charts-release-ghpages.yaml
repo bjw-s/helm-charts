@@ -24,7 +24,7 @@ jobs:
     name: Release charts
     runs-on: ubuntu-22.04
     steps:
-      - name: Get k8s-at-home token
+      - name: Get GitHub API token
         id: get-app-token
         uses: getsentry/action-github-app-token@v1
         with:

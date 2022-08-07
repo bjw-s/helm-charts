@@ -33,7 +33,7 @@ dependencies:
   repository: https://bjw-s.github.io/helm-charts/
 ```
 
-For more information, take a look at the [Docs](http://docs.k8s-at-home.com/our-helm-charts/common-library/).
+For more information, take a look at the [Docs](http://bjw-s.github.io/helm-charts/docs/common-library/introduction/).
 
 ## Configuration
 
@@ -51,7 +51,7 @@ N/A
 |-----|------|---------|-------------|
 | additionalContainers | object | `{}` | Specify any additional containers here as dictionary items. Each additional container should have its own key. Helm templates can be used. |
 | addons | object | See below | The common chart supports several add-ons. These can be configured under this key. |
-| addons.codeserver | object | See values.yaml | The common library supports adding a code-server add-on to access files. It can be configured under this key. For more info, check out [our docs](http://docs.k8s-at-home.com/our-helm-charts/common-library-add-ons/#code-server) |
+| addons.codeserver | object | See values.yaml | The common library supports adding a code-server add-on to access files. It can be configured under this key. For more info, check out [our docs](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-add-ons/##code-server) |
 | addons.codeserver.args | list | `["--auth","none"]` | Set codeserver command line arguments. Consider setting --user-data-dir to a persistent location to preserve code-server setting changes |
 | addons.codeserver.enabled | bool | `false` | Enable running a code-server container in the pod |
 | addons.codeserver.env | object | `{}` | Set any environment variables for code-server here |
@@ -83,7 +83,7 @@ N/A
 | addons.promtail.logs | list | `[]` | The paths to logs on the volume |
 | addons.promtail.loki | string | `""` | The URL to Loki |
 | addons.promtail.volumeMounts | list | `[]` | Specify a list of volumes that get mounted in the promtail container. At least 1 volumeMount is required! |
-| addons.vpn | object | See values.yaml | The common chart supports adding a VPN add-on. It can be configured under this key. For more info, check out [our docs](http://docs.k8s-at-home.com/our-helm-charts/common-library-add-ons/#wireguard-vpn) |
+| addons.vpn | object | See values.yaml | The common chart supports adding a VPN add-on. It can be configured under this key. For more info, check out [our docs](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-add-ons/#wireguard-vpn) |
 | addons.vpn.args | list | `[]` | Override the args for the vpn sidecar container |
 | addons.vpn.configFile | string | `nil` | Provide a customized vpn configuration file to be used by the VPN. |
 | addons.vpn.configFileSecret | string | `nil` | Reference an existing secret that contains the VPN configuration file The chart expects it to be present under the `vpnConfigfile` key. |
@@ -165,7 +165,7 @@ N/A
 | initContainers | object | `{}` | Specify any initContainers here as dictionary items. Each initContainer should have its own key. The dictionary item key will determine the order. Helm templates can be used. |
 | lifecycle | object | `{}` | Configure the lifecycle for the main container |
 | nodeSelector | object | `{}` | Node selection constraint [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) |
-| persistence | object | See below | Configure persistence for the chart here. Additional items can be added by adding a dictionary key similar to the 'config' key. [[ref]](http://docs.k8s-at-home.com/our-helm-charts/common-library-storage) |
+| persistence | object | See below | Configure persistence for the chart here. Additional items can be added by adding a dictionary key similar to the 'config' key. [[ref]](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-storage) |
 | persistence.config | object | See below | Default persistence for configuration files. |
 | persistence.config.accessMode | string | `"ReadWriteOnce"` | AccessMode for the persistent volume. Make sure to select an access mode that is supported by your storage provider! [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) |
 | persistence.config.enabled | bool | `false` | Enables or disables the persistence item |
@@ -232,7 +232,7 @@ N/A
 
 ## Support
 
-- See the [Docs](https://docs.k8s-at-home.com/our-helm-charts/getting-started/)
+- See the [Docs](http://bjw-s.github.io/helm-charts/docs/)
 - Open an [issue](https://github.com/bjw-s/helm-charts/issues/new/choose)
 - Join the k8s-at-home [Discord](https://discord.gg/sTMX7Vh) community
 

@@ -357,7 +357,7 @@ ingress:
 
 # -- Configure persistence for the chart here.
 # Additional items can be added by adding a dictionary key similar to the 'config' key.
-# [[ref]](http://docs.k8s-at-home.com/our-helm-charts/common-library-storage)
+# [[ref]](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-storage)
 # @default -- See below
 persistence:
   # -- Default persistence for configuration files.
@@ -477,7 +477,7 @@ resources: {}
 addons:
 
   # -- The common chart supports adding a VPN add-on. It can be configured under this key.
-  # For more info, check out [our docs](http://docs.k8s-at-home.com/our-helm-charts/common-library-add-ons/#wireguard-vpn)
+  # For more info, check out [our docs](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-add-ons/#wireguard-vpn)
   # @default -- See values.yaml
   vpn:
     # -- Enable running a VPN in the pod to route traffic through a VPN
@@ -609,7 +609,7 @@ addons:
         #     protocol: TCP
 
   # -- The common library supports adding a code-server add-on to access files. It can be configured under this key.
-  # For more info, check out [our docs](http://docs.k8s-at-home.com/our-helm-charts/common-library-add-ons/#code-server)
+  # For more info, check out [our docs](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-add-ons/##code-server)
   # @default -- See values.yaml
   codeserver:
     # -- Enable running a code-server container in the pod

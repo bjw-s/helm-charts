@@ -4,3 +4,6 @@ charts/**/charts/
 
 # Testing
 __snapshot__/
+
+# Docs
+_site/
