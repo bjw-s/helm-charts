@@ -1,13 +1,13 @@
 {{- define "custom.repository.organization" -}}
-k8s-at-home
+bjw-s
 {{- end -}}
 
 {{- define "custom.repository.url" -}}
-https://github.com/k8s-at-home/charts
+https://github.com/bjw-s/helm-charts
 {{- end -}}
 
 {{- define "custom.helm.url" -}}
-https://k8s-at-home.com/charts/
+https://bjw-s.github.io/helm-charts/
 {{- end -}}
 
 {{- define "custom.helm.path" -}}
@@ -51,7 +51,7 @@ Read through the [values.yaml](./values.yaml) file. It has several commented out
 {{- define "custom.valuesSection" -}}
 ## Values
 
-**Important**: When deploying an application Helm chart you can add more values from our common library chart [here](https://github.com/k8s-at-home/library-charts/tree/main/charts/stable/common)
+**Important**: When deploying an application Helm chart you can add more values from our common library chart [here](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common)
 
 {{ template "chart.valuesTable" . }}
 {{- end -}}
@@ -60,9 +60,8 @@ Read through the [values.yaml](./values.yaml) file. It has several commented out
 ## Support
 
 - See the [Docs](https://docs.k8s-at-home.com/our-helm-charts/getting-started/)
-- Open an [issue](https://github.com/k8s-at-home/charts/issues/new/choose)
-- Ask a [question](https://github.com/k8s-at-home/organization/discussions)
-- Join our [Discord](https://discord.gg/sTMX7Vh) community
+- Open an [issue](https://github.com/bjw-s/helm-charts/issues/new/choose)
+- Join the k8s-at-home [Discord](https://discord.gg/sTMX7Vh) community
 {{- end -}}
 
 {{ template "chart.header" . }}
@@ -91,9 +90,6 @@ Read through the [values.yaml](./values.yaml) file. It has several commented out
 
 {{ template "custom.valuesSection" . }}
 
-{{ template "custom.changelog" . }}
-
 {{ template "custom.support" . }}
 
 {{ template "helm-docs.versionFooter" . }}
-{{ "" }}

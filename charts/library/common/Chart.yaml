@@ -1,15 +1,17 @@
 apiVersion: v2
 name: common
-description: Function library for k8s-at-home charts
+description: Function library for Helm charts
 type: library
-version: 4.5.0
+version: 0.1.0
 kubeVersion: ">=1.16.0-0"
 keywords:
-  - k8s-at-home
   - common
-home: https://github.com/k8s-at-home/library-charts/tree/main/stable/common
+  - library
+home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
 maintainers:
   - name: bjw-s
     email: me@bjw-s.dev
-  - name: onedr0p
-    email: devin.kray@gmail.com
+annotations:
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: Initial version

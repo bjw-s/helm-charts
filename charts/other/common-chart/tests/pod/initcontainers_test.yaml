@@ -1,0 +1,83 @@
+suite: pod initContainers
+templates:
+  - common.yaml
+tests:
+  - it: with explicit name should pass
+    set:
+      initContainers:
+        init1:
+          name: template-test
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.initContainers[0].name
+          value: template-test
+
+  - it: with implicit name should pass
+    set:
+      initContainers:
+        init1:
+          image: template-test
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.initContainers[0].name
+          value: init1
+
+  - it: with templated name should pass
+    set:
+      initContainers:
+        init1:
+          name: "{{ .Release.Name }}-container"
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.initContainers[0].name
+          value: RELEASE-NAME-container
+
+  - it: with custom env vars dict should pass
+    set:
+      initContainers:
+        init1:
+          env:
+            int: 1
+            float: 1.5
+            string: value_of_env
+            template: "{{ .Release.Name }}-admin"
+    asserts:
+      - documentIndex: &DeploymentDocument 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDocument
+        equal:
+          path: spec.template.spec.initContainers[0].env[0]
+          value:
+            name: float
+            value: "1.5"
+      - documentIndex: *DeploymentDocument
+        equal:
+          path: spec.template.spec.initContainers[0].env[1]
+          value:
+            name: int
+            value: "1"
+      - documentIndex: *DeploymentDocument
+        equal:
+          path: spec.template.spec.initContainers[0].env[2]
+          value:
+            name: string
+            value: value_of_env
+      - documentIndex: *DeploymentDocument
+        equal:
+          path: spec.template.spec.initContainers[0].env[3]
+          value:
+            name: template
+            value: RELEASE-NAME-admin

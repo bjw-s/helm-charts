@@ -36,29 +36,7 @@
 
   {{- with .Values.env }}
   env:
-    {{- range $k, $v := . }}
-      {{- $name := $k }}
-      {{- $value := $v }}
-      {{- if kindIs "int" $name }}
-        {{- $name = required "environment variables as a list of maps require a name field" $value.name }}
-      {{- end }}
-    - name: {{ quote $name }}
-      {{- if kindIs "map" $value -}}
-        {{- if hasKey $value "value" }}
-            {{- $value = $value.value -}}
-        {{- else if hasKey $value "valueFrom" }}
-          {{- dict "valueFrom" $value.valueFrom | toYaml | nindent 6 }}
-        {{- else }}
-          {{- dict "valueFrom" $value | toYaml | nindent 6 }}
-        {{- end }}
-      {{- end }}
-      {{- if not (kindIs "map" $value) }}
-        {{- if kindIs "string" $value }}
-          {{- $value = tpl $value $ }}
-        {{- end }}
-      value: {{ quote $value }}
-      {{- end }}
-    {{- end }}
+    {{- get (fromYaml (include "common.controller.env_vars" $)) "env" | toYaml | nindent 4 -}}
   {{- end }}
   {{- if or .Values.envFrom .Values.secret }}
   envFrom:

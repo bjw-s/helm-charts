@@ -1,0 +1,29 @@
+image:
+  repository: ghcr.io/k8s-at-home/qbittorrent
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  main:
+    ports:
+      http:
+        port: 8080
+
+persistence:
+  config:
+    enabled: true
+    emptyDir:
+      enabled: true
+    mountPath: /config
+
+addons:
+  promtail:
+    enabled: true
+    loki: http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push
+    logs:
+    - name: qbittorrent
+      path: /config/data/qBittorrent/logs/*.log
+    volumeMounts:
+    - name: config
+      mountPath: /config
+      readOnly: true
