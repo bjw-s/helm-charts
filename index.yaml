@@ -1,3 +1,25 @@
 apiVersion: v1
-entries: {}
-generated: "2022-08-07T16:41:22.072685+02:00"
+entries:
+  common:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: Initial version
+    apiVersion: v2
+    created: "2022-08-07T14:45:46.893526437Z"
+    description: Function library for Helm charts
+    digest: f5a30aa881582b34727862cb71b3afe7cfd6ce4ee1bb4c750355cbb569b5e06f
+    home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
+    keywords:
+    - common
+    - library
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@bjw-s.dev
+      name: bjw-s
+    name: common
+    type: library
+    urls:
+    - https://bjw-s.github.io/helm-charts/library/common-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-08-07T14:45:46.88940644Z"
