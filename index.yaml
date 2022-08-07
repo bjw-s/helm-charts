@@ -7,13 +7,13 @@ entries:
           description: Upgraded `common` chart dependency to version 4.4.2
     apiVersion: v2
     appVersion: 10.6.2
-    created: "2022-07-31T18:29:25.340773161Z"
+    created: "2022-08-07T09:11:25.448743412Z"
     dependencies:
     - name: common
       repository: https://library-charts.k8s-at-home.com
       version: 4.4.2
     description: Airsonic is a Free and Open Source community driven media server
-    digest: 48a2a3b8bb5c45435babf60b8863286ced2d8daef854574bdfa76569c1fb7101
+    digest: 4bb7bc8841228d46c2878b7bb6e3262132217f4bcce86730b399c450eb0bd35f
     home: https://github.com/k8s-at-home/charts/tree/master/charts/apps/airsonic
     icon: https://raw.githubusercontent.com/linuxserver/docker-templates/master/linuxserver.io/img/airsonic-logo.png
     keywords:
@@ -37,7 +37,7 @@ entries:
           description: Upgraded `common` chart dependency to version 4.4.2
     apiVersion: v2
     appVersion: 10.6.2
-    created: "2022-07-31T18:29:25.357781046Z"
+    created: "2022-08-07T09:11:25.466216989Z"
     dependencies:
     - name: common
       repository: https://library-charts.k8s-at-home.com
@@ -68,13 +68,13 @@ entries:
           description: Upgraded `common` chart dependency to version 4.4.2
     apiVersion: v2
     appVersion: 0.4.3
-    created: "2022-07-31T18:29:25.34458677Z"
+    created: "2022-08-07T09:11:25.45159429Z"
     dependencies:
     - name: common
       repository: https://library-charts.k8s-at-home.com
       version: 4.4.2
     description: Bot for Prometheus Alertmanager
-    digest: ea8aee69fe5bb81e7ce8a3c77ea2a7c0169374aa15fea75616f48fb5a619fb3f
+    digest: 73581d36ce358f05ce39e4c6b9ccc12caad8b13488bdbef51ee104e127cec7ae
     home: https://github.com/k8s-at-home/charts/tree/master/charts/apps/alertmanager-bot
     icon: https://raw.githubusercontent.com/prometheus/prometheus.github.io/master/assets/prometheus_logo-cb55bb5c346.png
     keywords:
@@ -99,7 +99,7 @@ entries:
           description: Upgraded `common` chart dependency to version 4.4.2
     apiVersion: v2
     appVersion: 0.4.3
-    created: "2022-07-31T18:29:25.360754231Z"
+    created: "2022-08-07T09:11:25.468964564Z"
     dependencies:
     - name: common
       repository: https://library-charts.k8s-at-home.com
@@ -126,9 +126,9 @@ entries:
     version: 6.3.2
   common:
   - apiVersion: v2
-    created: "2022-07-31T18:29:25.350358434Z"
+    created: "2022-08-07T09:11:25.456456222Z"
     description: Function library for k8s-at-home charts
-    digest: 88633a120ea26d624274559a29f7b71bb9cfc7e3d4428fe263a015ba3e607e7a
+    digest: b23e6cd5c3dde22f790e9827fec6fd9b2569491e9ebfa30bc8111b6d643f1e30
     home: https://github.com/k8s-at-home/library-charts/tree/main/stable/common
     keywords:
     - k8s-at-home
@@ -145,7 +145,7 @@ entries:
     - https://bjw-s.github.io/helm-charts/library/common-4.5.0.tgz
     version: 4.5.0
   - apiVersion: v2
-    created: "2022-07-31T18:29:25.347139043Z"
+    created: "2022-08-07T09:11:25.454011456Z"
     description: Function library for k8s-at-home charts
     digest: c2c1a2dbd47879af2d1db15a577af39b8e838abddcb1ae58630c58fc6c4f52e0
     home: https://github.com/k8s-at-home/library-charts/tree/main/stable/common
@@ -170,15 +170,38 @@ entries:
       artifacthub.io/changes: |-
         - kind: changed
           description: Upgraded `common` chart dependency to version 4.4.2
+          links:
+            - name: GitHub Issue
+              url: https://github.com/issue-url
     apiVersion: v2
-    created: "2022-07-31T18:29:25.353237017Z"
+    created: "2022-08-07T09:11:25.463267109Z"
+    dependencies:
+    - name: common
+      repository: https://bjw-s.github.io/helm-charts
+      version: 4.4.2
+    description: A KaH-common powered chart template. This can be useful for small
+      projects that don't have their own chart.
+    digest: 9ddb3cc79c84c036715e9c68e7a4d29fae237e9327f5b4b4d93906551d6a125d
+    maintainers:
+    - email: me@bjw-s.dev
+      name: bjw-s
+    name: kah-common-chart
+    urls:
+    - https://bjw-s.github.io/helm-charts/other/kah-common-chart-1.1.3.tgz
+    version: 1.1.3
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: Upgraded `common` chart dependency to version 4.4.2
+    apiVersion: v2
+    created: "2022-08-07T09:11:25.46038533Z"
     dependencies:
     - name: common
       repository: https://library-charts.k8s-at-home.com
       version: 4.4.2
     description: A KaH-common powered chart template. This can be useful for small
       projects that don't have their own chart.
-    digest: 88b23641f81ddda74d036b33b5eec057c40710180ea6e34e3e569349056ce9de
+    digest: 10c6c7f517c240b4ba88c17a002bea610bf3ab4b256bf3ebf58687f9148089d5
     maintainers:
     - email: me@bjw-s.dev
       name: bjw-s
@@ -186,4 +209,4 @@ entries:
     urls:
     - https://bjw-s.github.io/helm-charts/other/kah-common-chart-1.1.2.tgz
     version: 1.1.2
-generated: "2022-07-31T18:29:25.335617314Z"
+generated: "2022-08-07T09:11:25.44428149Z"
