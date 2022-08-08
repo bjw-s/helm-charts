@@ -1,12 +1,33 @@
 apiVersion: v1
 entries:
+  app-template:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: Set `common` chart dependency to version 0.1.0
+    apiVersion: v2
+    created: "2022-08-08T13:09:45.535728185Z"
+    dependencies:
+    - name: common
+      repository: https://bjw-s.github.io/helm-charts
+      version: 0.1.0
+    description: A common powered chart template. This can be useful for small projects
+      that don't have their own chart.
+    digest: 0a9a0ef5704bda8613b3f30315246f57ae764a667ac896e96755b2854c8a0bb2
+    maintainers:
+    - email: me@bjw-s.dev
+      name: bjw-s
+    name: app-template
+    urls:
+    - https://bjw-s.github.io/helm-charts/other/app-template-0.1.0.tgz
+    version: 0.1.0
   common:
   - annotations:
       artifacthub.io/changes: |-
         - kind: changed
           description: Initial version
     apiVersion: v2
-    created: "2022-08-08T13:06:27.218266684Z"
+    created: "2022-08-08T13:09:45.533131122Z"
     description: Function library for Helm charts
     digest: f5a30aa881582b34727862cb71b3afe7cfd6ce4ee1bb4c750355cbb569b5e06f
     home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
@@ -28,7 +49,7 @@ entries:
         - kind: changed
           description: Set `common` chart dependency to version 0.1.0
     apiVersion: v2
-    created: "2022-08-08T13:06:27.221519901Z"
+    created: "2022-08-08T13:09:45.538312948Z"
     dependencies:
     - name: common
       repository: https://bjw-s.github.io/helm-charts
@@ -43,4 +64,4 @@ entries:
     urls:
     - https://bjw-s.github.io/helm-charts/other/common-chart-0.1.0.tgz
     version: 0.1.0
-generated: "2022-08-08T13:06:27.212960656Z"
+generated: "2022-08-08T13:09:45.520841825Z"
