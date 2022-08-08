@@ -18,8 +18,8 @@ tests:
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-chart
-            helm.sh/chart: common-chart-0.1.0
+            app.kubernetes.io/name: app-template
+            helm.sh/chart: app-template-0.1.0
 
   - it: retain enabled should pass
     set:
@@ -41,8 +41,8 @@ tests:
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-chart
-            helm.sh/chart: common-chart-0.1.0
+            app.kubernetes.io/name: app-template
+            helm.sh/chart: app-template-0.1.0
 
   - it: custom metadata should pass
     set:
@@ -67,8 +67,8 @@ tests:
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-chart
-            helm.sh/chart: common-chart-0.1.0
+            app.kubernetes.io/name: app-template
+            helm.sh/chart: app-template-0.1.0
             test_label: test
 
   - it: custom metadata with global metadata should pass
@@ -100,7 +100,7 @@ tests:
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-chart
+            app.kubernetes.io/name: app-template
             global_label: test
-            helm.sh/chart: common-chart-0.1.0
+            helm.sh/chart: app-template-0.1.0
             test_label: test

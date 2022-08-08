@@ -54,7 +54,7 @@ jobs:
         ${{
           (
             contains(fromJSON(needs.pr-metadata.outputs.addedOrModifiedCharts), 'library/common') &&
-            '["other/common-chart"]'
+            '["other/app-template"]'
           ) || '[]'
         }}
       overrideDeps: |-

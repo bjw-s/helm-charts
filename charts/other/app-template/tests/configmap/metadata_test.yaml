@@ -1,51 +1,54 @@
-suite: ingress metadata
+suite: configmap metadata
 templates:
   - common.yaml
 tests:
   - it: default metadata should pass
     set:
-      ingress.main.enabled: true
+      configmap:
+        config:
+          enabled: true
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &ConfigmapDocument 0
         isKind:
-          of: Ingress
-      - documentIndex: *IngressDocument
+          of: ConfigMap
+      - documentIndex: *ConfigmapDocument
         isNull:
           path: metadata.annotations
-      - documentIndex: *IngressDocument
+      - documentIndex: *ConfigmapDocument
         equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-chart
-            helm.sh/chart: common-chart-0.1.0
+            app.kubernetes.io/name: app-template
+            helm.sh/chart: app-template-0.1.0
 
   - it: custom metadata should pass
     set:
-      ingress.main:
-        enabled: true
-        annotations:
-          test_annotation: test
-        labels:
-          test_label: test
+      configmap:
+        config:
+          enabled: true
+          annotations:
+            test_annotation: test
+          labels:
+            test_label: test
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &ConfigmapDocument 0
         isKind:
-          of: Ingress
-      - documentIndex: *IngressDocument
+          of: ConfigMap
+      - documentIndex: *ConfigmapDocument
         equal:
           path: metadata.annotations
           value:
             test_annotation: test
-      - documentIndex: *IngressDocument
+      - documentIndex: *ConfigmapDocument
         equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-chart
-            helm.sh/chart: common-chart-0.1.0
+            app.kubernetes.io/name: app-template
+            helm.sh/chart: app-template-0.1.0
             test_label: test
 
   - it: custom metadata with global metadata should pass
@@ -55,29 +58,30 @@ tests:
           global_label: test
         annotations:
           global_annotation: test
-      ingress.main:
-        enabled: true
-        annotations:
-          test_annotation: test
-        labels:
-          test_label: test
+      configmap:
+        config:
+          enabled: true
+          annotations:
+            test_annotation: test
+          labels:
+            test_label: test
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &ConfigmapDocument 0
         isKind:
-          of: Ingress
-      - documentIndex: *IngressDocument
+          of: ConfigMap
+      - documentIndex: *ConfigmapDocument
         equal:
           path: metadata.annotations
           value:
             global_annotation: test
             test_annotation: test
-      - documentIndex: *IngressDocument
+      - documentIndex: *ConfigmapDocument
         equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-chart
+            app.kubernetes.io/name: app-template
             global_label: test
-            helm.sh/chart: common-chart-0.1.0
+            helm.sh/chart: app-template-0.1.0
             test_label: test

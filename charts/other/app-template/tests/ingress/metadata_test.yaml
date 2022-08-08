@@ -1,51 +1,51 @@
-suite: controller metadata statefulset
+suite: ingress metadata
 templates:
   - common.yaml
 tests:
   - it: default metadata should pass
     set:
-      controller.type: statefulset
+      ingress.main.enabled: true
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &IngressDocument 2
         isKind:
-          of: StatefulSet
-      - documentIndex: *ControllerDoc
+          of: Ingress
+      - documentIndex: *IngressDocument
         isNull:
           path: metadata.annotations
-      - documentIndex: *ControllerDoc
+      - documentIndex: *IngressDocument
         equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-chart
-            helm.sh/chart: common-chart-0.1.0
+            app.kubernetes.io/name: app-template
+            helm.sh/chart: app-template-0.1.0
 
   - it: custom metadata should pass
     set:
-      controller:
-        type: statefulset
+      ingress.main:
+        enabled: true
         annotations:
           test_annotation: test
         labels:
           test_label: test
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &IngressDocument 2
         isKind:
-          of: StatefulSet
-      - documentIndex: *ControllerDoc
+          of: Ingress
+      - documentIndex: *IngressDocument
         equal:
           path: metadata.annotations
           value:
             test_annotation: test
-      - documentIndex: *ControllerDoc
+      - documentIndex: *IngressDocument
         equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-chart
-            helm.sh/chart: common-chart-0.1.0
+            app.kubernetes.io/name: app-template
+            helm.sh/chart: app-template-0.1.0
             test_label: test
 
   - it: custom metadata with global metadata should pass
@@ -55,29 +55,29 @@ tests:
           global_label: test
         annotations:
           global_annotation: test
-      controller:
-        type: statefulset
+      ingress.main:
+        enabled: true
         annotations:
           test_annotation: test
         labels:
           test_label: test
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &IngressDocument 2
         isKind:
-          of: StatefulSet
-      - documentIndex: *ControllerDoc
+          of: Ingress
+      - documentIndex: *IngressDocument
         equal:
           path: metadata.annotations
           value:
             global_annotation: test
             test_annotation: test
-      - documentIndex: *ControllerDoc
+      - documentIndex: *IngressDocument
         equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-chart
+            app.kubernetes.io/name: app-template
             global_label: test
-            helm.sh/chart: common-chart-0.1.0
+            helm.sh/chart: app-template-0.1.0
             test_label: test

@@ -13,7 +13,7 @@ tests:
         equal:
           path: spec.rules[0].http.paths[0].backend
           value:
-            serviceName: RELEASE-NAME-common-chart
+            serviceName: RELEASE-NAME-app-template
             servicePort: null
 
   - it: custom service reference should pass

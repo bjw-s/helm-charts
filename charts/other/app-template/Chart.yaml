@@ -1,7 +1,7 @@
 ---
 apiVersion: v2
 description: A common powered chart template. This can be useful for small projects that don't have their own chart.
-name: common-chart
+name: app-template
 version: 0.1.0
 maintainers:
   - name: bjw-s

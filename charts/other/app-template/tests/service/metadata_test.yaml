@@ -1,54 +1,49 @@
-suite: configmap metadata
+suite: service metadata
 templates:
   - common.yaml
 tests:
   - it: default metadata should pass
-    set:
-      configmap:
-        config:
-          enabled: true
     asserts:
-      - documentIndex: &ConfigmapDocument 0
+      - documentIndex: &ServiceDocument 1
         isKind:
-          of: ConfigMap
-      - documentIndex: *ConfigmapDocument
+          of: Service
+      - documentIndex: *ServiceDocument
         isNull:
           path: metadata.annotations
-      - documentIndex: *ConfigmapDocument
+      - documentIndex: *ServiceDocument
         equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-chart
-            helm.sh/chart: common-chart-0.1.0
+            app.kubernetes.io/name: app-template
+            helm.sh/chart: app-template-0.1.0
 
   - it: custom metadata should pass
     set:
-      configmap:
-        config:
-          enabled: true
+      service:
+        main:
           annotations:
             test_annotation: test
           labels:
             test_label: test
     asserts:
-      - documentIndex: &ConfigmapDocument 0
+      - documentIndex: &ServiceDocument 1
         isKind:
-          of: ConfigMap
-      - documentIndex: *ConfigmapDocument
+          of: Service
+      - documentIndex: *ServiceDocument
         equal:
           path: metadata.annotations
           value:
             test_annotation: test
-      - documentIndex: *ConfigmapDocument
+      - documentIndex: *ServiceDocument
         equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-chart
-            helm.sh/chart: common-chart-0.1.0
+            app.kubernetes.io/name: app-template
+            helm.sh/chart: app-template-0.1.0
             test_label: test
 
   - it: custom metadata with global metadata should pass
@@ -58,30 +53,29 @@ tests:
           global_label: test
         annotations:
           global_annotation: test
-      configmap:
-        config:
-          enabled: true
+      service:
+        main:
           annotations:
             test_annotation: test
           labels:
             test_label: test
     asserts:
-      - documentIndex: &ConfigmapDocument 0
+      - documentIndex: &ServiceDocument 1
         isKind:
-          of: ConfigMap
-      - documentIndex: *ConfigmapDocument
+          of: Service
+      - documentIndex: *ServiceDocument
         equal:
           path: metadata.annotations
           value:
             global_annotation: test
             test_annotation: test
-      - documentIndex: *ConfigmapDocument
+      - documentIndex: *ServiceDocument
         equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
-            app.kubernetes.io/name: common-chart
+            app.kubernetes.io/name: app-template
             global_label: test
-            helm.sh/chart: common-chart-0.1.0
+            helm.sh/chart: app-template-0.1.0
             test_label: test
