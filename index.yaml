@@ -3,10 +3,30 @@ entries:
   app-template:
   - annotations:
       artifacthub.io/changes: |-
+        - kind: added
+          description: Automatically set `global.nameOverride` to release name
+    apiVersion: v2
+    created: "2022-08-09T09:00:45.426771919Z"
+    dependencies:
+    - name: common
+      repository: https://bjw-s.github.io/helm-charts
+      version: 0.1.0
+    description: A common powered chart template. This can be useful for small projects
+      that don't have their own chart.
+    digest: 456851353a750f4ead2cc518f637739d76f9f52af5275a3ced736d089abef0c3
+    maintainers:
+    - email: me@bjw-s.dev
+      name: bjw-s
+    name: app-template
+    urls:
+    - https://bjw-s.github.io/helm-charts/other/app-template-0.1.1.tgz
+    version: 0.1.1
+  - annotations:
+      artifacthub.io/changes: |-
         - kind: changed
           description: Set `common` chart dependency to version 0.1.0
     apiVersion: v2
-    created: "2022-08-08T13:09:45.535728185Z"
+    created: "2022-08-09T09:00:45.424077744Z"
     dependencies:
     - name: common
       repository: https://bjw-s.github.io/helm-charts
@@ -27,7 +47,7 @@ entries:
         - kind: changed
           description: Initial version
     apiVersion: v2
-    created: "2022-08-08T13:09:45.533131122Z"
+    created: "2022-08-09T09:00:45.421375268Z"
     description: Function library for Helm charts
     digest: f5a30aa881582b34727862cb71b3afe7cfd6ce4ee1bb4c750355cbb569b5e06f
     home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
@@ -49,7 +69,7 @@ entries:
         - kind: changed
           description: Set `common` chart dependency to version 0.1.0
     apiVersion: v2
-    created: "2022-08-08T13:09:45.538312948Z"
+    created: "2022-08-09T09:00:45.430158088Z"
     dependencies:
     - name: common
       repository: https://bjw-s.github.io/helm-charts
@@ -64,4 +84,4 @@ entries:
     urls:
     - https://bjw-s.github.io/helm-charts/other/common-chart-0.1.0.tgz
     version: 0.1.0
-generated: "2022-08-08T13:09:45.520841825Z"
+generated: "2022-08-09T09:00:45.418645793Z"
