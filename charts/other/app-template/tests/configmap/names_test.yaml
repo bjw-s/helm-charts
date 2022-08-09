@@ -71,7 +71,7 @@ tests:
       - documentIndex: 0
         equal:
           path: metadata.name
-          value: RELEASE-NAME-app-template-config
+          value: RELEASE-NAME-config
 
   - it: with nameOverride should pass
     set:
@@ -88,4 +88,4 @@ tests:
       - documentIndex: 0
         equal:
           path: metadata.name
-          value: RELEASE-NAME-app-template-http
+          value: RELEASE-NAME-http

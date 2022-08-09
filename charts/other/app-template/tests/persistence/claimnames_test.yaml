@@ -17,7 +17,7 @@ tests:
           value:
             name: config
             persistentVolumeClaim:
-              claimName: RELEASE-NAME-app-template-config
+              claimName: RELEASE-NAME-config
 
   - it: with existingClaim should pass
     set:
@@ -55,7 +55,7 @@ tests:
           value:
             name: claimWithoutSuffix
             persistentVolumeClaim:
-              claimName: RELEASE-NAME-app-template
+              claimName: RELEASE-NAME
 
   - it: custom suffix should pass
     set:
@@ -75,4 +75,4 @@ tests:
           value:
             name: claimWithNameOverride
             persistentVolumeClaim:
-              claimName: RELEASE-NAME-app-template-suffix
+              claimName: RELEASE-NAME-suffix

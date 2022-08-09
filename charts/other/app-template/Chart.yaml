@@ -2,7 +2,7 @@
 apiVersion: v2
 description: A common powered chart template. This can be useful for small projects that don't have their own chart.
 name: app-template
-version: 0.1.0
+version: 0.1.1
 maintainers:
   - name: bjw-s
     email: me@bjw-s.dev
@@ -12,5 +12,5 @@ dependencies:
     version: 0.1.0
 annotations:
   artifacthub.io/changes: |-
-    - kind: changed
-      description: Set `common` chart dependency to version 0.1.0
+    - kind: added
+      description: Automatically set `global.nameOverride` to release name

@@ -65,7 +65,7 @@ tests:
           value:
             name: configmap
             configMap:
-              name: RELEASE-NAME-app-template-config
+              name: RELEASE-NAME-config
 
   - it: secret persistence type should pass
     set:
