@@ -14,7 +14,7 @@ Refer to Helm's [documentation](https://helm.sh/docs/) to get started.
 helm repo add bjw-s http://bjw-s.github.io/helm-charts/
 ```
 
-You can then run `helm search repo bjw-s` to see the charts.
+You can then run `helm search repo bjw-s` to search the charts.
 
 ## How do I find people running Kubernetes at home?
 

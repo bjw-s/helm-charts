@@ -81,3 +81,5 @@ nav:
       - Introduction: common-library/introduction.md
       - Common Storage: common-library/common-library-storage.md
       - Common Add-ons: common-library/common-library-add-ons.md
+  - App Template:
+      - Introduction: app-template/introduction.md
