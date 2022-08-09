@@ -12,7 +12,7 @@ tests:
       - documentIndex: *ServiceDocument
         equal:
           path: metadata.name
-          value: RELEASE-NAME-app-template
+          value: RELEASE-NAME
 
   - it: custom name suffix should pass
     set:
@@ -26,4 +26,4 @@ tests:
       - documentIndex: *ServiceDocument
         equal:
           path: metadata.name
-          value: RELEASE-NAME-app-template-http
+          value: RELEASE-NAME-http

@@ -40,4 +40,4 @@ tests:
           path: spec.template.spec.containers[0].envFrom[0]
           value:
             secretRef:
-              name: RELEASE-NAME-app-template
+              name: RELEASE-NAME

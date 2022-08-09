@@ -68,11 +68,11 @@ tests:
               items:
                 - key: vpnConfigfile
                   path: vpnConfigfile
-              secretName: RELEASE-NAME-app-template-vpnconfig
+              secretName: RELEASE-NAME-vpnconfig
       - documentIndex: *AddonVPNConfigSecretDocument
         equal:
           path: metadata.name
-          value: RELEASE-NAME-app-template-vpnconfig
+          value: RELEASE-NAME-vpnconfig
 
   - it: addon enabled with existing configFile secret should pass
     set:
