@@ -1,0 +1,56 @@
+image:
+  # -- image repository
+  repository: vaultwarden/server
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+  # -- image tag
+  # this example is not automatically updated, so be sure to use the latest image
+  tag: 1.25.2
+
+strategy:
+  type: Recreate
+
+# -- environment variables.
+# See [image docs](https://github.com/dani-garcia/vaultwarden/blob/main/.env.template) for more details.
+env:
+  # -- Config dir
+  DATA_FOLDER: "config"
+
+# -- Configures service settings for the chart.
+service:
+  main:
+    ports:
+      http:
+        port: 80
+      websocket:
+        enabled: true
+        port: 3012
+
+ingress:
+  # -- Enable and configure ingress settings for the chart under this key.
+  main:
+    enabled: false
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: Prefix
+            service:
+              port: http
+          - path: /notifications/hub/negotiate
+            pathType: Prefix
+            service:
+              port: http
+          - path: /notifications/hub
+            pathType: Prefix
+            service:
+              port: websocket
+
+# -- Configure persistence settings for the chart under this key.
+persistence:
+  config:
+    enabled: true
+    type: pvc
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    mountPath: /config

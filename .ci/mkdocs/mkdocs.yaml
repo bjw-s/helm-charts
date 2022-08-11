@@ -45,9 +45,6 @@ theme:
 docs_dir: ../../docs
 site_dir: ../../_site
 
-extra_css:
-  - _static/custom.css
-
 # Plugins
 plugins:
   - search
@@ -71,6 +68,10 @@ markdown_extensions:
   - footnotes
   - meta
   - md_in_html
+  - pymdownx.highlight
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences
   - toc:
       permalink: true
 

@@ -14,40 +14,14 @@ Be sure to check out the [common library docs](../../common-library/introduction
 and its [`values.yaml`](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common/values.yaml) for
 more information about the available configuration options.
 
-#### Example
+#### Examples
 
-This is an example `values.yaml` file that would deploy the [echo-server](https://github.com/jmalloc/echo-server)
-application.
+This is an example `values.yaml` file that would deploy the [vaultwarden](https://github.com/dani-garcia/vaultwarden)
+application. For more deployment examples, check out the [`examples` folder](https://github.com/bjw-s/helm-charts/tree/main/examples/).
 
-```yaml
-image:
-  repository: docker.io/jmalloc/echo-server
-  tag: 0.3.3
 
-service:
-  main:
-    ports:
-      http:
-        port: 8080
-
-ingress:
-  main:
-    enabled: true
-    ingressClassName: "nginx"
-    hosts:
-      - host: &host "echo-server.${INGRESS_DOMAIN}"
-        paths:
-          - path: /
-    tls:
-      - hosts:
-          - *host
-
-resources:
-  requests:
-    cpu: 15m
-    memory: 64M
-  limits:
-    memory: 128M
+``` yaml title="values.yaml"
+--8<-- "./examples/helm/values.yaml"
 ```
 
 ## Source code
