@@ -73,5 +73,5 @@ jobs:
               - added|modified: '**'
 
       - name: Collect changed charts
-        uses: ./.github/actions/collect-charts
+        uses: bjw-s/helm-charts-actions/collect-charts@main
         id: changed-charts
