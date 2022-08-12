@@ -34,7 +34,7 @@ jobs:
           fetch-depth: 0
 
       - name: Collect charts to release
-        uses: ./.github/actions/collect-charts
+        uses: bjw-s/helm-charts-actions/collect-charts@main
         id: collect-charts
         with:
           repoConfigFile: ./.ci/repo-config.yaml
@@ -42,7 +42,7 @@ jobs:
 
   release-github-pages:
     name: Release Charts to GitHub pages
-    uses: bjw-s/helm-charts/.github/workflows/charts-release-ghpages.yaml@main
+    uses: ./.github/workflows/charts-release-ghpages.yaml
     needs:
       - prepare
     with:
