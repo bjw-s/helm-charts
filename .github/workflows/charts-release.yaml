@@ -42,7 +42,7 @@ jobs:
 
   release-github-pages:
     name: Release Charts to GitHub pages
-    uses: bjw-s/helm-charts/.github/workflows/charts-release-ghpages.yaml@main
+    uses: ./.github/workflows/charts-release-ghpages.yaml
     needs:
       - prepare
     with:
