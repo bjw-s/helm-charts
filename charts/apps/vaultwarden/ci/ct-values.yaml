@@ -1,0 +1,4 @@
+persistence:
+  config:
+    enabled: true
+    type: emptyDir

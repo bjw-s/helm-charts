@@ -1,87 +1,34 @@
-name: "Charts: Release to GitHub pages"
+name: Release Charts
 
 on:
-  workflow_call:
-    inputs:
-      charts:
-        description: >
-          Json encoded list of Helm charts to release.
-          Defaults to releasing everything.
-        default: "[]"
-        required: false
-        type: string
-    secrets:
-      BJWS_APP_ID:
-        required: true
-      BJWS_APP_PRIVATE_KEY:
-        required: true
-
-env:
-  HELM_VERSION: 3.9.2
+  push:
+    branches:
+      - main
 
 jobs:
-  release-charts:
-    name: Release charts
-    runs-on: ubuntu-22.04
+  release:
+    # depending on default permission settings for your org (contents being read-only or read-write for workloads), you will have to add permissions
+    # see: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#modifying-the-permissions-for-the-github_token
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
     steps:
-      - name: Get GitHub API token
-        id: get-app-token
-        uses: getsentry/action-github-app-token@v1
-        with:
-          app_id: ${{ secrets.BJWS_APP_ID }}
-          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
-
-      - name: Checkout charts branch
+      - name: Checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ steps.get-app-token.outputs.token }}
-          path: "src"
           fetch-depth: 0
 
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v3
-        with:
-          token: ${{ steps.get-app-token.outputs.token }}
-          path: "dest"
-          ref: "gh-pages"
-          fetch-depth: 0
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Install Kubernetes tools
-        uses: yokawasa/action-setup-kube-tools@v0.8.2
+      - name: Install Helm
+        uses: azure/setup-helm@v3
         with:
-          setup-tools: |
-            helmv3
-          helm: "${{ env.HELM_VERSION }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Package Helm Charts
-        shell: bash
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.4.0
         env:
-          SRC_DIR: "src/charts"
-          DEST_DIR: "dest"
-        run: |
-          CHARTS=( $(yq --null-input e '${{ inputs.charts }}[]' ) )
-
-          for CHART in "${CHARTS[@]}" ; do
-            mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
-            CHART_TYPE=${CHART_PATH_PARTS[0]}
-
-            helm dep up "${SRC_DIR}/${CHART}"
-            helm package "${SRC_DIR}/${CHART}" -u -d "${DEST_DIR}/${CHART_TYPE}"
-          done
-
-      - name: Update chart index
-        shell: bash
-        working-directory: dest
-        run: |
-          helm repo index . --url https://bjw-s.github.io/helm-charts/
-
-      - name: Commit changes
-        shell: bash
-        working-directory: dest
-        run: |
-          git config user.name "bjw-s-bot[bot]"
-          git config user.email "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"
-          git add $(git ls-files -o --exclude-standard)
-          git add index.yaml
-          git commit -m "Updated from ref: $GITHUB_SHA"
-          git push
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
