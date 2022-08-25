@@ -1,7 +1,7 @@
 excluded-charts-lint: []
 
 excluded-charts-install:
-  - apps/alertmanager-discord
-  - apps/foundryvtt
-  - apps/sdtd
+  - alertmanager-discord
+  - foundryvtt
+  - sdtd
   - library/common
