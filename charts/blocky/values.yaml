@@ -68,7 +68,7 @@ probes:
     # If you selected `custom: true`, this field holds the definition of the startupProbe.
     # @default -- See below
     spec:
-      initialDelaySeconds: 0
+      initialDelaySeconds: 10
       timeoutSeconds: 1
       ## This means it has a maximum of 5*30=150 seconds to start up before it fails
       periodSeconds: 5
