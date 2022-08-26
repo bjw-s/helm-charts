@@ -1,9 +1,9 @@
 ---
 apiVersion: v2
-appVersion: v0.18
+appVersion: v0.19
 description: DNS proxy as ad-blocker for local network
 name: blocky
-version: 10.5.2
+version: 10.6.0
 kubeVersion: ">=1.19.0-0"
 keywords:
   - blocky
@@ -14,8 +14,8 @@ icon: https://github.com/0xERR0R/blocky/raw/master/docs/blocky.svg?sanitize=true
 sources:
   - https://github.com/0xERR0R/blocky
 maintainers:
-  - name: billimek
-    email: jeff@billimek.com
+  - name: j0sh3rs
+    email: github@beholdthehurricane.com
 dependencies:
   - name: common
     repository: https://library-charts.k8s-at-home.com
@@ -27,4 +27,4 @@ dependencies:
 annotations:
   artifacthub.io/changes: |-
     - kind: changed
-      description: Upgraded `common` chart dependency to version 4.5.2
+      description: Added custom probes for startup, readiness, liveliness
