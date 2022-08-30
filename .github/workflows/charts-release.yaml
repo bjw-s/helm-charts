@@ -48,3 +48,12 @@ jobs:
     with:
       charts: "${{ needs.prepare.outputs.charts-to-release }}"
     secrets: inherit
+
+  release-github-oci:
+    name: Release Charts to GitHub OCI
+    uses: ./.github/workflows/charts-release-oci.yaml
+    needs:
+      - prepare
+    with:
+      charts: "${{ needs.prepare.outputs.charts-to-release }}"
+    secrets: inherit
