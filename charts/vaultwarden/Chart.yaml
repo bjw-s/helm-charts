@@ -20,7 +20,7 @@ dependencies:
     repository: https://library-charts.k8s-at-home.com
     version: 4.5.2
   - name: mariadb
-    version: 11.0.14
+    version: 11.3.0
     repository: https://charts.bitnami.com/bitnami
     condition: mariadb.enabled
   - name: postgresql
