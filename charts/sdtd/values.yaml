@@ -10,7 +10,7 @@ image:
   repository: ghcr.io/reitermarkus/7d2d
   # -- image tag
   # @default -- chart.appVersion
-  tag:
+  tag: main
   # -- image pull policy
   pullPolicy: Always
 
@@ -18,7 +18,7 @@ image:
 # @default -- See below
 env:
   # -- Set the container timezone
-  TZ: UTC
+  TZ: America/New_York
   # VERSION: alpha20.2
   # SERVER_NAME: My 7 Days to Die Server
 

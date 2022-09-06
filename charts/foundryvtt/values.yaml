@@ -9,9 +9,9 @@ image:
   # -- image repository
   repository: felddy/foundryvtt
   # -- image pull policy
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # -- image tag
-  tag: 0.8.3
+  tag: release
 
 strategy:
   type: Recreate

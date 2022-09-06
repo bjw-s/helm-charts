@@ -9,15 +9,15 @@ image:
   # -- image repository
   repository: shenxn/protonmail-bridge
   # -- image tag
-  tag: 1.8.7-1
+  tag: build
   # -- image pull policy
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 # -- environment variables.
 # @default -- See below
 env:
   # -- Set the container timezone
-  TZ: UTC
+  TZ: America/New_York
 
 # -- Configures service settings for the chart.
 # @default -- See values.yaml

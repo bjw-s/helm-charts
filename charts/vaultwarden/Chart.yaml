@@ -13,8 +13,8 @@ icon: "https://sesoodan.sirv.com/bitwarden_rs.png"
 sources:
   - https://github.com/dani-garcia/vaultwarden
 maintainers:
-  - name: Rwaltr
-    email: rwalt@pm.me
+  - name: j0sh3rs
+    email: j0sh3rs@pm.me
 dependencies:
   - name: common
     repository: https://library-charts.k8s-at-home.com

@@ -9,7 +9,7 @@ image:
   # -- image repository
   repository: vaultwarden/server
   # -- image pull policy
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # -- image tag
   # @default -- chart.appVersion
   tag:
