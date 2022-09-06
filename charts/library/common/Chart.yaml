@@ -2,15 +2,15 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 0.1.0
+version: 4.5.3
 kubeVersion: ">=1.16.0-0"
 keywords:
   - common
   - library
-home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
+home: https://github.com/j0sh3rs/helm-charts/tree/main/charts/library/common
 maintainers:
-  - name: bjw-s
-    email: me@bjw-s.dev
+  - name: j0sh3rs
+    email: j0sh3rs@pm.me
 annotations:
   artifacthub.io/changes: |-
     - kind: changed
