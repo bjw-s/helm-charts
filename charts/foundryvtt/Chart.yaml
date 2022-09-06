@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: v10.284.0
 description: An easy-to-deploy Dockerized Foundry Virtual Tabletop server
 name: foundryvtt
-version: 3.5.1
+version: 3.5.0
 kubeVersion: ">=1.16.0-0"
 keywords:
   - foundryvtt
@@ -12,12 +12,12 @@ icon: https://raw.githubusercontent.com/felddy/foundryvtt-docker/develop/assets/
 sources:
   - https://github.com/felddy/foundryvtt-docker
 maintainers:
-  - name: j0sh3rs
-    email: j0sh3rs@pm.me
+  - name: rwaltr
+    email: rwalt@pm.me
 dependencies:
   - name: common
-    repository: https://j0sh3rs.github.io/helm-charts
-    version: 4.5.3
+    repository: https://library-charts.k8s-at-home.com
+    version: 4.5.2
 annotations:
   artifacthub.io/changes: |-
     - kind: changed

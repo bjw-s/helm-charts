@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: main
 description: Dedicated server for 7 Days to Die
 name: sdtd
-version: 0.4.1
+version: 0.4.0
 kubeVersion: ">=1.16.0-0"
 keywords:
   - 7d2d
@@ -16,8 +16,8 @@ maintainers:
     email: me@reitermark.us
 dependencies:
   - name: common
-    repository: https://j0sh3rs.github.io/helm-charts
-    version: 4.5.3
+    repository: https://library-charts.k8s-at-home.com
+    version: 4.5.2
 annotations:
   artifacthub.io/changes: |-
     - kind: changed

@@ -14,12 +14,12 @@ sources:
   - https://github.com/shenxn/protonmail-bridge-docker
   - https://hub.docker.com/r/shenxn/protonmail-bridge
 maintainers:
-  - name: j0sh3rs
-    email: j0sh3rs@pm.me
+  - name: Eagleman7
+    email: my@email.com
 dependencies:
   - name: common
-    repository: https://j0sh3rs.github.io/helm-charts
-    version: 4.5.3
+    repository: https://library-charts.k8s-at-home.com
+    version: 4.5.2
 annotations:
   artifacthub.io/changes: |-
     - kind: changed
