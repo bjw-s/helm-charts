@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: 1.25.2
 description: Vaultwarden is a Bitwarden compatable server in Rust
 name: vaultwarden
-version: 5.4.0
+version: 5.5.0
 kubeVersion: ">=1.16.0-0"
 keywords:
   - Vaultwarden
@@ -17,8 +17,8 @@ maintainers:
     email: j0sh3rs@pm.me
 dependencies:
   - name: common
-    repository: https://library-charts.k8s-at-home.com
-    version: 4.5.2
+    repository: https://bjw-s.github.io/helm-charts
+    version: 0.1.0
   - name: mariadb
     version: 11.3.0
     repository: https://charts.bitnami.com/bitnami
@@ -30,4 +30,4 @@ dependencies:
 annotations:
   artifacthub.io/changes: |-
     - kind: changed
-      description: Upgraded `common` chart dependency to version 4.5.2
+      description: Upgraded `common` chart dependency to version 0.1.0

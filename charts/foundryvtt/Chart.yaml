@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: v10.284.0
 description: An easy-to-deploy Dockerized Foundry Virtual Tabletop server
 name: foundryvtt
-version: 3.5.1
+version: 3.6.0
 kubeVersion: ">=1.16.0-0"
 keywords:
   - foundryvtt
@@ -16,9 +16,9 @@ maintainers:
     email: rwalt@pm.me
 dependencies:
   - name: common
-    repository: https://library-charts.k8s-at-home.com
-    version: 4.5.2
+    repository: https://bjw-s.github.io/helm-charts
+    version: 0.1.0
 annotations:
   artifacthub.io/changes: |-
     - kind: changed
-      description: Upgraded `common` chart dependency to version 4.5.2
+      description: Upgraded `common` chart dependency to version 0.1.0

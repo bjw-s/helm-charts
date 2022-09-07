@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: v0.19
 description: DNS proxy as ad-blocker for local network
 name: blocky
-version: 10.6.5
+version: 10.7.0
 kubeVersion: ">=1.19.0-0"
 keywords:
   - blocky
@@ -18,8 +18,8 @@ maintainers:
     email: github@beholdthehurricane.com
 dependencies:
   - name: common
-    repository: https://library-charts.k8s-at-home.com
-    version: 4.5.2
+    repository: https://bjw-s.github.io/helm-charts
+    version: 0.1.0
   - name: redis
     repository: https://charts.bitnami.com/bitnami
     version: 17.1.4
