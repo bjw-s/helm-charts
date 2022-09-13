@@ -16,6 +16,6 @@ annotations:
     - kind: added
       description: Added support for adding serviceMonitors to services.
     - kind: changed
-      description: Updated gluetun image to v3.31.0
+      description: Updated gluetun image to v3.31.1
     - kind: changed
-      description: Updated code-server image to v4.6.1
+      description: Updated code-server image to v4.7.0
