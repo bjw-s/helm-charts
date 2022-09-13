@@ -277,6 +277,16 @@ service:
     # -- Provide additional labels which may be required.
     labels: {}
 
+    # -- Configure a serviceMonitor for this Service.
+    monitor:
+      enabled: false
+      endpoints:
+        - port: http
+          scheme: http
+          path: /metrics
+          interval: 1m
+          scrapeTimeout: 10s
+
     # -- Configure the Service port information here.
     # Additional ports can be added by adding a dictionary key similar to the 'http' service.
     # @default -- See below

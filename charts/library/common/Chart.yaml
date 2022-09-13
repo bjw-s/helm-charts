@@ -13,6 +13,8 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: added
+      description: Added support for adding serviceMonitors to services.
     - kind: changed
       description: Updated gluetun image to v3.31.0
     - kind: changed
