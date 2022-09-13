@@ -7,6 +7,8 @@ tests:
       configmap:
         config:
           enabled: true
+          data:
+            test: value 1
     asserts:
       - documentIndex: &ControllerDoc 1
         isKind:
@@ -15,4 +17,4 @@ tests:
         equal:
           path: spec.template.metadata.annotations
           value:
-            checksum/config: 548b0a7df4028b53a4b2d67aa8dc134ab573f502934332337d2e447481168090
+            checksum/config: afdf20f511621d5cb358c5e8b0da2d14cdbe2549fb12fa123f6a6e9baabef26e

@@ -16,6 +16,8 @@ annotations:
     - kind: added
       description: Added support for adding serviceMonitors to services.
     - kind: changed
+      description: ConfigMap checksum logic now only looks at ConfigMap data
+    - kind: changed
       description: Updated gluetun image to v3.31.1
     - kind: changed
       description: Updated code-server image to v4.7.0
