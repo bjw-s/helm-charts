@@ -1,6 +1,6 @@
 # common
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -61,7 +61,7 @@ N/A
 | addons.codeserver.git.deployKeySecret | string | `""` | Existing secret containing SSH private key The chart expects it to be present under the `id_rsa` key. |
 | addons.codeserver.image.pullPolicy | string | `"IfNotPresent"` | Specify the code-server image pull policy |
 | addons.codeserver.image.repository | string | `"ghcr.io/coder/code-server"` | Specify the code-server image |
-| addons.codeserver.image.tag | string | `"4.5.1"` | Specify the code-server image tag |
+| addons.codeserver.image.tag | string | `"4.7.0"` | Specify the code-server image tag |
 | addons.codeserver.ingress.enabled | bool | `false` | Enable an ingress for the code-server add-on. |
 | addons.codeserver.ingress.ingressClassName | string | `nil` | Set the ingressClass that is used for this ingress. Requires Kubernetes >=1.19 |
 | addons.codeserver.service.enabled | bool | `true` | Enable a service for the code-server add-on. |
@@ -83,7 +83,7 @@ N/A
 | addons.promtail.logs | list | `[]` | The paths to logs on the volume |
 | addons.promtail.loki | string | `""` | The URL to Loki |
 | addons.promtail.volumeMounts | list | `[]` | Specify a list of volumes that get mounted in the promtail container. At least 1 volumeMount is required! |
-| addons.vpn | object | See values.yaml | The common chart supports adding a VPN add-on. It can be configured under this key. For more info, check out [our docs](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-add-ons/#wireguard-vpn) |
+| addons.vpn | object | See values.yaml | The common chart supports adding a VPN add-on. It can be configured under this key. |
 | addons.vpn.args | list | `[]` | Override the args for the vpn sidecar container |
 | addons.vpn.configFile | string | `nil` | Provide a customized vpn configuration file to be used by the VPN. |
 | addons.vpn.configFileSecret | string | `nil` | Reference an existing secret that contains the VPN configuration file The chart expects it to be present under the `vpnConfigfile` key. |
@@ -92,26 +92,16 @@ N/A
 | addons.vpn.gluetun | object | See below | Gluetun specific configuration -- Make sure to read the [documentation](https://github.com/qdm12/gluetun/wiki) to see how to configure this addon! |
 | addons.vpn.gluetun.image.pullPolicy | string | `"IfNotPresent"` | Specify the Gluetun image pull policy |
 | addons.vpn.gluetun.image.repository | string | `"docker.io/qmcgaw/gluetun"` | Specify the Gluetun image |
-| addons.vpn.gluetun.image.tag | string | `"v3.30.0"` | Specify the Gluetun image tag |
+| addons.vpn.gluetun.image.tag | string | `"v3.31.1"` | Specify the Gluetun image tag |
 | addons.vpn.livenessProbe | object | `{}` | Optionally specify a livenessProbe, e.g. to check if the connection is still being protected by the VPN |
 | addons.vpn.networkPolicy.annotations | object | `{}` | Provide additional annotations which may be required. |
 | addons.vpn.networkPolicy.egress | string | `nil` | The egress configuration for your network policy, All outbound traffic from the pod will be blocked unless specified here. [[ref]](https://kubernetes.io/docs/concepts/services-networking/network-policies/) [[recipes]](https://github.com/ahmetb/kubernetes-network-policy-recipes) |
 | addons.vpn.networkPolicy.enabled | bool | `false` | If set to true, will deploy a network policy that blocks all outbound traffic except traffic specified as allowed |
 | addons.vpn.networkPolicy.labels | object | `{}` | Provide additional labels which may be required. |
 | addons.vpn.networkPolicy.podSelectorLabels | object | `{}` | Provide additional podSelector labels which may be required. |
-| addons.vpn.openvpn | object | See below | OpenVPN specific configuration |
-| addons.vpn.openvpn.auth | string | `nil` | Credentials to connect to the VPN Service (used with -a) |
-| addons.vpn.openvpn.authSecret | string | `nil` | Optionally specify an existing secret that contains the credentials. Credentials should be stored under the `VPN_AUTH` key |
-| addons.vpn.openvpn.image.pullPolicy | string | `"IfNotPresent"` | Specify the openvpn client image pull policy |
-| addons.vpn.openvpn.image.repository | string | `"dperson/openvpn-client"` | Specify the openvpn client image |
-| addons.vpn.openvpn.image.tag | string | `"latest"` | Specify the openvpn client image tag |
 | addons.vpn.scripts | object | See values.yaml | Provide custom up/down scripts that can be used by the vpn configuration. |
 | addons.vpn.securityContext | object | See values.yaml | Set the VPN container securityContext |
-| addons.vpn.type | string | `"openvpn"` | Specify the VPN type. Valid options are `openvpn`, `wireguard` and `gluetun`. |
-| addons.vpn.wireguard | object | See below | WireGuard specific configuration |
-| addons.vpn.wireguard.image.pullPolicy | string | `"IfNotPresent"` | Specify the WireGuard image pull policy |
-| addons.vpn.wireguard.image.repository | string | `"ghcr.io/k8s-at-home/wireguard"` | Specify the WireGuard image |
-| addons.vpn.wireguard.image.tag | string | `"v1.0.20210914"` | Specify the WireGuard image tag |
+| addons.vpn.type | string | `"gluetun"` | Specify the VPN type. Valid options are `gluetun`. |
 | affinity | object | `{}` | Defines affinity constraint rules. [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity) |
 | args | list | `[]` | Override the args for the default container |
 | automountServiceAccountToken | bool | `true` | Specifies whether a service account token should be automatically mounted. |
@@ -210,6 +200,9 @@ N/A
 | service.main.ipFamilies | list | `[]` | The ip families that should be used. Options: IPv4, IPv6 |
 | service.main.ipFamilyPolicy | string | `nil` | Specify the ip policy. Options: SingleStack, PreferDualStack, RequireDualStack |
 | service.main.labels | object | `{}` | Provide additional labels which may be required. |
+| service.main.monitor | object | See below | Configure a serviceMonitor for this Service. |
+| service.main.monitor.enabled | bool | `false` | Enables or disables the serviceMonitor. |
+| service.main.monitor.endpoints | list | See values.yaml | Configures the endpoints for the serviceMonitor. |
 | service.main.nameOverride | string | `nil` | Override the name suffix that is used for this service |
 | service.main.ports | object | See below | Configure the Service port information here. Additional ports can be added by adding a dictionary key similar to the 'http' service. |
 | service.main.ports.http.enabled | bool | `true` | Enables or disables the port |
