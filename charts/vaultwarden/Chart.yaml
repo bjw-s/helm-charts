@@ -18,7 +18,7 @@ maintainers:
 dependencies:
   - name: common
     repository: https://bjw-s.github.io/helm-charts
-    version: 0.1.0
+    version: 0.2.1
   - name: mariadb
     version: 11.3.0
     repository: https://charts.bitnami.com/bitnami
