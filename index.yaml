@@ -6,7 +6,7 @@ entries:
         - kind: added
           description: Automatically set `global.nameOverride` to release name
     apiVersion: v2
-    created: "2022-08-09T09:00:45.426771919Z"
+    created: "2022-09-14T08:20:59.464723361Z"
     dependencies:
     - name: common
       repository: https://bjw-s.github.io/helm-charts
@@ -26,7 +26,7 @@ entries:
         - kind: changed
           description: Set `common` chart dependency to version 0.1.0
     apiVersion: v2
-    created: "2022-08-09T09:00:45.424077744Z"
+    created: "2022-09-14T08:20:59.461486336Z"
     dependencies:
     - name: common
       repository: https://bjw-s.github.io/helm-charts
@@ -44,10 +44,41 @@ entries:
   common:
   - annotations:
       artifacthub.io/changes: |-
+        - kind: removed
+          description: BREAKING - Removed support for the `openvpn` and `wireguard` VPN types.
+        - kind: added
+          description: Added support for adding serviceMonitors to services.
+        - kind: changed
+          description: ConfigMap checksum logic now only looks at ConfigMap data
+        - kind: changed
+          description: Explicitly convert defaultMode to decimal notation in code-server addon.
+        - kind: changed
+          description: Updated gluetun image to v3.31.1
+        - kind: changed
+          description: Updated code-server image to v4.7.0
+    apiVersion: v2
+    created: "2022-09-14T08:20:59.458290812Z"
+    description: Function library for Helm charts
+    digest: 0c20278db20419482fa1e07d5e81a7c1043f6e5d0166668f4ad797e40fb77fbb
+    home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
+    keywords:
+    - common
+    - library
+    kubeVersion: '>=1.16.0-0'
+    maintainers:
+    - email: me@bjw-s.dev
+      name: bjw-s
+    name: common
+    type: library
+    urls:
+    - https://bjw-s.github.io/helm-charts/library/common-0.2.0.tgz
+    version: 0.2.0
+  - annotations:
+      artifacthub.io/changes: |-
         - kind: changed
           description: Initial version
     apiVersion: v2
-    created: "2022-08-09T09:00:45.421375268Z"
+    created: "2022-09-14T08:20:59.454864885Z"
     description: Function library for Helm charts
     digest: f5a30aa881582b34727862cb71b3afe7cfd6ce4ee1bb4c750355cbb569b5e06f
     home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
@@ -69,7 +100,7 @@ entries:
         - kind: changed
           description: Set `common` chart dependency to version 0.1.0
     apiVersion: v2
-    created: "2022-08-09T09:00:45.430158088Z"
+    created: "2022-09-14T08:20:59.468137387Z"
     dependencies:
     - name: common
       repository: https://bjw-s.github.io/helm-charts
@@ -84,4 +115,4 @@ entries:
     urls:
     - https://bjw-s.github.io/helm-charts/other/common-chart-0.1.0.tgz
     version: 0.1.0
-generated: "2022-08-09T09:00:45.418645793Z"
+generated: "2022-09-14T08:20:59.444190104Z"
