@@ -17,7 +17,7 @@ Renders the Service objects required by the chart.
       {{- include "common.classes.service" $ | nindent 0 -}}
 
       {{/* Include a serviceMonitor if required */}}
-      {{- if $service.monitor.enabled | default false -}}
+      {{- if ($service.monitor).enabled | default false -}}
         {{- $_ := set $ "ObjectValues" (dict "serviceMonitor" $serviceValues.monitor) -}}
         {{- $_ := set $.ObjectValues.serviceMonitor "nameOverride" $serviceValues.nameOverride -}}
 
