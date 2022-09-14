@@ -29,7 +29,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
 - name: common
-  version: 0.1.0
+  version: 0.2.0
   repository: https://bjw-s.github.io/helm-charts/
 ```
 

@@ -21,7 +21,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
 - name: common
-  version: 0.1.0
+  version: {{ template "chart.version" . }}
   repository: {{ template "custom.helm.url" }}
 ```
 
