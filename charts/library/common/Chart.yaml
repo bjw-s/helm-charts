@@ -2,7 +2,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 0.1.0
+version: 0.2.0
 kubeVersion: ">=1.16.0-0"
 keywords:
   - common
@@ -13,5 +13,15 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: removed
+      description: BREAKING - Removed support for the `openvpn` and `wireguard` VPN types.
+    - kind: added
+      description: Added support for adding serviceMonitors to services.
     - kind: changed
-      description: Initial version
+      description: ConfigMap checksum logic now only looks at ConfigMap data
+    - kind: changed
+      description: Explicitly convert defaultMode to decimal notation in code-server addon.
+    - kind: changed
+      description: Updated gluetun image to v3.31.1
+    - kind: changed
+      description: Updated code-server image to v4.7.0
