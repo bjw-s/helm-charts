@@ -17,6 +17,7 @@ maintainers:
   - name: j0sh3rs
     email: github@beholdthehurricane.com
 dependencies:
+dependencies:
   - name: common
     repository: https://bjw-s.github.io/helm-charts
     version: 0.2.1
