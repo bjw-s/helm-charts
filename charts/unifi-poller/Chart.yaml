@@ -21,7 +21,7 @@ dependencies:
     repository: https://bjw-s.github.io/helm-charts
     version: 0.2.1
   - name: influxdb
-    version: 5.4.3
+    version: 5.4.5
     repository: https://charts.bitnami.com/bitnami
     condition: influxdb.enabled
 annotations:
