@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: v10.286.0
 description: An easy-to-deploy Dockerized Foundry Virtual Tabletop server
 name: foundryvtt
-version: 3.6.1
+version: 3.7.0
 kubeVersion: ">=1.16.0-0"
 keywords:
   - foundryvtt
