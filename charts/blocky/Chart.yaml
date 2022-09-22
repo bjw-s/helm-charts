@@ -23,7 +23,7 @@ dependencies:
     version: 0.2.1
   - name: redis
     repository: https://charts.bitnami.com/bitnami
-    version: 17.1.7
+    version: 17.1.8
     condition: redis.enabled
 annotations:
   artifacthub.io/changes: |-
