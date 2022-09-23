@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: v0.19
 description: DNS proxy as ad-blocker for local network
 name: blocky
-version: 10.8.0
+version: 10.8.1
 kubeVersion: ">=1.19.0-0"
 keywords:
   - blocky
@@ -25,7 +25,3 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     version: 17.1.8
     condition: redis.enabled
-annotations:
-  artifacthub.io/changes: |-
-    - kind: changed
-      description: Adjust startup probe delay
