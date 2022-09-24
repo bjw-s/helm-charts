@@ -22,5 +22,5 @@ dependencies:
     version: 0.2.1
   - name: redis
     repository: https://charts.bitnami.com/bitnami
-    version: 17.1.8
+    version: 17.2.0
     condition: redis.enabled
