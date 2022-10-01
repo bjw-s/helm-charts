@@ -2,7 +2,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 0.2.1
+version: 0.2.2
 kubeVersion: ">=1.16.0-0"
 keywords:
   - common
@@ -13,6 +13,8 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: fixed
+      description: Fix deprecation warning on unsupported vpn types.
     - kind: fixed
       description: Make sure service.monitor is optional.
     - kind: removed
