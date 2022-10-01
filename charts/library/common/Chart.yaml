@@ -15,17 +15,5 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: Fix deprecation warning on unsupported vpn types.
-    - kind: fixed
-      description: Make sure service.monitor is optional.
-    - kind: removed
-      description: BREAKING - Removed support for the `openvpn` and `wireguard` VPN types.
-    - kind: added
-      description: Added support for adding serviceMonitors to services.
     - kind: changed
-      description: ConfigMap checksum logic now only looks at ConfigMap data
-    - kind: changed
-      description: Explicitly convert defaultMode to decimal notation in code-server addon.
-    - kind: changed
-      description: Updated gluetun image to v3.31.1
-    - kind: changed
-      description: Updated code-server image to v4.7.0
+      description: Updated code-server image to v4.7.1
