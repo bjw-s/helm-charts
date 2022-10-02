@@ -85,3 +85,9 @@ jobs:
           git add index.yaml
           git commit -m "Updated from ref: $GITHUB_SHA"
           git push
+
+      - name: Wait for workflow
+        uses: ArcticLampyrid/action-wait-for-workflow@v1.0.2
+        with:
+          github_token: ${{ steps.get-app-token.outputs.token }}
+          workflow: pages-build-deployment

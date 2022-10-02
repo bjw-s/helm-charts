@@ -26,7 +26,8 @@ jobs:
     name: Prepare data required for release
     runs-on: ubuntu-22.04
     outputs:
-      charts-to-release: ${{ steps.collect-charts.outputs.charts }}
+      libraryChartsToRelease: ${{ steps.collect-charts.outputs.chartsLibrary }}
+      applicationChartsToRelease: ${{ steps.collect-charts.outputs.chartsApplication }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -40,11 +41,21 @@ jobs:
           repoConfigFile: ./.ci/repo-config.yaml
           overrideCharts: "[${{ inputs.charts }}]"
 
-  release-github-pages:
-    name: Release Charts to GitHub pages
+  release-gh-pages-library:
+    name: Release Library charts to GitHub pages
     uses: ./.github/workflows/charts-release-ghpages.yaml
     needs:
       - prepare
     with:
-      charts: "${{ needs.prepare.outputs.charts-to-release }}"
+      charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
     secrets: inherit
+
+  # release-gh-pages:
+  #   name: Release Application Charts to GitHub pages
+  #   uses: ./.github/workflows/charts-release-ghpages.yaml
+  #   needs:
+  #     - prepare
+  #     - release-gh-pages-library
+  #   with:
+  #     charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
+  #   secrets: inherit
