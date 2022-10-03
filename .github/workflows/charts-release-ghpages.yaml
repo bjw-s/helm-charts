@@ -88,11 +88,10 @@ jobs:
           disable_globbing: true
 
       - name: Wait for deploy
-        uses: jchen1/wait-for-green@v1.0.7
+        uses: fountainhead/action-wait-for-check@v1.0.0
         if: ${{ steps.auto-commit.outputs.changes_detected }}
         id: wait-for-deploy
         with:
           token: ${{ steps.get-app-token.outputs.token }}
-          commit: ${{ steps.auto-commit.outputs.commit_hash }}
-          # Ignore the job we're running on lest we create an infinite loop
-          ignored_checks: 'wait-for-deploy'
+          ref: ${{ steps.auto-commit.outputs.commit_hash }}
+          checkName: deploy
