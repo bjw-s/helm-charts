@@ -15,6 +15,12 @@ on:
           A JSON encoded array of charts to lint
         required: true
         type: string
+      overrideDeps:
+        description: >
+          A JSON encoded array of dependencies to override before linting
+        type: string
+        required: false
+        default: '[]'
 
 env:
   HELM_VERSION: 3.9.2
@@ -58,7 +64,14 @@ jobs:
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.3.1
 
-      - name: Run chart-testing (install)
+      - name: Override chart dependencies
+        uses: ./.github/actions/override-chart-deps
+        if: ${{ inputs.overrideDeps != '[]' }}
+        with:
+          chart: ${{ matrix.chart }}
+          overrides: ${{ inputs.overrideDeps }}
+
+      - name: Run chart-testing (lint)
         run: ct lint --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
 
   # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7

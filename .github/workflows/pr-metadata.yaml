@@ -22,6 +22,8 @@ on:
         value: ${{ jobs.pr-changes.outputs.chartsToLint }}
       chartsToInstall:
         value: ${{ jobs.pr-changes.outputs.chartsToInstall }}
+      commonLibraryUpdated:
+        value: ${{ contains(fromJSON(jobs.pr-changes.outputs.addedOrModifiedCharts), 'library/common') }}
 
 jobs:
   pr-metadata:
@@ -55,6 +57,8 @@ jobs:
       addedOrModifiedFilesDetected: ${{ steps.changed-files.outputs.allAddedOrModified }}
       addedOrModifiedFiles: ${{ steps.changed-files.outputs.allAddedOrModified_files }}
       addedOrModifiedCharts: ${{ steps.changed-charts.outputs.charts }}
+      addedOrModifiedLibraryCharts: ${{ steps.changed-charts.outputs.chartsLibrary }}
+      addedOrModifiedApplicationCharts: ${{ steps.changed-charts.outputs.chartsApplication }}
       chartsToLint: ${{ steps.changed-charts.outputs.chartsToLint }}
       chartsToInstall: ${{ steps.changed-charts.outputs.chartsToInstall }}
     steps:
