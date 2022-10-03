@@ -15,13 +15,13 @@
     {{- tpl (toYaml .Values.podAnnotations) . | nindent 0 -}}
   {{- end -}}
 
-  {{- $configMapsFound := false -}}
+  {{- $configMapsFound := dict -}}
   {{- range $name, $configmap := .Values.configmap -}}
     {{- if $configmap.enabled -}}
-      {{- $configMapsFound = true -}}
+      {{- $_ := set $configMapsFound $name (toYaml $configmap.data | sha256sum) -}}
     {{- end -}}
   {{- end -}}
   {{- if $configMapsFound -}}
-    {{- printf "checksum/config: %v" (include ("common.configmap") . | sha256sum) | nindent 0 -}}
+    {{- printf "checksum/config: %v" (toYaml $configMapsFound | sha256sum) | nindent 0 -}}
   {{- end -}}
 {{- end -}}

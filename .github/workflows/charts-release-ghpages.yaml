@@ -76,12 +76,22 @@ jobs:
           helm repo index . --url https://bjw-s.github.io/helm-charts/
 
       - name: Commit changes
-        shell: bash
-        working-directory: dest
-        run: |
-          git config user.name "bjw-s-bot[bot]"
-          git config user.email "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"
-          git add $(git ls-files -o --exclude-standard)
-          git add index.yaml
-          git commit -m "Updated from ref: $GITHUB_SHA"
-          git push
+        uses: stefanzweifel/git-auto-commit-action@v4
+        id: auto-commit
+        with:
+          repository: dest
+          branch: gh-pages
+          commit_user_name: "bjw-s-bot[bot]"
+          commit_user_email: 87358111+bjw-s-bot[bot]@users.noreply.github.com
+          commit_author: bjw-s-bot[bot] <87358111+bjw-s-bot[bot]@users.noreply.github.com>
+          file_pattern: 'index.yaml **/*.tgz'
+          disable_globbing: true
+
+      - name: Wait for deploy
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        if: ${{ steps.auto-commit.outputs.changes_detected }}
+        id: wait-for-deploy
+        with:
+          token: ${{ steps.get-app-token.outputs.token }}
+          ref: ${{ steps.auto-commit.outputs.commit_hash }}
+          checkName: deploy

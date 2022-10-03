@@ -9,7 +9,7 @@ secret:
   {{- else }}
   secretName: {{ include "common.names.fullname" . }}-deploykey
   {{- end }}
-  defaultMode: 256
+  defaultMode: {{ "0400" | toDecimal }}
   items:
     - key: id_rsa
       path: id_rsa

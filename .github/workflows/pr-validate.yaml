@@ -35,6 +35,13 @@ jobs:
       checkoutCommit: ${{ github.sha }}
       chartsToLint: ${{ needs.pr-metadata.outputs.chartsToLint }}
       isRenovatePR: ${{ needs.pr-metadata.outputs.isRenovatePR }}
+      overrideDeps: |-
+        ${{
+           (
+             needs.pr-metadata.outputs.commonLibraryUpdated &&
+            '[{"name": "common", "repository": "file://../../library/common", "version": "*"}]'
+           ) || '[]'
+         }}
 
   charts-test:
     uses: ./.github/workflows/charts-test.yaml
@@ -42,22 +49,17 @@ jobs:
       - pr-metadata
     with:
       checkoutCommit: ${{ github.sha }}
-      chartsToTest: ${{ needs.pr-metadata.outputs.chartsToInstall }}
-
-  library-charts-test:
-    uses: ./.github/workflows/charts-test.yaml
-    needs:
-      - pr-metadata
-    with:
-      checkoutCommit: ${{ github.sha }}
       chartsToTest: |-
         ${{
-          (
-            contains(fromJSON(needs.pr-metadata.outputs.addedOrModifiedCharts), 'library/common') &&
-            '["other/app-template"]'
-          ) || '[]'
-        }}
+           (
+             needs.pr-metadata.outputs.commonLibraryUpdated &&
+             '["other/app-template"]'
+           ) || needs.pr-metadata.outputs.chartsToInstall
+         }}
       overrideDeps: |-
-        [
-          {"name": "common", "repository": "file://../../library/common", "version": "*"}
-        ]
+        ${{
+           (
+             needs.pr-metadata.outputs.commonLibraryUpdated &&
+            '[{"name": "common", "repository": "file://../../library/common", "version": "*"}]'
+           ) || '[]'
+         }}
