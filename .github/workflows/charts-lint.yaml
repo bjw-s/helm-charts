@@ -42,13 +42,13 @@ jobs:
           ref: ${{ inputs.checkoutCommit }}
 
       - name: Verify chart version
-        uses: zekker6/helm-charts-actions/verify-chart-version@main
+        uses: bjw-s/helm-charts-actions/verify-chart-version@main
         id: verify-chart-version
         with:
           chart: "charts/${{ matrix.chart }}"
 
       - name: Verify chart changelog
-        uses: zekker6/helm-charts-actions/verify-chart-changelog@main
+        uses: bjw-s/helm-charts-actions/verify-chart-changelog@main
         if: inputs.isRenovatePR != 'true'
         id: verify-chart-changelog
         with:
