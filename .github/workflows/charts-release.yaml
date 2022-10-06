@@ -55,7 +55,7 @@ jobs:
     uses: ./.github/workflows/charts-release-ghpages.yaml
     needs:
       - prepare
-      - release-library-charts
+#      - release-library-charts
     with:
       charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
     secrets: inherit
