@@ -41,14 +41,14 @@ jobs:
           repoConfigFile: ./.ci/repo-config.yaml
           overrideCharts: "[${{ inputs.charts }}]"
 
-  release-library-charts:
-    name: Release Library charts to GitHub pages
-    uses: ./.github/workflows/charts-release-ghpages.yaml
-    needs:
-      - prepare
-    with:
-      charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
-    secrets: inherit
+#  release-library-charts:
+#    name: Release Library charts to GitHub pages
+#    uses: ./.github/workflows/charts-release-ghpages.yaml
+#    needs:
+#      - prepare
+#    with:
+#      charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
+#    secrets: inherit
 
   release-application-charts:
     name: Release Application charts to GitHub pages
