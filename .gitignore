@@ -7,3 +7,5 @@ __snapshot__/
 
 # Docs
 _site/
+
+.idea/
