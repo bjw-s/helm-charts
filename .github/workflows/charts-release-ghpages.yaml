@@ -66,7 +66,8 @@ jobs:
         shell: bash
         working-directory: dest
         run: |
-          helm repo index . --url https://zekker6.github.io/helm-charts/
+          #helm repo index . --url https://zekker6.github.io/helm-charts/
+          helm repo index .
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
