@@ -371,7 +371,7 @@ ingress:
 
 # -- Configure persistence for the chart here.
 # Additional items can be added by adding a dictionary key similar to the 'config' key.
-# [[ref]](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-storage)
+# [[ref]](https://zekker6.github.io/helm-charts/docs/common-library/common-library-storage)
 # @default -- See below
 persistence:
   # -- Default persistence for configuration files.
@@ -594,7 +594,7 @@ addons:
         #     protocol: TCP
 
   # -- The common library supports adding a code-server add-on to access files. It can be configured under this key.
-  # For more info, check out [our docs](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-add-ons/##code-server)
+  # For more info, check out [our docs](https://zekker6.github.io/helm-charts/docs/common-library/common-library-add-ons/##code-server)
   # @default -- See values.yaml
   codeserver:
     # -- Enable running a code-server container in the pod

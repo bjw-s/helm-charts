@@ -1,0 +1,18 @@
+{{- if .Values.matrix.federation.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "matrix.fullname" . }}-synapse-federation
+  labels:
+{{ include "matrix.labels" . | indent 4 }}
+{{ include "matrix.synapse.labels" . | indent 4}}
+spec:
+  type: {{ .Values.synapse.service.federation.type }}
+  ports:
+    - port: {{ .Values.synapse.service.federation.port }}
+      targetPort: http
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: {{ include "matrix.name" . }}-synapse
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

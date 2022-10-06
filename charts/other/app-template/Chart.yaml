@@ -4,11 +4,11 @@ description: A common powered chart template. This can be useful for small proje
 name: app-template
 version: 0.2.2
 maintainers:
-  - name: bjw-s
-    email: me@bjw-s.dev
+  - name: zekker6
+    email: me@zekker6.dev
 dependencies:
   - name: common
-    repository: https://bjw-s.github.io/helm-charts
+    repository: https://zekker6.github.io/helm-charts
     version: 0.2.2
 annotations:
   artifacthub.io/changes: |-
@@ -17,4 +17,4 @@ annotations:
         Updated library version to 0.2.2.
       links:
         - name: Common library chart definition
-          url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
+          url: https://github.com/zekker6/helm-charts/blob/main/charts/library/common/Chart.yaml

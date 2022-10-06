@@ -1,0 +1,141 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "matrix.fullname" . }}-synapse
+  labels:
+{{ include "matrix.labels" . | indent 4 }}
+{{ include "matrix.synapse.labels" . | indent 4}}
+spec:
+  revisionHistoryLimit: 5
+  replicas: {{ .Values.synapse.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "matrix.name" . }}-synapse
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        # re-roll deployment on homeserver.yaml change
+        checksum/synapse-config: {{ include (print $.Template.BasePath "/synapse/configmap.yaml") . | sha256sum }}
+      labels:
+        app.kubernetes.io/name: {{ include "matrix.name" . }}-synapse
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      # generate signing key only on fresh install
+      {{- if .Release.IsInstall }}
+      initContainers:
+        - name: generate-signing-key
+          image: "{{ .Values.synapse.image.repository }}:{{ .Values.synapse.image.tag }}"
+          imagePullPolicy: {{ .Values.synapse.image.pullPolicy }}
+          env:
+            - name: SYNAPSE_SERVER_NAME
+              value: {{ .Values.matrix.serverName }}
+            - name: SYNAPSE_REPORT_STATS
+              value: {{ .Values.matrix.telemetry | ternary "yes" "no" | quote }}
+          command: ["python"]
+          args:
+            - "-m"
+            - "synapse.app.homeserver"
+            - "--config-path"
+            - "/data/homeserver.yaml"
+            - "--keys-directory"
+            - "/data/keys"
+            - "--generate-keys"
+          volumeMounts:
+            - name: synapse-config
+              mountPath: /data
+            - name: signing-key
+              mountPath: /data/keys
+      {{- end }} {{/* end if .Release.IsInstall */}}
+      containers:
+        - name: "synapse"
+          image: "{{ .Values.synapse.image.repository }}:{{ .Values.synapse.image.tag }}"
+          imagePullPolicy: {{ .Values.synapse.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8008
+              protocol: TCP
+            {{- if .Values.synapse.metrics.enabled }}
+            - name: metrics
+              containerPort: {{ .Values.synapse.metrics.port }}
+              protocol: TCP
+            {{- end }}
+          volumeMounts:
+            - name: synapse-config
+              mountPath: /data
+            - name: signing-key
+              mountPath: /data/keys
+            - name: media-store
+              mountPath: /data/media_store
+            {{- if or .Values.bridges.whatsapp.enabled .Values.bridges.discord.enabled .Values.bridges.irc.enabled }}
+            - name: bridges
+              mountPath: /bridges
+              readOnly: true
+            {{- end }}
+            - name: uploads
+              mountPath: /data/uploads
+            - name: tmp
+              mountPath: /tmp
+          readinessProbe:
+            httpGet:
+              path: /_matrix/static/
+              port: http
+            {{- if .Values.synapse.probes.readiness }}
+            {{- toYaml .Values.synapse.probes.readiness | nindent 12 }}
+            {{- end }}
+          startupProbe:
+            httpGet:
+              path: /_matrix/static/
+              port: http
+            {{- if .Values.synapse.probes.startup }}
+            {{- toYaml .Values.synapse.probes.startup | nindent 12 }}
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /_matrix/static/
+              port: http
+            {{- if .Values.synapse.probes.liveness }}
+            {{- toYaml .Values.synapse.probes.liveness | nindent 12 }}
+            {{- end }}
+          securityContext:
+            runAsGroup: 1000
+            runAsUser: 1000
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: true
+          {{- with .Values.synapse.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: synapse-config
+          configMap:
+            name: {{ include "matrix.fullname" . }}-synapse-config
+        - name: signing-key
+          persistentVolumeClaim:
+            claimName: {{ include "matrix.fullname" . }}-signing-key
+        - name: media-store
+          persistentVolumeClaim:
+            claimName: {{ include "matrix.fullname" . }}-media-store
+        {{- if or .Values.bridges.whatsapp.enabled .Values.bridges.discord.enabled .Values.bridges.irc.enabled }}
+        - name: bridges
+          persistentVolumeClaim:
+            claimName: {{ include "matrix.fullname" . }}-bridges
+        {{- end }}
+        # Ephemeral in-progress uploads
+        - name: uploads
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}

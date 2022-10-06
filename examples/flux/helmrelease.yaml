@@ -15,7 +15,7 @@ spec:
       interval: 15m
       sourceRef:
         kind: HelmRepository
-        name: bjw-s-helm-charts
+        name: zekker6-helm-charts
         namespace: flux-system
 
   values:

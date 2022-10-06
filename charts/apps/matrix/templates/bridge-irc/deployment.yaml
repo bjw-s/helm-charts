@@ -1,0 +1,110 @@
+{{- if .Values.bridges.irc.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "matrix.fullname" . }}-bridge-irc
+  labels:
+  {{ include "matrix.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.bridges.irc.replicaCount }}
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "matrix.name" . }}-bridge-irc
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      matrix-chart/allow-synapse-access: allow
+  template:
+    metadata:
+      annotations:
+        # re-roll deployment on config change
+        checksum/irc-config: {{ include (print $.Template.BasePath "/bridge-irc/configmap.yaml") . | sha256sum }}
+      labels:
+        app.kubernetes.io/name: {{ include "matrix.name" . }}-bridge-irc
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        matrix-chart/allow-synapse-access: allow
+    spec:
+      {{- if .Values.bridges.affinity }}
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - {{ include "matrix.name" . }}-synapse
+                  - key: app.kubernetes.io/instance
+                    operator: In
+                    values:
+                      - {{ .Release.Name }}
+              topologyKey: kubernetes.io/hostname
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      initContainers:
+        - name: "load-config"
+          image: "{{ .Values.bridges.irc.image.repository }}:{{ .Values.bridges.irc.image.tag }}"
+          imagePullPolicy: {{ .Values.bridges.irc.image.pullPolicy }}
+          command: ["sh"]
+          args: ["-c", "cp /load/registration.yaml /data/appservice-registration-irc.yaml; cp /load/passkey.pem /data/passkey.pem; cp /load/config.yaml /data/config.yaml; cp /load/registration.yaml /bridges/irc.yaml"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: bridges
+              mountPath: /bridges
+            - name: config
+              mountPath: /load
+              readOnly: true
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+      containers:
+        - name: "bridge-irc"
+          image: "{{ .Values.bridges.irc.image.repository }}:{{ .Values.bridges.irc.image.tag }}"
+          imagePullPolicy: {{ .Values.bridges.irc.image.pullPolicy }}
+          {{- if not .Values.bridges.irc.databaseSslVerify }}
+          env:
+            - name: NODE_TLS_REJECT_UNAUTHORIZED
+              value: "0"
+          {{- end }}
+          ports:
+            - name: bridge
+              containerPort: 9006
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          {{- with .Values.bridges.irc.resources }}
+          resources:
+          {{- toYaml . | nindent 12 }}
+      {{- end }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: "{{ include "matrix.fullname" . }}-irc-data"
+        - name: config
+          configMap:
+            name: "{{ include "matrix.fullname" . }}-irc-config"
+        - name: bridges
+          persistentVolumeClaim:
+            claimName: "{{ include "matrix.fullname" . }}-bridges"
+  {{- end }}

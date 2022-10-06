@@ -1,0 +1,190 @@
+{{- define "matrix.irc.config" }}
+homeserver:
+  # The URL to the home server for client-server API calls, also used to form the
+  # media URLs as displayed in bridged IRC channels:
+  url: "{{ include "matrix.baseUrl" . }}"
+  #
+  # The URL of the homeserver hosting media files. This is only used to transform
+  # mxc URIs to http URIs when bridging m.room.[file|image] events. Optional. By
+  # default, this is the homeserver URL, specified above.
+  #
+  # media_url: "http://media.repo:8008"
+
+  # Drop Matrix messages which are older than this number of seconds, according to
+  # the event's origin_server_ts.
+  # If the bridge is down for a while, the homeserver will attempt to send all missed
+  # events on reconnection. These events may be hours old, which can be confusing to
+  # IRC users if they are then bridged. This option allows these old messages to be
+  # dropped.
+  # CAUTION: This is a very coarse heuristic. Federated homeservers may have different
+  # clock times and hence produce different origin_server_ts values, which may be old
+  # enough to cause *all* events from the homeserver to be dropped.
+  # Default: 0 (don't ever drop)
+  # dropMatrixMessagesAfterSecs: 300 # 5 minutes
+
+  # The 'domain' part for user IDs on this home server. Usually (but not always)
+  # is the "domain name" part of the HS URL.
+  domain: "{{ .Values.matrix.serverName }}"
+
+  # Should presence be enabled for matrix clients on this bridge. If disabled on the
+  # homeserver then it should also be disabled here to avoid excess traffic.
+  # Default: true
+  enablePresence: {{ .Values.bridges.irc.presence }}
+
+  # Which port should the appservice bind to. Takes priority over the one provided in the
+  # command line! Optional.
+  bindPort: 9006
+
+  # Use this option to force the appservice to listen on another hostname for transactions.
+  # This is NOT your synapse hostname. E.g. use 127.0.0.1 to only listen locally. Optional.
+  bindHostname: 0.0.0.0
+
+# Configuration specific to the IRC service
+ircService:
+  servers:
+    {{ toYaml .Values.bridges.irc.servers | nindent 4 }}
+  # Set information about the bridged channel in the room state, so that client's may
+  # present relevant UI to the user. MSC2346
+  bridgeInfoState:
+    enabled: false
+    initial: false
+  # Configuration for an ident server. If you are running a public bridge it is
+  # advised you setup an ident server so IRC mods can ban specific matrix users
+  # rather than the application service itself.
+  ident:
+    # True to listen for Ident requests and respond with the
+    # matrix user's user_id (converted to ASCII, respecting RFC 1413).
+    # Default: false.
+    enabled: false
+    # The port to listen on for incoming ident requests.
+    # Ports below 1024 require root to listen on, and you may not want this to
+    # run as root. Instead, you can get something like an Apache to yank up
+    # incoming requests to 113 to a high numbered port. Set the port to listen
+    # on instead of 113 here.
+    # Default: 113.
+    port: 1113
+    # The address to listen on for incoming ident requests.
+    # Default: 0.0.0.0
+    address: "::"
+
+  # Configuration for logging. Optional. Default: console debug level logging
+  # only.
+  logging:
+    # Level to log on console/logfile. One of error|warn|info|debug
+    level: "debug"
+    # The file location to log to. This is relative to the project directory.
+    logfile: "/data/debug.log"
+    # The file location to log errors to. This is relative to the project
+    # directory.
+    errfile: "/data/errors.log"
+    # Whether to log to the console or not.
+    toConsole: true
+    # The max number of files to keep. Files will be overwritten eventually due
+    # to rotations.
+    maxFiles: 5
+
+  # Metrics will then be available via GET /metrics on the bridge listening port (-p).
+  metrics:
+    # Whether to actually enable the metric endpoint. Default: false
+    enabled: false {{/* TODO: Enable this when Prometheus support added */}}
+    # When collecting remote user active times, which "buckets" should be used. Defaults are given below.
+    # The bucket name is formed of a duration and a period. (h=hours,d=days,w=weeks).
+    remoteUserAgeBuckets:
+      - "1h"
+      - "1d"
+      - "1w"
+
+  # Configuration options for the debug HTTP API. To access this API, you must
+  # append ?access_token=$APPSERVICE_TOKEN (from the registration file) to the requests.
+  #
+  # The debug API exposes the following endpoints:
+  #
+  #   GET /irc/$domain/user/$user_id => Return internal state for the IRC client for this user ID.
+  #
+  #   POST /irc/$domain/user/$user_id => Issue a raw IRC command down this connection.
+  #                                      Format: new line delimited commands as per IRC protocol.
+  #
+  debugApi:
+    # True to enable the HTTP API endpoint. Default: false.
+    enabled: false
+    # The port to host the HTTP API.
+    port: 11100
+
+  # Configuration for the provisioning API.
+  #
+  # GET /_matrix/provision/link
+  # GET /_matrix/provision/unlink
+  # GET /_matrix/provision/listlinks
+  #
+  provisioning:
+    # True to enable the provisioning HTTP endpoint. Default: false.
+    enabled: false
+    # The number of seconds to wait before giving up on getting a response from
+    # an IRC channel operator. If the channel operator does not respond within the
+    # allotted time period, the provisioning request will fail.
+    # Default: 300 seconds (5 mins)
+    requestTimeoutSeconds: 300
+    # A file defining the provisioning rules for rooms. Format is documented
+    # in rules.sample.yaml. Leave undefined to not specify any rules.
+    ruleFile: "./provisioning.rules.yaml"
+    # Watch the file for changes, and apply the rules. Default: false
+    enableReload: true
+
+  # WARNING: The bridge needs to send plaintext passwords to the IRC server, it cannot
+  # send a password hash. As a result, passwords (NOT hashes) are stored encrypted in
+  # the database.
+  #
+  # To generate a .pem file:
+  # $ openssl genpkey -out passkey.pem -outform PEM -algorithm RSA -pkeyopt rsa_keygen_bits:2048
+  #
+  # The path to the RSA PEM-formatted private key to use when encrypting IRC passwords
+  # for storage in the database. Passwords are stored by using the admin room command
+  # `!storepass server.name passw0rd. When a connection is made to IRC on behalf of
+  # the Matrix user, this password will be sent as the server password (PASS command).
+  passwordEncryptionKeyPath: "/data/passkey.pem"
+
+  # Config for Matrix -> IRC bridging
+  matrixHandler:
+    # Cache this many matrix events in memory to be used for m.relates_to messages (usually replies).
+    eventCacheSize: 4096
+
+  ircHandler:
+    # How many /leave requests can be ongoing at a time.
+    # This is used to stem the flow of requests in case of a mass quit/leave, which might
+    # slow down the homeserver.
+    leaveConcurrency: 10
+    # Should we attempt to match an IRC side mention (nickaname match)
+    # with the nickname's owner's matrixId, if we are bridging them?
+    # "on" - Defaults to enabled, users can choose to disable.
+    # "off" - Defaults to disabled, users can choose to enable.
+    # "force-off" - Disabled, cannot be enabled.
+    mapIrcMentionsToMatrix: "on" # This can be "on", "off", "force-off".
+# Options here are generally only applicable to large-scale bridges and may have
+# consequences greater than other options in this configuration file.
+advanced:
+  # The maximum number of HTTP(S) sockets to maintain. Usually this is unlimited
+  # however for large bridges it is important to rate limit the bridge to avoid
+  # accidentally overloading the homeserver. Defaults to 1000, which should be
+  # enough for the vast majority of use cases.
+  maxHttpSockets: 1000
+  # Max size of an appservice transaction payload, in bytes. Defaults to 10Mb
+  maxTxnSize: 10000000
+
+# Capture information to a sentry.io instance
+sentry:
+  enabled: false
+  dsn: "https://<key>@sentry.io/<project>"
+  # Optional. A tag to specify the production environment. Not set by default
+  # environment: ""
+  # Optional. A tag to specify the server name. Not set by default
+  # serverName: ""
+
+# Use an external database to store bridge state.
+database:
+  # database engine (must be 'postgres' or 'nedb'). Default: nedb
+  engine: "postgres"
+  # Either a PostgreSQL connection string, or a path to the NeDB storage directory.
+  # For postgres, it must start with postgres://
+  # For NeDB, it must start with nedb://. The path is relative to the project directory.
+  connectionString: {{ printf (include "matrix.postgresUri" .) .Values.bridges.irc.database | quote }}
+{{- end }}

@@ -1,0 +1,30 @@
+{{- if .Values.postgresql.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "matrix.fullname" . }}-postgresql-initdb
+  labels:
+  {{ include "matrix.labels" . | nindent 4}}
+data:
+  matrix.sql: |
+    CREATE USER {{ .Values.postgresql.username }}
+      LOGIN
+      ENCRYPTED PASSWORD '{{ .Values.postgresql.password }}';
+
+    CREATE DATABASE {{ .Values.postgresql.database }}
+      ENCODING 'UTF8'
+      LC_COLLATE='C'
+      LC_CTYPE='C'
+      template=template0
+      OWNER {{ .Values.postgresql.username }};
+  {{- if .Values.bridges.irc.enabled }}
+  {{/* Scripts are run in alphabetical order */}}
+  zzz_irc.sql: |
+    CREATE DATABASE {{ .Values.bridges.irc.database }}
+       ENCODING 'UTF8'
+       LC_COLLATE='C'
+       LC_CTYPE='C'
+       template=template0
+       OWNER {{ .Values.postgresql.username }};
+  {{- end }}
+{{- end }}

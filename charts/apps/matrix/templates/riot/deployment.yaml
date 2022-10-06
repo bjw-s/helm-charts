@@ -1,0 +1,97 @@
+{{- if .Values.riot.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "matrix.fullname" . }}-riot
+  labels:
+{{ include "matrix.labels" . | indent 4 }}
+{{ include "matrix.element.labels" . | indent 4}}
+spec:
+  replicas: {{ .Values.riot.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "matrix.name" . }}-riot
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      annotations:
+        # re-roll deployment on config change
+        checksum/riot-config: {{ include (print $.Template.BasePath "/riot/configmap.yaml") . | sha256sum }}
+      labels:
+        app.kubernetes.io/name: {{ include "matrix.name" . }}-riot
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: "riot"
+          image: "{{ .Values.riot.image.repository }}:{{ .Values.riot.image.tag }}"
+          imagePullPolicy: {{ .Values.riot.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /app/config.json
+              name: riot-config
+              subPath: config.json
+              readOnly: true
+            - mountPath: /etc/nginx/nginx.conf
+              name: riot-config
+              subPath: nginx.conf
+              readOnly: true
+            - mountPath: /etc/nginx/conf.d/default.conf
+              name: riot-config
+              subPath: default.conf
+              readOnly: true
+            - mountPath: /var/cache/nginx
+              name: ephemeral
+              subPath: cache
+            - mountPath: /var/run/pid
+              name: ephemeral
+              subPath: pid
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            {{- if .Values.riot.probes.readiness }}
+            {{- toYaml .Values.riot.probes.readiness | nindent 12 }}
+            {{- end }}
+          startupProbe:
+            httpGet:
+              path: /
+              port: http
+            {{- if .Values.riot.probes.startup }}
+            {{- toYaml .Values.riot.probes.startup | nindent 12 }}
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            {{- if .Values.riot.probes.liveness }}
+            {{- toYaml .Values.riot.probes.liveness | nindent 12 }}
+            {{- end }}
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          {{- with .Values.riot.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: riot-config
+          configMap:
+            name: {{ include "matrix.fullname" . }}-riot-config
+        # ephemeral cache, PID file, and any other temporary files nginx needs access to
+        - name: ephemeral
+          emptyDir: {}
+{{- end }}

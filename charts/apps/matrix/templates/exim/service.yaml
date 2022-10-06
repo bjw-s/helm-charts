@@ -1,0 +1,19 @@
+{{- if and .Values.mail.enabled .Values.mail.relay.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "matrix.fullname" . }}-exim-relay
+  labels:
+{{ include "matrix.labels" . | indent 4 }}
+{{ include "matrix.mail.labels" . | indent 4}}
+spec:
+  type: {{ .Values.mail.relay.service.type }}
+  ports:
+    - port: {{ .Values.mail.relay.service.port }}
+      targetPort: smtp
+      protocol: TCP
+      name: smtp
+  selector:
+    app.kubernetes.io/name: {{ include "matrix.name" . }}-exim-relay
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

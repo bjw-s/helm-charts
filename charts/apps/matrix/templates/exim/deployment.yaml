@@ -1,0 +1,64 @@
+{{- if and .Values.mail.enabled .Values.mail.relay.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "matrix.fullname" . }}-exim-relay
+  labels:
+{{ include "matrix.labels" . | indent 4 }}
+{{ include "matrix.mail.labels" . | indent 4}}
+spec:
+  replicas: {{ .Values.mail.relay.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "matrix.name" . }}-exim-relay
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "matrix.name" . }}-exim-relay
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsUser: 100
+        runAsGroup: 101
+      containers:
+        - name: "exim-relay"
+          image: "{{ .Values.mail.relay.image.repository }}:{{ .Values.mail.relay.image.tag }}"
+          imagePullPolicy: {{ .Values.mail.relay.image.pullPolicy }}
+          ports:
+            - name: smtp
+              containerPort: 8025
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: smtp
+            {{- if .Values.mail.relay.probes.readiness }}
+            {{- toYaml .Values.mail.relay.probes.readiness | nindent 12 }}
+            {{- end }}
+          startupProbe:
+            tcpSocket:
+              port: smtp
+            {{- if .Values.mail.relay.probes.startup }}
+            {{- toYaml .Values.mail.relay.probes.startup | nindent 12 }}
+            {{- end }}
+          livenessProbe:
+            tcpSocket:
+              port: smtp
+            {{- if .Values.mail.relay.probes.liveness }}
+            {{- toYaml .Values.mail.relay.probes.liveness | nindent 12 }}
+            {{- end }}
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          {{- with .Values.mail.relay.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+{{- end }}

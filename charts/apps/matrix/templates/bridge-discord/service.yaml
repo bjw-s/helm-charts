@@ -1,0 +1,18 @@
+{{- if .Values.bridges.discord.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "matrix.fullname" . }}-bridge-discord
+  labels:
+{{ include "matrix.labels" . | indent 4 }}
+spec:
+  type: {{ .Values.bridges.discord.service.type }}
+  ports:
+    - port: {{ .Values.bridges.discord.service.port }}
+      targetPort: bridge
+      protocol: TCP
+      name: bridge
+  selector:
+    app.kubernetes.io/name: {{ include "matrix.name" . }}-bridge-discord
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

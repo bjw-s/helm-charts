@@ -19,8 +19,8 @@ jobs:
         id: get-app-token
         uses: getsentry/action-github-app-token@v1
         with:
-          app_id: ${{ secrets.BJWS_APP_ID }}
-          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
+          app_id: ${{ secrets.ZEKKER_APP_ID }}
+          private_key: ${{ secrets.ZEKKER_APP_PRIVATE_KEY }}
 
       - name: Checkout charts branch
         uses: actions/checkout@v3
@@ -58,8 +58,8 @@ jobs:
         shell: bash
         working-directory: dest
         run: |
-          git config user.name "bjw-s-bot[bot]"
-          git config user.email "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"
+          git config user.name "zekker6-bot[bot]"
+          git config user.email "zekker6-bot <87358111+zekker6-bot[bot]@users.noreply.github.com>"
           git add docs
           git commit -m "Updated docs from ref: $GITHUB_SHA"
           git push

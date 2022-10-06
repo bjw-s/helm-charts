@@ -7,10 +7,10 @@ kubeVersion: ">=1.16.0-0"
 keywords:
   - common
   - library
-home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
+home: https://github.com/zekker6/helm-charts/tree/main/charts/library/common
 maintainers:
-  - name: bjw-s
-    email: me@bjw-s.dev
+  - name: zekker6
+    email: me@zekker6.dev
 annotations:
   artifacthub.io/changes: |-
     - kind: fixed

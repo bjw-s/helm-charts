@@ -1,0 +1,17 @@
+{{- if .Values.bridges.discord.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "matrix.fullname" . }}-discord-data
+  labels:
+{{ include "matrix.labels" . | indent 4}}
+spec:
+  {{- if .Values.bridges.discord.data.storageClass }}
+  storageClassName: {{ .Values.bridges.discord.data.storageClass }}
+  {{- end }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.bridges.discord.data.capacity }}
+{{- end }}

@@ -1,0 +1,16 @@
+{{- if and .Values.networkPolicies.enabled .Values.coturn.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "matrix.fullname" . }}-coturn
+  labels:
+{{ include "matrix.labels" . | indent 4 }}
+{{ include "matrix.coturn.labels" . | indent 4}}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "matrix.fullname" . }}-coturn
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+{{- end }}

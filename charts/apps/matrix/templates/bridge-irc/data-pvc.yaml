@@ -1,0 +1,14 @@
+{{- if .Values.bridges.irc.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "matrix.fullname" . }}-irc-data
+  labels:
+  {{ include "matrix.labels" . | nindent 4}}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.bridges.irc.data.capacity }}
+{{- end }}

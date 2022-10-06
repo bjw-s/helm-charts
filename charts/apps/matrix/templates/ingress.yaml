@@ -1,0 +1,63 @@
+{{- if .Values.ingress.enabled -}}
+{{- if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else -}}
+apiVersion: networking.k8s.io/v1
+{{- end }}
+kind: Ingress
+metadata:
+  name: {{ include "matrix.fullname" . }}
+  labels:
+    {{- include "matrix.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+{{- if .Values.ingress.tls }}
+  tls:
+    {{- range .Values.ingress.tls }}
+    - hosts:
+      {{- range .hosts }}
+      - {{ . | quote }}
+      {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+{{- end }}
+  rules:
+    - host: {{ .Values.ingress.hosts.synapse }}
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ include "matrix.fullname" . }}-synapse"
+                port:
+                  number: {{ .Values.synapse.service.port }}
+
+    {{- if .Values.riot.enabled }}
+    - host: {{ .Values.ingress.hosts.riot }}
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ include "matrix.fullname" . }}-riot"
+                port:
+                  number: {{ .Values.riot.service.port }}
+    {{- end }}
+    {{- if .Values.ingress.federation }}
+    - host: {{ .Values.ingress.hosts.federation }}
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ include "matrix.fullname" . }}-synapse-federation"
+                port:
+                  number: {{ .Values.synapse.service.federation.port }}
+    {{- end }}
+{{- end }}

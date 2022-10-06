@@ -1,0 +1,105 @@
+{{- if .Values.bridges.discord.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "matrix.fullname" . }}-bridge-discord
+  labels:
+{{ include "matrix.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.bridges.discord.replicaCount }}
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "matrix.name" . }}-bridge-discord
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      matrix-chart/allow-synapse-access: allow
+  template:
+    metadata:
+      annotations:
+        # re-roll deployment on config change
+        checksum/discord-config: {{ include (print $.Template.BasePath "/bridge-discord/configmap.yaml") . | sha256sum }}
+      labels:
+        app.kubernetes.io/name: {{ include "matrix.name" . }}-bridge-discord
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        matrix-chart/allow-synapse-access: allow
+    spec:
+      {{- if .Values.bridges.affinity }}
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - {{ include "matrix.name" . }}-synapse
+                  - key: app.kubernetes.io/instance
+                    operator: In
+                    values:
+                      - {{ .Release.Name }}
+              topologyKey: kubernetes.io/hostname
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      initContainers:
+        - name: "load-config"
+          image: "{{ .Values.bridges.discord.image.repository }}:{{ .Values.bridges.discord.image.tag }}"
+          imagePullPolicy: {{ .Values.bridges.discord.image.pullPolicy }}
+          command: ["sh"]
+          args: ["-c", "cp /load/registration.yaml /data/discord-registration.yaml; cp /load/config.yaml /data/config.yaml; cp /load/registration.yaml /bridges/discord.yaml"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: bridges
+              mountPath: /bridges
+            - name: config
+              mountPath: /load
+              readOnly: true
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+      containers:
+        - name: "bridge-discord"
+          image: "{{ .Values.bridges.discord.image.repository }}:{{ .Values.bridges.discord.image.tag }}"
+          imagePullPolicy: {{ .Values.bridges.discord.image.pullPolicy }}
+          ports:
+            - name: bridge
+              containerPort: 9005
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          {{- with .Values.bridges.discord.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: "{{ include "matrix.fullname" . }}-discord-data"
+        - name: config
+          configMap:
+            name: "{{ include "matrix.fullname" . }}-discord-config"
+        - name: bridges
+          persistentVolumeClaim:
+            claimName: "{{ include "matrix.fullname" . }}-bridges"
+{{- end }}

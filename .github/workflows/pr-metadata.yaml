@@ -77,5 +77,5 @@ jobs:
               - added|modified: '**'
 
       - name: Collect changed charts
-        uses: bjw-s/helm-charts-actions/collect-charts@main
+        uses: zekker6/helm-charts-actions/collect-charts@main
         id: changed-charts

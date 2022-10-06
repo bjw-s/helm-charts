@@ -11,13 +11,13 @@ In order to use this template chart, you would deploy it as you would any other 
 By setting the desired values, the common library chart will render the desired resources.
 
 Be sure to check out the [common library docs](../../common-library/introduction)
-and its [`values.yaml`](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common/values.yaml) for
+and its [`values.yaml`](https://github.com/zekker6/helm-charts/tree/main/charts/library/common/values.yaml) for
 more information about the available configuration options.
 
 #### Examples
 
 This is an example `values.yaml` file that would deploy the [vaultwarden](https://github.com/dani-garcia/vaultwarden)
-application. For more deployment examples, check out the [`examples` folder](https://github.com/bjw-s/helm-charts/tree/main/examples/).
+application. For more deployment examples, check out the [`examples` folder](https://github.com/zekker6/helm-charts/tree/main/examples/).
 
 
 ``` yaml title="values.yaml"
@@ -27,4 +27,4 @@ application. For more deployment examples, check out the [`examples` folder](htt
 ## Source code
 
 The source code for the app template chart can be found
-[here](https://github.com/bjw-s/helm-charts/tree/main/charts/other/app-template).
+[here](https://github.com/zekker6/helm-charts/tree/main/charts/other/app-template).

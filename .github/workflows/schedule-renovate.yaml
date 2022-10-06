@@ -27,11 +27,11 @@ on:
 jobs:
   renovate:
     name: Renovate
-    uses: bjw-s/gh-workflows/.github/workflows/run-renovate.yaml@main
+    uses: zekker6/gh-workflows/.github/workflows/run-renovate.yaml@main
     with:
       configurationFile: ".github/renovate.json5"
       dryRun: ${{ inputs.dryRun || 'false' }}
       renovateLogLevel: ${{ inputs.logLevel || 'debug' }}
     secrets:
-      app_id: ${{ secrets.BJWS_APP_ID }}
-      app_private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
+      app_id: ${{ secrets.ZEKKER_APP_ID }}
+      app_private_key: ${{ secrets.ZEKKER_APP_PRIVATE_KEY }}

@@ -1,14 +1,14 @@
 ---
 
 # Project information
-site_name: bjw-s | Helm charts | Docs
-site_description: Docs for the bjw-s Helm charts repository
-site_author: bjw-s
-site_url: https://bjw-s.github.io/helm-charts/docs
+site_name: zekker6 | Helm charts | Docs
+site_description: Docs for the zekker6 Helm charts repository
+site_author: zekker6
+site_url: https://zekker6.github.io/helm-charts/docs
 
 # Repository
-repo_name: bjw-s/helm-charts
-repo_url: https://github.com/bjw-s/helm-charts
+repo_name: zekker6/helm-charts
+repo_url: https://github.com/zekker6/helm-charts
 edit_uri: ""
 
 # Configuration
@@ -55,7 +55,7 @@ plugins:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/bjw-s
+      link: https://github.com/zekker6
     - icon: fontawesome/brands/discord
       link: https://discord.gg/sTMX7Vh
 

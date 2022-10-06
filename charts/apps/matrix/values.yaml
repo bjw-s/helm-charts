@@ -1,0 +1,685 @@
+# Runtime configuration for Synapse and settings related to the Matrix protocol
+matrix:
+  # Manual overrides for homeserver.yaml, the main configuration file for Synapse
+  # If homeserverOverride is set, the entirety of homeserver.yaml will be replaced with the contents.
+  # If homeserverExtra is set, the contents will be appended to the end of the default configuration.
+  # It is highly recommended that you take a look at the defaults in templates/synapse/_homeserver.yaml, to get a sense
+  # of the requirements and default configuration options to use other services in this chart.
+  # homeserverOverride: {}
+  # homeserverExtra: {}
+
+  # Domain name of the server
+  # This is not necessarily the host name where the service is reachable. In fact, you may want to omit any subdomains
+  # from this value as the server name set here will be the name of your homeserver in the fediverse, and will be the
+  # domain name at the end of every user's username
+  serverName: "example.com"
+
+  # Enable anonymous telemetry to matrix.org
+  telemetry: false
+
+  # Hostname where Synapse can be reached.
+  # This is *optional* if an Ingress is configured below. If hostname is unspecified, the Synapse hostname of the
+  # Ingress will be used
+  # hostname: "matrix.example.com"
+
+  # Set to false to disable presence (online/offline indicators)
+  presence: true
+
+  # Set to true to block non-admins from inviting users to any rooms
+  blockNonAdminInvites: false
+
+  # Set to false to disable message searching
+  search: true
+
+  # Which types of rooms to enable end-to-end encryption on by default
+  # off: none
+  # invite: private messages, or rooms created with the private_chat or trusted_private_chat room preset
+  # all: all rooms
+  encryptByDefault: invite
+
+  # Email address of the administrator
+  adminEmail: "admin@example.com"
+
+  # Settings related to image and multimedia uploads
+  uploads:
+    # Max upload size in bytes
+    maxSize: 10M
+
+    # Max image size in pixels
+    maxPixels: 32M
+
+  # Settings related to federation
+  federation:
+    # Set to false to disable federation and run an isolated homeserver
+    enabled: true
+
+    # Set to false to disallow members of other homeservers from fetching *public* rooms
+    allowPublicRooms: true
+
+    # Whitelist of domains to federate with (comment for all domains except blacklisted)
+    # whitelist: []
+
+    # IP addresses to blacklist federation requests to
+    blacklist:
+      - '127.0.0.0/8'
+      - '10.0.0.0/8'
+      - '172.16.0.0/12'
+      - '192.168.0.0/16'
+      - '100.64.0.0/10'
+      - '169.254.0.0/16'
+      - '::1/128'
+      - 'fe80::/64'
+      - 'fc00::/7'
+
+  # User registration settings
+  registration:
+    # Allow new users to register an account
+    enabled: false
+
+    # If set, allows registration of standard or admin accounts by anyone who
+    # has the shared secret, even if registration is otherwise disabled.
+    #
+    # sharedSecret: <PRIVATE STRING>
+
+    # Allow users to join rooms as a guest
+    allowGuests: false
+
+    # Required "3PIDs" - third-party identifiers such as email or msisdn (SMS)
+    # required3Pids:
+    #   - email
+    #   - msisdn
+
+    # Rooms to automatically join all new users to
+    autoJoinRooms: []
+    # - "#welcome:example.com"
+
+  # Settings for the URL preview crawler
+  urlPreviews:
+    # Enable URL previews.
+    # WARNING: Make sure to review the default rules below to ensure that users cannot crawl
+    # sensitive internal endpoints in your cluster.
+    enabled: false
+
+    # Blacklists and whitelists for the URL preview crawler
+    rules:
+      # Maximum size of a crawlable page. Keep this low to prevent a DOS vector
+      maxSize: 10M
+
+      # Whitelist and blacklist for crawlable IP addresses
+      ip:
+        # whitelist:
+        blacklist:
+          - '127.0.0.0/8'
+          - '10.0.0.0/8'
+          - '172.16.0.0/12'
+          - '192.168.0.0/16'
+          - '100.64.0.0/10'
+          - '169.254.0.0/16'
+          - '::1/128'
+          - 'fe80::/64'
+          - 'fc00::/7'
+
+      # Whitelist and blacklist based on URL pattern matching
+      url: {}
+        # whitelist:
+        # blacklist:
+        #  # blacklist any URL with a username in its URI
+        #  - username: '*'
+        #
+        #  # blacklist all *.google.com URLs
+        #  - netloc: 'google.com'
+        #  - netloc: '*.google.com'
+        #
+        #  # blacklist all plain HTTP URLs
+        #  - scheme: 'http'
+        #
+        #  # blacklist http(s)://www.acme.com/foo
+        #  - netloc: 'www.acme.com'
+        #    path: '/foo'
+        #
+        #  # blacklist any URL with a literal IPv4 address
+        #  - netloc: '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'
+
+  # How long to keep redacted events in unredacted form in the database
+  retentionPeriod: 7d
+
+  security:
+    # a secret which is used to sign access tokens. If none is specified,
+    # the registration_shared_secret is used, if one is given; otherwise,
+    # a secret key is derived from the signing key.
+    #
+    # macaroonSecretKey: <PRIVATE STRING>
+
+    # This disables the warning that is emitted when the
+    # trustedKeyServers include 'matrix.org'. See below.
+    # Set to false to re-enable the warning.
+    #
+    surpressKeyServerWarning: true
+
+    # The trusted servers to download signing keys from.
+    #
+    # When we need to fetch a signing key, each server is tried in parallel.
+    #
+    # Normally, the connection to the key server is validated via TLS certificates.
+    # Additional security can be provided by configuring a `verify key`, which
+    # will make synapse check that the response is signed by that key.
+    #
+    # This setting supercedes an older setting named `perspectives`. The old format
+    # is still supported for backwards-compatibility, but it is deprecated.
+    #
+    # 'trustedKeyServers' defaults to matrix.org, but using it will generate a
+    # warning on start-up. To suppress this warning, set
+    # 'surpressKeyServerWarning' to true.
+    #
+    # Options for each entry in the list include:
+    #
+    #    serverName: the name of the server. required.
+    #
+    #    verifyKeys: an optional map from key id to base64-encoded public key.
+    #       If specified, we will check that the response is signed by at least
+    #       one of the given keys.
+    #
+    #    acceptKeysInsecurely: a boolean. Normally, if `verify_keys` is unset,
+    #       and federation_verify_certificates is not `true`, synapse will refuse
+    #       to start, because this would allow anyone who can spoof DNS responses
+    #       to masquerade as the trusted key server. If you know what you are doing
+    #       and are sure that your network environment provides a secure connection
+    #       to the key server, you can set this to `true` to override this
+    #       behaviour.
+    #
+    # An example configuration might look like:
+    #
+    # trustedKeyServers:
+    #   - serverName: my_trusted_server.example.com
+    #     verifyKeys:
+    #       - id: "ed25519:auto"
+    #         key: "abcdefghijklmnopqrstuvwxyzabcdefghijklmopqr"
+    #     acceptKeysInsecurely: false
+    #   - serverName: my_other_trusted_server.example.com
+
+  # Set to true to globally block access to the homeserver
+  disabled: false
+  # Human readable reason for why the homeserver is blocked
+  disabledMessage: ""
+
+  logging:
+    # Root log level is the default log level for log outputs that do not have more
+    # specific settings.
+    rootLogLevel: WARNING
+    # beware: increasing this to DEBUG will make synapse log sensitive
+    # information such as access tokens.
+    sqlLogLevel: WARNING
+    # The log level for the synapse server
+    synapseLogLevel: WARNING
+
+# Persistent volumes configuration
+volumes:
+  # Uploaded attachments/multimedia
+  media:
+    # Capacity of the media persistent volume claim
+    capacity: 10Gi
+    # Storage class (optional)
+    storageClass: ""
+  signingKey:
+    # Capacity of the signing key PVC
+    # Note: 1Mi is more than enough, but some cloud providers set a minimum PVC size of 1Mi or 1Gi, adjust as necessary
+    capacity: 1Mi
+    # Storage class (optional)
+    storageClass: ""
+
+ingress:
+  enabled: true
+  # Whether to expose the federation API behind the Ingress
+  # If you would rather use an external proxy to run federation on a port other than 443, set this to false and set the synapse.service.federation.type value to either LoadBalancer or NodePort
+  federation: true
+  tls: []
+  hosts:
+    synapse: matrix.chart-example.local
+    riot: element.chart-example.local
+    federation: matrix-fed.chart-example.local
+  annotations:
+    # This annotation is required for the Nginx ingress provider. You can remove it if you use a different ingress provider
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_intercept_errors off;
+
+# PostgreSQL Database Configuration
+postgresql:
+  # Whether to deploy the stable/postgresql chart with this chart. If disabled, make sure PostgreSQL is available at the hostname below and credentials are configured below
+  enabled: true
+
+  username: matrix
+  password: matrix
+  database: matrix
+
+  # Set this if postgresql.enabled = false
+  hostname: ""
+  port: 5432
+
+  # Storage to allocate for stable/postgresql
+  persistence:
+    size: 8Gi
+
+  primary:
+    initdb:
+      # If postgresql.enabled, stable/postgresql will run the scripts in templates/postgresql/initdb-configmap.yaml
+      # If using an external Postgres server, make sure to configure the database as specified at https://github.com/matrix-org/synapse/blob/master/docs/postgres.md
+      scriptsConfigMap: "{{ .Release.Name }}-postgresql-initdb"
+
+# Synapse Kubernetes resource settings
+synapse:
+  image:
+    repository: "matrixdotorg/synapse"
+    tag: v1.68.0
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+    federation:
+      type: ClusterIP
+      port: 80
+  replicaCount: 1
+  resources: {}
+  # Configure timings for readiness, startup, and liveness probes here
+  probes:
+    readiness:
+      timeoutSeconds: 5
+      periodSeconds: 10
+    startup:
+      timeoutSeconds: 5
+      periodSeconds: 5
+      failureThreshold: 6
+    liveness:
+      timeoutSeconds: 5
+      periodSeconds: 10
+
+  # Labels to be appended to all Synapse resources
+  labels:
+    component: synapse
+  
+  # Prometheus metrics for Synapse
+  # https://github.com/matrix-org/synapse/blob/master/docs/metrics-howto.md
+  metrics:
+    # Whether Synapse should capture metrics on an additional endpoint
+    enabled: true
+    # Port to listen on for metrics scraping
+    port: 9092
+    annotations: true
+
+
+# Element (formerly Riot Web) client configuration
+riot:
+  # Set to false to disable a deployment of Element. Users will still be able to connect via any other instances of Element (such as https://app.element.io), Element Desktop, or any other Matrix clients
+  enabled: true
+
+  # Organization/enterprise branding
+  branding:
+    # Shown in email notifications
+    brand: "Element"
+    # Background of login splash screen
+    welcomeBackgroundUrl: ""
+    # Logo shown at top of login screen
+    authHeaderLogoUrl: ""
+    # Array of links to show at the bottom of the login screen
+    authFooterLinks: []
+#      - text:
+#        url:
+
+  # Element integrations configuration
+  integrations:
+    # Set to false to disable the Integrations menu (including widgets, bots, and other plugins to Element)
+    enabled: true
+    # UI to load when a user selects the Integrations button at the top-right of a room
+    ui: "https://scalar.vector.im/"
+    # API for the integration server
+    api: "https://scalar.vector.im/api"
+    # Array of API paths providing widgets
+    widgets:
+      - "https://scalar.vector.im/_matrix/integrations/v1"
+      - "https://scalar.vector.im/api"
+      - "https://scalar-staging.vector.im/_matrix/integrations/v1"
+      - "https://scalar-staging.vector.im/api"
+      - "https://scalar-staging.riot.im/scalar/api"
+
+  # Experimental features in Element, see https://github.com/vector-im/riot-web/blob/develop/docs/labs.md
+  labs:
+    - feature_new_spinner
+    - feature_pinning
+    - feature_custom_status
+    - feature_custom_tags
+    - feature_state_counters
+    - feature_many_integration_managers
+    - feature_mjolnir
+    - feature_dm_verification
+    - feature_bridge_state
+    - feature_presence_in_room_list
+    - feature_custom_themes
+
+  # Servers to show in the Explore menu (the current server is always shown)
+  roomDirectoryServers:
+    - matrix.org
+
+  # Set to the user ID (@username:domain.tld) of a bot to invite all new users to a DM with the bot upon registration
+  welcomeUserId: ""
+
+  # Prefix before permalinks generated when users share links to rooms, users, or messages. If running an unfederated Synapse, set the below to the URL of your Element instance.
+  permalinkPrefix: "https://matrix.to"
+
+  # Element Kubernetes resource settings
+  image:
+    repository: "vectorim/riot-web"
+    tag: v1.7.33
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+  replicaCount: 1
+  resources: {}
+  probes:
+    readiness: {}
+    startup: {}
+    liveness: {}
+
+  # Element specific labels
+  labels:
+    component: element
+
+# Settings for Coturn TURN relay, used for routing voice calls
+coturn:
+  # Set to false to disable the included deployment of Coturn
+  enabled: true
+
+  # URIs of the Coturn servers
+  # If deploying Coturn with this chart, include the public IPs of each node in your cluster (or a DNS round-robin hostname)
+  # You can also include an external Coturn instance if you'd prefer
+  uris: []
+#    - "turn:turn.example.com?transport=udp"
+
+  # How to deploy Coturn
+  # Options:
+  #   DaemonSet:  A DaemonSet will be used to schedule one Coturn pod per node. Each Coturn pod will open the ports it needs directly on the host it is scheduled on.
+  #               This maximizes compatibility and will allow you to set up Coturn without any additional cluster configuration.
+  #   Deployment: A Deployment will be used to schedule Coturn pods. The number of Coturn pods will be configurable (via the replicaCount setting below).
+  #               You will need to use a NodePort service or an external load balancer to route traffic to the Coturn pods.
+  #               This is more flexible and can use fewer pods in a multi-node setup, but will require additional networking configuration.
+  kind: DaemonSet
+
+  # Whether to allow guests to use the TURN server
+  allowGuests: true
+
+  # Shared secret for communication between Synapse and Coturn.
+  # Optional, will be auto-generated if not overridden here.
+  sharedSecret: ""
+
+  # UDP port range for TURN connections
+  ports:
+    from: 49152
+    to: 49172
+
+  service:
+    # The type of service to deploy for routing Coturn traffic
+    # Options:
+    #   ClusterIP: Recommended for DaemonSet configurations. This will create a standard Kubernetes service for Coturn within the cluster. No external networking
+    #              will be configured as the DaemonSet will handle binding to each Node's host networking
+    #   NodePort:  Recommended for Deployment configurations. This will open TURN ports on every node and route traffic on these ports to the Coturn pods.
+    #              You will need to make sure your cloud provider supports the cluster config setting "apiserver.service-node-port-range", as this range must contain
+    #              the ports defined above for the service to be created.
+    type: ClusterIP
+
+  image:
+    repository: "instrumentisto/coturn"
+    tag: "4.5"
+    pullPolicy: IfNotPresent
+  replicaCount: 1
+  resources: {}
+
+  # Coturn specific labels
+  labels:
+    component: coturn
+
+# Settings for email notifications
+mail:
+  # Set to false to disable all email notifications
+  # NOTE: If enabled, either enable the Exim relay or configure an external mail server below
+  enabled: true
+  # Name and email address for outgoing mail
+  from: "Matrix <matrix@example.com>"
+  # Optional: Element instance URL.
+  # If the ingress is enabled, this is unnecessary.
+  # If the ingress is disabled and this is left unspecified, emails will contain a link to https://app.element.io
+  riotUrl: ""
+
+  # Exim relay
+  relay:
+    enabled: true
+    image:
+      repository: "devture/exim-relay"
+      tag: "4.95-r0-4"
+      pullPolicy: IfNotPresent
+    service:
+      type: ClusterIP
+      port: 25
+    replicaCount: 1
+    resources: {}
+    probes:
+      readiness: {}
+      startup: {}
+      liveness: {}
+    # Mail relay specific labels
+    labels:
+      component: mail
+
+  
+  # External mail server
+  external:
+    host: ""
+    port: 25  # SSL: 465, STARTTLS: 587
+    username: ""
+    password: ""
+    requireTransportSecurity: true
+
+bridges:
+  irc:
+    # Set to true to enable the IRC bridge
+    enabled: false
+    # Whether to enable presence (online/offline indicators). If presence is disabled for the homeserver (above), it should be disabled here too
+    presence: false
+    # Name of Postgres database to store IRC bridge data in, this database will be created if the included Postgres chart is enabled, otherwise you must create it manually
+    database: "matrix_irc"
+    databaseSslVerify: true
+
+    # Object of IRC servers to connect to, see https://github.com/matrix-org/matrix-appservice-irc/blob/master/config.sample.yaml for config options
+    servers:
+      chat.freenode.net:
+        # A human-readable short name.
+        name: "Freenode"
+        # The port to connect to. Optional.
+        port: 6697
+        # Whether to use SSL or not. Default: false.
+        ssl: true
+
+    data:
+      # Size of the data PVC to allocate
+      capacity: 1Mi
+
+    image:
+      repository: "matrixdotorg/matrix-appservice-irc"
+      tag: "release-0.22.0-rc1"
+      pullPolicy: IfNotPresent
+    replicaCount: 1
+    resources: {}
+    service:
+      type: ClusterIP
+      port: 9006
+
+  whatsapp:
+    # Set to true to enable the WhatsApp bridge
+    enabled: false
+
+    # Username and display name of the WhatsApp bridge bot
+    bot:
+      username: "whatsappbot"
+      displayName: "WhatsApp bridge bot"
+      avatar: "mxc://maunium.net/NeXNQarUbrlYBiPCpprYsRqr"
+
+    # Permissions for using the bridge.
+    # Permitted values:
+    # relaybot - Talk through the relaybot (if enabled), no access otherwise
+    #     user - Access to use the bridge to chat with a WhatsApp account.
+    #    admin - User level and some additional administration tools
+    # Permitted keys:
+    #        * - All Matrix users
+    #   domain - All users on that homeserver
+    #     mxid - Specific user
+    permissions:
+      "*": relaybot
+
+    # WhatsApp server connection settings
+    connection:
+      # WhatsApp server connection timeout (seconds)
+      timeout: 20
+      # Number of QR codes to store, essentially multiplying the connection timeout
+      qrRegenCount: 2
+      # Maximum number of connection attempts before failing
+      maxAttempts: 3
+      # Retry delay
+      # Negative numbers are exponential backoff: -connection_retry_delay + 1 + 2^attempts
+      retryDelay: -1
+      # Whether or not to notify the user when attempting to reconnect. Set to false to only report when maxAttempts has been reached
+      reportRetry: true
+
+    # Send notifications for incoming calls
+    callNotices: true
+
+    users:
+      # Username for WhatsApp users
+      # Evaluated as a template where {{ . }} is replaced with the phone number of the WhatsApp user
+      username: "whatsapp_{{.}}"
+
+      # Display name for WhatsApp users
+      # Evaluated as a template, with variables:
+      # {{.Notify}} - nickname set by the WhatsApp user
+      # {{.Jid}}    - phone number (international format)
+      # The following variables are also available, but will cause problems on multi-user instances:
+      # {{.Name}}   - display name from contact list
+      # {{.Short}}  - short display name from contact list
+      displayName: "{{if .Notify}}{{.Notify}}{{else}}{{.Jid}}{{end}} (WA)"
+
+    # Display name for communities.
+    # A community will be automatically generated for each user using the bridge, and can be used to group WhatsApp chats together
+    # Evaluated as a template, with variables:
+    # {{.Localpart}} - MXID localpart
+    # {{.Server}}    - MXID server part of the user.
+    communityName: "whatsapp_{{.Localpart}}={{.Server}}"
+
+    relaybot:
+      # Set to true to enable the relaybot and management room
+      enabled: false
+
+      # Management room for the relay bot where status notifications are posted
+      management: "!foo:example.com"
+
+      # Users to invite to the management room automatically
+      invites: []
+
+    data:
+      # Size of the PVC to allocate for the SQLite database
+      capacity: 512Mi
+      # Storage class (optional)
+      storageClass: ""
+
+    image:
+      repository: "dock.mau.dev/tulir/mautrix-whatsapp"
+      tag: "latest"
+      pullPolicy: Always
+    replicaCount: 1
+    resources: {}
+    service:
+      type: ClusterIP
+      port: 29318
+
+  discord:
+    # Set to true to enable the Discord bridge
+    enabled: false
+
+    # Discord bot authentication
+    # See https://github.com/Half-Shot/matrix-appservice-discord#setting-up-discord
+    auth:
+      clientId: ""
+      botToken: ""
+
+    # The name of bridged rooms
+    # Available vars:
+    #   :guild - guild/server name
+    #   :name  - channel name prefixed with #
+    channelName: "[Discord] :guild :name"
+
+    users:
+      # Nickname of bridged Discord users
+      # Available vars:
+      #   :nick     - user's Discord nickname
+      #   :username - user's Discord username
+      #   :tag      - user's 4 digit Discord tag
+      #   :id       - user's Discord developer ID (long)
+      nickname: ":nick"
+      # Username of bridged Discord users
+      # Available vars:
+      #   :username - user's Discord username
+      #   :tag      - user's 4 digit Discord tag
+      #   :id       - user's Discord developer ID (long)
+      username: ":username#:tag"
+
+    # Set to false to disable online/offline presence for Discord users
+    presence: true
+
+    # Set to false to disable typing notifications (only for Discord to Matrix)
+    typingNotifications: true
+
+    # Set to true to allow users to bridge rooms themselves using !discord commands
+    # More info: https://t2bot.io/discord
+    selfService: false
+
+    # Set to false to disable the Discord bot read receipt, which advances whenever the bot bridges a message
+    readReceipt: true
+
+    # Set to false to disable Discord notifications when a user joins/leaves the Matrix channel
+    joinLeaveEvents: true
+
+    # Default visibility of bridged rooms (public/private)
+    defaultVisibility: public
+
+    data:
+      # Size of the PVC to allocate for the SQLite database
+      capacity: 512Mi
+      # Storage class (optional)
+      storageClass: ""
+
+    image:
+      repository: "halfshot/matrix-appservice-discord"
+      tag: "latest"
+      pullPolicy: Always
+    replicaCount: 1
+    resources: {}
+    service:
+      type: ClusterIP
+      port: 9005
+  # Recommended to leave this disabled to allow bridges to be scheduled on separate nodes.
+  # Set this to true to reduce latency between the homeserver and bridges, or if your cloud provider does not allow
+  # the ReadWriteMany access mode (see below)
+  affinity: false
+  volume:
+    # Capacity of the shared volume for storing bridge/appservice registration files
+    # Note: 1Mi should be enough but some cloud providers may set a minimum PVC size of 1Gi, adjust as necessary
+    capacity: 1Mi
+    # Storage class (optional)
+    storageClass: ""
+    # Access mode of the shared volume. ReadWriteMany is recommended to allow bridges to be scheduled on separate nodes.
+    # Some cloud providers may not allow the ReadWriteMany access mode. In that case, change this to ReadWriteOnce -AND-
+    # set bridges.affinity (above) to true
+    accessMode: ReadWriteMany
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+networkPolicies:
+  enabled: false

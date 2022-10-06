@@ -1,0 +1,129 @@
+{{- if .Values.bridges.whatsapp.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "matrix.fullname" . }}-bridge-whatsapp
+  labels:
+{{ include "matrix.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.bridges.whatsapp.replicaCount }}
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "matrix.name" . }}-bridge-whatsapp
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      matrix-chart/allow-synapse-access: allow
+  template:
+    metadata:
+      annotations:
+        # re-roll deployment on config change
+        checksum/whatsapp-config: {{ include (print $.Template.BasePath "/bridge-whatsapp/configmap.yaml") . | sha256sum }}
+      labels:
+        app.kubernetes.io/name: {{ include "matrix.name" . }}-bridge-whatsapp
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        matrix-chart/allow-synapse-access: allow
+    spec:
+      {{- if .Values.bridges.affinity }}
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - {{ include "matrix.name" . }}-synapse
+                  - key: app.kubernetes.io/instance
+                    operator: In
+                    values:
+                      - {{ .Release.Name }}
+              topologyKey: kubernetes.io/hostname
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      initContainers:
+        - name: "load-config"
+          image: "{{ .Values.bridges.whatsapp.image.repository }}:{{ .Values.bridges.whatsapp.image.tag }}"
+          imagePullPolicy: {{ .Values.bridges.whatsapp.image.pullPolicy }}
+          command: ["sh"]
+          args: ["-c", "cp /load/config.yaml /data/config.yaml"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: config
+              mountPath: /load
+              readOnly: true
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+        - name: "generate-config"
+          image: "{{ .Values.bridges.whatsapp.image.repository }}:{{ .Values.bridges.whatsapp.image.tag }}"
+          imagePullPolicy: {{ .Values.bridges.whatsapp.image.pullPolicy }}
+          command: ["mautrix-whatsapp"]
+          args: ["-g", "-c", "/data/config.yaml", "-r", "/bridges/whatsapp.yaml"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: bridges
+              mountPath: /bridges
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          {{- with .Values.bridges.whatsapp.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      containers:
+        - name: "bridge-whatsapp"
+          image: "{{ .Values.bridges.whatsapp.image.repository }}:{{ .Values.bridges.whatsapp.image.tag }}"
+          imagePullPolicy: {{ .Values.bridges.whatsapp.image.pullPolicy }}
+          command: ["mautrix-whatsapp"]
+          args: ["-c", "/data/config.yaml"]
+          ports:
+            - name: bridge
+              containerPort: 29318
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            - name: tmp
+              mountPath: /tmp
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+          {{- with .Values.bridges.whatsapp.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: "{{ include "matrix.fullname" . }}-whatsapp-data"
+        - name: config
+          configMap:
+            name: "{{ include "matrix.fullname" . }}-whatsapp-config"
+        - name: bridges
+          persistentVolumeClaim:
+            claimName: "{{ include "matrix.fullname" . }}-bridges"
+        - name: tmp
+          emptyDir: {}
+{{- end }}

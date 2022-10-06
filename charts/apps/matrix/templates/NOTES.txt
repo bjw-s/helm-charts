@@ -1,0 +1,55 @@
+{{- if .Release.IsInstall }}
+zekker6/matrix-chart has been installed!
+
+Installed components:
+ - Synapse ({{ .Values.synapse.image.repository }})
+{{- if .Values.riot.enabled }}
+ - Element Web ({{ .Values.riot.image.repository }})
+{{- end }}
+{{- if .Values.coturn.enabled }}
+ - Coturn ({{ .Values.coturn.image.repository }})
+{{- end }}
+{{- if .Values.mail.relay.enabled }}
+ - Exim Relay ({{ .Values.mail.relay.image.repository }})
+{{- end }}
+{{- if .Values.bridges.irc.enabled }}
+ - IRC Bridge ({{ .Values.bridges.irc.image.repository }})
+{{- end }}
+{{- if .Values.bridges.whatsapp.enabled }}
+ - WhatsApp Bridge ({{ .Values.bridges.whatsapp.image.repository }})
+{{- end }}
+{{- if .Values.bridges.discord.enabled }}
+ - Discord Bridge ({{ .Values.bridges.discord.image.repository }})
+{{- end }}
+
+Thank you for installing zekker6/matrix-chart! If you have any questions or run into any issues, please file a GitHub issue or join us at #matrix-chart:typokign.com.
+
+{{ if .Values.ingress.enabled }}
+Your Synapse homeserver should soon be available at https://{{ .Values.ingress.hosts.synapse }}
+{{- if .Values.riot.enabled }}
+Your Element Web instance should soon be available at https://{{ .Values.ingress.hosts.riot }}
+{{- end }}
+{{- end }}
+
+{{ if .Values.bridges.irc.enabled }}
+The IRC bridge has been enabled!
+
+You can now join IRC channels on any servers you have configured by joining #<alias_prefix><channel_name>:{{ .Values.matrix.serverName }}.
+For more information, check out the official documentation at https://github.com/matrix-org/matrix-appservice-irc
+{{- end }}
+
+{{ if .Values.bridges.whatsapp.enabled }}
+The WhatsApp bridge has been enabled!
+
+To get started, start a chat with the bridge bot (@{{ .Values.bridges.whatsapp.bot.username }}:{{ .Values.matrix.serverName }}).
+For more information, check out the official documentation at https://github.com/tulir/mautrix-whatsapp/wiki/Authentication
+{{- end }}
+
+{{ if .Values.bridges.discord.enabled }}
+The Discord bridge has been enabled!
+
+You'll need to follow the instructions at https://github.com/Half-Shot/matrix-appservice-discord#setting-up-discord to finish setting up the bridge
+
+When you've finished setting up the bridge, head to https://discord.com/oauth2/authorize?client_id={{ .Values.bridges.discord.auth.clientId }}&scope=bot&permissions=607251456 to invite the bridge bot to a Discord guild.
+{{- end }}
+{{- end }}

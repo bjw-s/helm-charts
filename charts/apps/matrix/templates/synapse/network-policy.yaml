@@ -1,0 +1,23 @@
+{{- if .Values.networkPolicies.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "matrix.fullname" . }}-synapse
+  labels:
+{{ include "matrix.labels" . | indent 4 }}
+{{ include "matrix.synapse.labels" . | indent 4}}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "matrix.fullname" . }}-synapse
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              matrix-chart/allow-synapse-access: allow
+              app.kubernetes.io/instance: {{ .Release.Name }}
+      ports:
+        - port: http
+          protocol: TCP
+{{- end }}

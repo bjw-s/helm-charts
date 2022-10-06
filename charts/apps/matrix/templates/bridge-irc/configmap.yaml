@@ -1,0 +1,29 @@
+{{- if .Values.bridges.irc.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "matrix.fullname" . }}-irc-config
+  labels:
+  {{ include "matrix.labels" . | nindent 4}}
+data:
+  config.yaml: |
+  {{ include "matrix.irc.config" . | nindent 4 }}
+  registration.yaml: |
+    id: appservice-irc
+    as_token: "{{ include "matrix.irc.as_token" . }}"
+    hs_token: "{{ include "matrix.irc.hs_token" . }}"
+    namespaces:
+      users:
+        - exclusive: true
+          regex: '@irc_.*:{{ include "matrix.fullname" . }}'
+      aliases:
+        - exclusive: true
+          regex: '#irc_.*:{{ include "matrix.fullname" . }}'
+    url: "http://{{ include "matrix.fullname" . }}-bridge-irc:{{ .Values.bridges.irc.service.port }}"
+    sender_localpart: irc_bot
+    rate_limited: false
+    protocols:
+      - irc
+  passkey.pem: |
+    {{ include "matrix.irc.passkey" . | nindent 4 }}
+{{- end }}

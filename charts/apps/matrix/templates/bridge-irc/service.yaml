@@ -1,0 +1,18 @@
+{{- if .Values.bridges.irc.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "matrix.fullname" . }}-bridge-irc
+  labels:
+  {{ include "matrix.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.bridges.irc.service.type }}
+  ports:
+    - port: {{ .Values.bridges.irc.service.port }}
+      targetPort: bridge
+      protocol: TCP
+      name: bridge
+  selector:
+    app.kubernetes.io/name: {{ include "matrix.name" . }}-bridge-irc
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

@@ -1,0 +1,127 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "matrix.fullname" . }}-riot-config
+  labels:
+{{ include "matrix.labels" . | nindent 4}}
+{{ include "matrix.element.labels" . | indent 4}}
+data:
+  config.json: |
+    {
+      "default_server_config": {
+        "m.homeserver": {
+          "base_url": {{ include "matrix.baseUrl" . | quote }}
+        }
+      },
+      "brand": {{ .Values.riot.branding.brand | quote }},
+      "branding": {
+        {{- if .Values.riot.branding.welcomeBackgroundUrl }}
+        "welcomeBackgroundUrl": {{ .Values.riot.branding.welcomeBackgroundUrl | quote }},
+        {{- end }}
+        {{- if .Values.riot.branding.authHeaderLogoUrl }}
+        "authHeaderLogoUrl": {{ .Values.riot.branding.authHeaderLogoUrl | quote }},
+        {{- end }}
+        {{- if .Values.riot.branding.authFooterLinks }}
+        "authFooterLinks": {{ .Values.riot.branding.authFooterLinks | toJson }},
+        {{- end }}
+      },
+      {{- if .Values.riot.integrations.enabled }}
+      "integrations_ui_url": {{ .Values.riot.integrations.ui | quote }},
+      "integrations_rest_url": {{ .Values.riot.integrations.api | quote }},
+      "integrations_widgets_urls": {{ .Values.riot.integrations.widgets | toJson }},
+      {{- end }}
+      {{- if .Values.riot.labs }} {{/* if not empty */}}
+      "showLabsSettings": true,
+      {{- else }}
+      "showLabsSettings": false,
+      {{- end }}
+      "features": {
+        {{- if .Values.riot.labs }}
+        {{- range initial .Values.riot.labs }}
+        {{ . | quote }}: "labs",
+        {{- end }}
+        {{ last .Values.riot.labs | quote }}: "labs"
+        {{- end }}
+      },
+      "roomDirectory": {
+        "servers": {{ .Values.riot.roomDirectoryServers | toJson }}
+      },
+      {{- if .Values.riot.welcomeUserId }}
+      "welcomeUserId": {{ .Values.riot.welcomeUserId | quote }},
+      {{- end }}
+      "permalinkPrefix": {{ .Values.riot.permalinkPrefix | quote }}
+    }
+  nginx.conf: |
+    worker_processes  auto;
+
+    error_log  /var/log/nginx/error.log warn;
+    pid        /var/run/pid/nginx.pid;
+
+    events {
+      worker_connections  1024;
+    }
+
+    http {
+      include       /etc/nginx/mime.types;
+      default_type  application/octet-stream;
+
+      log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+      '$status $body_bytes_sent "$http_referer" '
+      '"$http_user_agent" "$http_x_forwarded_for"';
+
+      access_log  /var/log/nginx/access.log  main;
+
+      sendfile        on;
+      #tcp_nopush     on;
+
+      keepalive_timeout  65;
+
+      #gzip  on;
+
+      include /etc/nginx/conf.d/*.conf;
+    }
+  default.conf: |
+    server {
+      listen       8080;
+      server_name  localhost;
+
+      #charset koi8-r;
+      #access_log  /var/log/nginx/host.access.log  main;
+
+      location / {
+          root   /usr/share/nginx/html;
+          index  index.html index.htm;
+      }
+
+      #error_page  404              /404.html;
+
+      # redirect server error pages to the static page /50x.html
+      #
+      error_page   500 502 503 504  /50x.html;
+      location = /50x.html {
+          root   /usr/share/nginx/html;
+      }
+
+      # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+      #
+      #location ~ \.php$ {
+      #    proxy_pass   http://127.0.0.1;
+      #}
+
+      # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+      #
+      #location ~ \.php$ {
+      #    root           html;
+      #    fastcgi_pass   127.0.0.1:9000;
+      #    fastcgi_index  index.php;
+      #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;
+      #    include        fastcgi_params;
+      #}
+
+      # deny access to .htaccess files, if Apache's document root
+      # concurs with nginx's one
+      #
+      #location ~ /\.ht {
+      #    deny  all;
+      #}
+    }

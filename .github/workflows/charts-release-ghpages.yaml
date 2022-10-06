@@ -11,9 +11,9 @@ on:
         required: false
         type: string
     secrets:
-      BJWS_APP_ID:
+      ZEKKER_APP_ID:
         required: true
-      BJWS_APP_PRIVATE_KEY:
+      ZEKKER_APP_PRIVATE_KEY:
         required: true
 
 env:
@@ -28,8 +28,8 @@ jobs:
         id: get-app-token
         uses: getsentry/action-github-app-token@v1
         with:
-          app_id: ${{ secrets.BJWS_APP_ID }}
-          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
+          app_id: ${{ secrets.ZEKKER_APP_ID }}
+          private_key: ${{ secrets.ZEKKER_APP_PRIVATE_KEY }}
 
       - name: Checkout charts branch
         uses: actions/checkout@v3
@@ -73,7 +73,7 @@ jobs:
         shell: bash
         working-directory: dest
         run: |
-          helm repo index . --url https://bjw-s.github.io/helm-charts/
+          helm repo index . --url https://zekker6.github.io/helm-charts/
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
@@ -81,9 +81,9 @@ jobs:
         with:
           repository: dest
           branch: gh-pages
-          commit_user_name: "bjw-s-bot[bot]"
-          commit_user_email: 87358111+bjw-s-bot[bot]@users.noreply.github.com
-          commit_author: bjw-s-bot[bot] <87358111+bjw-s-bot[bot]@users.noreply.github.com>
+          commit_user_name: "zekker6-bot[bot]"
+          commit_user_email: 87358111+zekker6-bot[bot]@users.noreply.github.com
+          commit_author: zekker6-bot[bot] <87358111+zekker6-bot[bot]@users.noreply.github.com>
           file_pattern: 'index.yaml **/*.tgz'
           disable_globbing: true
 

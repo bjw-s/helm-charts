@@ -1,0 +1,17 @@
+{{- if or .Values.bridges.whatsapp.enabled .Values.bridges.discord.enabled .Values.bridges.irc.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "matrix.fullname" . }}-bridges
+  labels:
+{{ include "matrix.labels" . | indent 4}}
+spec:
+  {{- if .Values.bridges.volume.storageClass }}
+  storageClassName: {{ .Values.bridges.volume.storageClass }}
+  {{- end }}
+  accessModes:
+    - {{ .Values.bridges.volume.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.bridges.volume.capacity }}
+{{- end }}

@@ -1,0 +1,17 @@
+{{- if .Values.bridges.whatsapp.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "matrix.fullname" . }}-whatsapp-data
+  labels:
+{{ include "matrix.labels" . | indent 4}}
+spec:
+  {{- if .Values.bridges.whatsapp.data.storageClass }}
+  storageClassName: {{ .Values.bridges.whatsapp.data.storageClass }}
+  {{- end }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.bridges.whatsapp.data.capacity }}
+{{- end }}
