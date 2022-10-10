@@ -400,6 +400,60 @@ ingress:
     #    hosts:
     #      - chart-example.local
 
+# -- Configure the gateway routes for the chart here.
+# Additional routes can be added by adding a dictionary key similar to the 'main' route.
+# [[ref]](https://gateway-api.sigs.k8s.io/references/spec/#gateway.networking.k8s.io%2fv1alpha2)
+# @default -- See below
+route:
+  main:
+    # -- Enables or disables the route
+    enabled: false
+
+    # -- Set the route kind
+    # Valid options are GRPCRoute, HTTPRoute, TCPRoute, TLSRoute, UDPRoute
+    kind: HTTPRoute
+
+    # -- Override the name suffix that is used for this route.
+    nameOverride:
+
+    # -- Provide additional annotations which may be required.
+    annotations: {}
+
+    # -- Provide additional labels which may be required.
+    labels: {}
+
+    ## -- Configure the resource the route attaches to.
+    parentRefs:
+    -  # Group of the referent resource.
+      group: gateway.networking.k8s.io
+      # Kind of the referent resource.
+      kind: Gateway
+      # Name of the referent resource
+      name:
+      # Namespace of the referent resource
+      namespace:
+      # Name of the section within the target resource.
+      sectionName: ""
+
+    # -- Host addresses
+    hostnames: []
+
+    # -- Configure rules for routing. Defaults to the primary service.
+    rules:
+      -  # -- Configure backends where matching requests should be sent.
+        backendRefs:
+        - group: ""
+          kind: Service
+          name:
+          namespace:
+          port:
+          weight: 1
+        ## Configure conditions used for matching incoming requests. Only for HTTPRoutes
+        matches:
+          - path:
+              type: PathPrefix
+              value: /
+
 # -- Configure persistence for the chart here.
 # Additional items can be added by adding a dictionary key similar to the 'config' key.
 # [[ref]](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-storage)
