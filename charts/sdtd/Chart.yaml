@@ -3,8 +3,8 @@ apiVersion: v2
 appVersion: main
 description: Dedicated server for 7 Days to Die
 name: sdtd
-version: 0.67.1
-kubeVersion: ">=1.16.0-0"
+version: 0.67.2
+kubeVersion: '>=1.16.0-0'
 keywords:
   - 7d2d
 home: https://github.com/k8s-at-home/charts/tree/master/charts/stable/7d2d
