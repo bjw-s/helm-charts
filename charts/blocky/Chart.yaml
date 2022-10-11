@@ -19,7 +19,7 @@ maintainers:
 dependencies:
   - name: common
     repository: https://bjw-s.github.io/helm-charts
-    version: 0.2.1
+    version: 0.2.2
   - name: redis
     repository: https://charts.bitnami.com/bitnami
     version: 17.3.4
