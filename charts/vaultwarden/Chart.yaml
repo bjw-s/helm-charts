@@ -20,7 +20,7 @@ dependencies:
     repository: https://bjw-s.github.io/helm-charts
     version: 0.2.2
   - name: mariadb
-    version: 11.3.1
+    version: 11.3.3
     repository: https://charts.bitnami.com/bitnami
     condition: mariadb.enabled
   - name: postgresql
