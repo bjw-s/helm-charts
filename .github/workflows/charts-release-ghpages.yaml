@@ -88,7 +88,7 @@ jobs:
           disable_globbing: true
 
       - name: Wait for deploy
-        uses: fountainhead/action-wait-for-check@v1.0.0
+        uses: fountainhead/action-wait-for-check@v1.1.0
         if: ${{ steps.auto-commit.outputs.changes_detected }}
         id: wait-for-deploy
         with:
