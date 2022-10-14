@@ -119,10 +119,10 @@ ingress:
     hosts:
       - host: blocky-api.local
         paths:
-        - path: /
-          pathType: Prefix
-          service:
-            port: 4000
+          - path: /
+            pathType: Prefix
+            service:
+              port: 4000
 
 # -- Configure persistence settings for the chart under this key.
 # @default -- See values.yaml
@@ -143,7 +143,7 @@ metrics:
     # -- Additional labels for the Kubernetes `ServiceMonitor` object
     labels: {}
     # -- The Kubernetes `Endpoints` label to use as the Prometheus job name
-    jobLabel: ""
+    jobLabel: ''
     # -- TargetLabels transfers labels from the Kubernetes `Service`` onto the created metrics.
     targetLabels: []
     # -- PodTargetLabels transfers labels on the Kubernetes `Pod`` onto the created metrics.
@@ -155,7 +155,8 @@ metrics:
     labels: {}
     # -- Configure additionial rules for the chart under this key.
     # @default -- See prometheusrules.yaml
-    rules: []
+    rules:
+      []
       # - alert: BlockyDisabled
       #   annotations:
       #     description: Blocky's ad blocking has been disabled for 15min.
@@ -166,15 +167,6 @@ metrics:
       #   for: 15m
       #   labels:
       #     severity: critical
-
-# -- Enable and configure redis subchart under this key.
-# Useful if you're running more than one replica of blocky dns.
-# For more options see [redis chart documentation](https://github.com/bitnami/charts/tree/master/bitnami/redis)
-# @default -- See values.yaml
-redis:
-  enabled: false
-  # auth:
-  #   enabled: false
 
 # -- Full list of options https://github.com/0xERR0R/blocky/blob/v0.18/docs/config.yml
 # @default -- see URL to default config
