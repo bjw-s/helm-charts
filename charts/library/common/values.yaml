@@ -746,3 +746,6 @@ addons:
       capabilities:
         add:
           - NET_ADMIN
+
+# -- Allows specifying custom resources
+customResources: []

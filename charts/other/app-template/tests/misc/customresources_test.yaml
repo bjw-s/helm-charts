@@ -1,0 +1,36 @@
+suite: misc customresources
+templates:
+  - common.yaml
+tests:
+  - it: customResources should pass
+    set:
+      customResources:
+        - apiVersion: cert-manager.io/v1
+          kind: ClusterIssuer
+          metadata:
+            name: fake
+          spec:
+            acme:
+              server: https://acme-v02.api.letsencrypt.org/directory
+              email: fake
+              privateKeySecretRef:
+                name: fake
+              solvers:
+                - dns01:
+                    cloudflare:
+                      email: fake
+                      apiKeySecretRef:
+                        name: fake
+                        key: fake
+                  selector:
+                    dnsZones:
+                      - fake
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: ClusterIssuer
+      - documentIndex: 0
+        equal:
+          path: spec.acme.server
+          value: https://acme-v02.api.letsencrypt.org/directory
+
