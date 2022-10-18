@@ -749,3 +749,20 @@ addons:
 
 # -- Allows specifying custom resources
 customResources: []
+#  - apiVersion: scheduling.k8s.io/v1
+#    kind: PriorityClass
+#    metadata:
+#      name: app-low
+#    value: 70000
+#    globalDefault: false
+#    description: "This priority class should only be used for low priority app pods."
+
+# -- Allows specifying custom resource templates
+customTemplates: []
+#  - |
+#    apiVersion: v1
+#    kind: Secret
+#    metadata:
+#      name: common-secret
+#    stringData:
+#      mykey: {{ .Values.mysecret }}
