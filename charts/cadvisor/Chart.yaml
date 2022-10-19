@@ -1,7 +1,7 @@
 apiVersion: v1
 description: A chart for a Cadvisor deployment
 name: cadvisor
-version: 2.3.0
+version: 2.3.1
 appVersion: 0.45.0
 home: https://github.com/google/cadvisor
 sources:
