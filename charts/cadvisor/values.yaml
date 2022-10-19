@@ -11,8 +11,7 @@ image:
 container:
   port: 8080
   additionalArgs:
-    - --housekeeping_interval=10s # kubernetes default args
-    - --max_housekeeping_interval=15s
+    - --allow_dynamic_housekeeping=true
     - --event_storage_event_limit=default=0
     - --event_storage_age_limit=default=0
     - --disable_metrics=percpu,process,sched,tcp,udp # enable only diskIO, cpu, memory, network, disk
@@ -29,7 +28,8 @@ container:
       path: '/var/lib/docker'
     - name: disk
       path: '/dev/disk'
-
+    - name: containerd
+      path: '/run/k3s/containerd'
 resources:
   {}
   # We usually recommend not to specify default resources and to leave this as a conscious
@@ -75,7 +75,7 @@ affinity: {}
 
 # This will create a ServiceMonitor Custom Resource indicating the prometheus operator what to scrape.
 metrics:
-  enabled: false
+  enabled: true
   interval: 30s
   scrapeTimeout: 30s
   # This will allow you to specify relabelings on the metrics before ingestion. E.g. to use the kubernetes monitoring
