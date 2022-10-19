@@ -1,0 +1,100 @@
+image:
+  repository: gcr.io/cadvisor/cadvisor
+  tag: v0.45.0
+  pullPolicy: IfNotPresent
+
+  ## Reference to one or more secrets to be used when pulling images
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ##
+  pullSecrets: []
+
+container:
+  port: 8080
+  additionalArgs:
+    - --housekeeping_interval=10s # kubernetes default args
+    - --max_housekeeping_interval=15s
+    - --event_storage_event_limit=default=0
+    - --event_storage_age_limit=default=0
+    - --disable_metrics=percpu,process,sched,tcp,udp # enable only diskIO, cpu, memory, network, disk
+    - --docker_only
+  hostPaths:
+    - name: rootfs
+      path: '/'
+      mount: '/rootfs'
+    - name: varrun
+      path: '/var/run'
+    - name: sys
+      path: '/sys'
+    - name: docker
+      path: '/var/lib/docker'
+    - name: disk
+      path: '/dev/disk'
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+podAnnotations: {}
+
+# priorityClassName: system-cluster-critical
+priorityClassName: {}
+
+# sometimes errors are encountered when using the cpu load reader without being on the host network
+hostNetwork: false
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:
+
+podSecurityPolicy:
+  create: false
+  privileged: false
+
+# Specifies whether a securityContext should be created. Required for privileged operations.
+podSecurityContext:
+  create: false
+  privileged: false
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# This will create a ServiceMonitor Custom Resource indicating the prometheus operator what to scrape.
+metrics:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 30s
+  # This will allow you to specify relabelings on the metrics before ingestion. E.g. to use the kubernetes monitoring
+  # mixin with this chart set metrics.enabled above to true and use:
+  # relabelings:
+  #  - sourceLabels:
+  #    - name
+  #    targetLabel: container
+  #  - sourceLabels:
+  #    - container_label_io_kubernetes_pod_namespace
+  #    targetLabel: namespace
+  #  - sourceLabels:
+  #    - container_label_io_kubernetes_pod_name
+  #    targetLabel: pod
+  metricRelabelings: []
+  # This will allow you to specify relabelings on the metrics before scraping.
+  # relabelings:
+  #  - action: replace
+  #    sourceLabels:
+  #    - __meta_kubernetes_pod_node_name
+  #    targetLabel: node
+  relabelings: []

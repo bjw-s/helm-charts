@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ template "cadvisor.name" . }}
+  annotations:
+      seccomp.security.alpha.kubernetes.io/pod: 'docker/default'
+  labels:
+    app: {{ template "cadvisor.name" . }}
+    chart: {{ template "cadvisor.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "cadvisor.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "cadvisor.name" . }}
+        release: {{ .Release.Name }}
+      annotations:
+        {{- range $key, $value := .Values.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+    spec:
+      {{ if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{ if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range .Values.image.pullSecrets }}
+      - name: {{ . }}
+      {{- end }}
+      {{- end }}
+      serviceAccountName: {{ template "cadvisor.serviceAccountName" . }}
+      {{ if .Values.hostNetwork }} 
+      hostNetwork: true
+      {{- end }}
+      containers:
+      - name: {{ template "cadvisor.name" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        args:
+        {{- with .Values.container.additionalArgs }}
+{{ toYaml . | indent 10 }}
+        {{- end }}
+        volumeMounts:
+        {{- range .Values.container.hostPaths }}
+        - name: {{ .name }}
+          mountPath: {{ default .path .mount }}
+          readOnly: true
+        {{- end }}
+        {{ if .Values.podSecurityContext.create }}
+        securityContext:
+          privileged: {{ .Values.podSecurityContext.privileged }}
+        {{- end }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.container.port }}
+          protocol: TCP
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      volumes:
+      {{- range .Values.container.hostPaths }}
+      - name: {{ .name }}
+        hostPath:
+          path: {{ .path }}
+      {{- end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+
