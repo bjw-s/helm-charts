@@ -1,9 +1,9 @@
 ---
 apiVersion: v2
-appVersion: 1.25.2
+appVersion: 1.26.0
 description: Vaultwarden is a Bitwarden compatable server in Rust
 name: vaultwarden
-version: 5.6.2
+version: 5.7.0
 kubeVersion: '>=1.16.0-0'
 keywords:
   - Vaultwarden
@@ -19,14 +19,6 @@ dependencies:
   - name: common
     repository: https://bjw-s.github.io/helm-charts
     version: 0.2.2
-  - name: mariadb
-    version: 11.3.3
-    repository: https://charts.bitnami.com/bitnami
-    condition: mariadb.enabled
-  - name: postgresql
-    version: 11.9.8
-    repository: https://charts.bitnami.com/bitnami
-    condition: postgresql.enabled
 annotations:
   artifacthub.io/changes: |-
     - kind: changed

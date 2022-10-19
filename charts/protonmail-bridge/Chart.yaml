@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: 1.8.7-1
 description: Container for protonmail bridge to work on the network.
 name: protonmail-bridge
-version: 5.7.2
+version: 5.8.0
 kubeVersion: '>=1.16.0-0'
 keywords:
   - protonmail
@@ -14,8 +14,8 @@ sources:
   - https://github.com/shenxn/protonmail-bridge-docker
   - https://hub.docker.com/r/shenxn/protonmail-bridge
 maintainers:
-  - name: Eagleman7
-    email: my@email.com
+  - name: j0sh3rs
+    email: github@beholdthehurricane.com
 dependencies:
   - name: common
     repository: https://bjw-s.github.io/helm-charts
