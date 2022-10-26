@@ -1,4 +1,3 @@
-
 {{/*
 This template serves as a blueprint for all Route objects that are created
 within the common library.
