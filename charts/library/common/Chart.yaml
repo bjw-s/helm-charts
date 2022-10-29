@@ -15,3 +15,5 @@ annotations:
   artifacthub.io/changes: |-
     - kind: changed
       description: Support services have extraSelectorLabels
+    - kind: changed
+      description: Updated code-server image to v4.8.1
