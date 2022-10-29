@@ -10,7 +10,7 @@ Renders the Persistent Volume Claim objects required by the chart.
         {{- $_ := set $persistenceValues "nameOverride" $index -}}
       {{- end -}}
       {{- $_ := set $ "ObjectValues" (dict "persistence" $persistenceValues) -}}
-      {{- include "common.classes.pvc" $ | nindent 0 -}}
+      {{- include "bjw-s.common.class.pvc" $ | nindent 0 -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}

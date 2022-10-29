@@ -15,7 +15,7 @@ within the common library.
   {{- $serviceName = printf "%v-%v" $serviceName $values.nameOverride -}}
 {{ end -}}
 {{- $svcType := $values.type | default "" -}}
-{{- $primaryPort := get $values.ports (include "bjw-s.common.lib.util.service.primaryPort" (dict "values" $values)) }}
+{{- $primaryPort := get $values.ports (include "bjw-s.common.lib.service.primaryPort" (dict "values" $values)) }}
 ---
 apiVersion: v1
 kind: Service

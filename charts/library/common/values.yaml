@@ -189,6 +189,9 @@ probes:
     enabled: true
     # -- Set this to `true` if you wish to specify your own livenessProbe
     custom: false
+    # -- sets the probe type when not using a custom probe
+    # @default -- "TCP"
+    type: TCP
     # -- The spec field contains the values for the default livenessProbe.
     # If you selected `custom: true`, this field holds the definition of the livenessProbe.
     # @default -- See below
@@ -205,6 +208,9 @@ probes:
     enabled: true
     # -- Set this to `true` if you wish to specify your own readinessProbe
     custom: false
+    # -- sets the probe type when not using a custom probe
+    # @default -- "TCP"
+    type: TCP
     # -- The spec field contains the values for the default readinessProbe.
     # If you selected `custom: true`, this field holds the definition of the readinessProbe.
     # @default -- See below
@@ -221,6 +227,9 @@ probes:
     enabled: true
     # -- Set this to `true` if you wish to specify your own startupProbe
     custom: false
+    # -- sets the probe type when not using a custom probe
+    # @default -- "TCP"
+    type: TCP
     # -- The spec field contains the values for the default startupProbe.
     # If you selected `custom: true`, this field holds the definition of the startupProbe.
     # @default -- See below

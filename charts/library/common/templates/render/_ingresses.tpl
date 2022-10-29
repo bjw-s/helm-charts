@@ -8,7 +8,7 @@ Renders the Ingress objects required by the chart.
       {{- $ingressValues := $ingress -}}
 
       {{/* set defaults */}}
-      {{- if and (not $ingressValues.nameOverride) (ne $name (include "bjw-s.common.lib.util.ingress.primary" $)) -}}
+      {{- if and (not $ingressValues.nameOverride) (ne $name (include "bjw-s.common.lib.ingress.primary" $)) -}}
         {{- $_ := set $ingressValues "nameOverride" $name -}}
       {{- end -}}
 

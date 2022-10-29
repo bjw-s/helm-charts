@@ -1,10 +1,10 @@
 {{/*
 Environment variables used by containers.
 */}}
-{{- define "common.controller.env_vars" -}}
+{{- define "bjw-s.common.lib.container.envVars" -}}
   {{- $values := .Values.env -}}
   {{- if hasKey . "ObjectValues" -}}
-    {{- with .ObjectValues.env -}}
+    {{- with .ObjectValues.envVars -}}
       {{- $values = . -}}
     {{- end -}}
   {{- end -}}

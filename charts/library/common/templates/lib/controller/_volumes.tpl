@@ -1,7 +1,7 @@
 {{/*
 Volumes included by the controller.
 */}}
-{{- define "common.controller.volumes" -}}
+{{- define "bjw-s.common.lib.controller.volumes" -}}
 {{- range $index, $persistence := .Values.persistence }}
 {{- if $persistence.enabled }}
 - name: {{ $index }}

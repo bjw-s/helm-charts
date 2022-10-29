@@ -1,5 +1,5 @@
 {{/* Return the name of the primary ingress object */}}
-{{- define "bjw-s.common.lib.util.ingress.primary" -}}
+{{- define "bjw-s.common.lib.ingress.primary" -}}
   {{- $enabledIngresses := dict -}}
   {{- range $name, $ingress := .Values.ingress -}}
     {{- if $ingress.enabled -}}

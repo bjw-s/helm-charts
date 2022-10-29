@@ -1,5 +1,5 @@
 {{- /* The main container included in the controller */ -}}
-{{- define "common.controller.mainContainer" -}}
+{{- define "bjw-s.common.lib.controller.mainContainer" -}}
 - name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}
   image: {{ printf "%s:%s" .Values.image.repository (default .Chart.AppVersion .Values.image.tag) | quote }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
@@ -36,7 +36,7 @@
 
   {{- with .Values.env }}
   env:
-    {{- get (fromYaml (include "common.controller.env_vars" $)) "env" | toYaml | nindent 4 -}}
+    {{- get (fromYaml (include "bjw-s.common.lib.container.envVars" $)) "env" | toYaml | nindent 4 -}}
   {{- end }}
   {{- if or .Values.envFrom .Values.secret }}
   envFrom:
@@ -49,12 +49,12 @@
     {{- end }}
   {{- end }}
   ports:
-  {{- include "common.controller.ports" . | trim | nindent 4 }}
-  {{- with (include "common.controller.volumeMounts" . | trim) }}
+  {{- include "bjw-s.common.lib.container.ports" . | trim | nindent 4 }}
+  {{- with (include "bjw-s.common.lib.container.volumeMounts" . | trim) }}
   volumeMounts:
     {{- nindent 4 . }}
   {{- end }}
-  {{- include "common.controller.probes" . | trim | nindent 2 }}
+  {{- include "bjw-s.common.lib.container.probes" . | trim | nindent 2 }}
   {{- with .Values.resources }}
   resources:
     {{- toYaml . | nindent 4 }}

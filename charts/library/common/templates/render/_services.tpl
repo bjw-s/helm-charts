@@ -8,7 +8,7 @@ Renders the Service objects required by the chart.
       {{- $serviceValues := $service -}}
 
       {{/* set the default nameOverride to the service name */}}
-      {{- if and (not $serviceValues.nameOverride) (ne $name (include "bjw-s.common.lib.util.service.primary" $)) -}}
+      {{- if and (not $serviceValues.nameOverride) (ne $name (include "bjw-s.common.lib.service.primary" $)) -}}
         {{- $_ := set $serviceValues "nameOverride" $name -}}
       {{ end -}}
 

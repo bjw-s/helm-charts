@@ -1,13 +1,13 @@
 {{/*
 Default NOTES.txt content.
 */}}
-{{- define "common.notes.defaultNotes" -}}
+{{- define "bjw-s.common.lib.chart.notes" -}}
 
-{{- $primaryIngress := get .Values.ingress (include "bjw-s.common.lib.util.ingress.primary" .) -}}
-{{- $primaryService := get .Values.service (include "bjw-s.common.lib.util.service.primary" .) -}}
+{{- $primaryIngress := get .Values.ingress (include "bjw-s.common.lib.ingress.primary" .) -}}
+{{- $primaryService := get .Values.service (include "bjw-s.common.lib.service.primary" .) -}}
 {{- $primaryPort := "" -}}
 {{- if $primaryService -}}
-  {{- $primaryPort = get $primaryService.ports (include "bjw-s.common.lib.util.service.primaryPort" (dict "serviceName" (include "bjw-s.common.lib.util.service.primary" .) "values" $primaryService)) -}}
+  {{- $primaryPort = get $primaryService.ports (include "bjw-s.common.lib.service.primaryPort" (dict "serviceName" (include "bjw-s.common.lib.service.primary" .) "values" $primaryService)) -}}
 {{- end -}}
 
 {{- $prefix := "http" -}}

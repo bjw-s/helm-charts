@@ -4,7 +4,7 @@ The volume (referencing VPN scripts) to be inserted into additionalVolumes.
 {{- define "bjw-s.common.addon.vpn.scriptsVolumeSpec" -}}
 {{- if or .Values.addons.vpn.scripts.up .Values.addons.vpn.scripts.down -}}
 configMap:
-  name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}-vpn
+  name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}-addon-vpn
   items:
     {{- if .Values.addons.vpn.scripts.up }}
     - key: up.sh
@@ -28,7 +28,7 @@ secret:
   {{- if .Values.addons.vpn.configFileSecret }}
   secretName: {{ .Values.addons.vpn.configFileSecret }}
   {{- else }}
-  secretName: {{ include "bjw-s.common.lib.chart.names.fullname" . }}-vpnconfig
+  secretName: {{ include "bjw-s.common.lib.chart.names.fullname" . }}-addon-vpn-config
   {{- end }}
   items:
     - key: vpnConfigfile

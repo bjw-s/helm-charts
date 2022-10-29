@@ -1,7 +1,7 @@
 {{/*
 Return the primary service object
 */}}
-{{- define "bjw-s.common.lib.util.service.primary" -}}
+{{- define "bjw-s.common.lib.service.primary" -}}
   {{- $enabledServices := dict -}}
   {{- range $name, $service := .Values.service -}}
     {{- if $service.enabled -}}

@@ -17,15 +17,19 @@ It will include / inject the required templates based on the given values.
   {{- end -}}
 
   {{/* Include the configmap if not empty */}}
-  {{- $configmap := include "bjw-s.common.addon.vpn.configmap" . -}}
-  {{- if $configmap -}}
-    {{- $configmap | nindent 0 -}}
+  {{- if or .Values.addons.vpn.scripts.up .Values.addons.vpn.scripts.down }}
+    {{- $configmap := include "bjw-s.common.addon.vpn.configmap" . -}}
+    {{- if $configmap -}}
+      {{- $_ := set .Values.configMaps "addon-vpn" (dict "enabled" "true" "data" ($configmap | fromYaml)) -}}
+    {{- end -}}
   {{- end -}}
 
   {{/* Include the secret if not empty */}}
-  {{- $secret := include "bjw-s.common.addon.vpn.secret" . -}}
-  {{- if $secret -}}
-    {{- $secret | nindent 0 -}}
+  {{- if and .Values.addons.vpn.configFile (not .Values.addons.vpn.configFileSecret) }}
+    {{- $secret := include "bjw-s.common.addon.vpn.secret" . -}}
+    {{- if $secret -}}
+      {{- $_ := set .Values.secrets "addon-vpn-config" (dict "enabled" "true" "stringData" ($secret | fromYaml)) -}}
+    {{- end -}}
   {{- end -}}
 
   {{/* Append the vpn scripts volume to the volumes */}}

@@ -17,12 +17,12 @@ within the common library.
     {{- $ingressName = printf "%v-%v" $ingressName $values.nameOverride -}}
   {{- end -}}
 
-  {{- $primaryService := get .Values.service (include "bjw-s.common.lib.util.service.primary" .) -}}
+  {{- $primaryService := get .Values.service (include "bjw-s.common.lib.service.primary" .) -}}
   {{- $defaultServiceName := $fullName -}}
   {{- if and (hasKey $primaryService "nameOverride") $primaryService.nameOverride -}}
     {{- $defaultServiceName = printf "%v-%v" $defaultServiceName $primaryService.nameOverride -}}
   {{- end -}}
-  {{- $defaultServicePort := get $primaryService.ports (include "bjw-s.common.lib.util.service.primaryPort" (dict "values" $primaryService)) -}}
+  {{- $defaultServicePort := get $primaryService.ports (include "bjw-s.common.lib.service.primaryPort" (dict "values" $primaryService)) -}}
   {{- $isStable := include "common.capabilities.ingress.isStable" . }}
 ---
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
