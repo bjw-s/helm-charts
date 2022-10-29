@@ -54,7 +54,7 @@ tests:
         configmap:
           enabled: true
           type: configMap
-          name: "{{ include \"common.names.fullname\" $ }}-config"
+          name: "{{ include \"bjw-s.common.lib.chart.names.fullname\" $ }}-config"
     asserts:
       - documentIndex: 0
         isKind:

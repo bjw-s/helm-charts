@@ -1,13 +1,13 @@
 {{/*
 Blueprint for the NetworkPolicy object that can be included in the addon.
 */}}
-{{- define "common.addon.vpn.networkpolicy" -}}
+{{- define "bjw-s.common.addon.vpn.networkpolicy" -}}
 {{- if .Values.addons.vpn.networkPolicy.enabled }}
 ---
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}
   {{- with (merge (.Values.addons.vpn.networkPolicy.labels | default dict) (include "common.labels" $ | fromYaml)) }}
   labels: {{- toYaml . | nindent 4 }}
   {{- end }}

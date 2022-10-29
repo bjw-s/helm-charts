@@ -1,4 +1,4 @@
-{{- define "common.classes.serviceMonitor" -}}
+{{- define "bjw-s.common.class.serviceMonitor" -}}
 {{- $values := dict -}}
 {{- if hasKey . "ObjectValues" -}}
   {{- with .ObjectValues.serviceMonitor -}}
@@ -6,7 +6,7 @@
   {{- end -}}
 {{ end -}}
 
-{{- $serviceMonitorName := include "common.names.fullname" . -}}
+{{- $serviceMonitorName := include "bjw-s.common.lib.chart.names.fullname" . -}}
 {{- if and (hasKey $values "nameOverride") $values.nameOverride -}}
   {{- $serviceMonitorName = printf "%v-%v" $serviceMonitorName $values.nameOverride -}}
 {{ end -}}

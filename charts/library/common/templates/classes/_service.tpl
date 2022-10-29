@@ -2,7 +2,7 @@
 This template serves as a blueprint for all Service objects that are created
 within the common library.
 */}}
-{{- define "common.classes.service" -}}
+{{- define "bjw-s.common.class.service" -}}
 {{- $values := .Values.service -}}
 {{- if hasKey . "ObjectValues" -}}
   {{- with .ObjectValues.service -}}
@@ -10,12 +10,12 @@ within the common library.
   {{- end -}}
 {{ end -}}
 
-{{- $serviceName := include "common.names.fullname" . -}}
+{{- $serviceName := include "bjw-s.common.lib.chart.names.fullname" . -}}
 {{- if and (hasKey $values "nameOverride") $values.nameOverride -}}
   {{- $serviceName = printf "%v-%v" $serviceName $values.nameOverride -}}
 {{ end -}}
 {{- $svcType := $values.type | default "" -}}
-{{- $primaryPort := get $values.ports (include "common.classes.service.ports.primary" (dict "values" $values)) }}
+{{- $primaryPort := get $values.ports (include "bjw-s.common.lib.util.service.primaryPort" (dict "values" $values)) }}
 ---
 apiVersion: v1
 kind: Service

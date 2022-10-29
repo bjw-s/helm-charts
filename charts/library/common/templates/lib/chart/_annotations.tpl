@@ -16,7 +16,7 @@
   {{- end -}}
 
   {{- $configMapsFound := dict -}}
-  {{- range $name, $configmap := .Values.configmap -}}
+  {{- range $name, $configmap := .Values.configMaps -}}
     {{- if $configmap.enabled -}}
       {{- $_ := set $configMapsFound $name (toYaml $configmap.data | sha256sum) -}}
     {{- end -}}

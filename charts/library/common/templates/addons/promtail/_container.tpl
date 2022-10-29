@@ -1,7 +1,7 @@
 {{/*
 The promtail sidecar container to be inserted.
 */}}
-{{- define "common.addon.promtail.container" -}}
+{{- define "bjw-s.common.addon.promtail.container" -}}
 {{- if lt (len .Values.addons.promtail.volumeMounts) 1 }}
 {{- fail "At least 1 volumeMount is required for the promtail container" }}
 {{- end -}}

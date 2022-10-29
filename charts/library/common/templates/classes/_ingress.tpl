@@ -2,8 +2,8 @@
 This template serves as a blueprint for all Ingress objects that are created
 within the common library.
 */}}
-{{- define "common.classes.ingress" -}}
-  {{- $fullName := include "common.names.fullname" . -}}
+{{- define "bjw-s.common.class.ingress" -}}
+  {{- $fullName := include "bjw-s.common.lib.chart.names.fullname" . -}}
   {{- $ingressName := $fullName -}}
   {{- $values := .Values.ingress -}}
 
@@ -17,12 +17,12 @@ within the common library.
     {{- $ingressName = printf "%v-%v" $ingressName $values.nameOverride -}}
   {{- end -}}
 
-  {{- $primaryService := get .Values.service (include "common.service.primary" .) -}}
+  {{- $primaryService := get .Values.service (include "bjw-s.common.lib.util.service.primary" .) -}}
   {{- $defaultServiceName := $fullName -}}
   {{- if and (hasKey $primaryService "nameOverride") $primaryService.nameOverride -}}
     {{- $defaultServiceName = printf "%v-%v" $defaultServiceName $primaryService.nameOverride -}}
   {{- end -}}
-  {{- $defaultServicePort := get $primaryService.ports (include "common.classes.service.ports.primary" (dict "values" $primaryService)) -}}
+  {{- $defaultServicePort := get $primaryService.ports (include "bjw-s.common.lib.util.service.primaryPort" (dict "values" $primaryService)) -}}
   {{- $isStable := include "common.capabilities.ingress.isStable" . }}
 ---
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}

@@ -1,6 +1,6 @@
 {{- /* The main container included in the controller */ -}}
 {{- define "common.controller.mainContainer" -}}
-- name: {{ include "common.names.fullname" . }}
+- name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}
   image: {{ printf "%s:%s" .Values.image.repository (default .Chart.AppVersion .Values.image.tag) | quote }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- with .Values.command }}
@@ -45,7 +45,7 @@
     {{- end }}
     {{- if .Values.secret }}
     - secretRef:
-        name: {{ include "common.names.fullname" . }}
+        name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}
     {{- end }}
   {{- end }}
   ports:

@@ -1,51 +1,22 @@
 # common
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
-Since a lot of the bjw-s charts follow a similar pattern, this library was built to reduce maintenance cost between the charts that use it and try achieve a goal of being DRY.
+**Homepage:** <https://github.com/bjw-s/helm-charts/tree/main/charts/library/common>
+
+## Maintainers
+
+| Name | Email | Url |
+| ---- | ------ | --- |
+| bjw-s | me@bjw-s.dev |  |
 
 ## Requirements
 
 Kubernetes: `>=1.16.0-0`
 
-## Dependencies
-
-| Repository | Name | Version |
-|------------|------|---------|
-
-## Installing the Chart
-
-This is a [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm).
-
-**WARNING: THIS CHART IS NOT MEANT TO BE INSTALLED DIRECTLY**
-
-## Using this library
-
-Include this chart as a dependency in your `Chart.yaml` e.g.
-
-```yaml
-# Chart.yaml
-dependencies:
-- name: common
-  version: 0.2.0
-  repository: https://bjw-s.github.io/helm-charts/
-```
-
-For more information, take a look at the [Docs](http://bjw-s.github.io/helm-charts/docs/common-library/introduction/).
-
-## Configuration
-
-Read through the [values.yaml](./values.yaml) file. It has several commented out suggested values.
-
-## Custom configuration
-
-N/A
-
 ## Values
-
-**Important**: When deploying an application Helm chart you can add more values from our common library chart [here](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common)
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -61,7 +32,7 @@ N/A
 | addons.codeserver.git.deployKeySecret | string | `""` | Existing secret containing SSH private key The chart expects it to be present under the `id_rsa` key. |
 | addons.codeserver.image.pullPolicy | string | `"IfNotPresent"` | Specify the code-server image pull policy |
 | addons.codeserver.image.repository | string | `"ghcr.io/coder/code-server"` | Specify the code-server image |
-| addons.codeserver.image.tag | string | `"4.7.0"` | Specify the code-server image tag |
+| addons.codeserver.image.tag | string | `"4.8.1"` | Specify the code-server image tag |
 | addons.codeserver.ingress.enabled | bool | `false` | Enable an ingress for the code-server add-on. |
 | addons.codeserver.ingress.ingressClassName | string | `nil` | Set the ingressClass that is used for this ingress. Requires Kubernetes >=1.19 |
 | addons.codeserver.service.enabled | bool | `true` | Enable a service for the code-server add-on. |
@@ -105,13 +76,12 @@ N/A
 | affinity | object | `{}` | Defines affinity constraint rules. [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity) |
 | args | list | `[]` | Override the args for the default container |
 | automountServiceAccountToken | bool | `true` | Specifies whether a service account token should be automatically mounted. |
-| autoscaling | object | <disabled> | Add a Horizontal Pod Autoscaler |
 | command | list | `[]` | Override the command(s) for the default container |
-| configmap | object | See below | Configure configMaps for the chart here. Additional configMaps can be added by adding a dictionary key similar to the 'config' object. |
-| configmap.config.annotations | object | `{}` | Annotations to add to the configMap |
-| configmap.config.data | object | `{}` | configMap data content. Helm template enabled. |
-| configmap.config.enabled | bool | `false` | Enables or disables the configMap |
-| configmap.config.labels | object | `{}` | Labels to add to the configMap |
+| configMaps | object | See below | Configure configMaps for the chart here. Additional configMaps can be added by adding a dictionary key similar to the 'config' object. |
+| configMaps.config.annotations | object | `{}` | Annotations to add to the configMap |
+| configMaps.config.data | object | `{}` | configMap data content. Helm template enabled. |
+| configMaps.config.enabled | bool | `false` | Enables or disables the configMap |
+| configMaps.config.labels | object | `{}` | Labels to add to the configMap |
 | controller.annotations | object | `{}` | Set annotations on the deployment/statefulset/daemonset |
 | controller.enabled | bool | `true` | enable the controller. |
 | controller.labels | object | `{}` | Set labels on the deployment/statefulset/daemonset |
@@ -191,7 +161,11 @@ N/A
 | resources | object | `{}` | Set the resource requests / limits for the main container. |
 | runtimeClassName | string | `nil` | Allow specifying a runtimeClassName other than the default one (ie: nvidia) |
 | schedulerName | string | `nil` | Allows specifying a custom scheduler name |
-| secret | object | `{}` | Use this to populate a secret with the values you specify. Be aware that these values are not encrypted by default, and could therefore visible to anybody with access to the values.yaml file. |
+| secrets | object | See below | Use this to populate secrets with the values you specify. Be aware that these values are not encrypted by default, and could therefore visible to anybody with access to the values.yaml file. Additional Secrets can be added by adding a dictionary key similar to the 'secret' object. |
+| secrets.secret.annotations | object | `{}` | Annotations to add to the Secret |
+| secrets.secret.enabled | bool | `false` | Enables or disables the Secret |
+| secrets.secret.labels | object | `{}` | Labels to add to the Secret |
+| secrets.secret.stringData | object | `{}` | Secret stringData content. Helm template enabled. |
 | securityContext | object | `{}` | Configure the Security Context for the main container |
 | service | object | See below | Configure the services for the chart here. Additional services can be added by adding a dictionary key similar to the 'main' service. |
 | service.main.annotations | object | `{}` | Provide additional annotations which may be required. |
@@ -206,6 +180,7 @@ N/A
 | service.main.nameOverride | string | `nil` | Override the name suffix that is used for this service |
 | service.main.ports | object | See below | Configure the Service port information here. Additional ports can be added by adding a dictionary key similar to the 'http' service. |
 | service.main.ports.http.enabled | bool | `true` | Enables or disables the port |
+| service.main.ports.http.extraSelectorLabels | object | `{}` | Allow adding additional match labels |
 | service.main.ports.http.nodePort | string | `nil` | Specify the nodePort value for the LoadBalancer and NodePort service types. [[ref]](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport) |
 | service.main.ports.http.port | string | `nil` | The port number |
 | service.main.ports.http.primary | bool | `true` | Make this the primary port (used in probes, notes, etc...) If there is more than 1 service, make sure that only 1 port is marked as primary. |
@@ -222,12 +197,6 @@ N/A
 | tolerations | list | `[]` | Specify taint tolerations [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) |
 | topologySpreadConstraints | list | `[]` | Defines topologySpreadConstraint rules. [[ref]](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/) |
 | volumeClaimTemplates | list | `[]` | Used in conjunction with `controller.type: statefulset` to create individual disks for each instance. |
-
-## Support
-
-- See the [Docs](http://bjw-s.github.io/helm-charts/docs/)
-- Open an [issue](https://github.com/bjw-s/helm-charts/issues/new/choose)
-- Join the k8s-at-home [Discord](https://discord.gg/sTMX7Vh) community
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v0.1.1](https://github.com/k8s-at-home/helm-docs/releases/v0.1.1)

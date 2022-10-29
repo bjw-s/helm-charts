@@ -1,12 +1,12 @@
 {{- /*
 The pod definition included in the controller.
 */ -}}
-{{- define "common.controller.pod" -}}
+{{- define "bjw-s.common.lib.controller.pod" -}}
   {{- with .Values.imagePullSecrets }}
 imagePullSecrets:
     {{- toYaml . | nindent 2 }}
   {{- end }}
-serviceAccountName: {{ include "common.names.serviceAccountName" . }}
+serviceAccountName: {{ include "bjw-s.common.lib.chart.names.serviceAccountName" . }}
 automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
   {{- with .Values.podSecurityContext }}
 securityContext:

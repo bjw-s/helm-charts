@@ -4,7 +4,7 @@ templates:
 tests:
   - it: default metadata should pass
     set:
-      configmap:
+      configMaps:
         config:
           enabled: true
           data:

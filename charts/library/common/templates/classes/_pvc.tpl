@@ -9,7 +9,7 @@ within the common library.
     {{- $values = . -}}
   {{- end -}}
 {{ end -}}
-{{- $pvcName := include "common.names.fullname" . -}}
+{{- $pvcName := include "bjw-s.common.lib.chart.names.fullname" . -}}
 {{- if and (hasKey $values "nameOverride") $values.nameOverride -}}
   {{- if not (eq $values.nameOverride "-") -}}
     {{- $pvcName = printf "%v-%v" $pvcName $values.nameOverride -}}

@@ -59,16 +59,6 @@ podAnnotations: {}
 # -- Set labels on the pod
 podLabels: {}
 
-# -- Add a Horizontal Pod Autoscaler
-# @default -- <disabled>
-autoscaling:
-  enabled: false
-  target:  # deploymentname
-  minReplicas:  # 1
-  maxReplicas:  # 100
-  targetCPUUtilizationPercentage:  # 80
-  targetMemoryUtilizationPercentage:  # 80
-
 serviceAccount:
   # -- Specifies whether a service account should be created
   create: false
@@ -83,16 +73,27 @@ serviceAccount:
 # -- Specifies whether a service account token should be automatically mounted.
 automountServiceAccountToken: true
 
-# -- Use this to populate a secret with the values you specify.
+# -- Use this to populate secrets with the values you specify.
 # Be aware that these values are not encrypted by default, and could therefore visible
 # to anybody with access to the values.yaml file.
-secret: {}
-  # PASSWORD: my-password
+# Additional Secrets can be added by adding a dictionary key similar to the 'secret' object.
+# @default -- See below
+secrets:
+  secret:
+    # -- Enables or disables the Secret
+    enabled: false
+    # -- Labels to add to the Secret
+    labels: {}
+    # -- Annotations to add to the Secret
+    annotations: {}
+    # -- Secret stringData content. Helm template enabled.
+    stringData: {}
+      # foo: bar
 
 # -- Configure configMaps for the chart here.
 # Additional configMaps can be added by adding a dictionary key similar to the 'config' object.
 # @default -- See below
-configmap:
+configMaps:
   config:
     # -- Enables or disables the configMap
     enabled: false
@@ -654,7 +655,7 @@ addons:
           port: 12321
           enabled: true
           protocol: TCP
-          targetPort: codeserver
+          targetPort: 12321
           ## Specify the nodePort value for the LoadBalancer and NodePort service types.
           ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
           ##

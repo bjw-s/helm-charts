@@ -1,26 +1,28 @@
 {{/*
-This template serves as the blueprint for the Deployment objects that are created
-within the common library.
+This template serves as a blueprint for Deployment objects that are created
+using the common library.
 */}}
-{{- define "common.deployment" }}
+{{- define "bjw-s.common.class.deployment" -}}
+  {{- $labels := (merge (.Values.controller.labels | default dict) (include "common.labels" $ | fromYaml)) -}}
+  {{- $annotations := (merge (.Values.controller.annotations | default dict) (include "common.annotations" $ | fromYaml)) -}}
+  {{- $strategy := default "Recreate" .Values.controller.strategy -}}
+  {{- if and (ne $strategy "Recreate") (ne $strategy "RollingUpdate") -}}
+    {{- fail (printf "Not a valid strategy type for Deployment (%s)" $strategy) -}}
+  {{- end -}}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}
-  {{- with (merge (.Values.controller.labels | default dict) (include "common.labels" $ | fromYaml)) }}
+  name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}
+  {{- with $labels }}
   labels: {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with (merge (.Values.controller.annotations | default dict) (include "common.annotations" $ | fromYaml)) }}
+  {{- with $annotations }}
   annotations: {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   revisionHistoryLimit: {{ .Values.controller.revisionHistoryLimit }}
   replicas: {{ .Values.controller.replicas }}
-  {{- $strategy := default "Recreate" .Values.controller.strategy }}
-  {{- if and (ne $strategy "Recreate") (ne $strategy "RollingUpdate") }}
-    {{- fail (printf "Not a valid strategy type for Deployment (%s)" $strategy) }}
-  {{- end }}
   strategy:
     type: {{ $strategy }}
     {{- with .Values.controller.rollingUpdate }}
@@ -49,5 +51,5 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{- include "common.controller.pod" . | nindent 6 }}
-{{- end }}
+      {{- include "bjw-s.common.lib.controller.pod" . | nindent 6 }}
+{{- end -}}

@@ -19,3 +19,7 @@ annotations:
       description: Updated code-server image to v4.8.1
     - kind: fixed
       description: Fix NOTES always showing ingress protocol as http
+    - kind: changed
+      description: "**BREAKING**: Renamed `configmap` key to `configMaps`
+    - kind: changed
+      description: "**BREAKING**: Renamed `secret` key to `secrets`, which now works similar to `configMaps`
