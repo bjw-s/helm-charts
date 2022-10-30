@@ -23,8 +23,12 @@ metadata:
   {{- end }}
 spec:
   selector:
+    {{- if $values.selector -}}
+      {{- tpl ($values.selector | toYaml) $ | nindent 4}}
+    {{- else }}
     matchLabels:
-      app.kubernetes.io/service: {{ $values.serviceName }}
+      app.kubernetes.io/service: {{ tpl $values.serviceName $ }}
       {{- include "common.labels.selectorLabels" . | nindent 6 }}
+    {{- end }}
   endpoints: {{- toYaml (required (printf "endpoints are required for serviceMonitor %v" $serviceMonitorName) $values.endpoints) | nindent 4 }}
 {{- end }}

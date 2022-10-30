@@ -287,20 +287,6 @@ service:
     # -- Provide additional labels which may be required.
     labels: {}
 
-    # -- Configure a serviceMonitor for this Service.
-    # @default -- See below
-    monitor:
-      # -- Enables or disables the serviceMonitor.
-      enabled: false
-      # -- Configures the endpoints for the serviceMonitor.
-      # @default -- See values.yaml
-      endpoints:
-        - port: http
-          scheme: http
-          path: /metrics
-          interval: 1m
-          scrapeTimeout: 10s
-
     # -- Configure the Service port information here.
     # Additional ports can be added by adding a dictionary key similar to the 'http' service.
     # @default -- See below
@@ -332,6 +318,40 @@ service:
 
         # -- Allow adding additional match labels
         extraSelectorLabels: {}
+
+# -- Configure the ServiceMonitors for the chart here.
+# Additional ServiceMonitors can be added by adding a dictionary key similar to the 'main' ServiceMonitors.
+# @default -- See below
+serviceMonitor:
+  main:
+    # -- Enables or disables the serviceMonitor.
+    enabled: false
+
+    # -- Override the name suffix that is used for this serviceMonitor.
+    nameOverride:
+
+    # -- Provide additional annotations which may be required.
+    annotations: {}
+
+    # -- Provide additional labels which may be required.
+    labels: {}
+
+    # -- Configures a custom selector for the serviceMonitor, this takes precedence over
+    # specifying a service name.
+    # Helm templates can be used.
+    selector: {}
+
+    # -- Configures the target Service for the serviceMonitor. Helm templates can be used.
+    serviceName: main
+
+    # -- Configures the endpoints for the serviceMonitor.
+    # @default -- See values.yaml
+    endpoints:
+      - port: http
+        scheme: http
+        path: /metrics
+        interval: 1m
+        scrapeTimeout: 10s
 
 # -- Configure the ingresses for the chart here.
 # Additional ingresses can be added by adding a dictionary key similar to the 'main' ingress.

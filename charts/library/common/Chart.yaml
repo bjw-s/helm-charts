@@ -21,6 +21,8 @@ annotations:
     - kind: changed
       description: "**BREAKING**: Renamed `configmap` key to `configMaps`"
     - kind: changed
+      description: "**BREAKING**: Moved `serviceMonitor` from `service` to its own key"
+    - kind: changed
       description: "**BREAKING**: Renamed `secret` key to `secrets`, which now works similar to `configMaps`"
     - kind: changed
       description: Support services have extraSelectorLabels
