@@ -4,14 +4,6 @@ It will include / inject the required templates based on the given values.
 */}}
 {{- define "bjw-s.common.addon.vpn" -}}
 {{- if .Values.addons.vpn.enabled -}}
-  {{- if eq "openvpn" .Values.addons.vpn.type -}}
-    {{- fail "The 'openvpn' VPN type is no longer supported. Please migrate to the 'gluetun' type." }}
-  {{- end -}}
-
-  {{- if eq "wireguard" .Values.addons.vpn.type -}}
-    {{- fail "The 'wireguard' VPN type is no longer supported. Please migrate to the 'gluetun' type." }}
-  {{- end -}}
-
   {{- if eq "gluetun" .Values.addons.vpn.type -}}
     {{- include "bjw-s.common.addon.gluetun" . }}
   {{- end -}}
