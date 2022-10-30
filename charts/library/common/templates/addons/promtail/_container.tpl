@@ -25,7 +25,7 @@ args:
 {{- end }}
 - "-config.file=/etc/promtail/promtail.yaml"
 volumeMounts:
-  - name: promtail-config
+  - name: addon-promtail
     mountPath: /etc/promtail/promtail.yaml
     subPath: promtail.yaml
     readOnly: true

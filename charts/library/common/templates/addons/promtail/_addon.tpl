@@ -19,7 +19,7 @@ It will include / inject the required templates based on the given values.
   {{/* Append the promtail config volume to the volumes */}}
   {{- $volume := include "bjw-s.common.addon.promtail.volumeSpec" . | fromYaml -}}
   {{- if $volume -}}
-    {{- $_ := set .Values.persistence "promtail-config" (dict "enabled" "true" "mountPath" "-" "type" "custom" "volumeSpec" $volume) -}}
+    {{- $_ := set .Values.persistence "addon-promtail" (dict "enabled" "true" "mountPath" "-" "type" "custom" "volumeSpec" $volume) -}}
   {{- end -}}
 {{- end -}}
 {{- end -}}
