@@ -1,9 +1,10 @@
+---
 apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
 version: 0.3.0
-kubeVersion: ">=1.16.0-0"
+kubeVersion: ">=1.22.0-0"
 keywords:
   - common
   - library
@@ -13,6 +14,14 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: added
+      description: Added support for `httpGet` probes
+    - kind: changed
+      description: "**BREAKING**: Raised minimum supported k8s version to 1.22"
+    - kind: changed
+      description: "**BREAKING**: Renamed `configmap` key to `configMaps`"
+    - kind: changed
+      description: "**BREAKING**: Renamed `secret` key to `secrets`, which now works similar to `configMaps`"
     - kind: changed
       description: Support services have extraSelectorLabels
     - kind: changed
@@ -21,11 +30,5 @@ annotations:
       description: Fix NOTES always showing ingress protocol as http
     - kind: changed
       description: Restructure of template components
-    - kind: changed
-      description: "**BREAKING**: Renamed `configmap` key to `configMaps`"
-    - kind: changed
-      description: "**BREAKING**: Renamed `secret` key to `secrets`, which now works similar to `configMaps`"
-    - kind: added
-      description: Added support for `httpGet` probes
     - kind: removed
       description: "**BREAKING**: Removed support for HorizontalPodAutoscaler"
