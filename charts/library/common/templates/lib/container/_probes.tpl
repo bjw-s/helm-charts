@@ -23,9 +23,9 @@ Probes selection logic.
           {{- $probeType = $probe.type | default "TCP" -}}
         {{- end }}
         {{- if or ( eq $probeType "HTTPS" ) ( eq $probeType "HTTP" ) -}}
-          httpGet:
-            path: {{ $probe.path }}
-            scheme: {{ $probeType }}
+  httpGet:
+    path: {{ $probe.path }}
+    scheme: {{ $probeType }}
         {{- else }}
   tcpSocket:
         {{- end }}
@@ -36,10 +36,10 @@ Probes selection logic.
         {{- else }}
     port: {{ $primaryPort.port }}
         {{- end }}
-    initialDelaySeconds: {{ $probe.spec.initialDelaySeconds }}
-    failureThreshold: {{ $probe.spec.failureThreshold }}
-    timeoutSeconds: {{ $probe.spec.timeoutSeconds }}
-    periodSeconds: {{ $probe.spec.periodSeconds }}
+  initialDelaySeconds: {{ $probe.spec.initialDelaySeconds }}
+  failureThreshold: {{ $probe.spec.failureThreshold }}
+  timeoutSeconds: {{ $probe.spec.timeoutSeconds }}
+  periodSeconds: {{ $probe.spec.periodSeconds }}
       {{- end }}
     {{- end }}
   {{- end }}
