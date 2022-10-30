@@ -23,9 +23,8 @@ within the common library.
     {{- $defaultServiceName = printf "%v-%v" $defaultServiceName $primaryService.nameOverride -}}
   {{- end -}}
   {{- $defaultServicePort := get $primaryService.ports (include "bjw-s.common.lib.service.primaryPort" (dict "values" $primaryService)) -}}
-  {{- $isStable := include "common.capabilities.ingress.isStable" . }}
 ---
-apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $ingressName }}
@@ -36,7 +35,7 @@ metadata:
   annotations: {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and $isStable $values.ingressClassName }}
+  {{- if $values.ingressClassName }}
   ingressClassName: {{ $values.ingressClassName }}
   {{- end }}
   {{- if $values.tls }}
@@ -64,19 +63,12 @@ spec:
             {{- $port = default $port .service.port -}}
           {{- end }}
           - path: {{ tpl .path $ | quote }}
-            {{- if $isStable }}
             pathType: {{ default "Prefix" .pathType }}
-            {{- end }}
             backend:
-              {{- if $isStable }}
               service:
                 name: {{ $service }}
                 port:
                   number: {{ $port }}
-              {{- else }}
-              serviceName: {{ $service }}
-              servicePort: {{ $port }}
-              {{- end }}
           {{- end }}
   {{- end }}
 {{- end }}

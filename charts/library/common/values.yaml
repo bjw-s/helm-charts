@@ -357,7 +357,6 @@ ingress:
     labels: {}
 
     # -- Set the ingressClass that is used for this ingress.
-    # Requires Kubernetes >=1.19
     ingressClassName:  # "nginx"
 
     ## Configure the hosts for the ingress
@@ -368,7 +367,6 @@ ingress:
         paths:
           -  # -- Path.  Helm template can be passed.
             path: /
-            # -- Ignored if not kubeVersion >= 1.14-0
             pathType: Prefix
             service:
               # -- Overrides the service name reference for this path
@@ -683,14 +681,12 @@ addons:
       labels: {}
 
       # -- Set the ingressClass that is used for this ingress.
-      # Requires Kubernetes >=1.19
       ingressClassName:  # "nginx"
 
       hosts:
         - host: code.chart-example.local
           paths:
             - path: /
-              # Ignored if not kubeVersion >= 1.14-0
               pathType: Prefix
       tls: []
       #  - secretName: chart-example-tls
