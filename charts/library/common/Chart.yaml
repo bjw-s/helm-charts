@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 0.3.0
+version: 1.0.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common

@@ -1,22 +1,51 @@
 # common
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
-**Homepage:** <https://github.com/bjw-s/helm-charts/tree/main/charts/library/common>
-
-## Maintainers
-
-| Name | Email | Url |
-| ---- | ------ | --- |
-| bjw-s | me@bjw-s.dev |  |
+Since a lot of the bjw-s charts follow a similar pattern, this library was built to reduce maintenance cost between the charts that use it and try achieve a goal of being DRY.
 
 ## Requirements
 
-Kubernetes: `>=1.16.0-0`
+Kubernetes: `>=1.22.0-0`
+
+## Dependencies
+
+| Repository | Name | Version |
+|------------|------|---------|
+
+## Installing the Chart
+
+This is a [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm).
+
+**WARNING: THIS CHART IS NOT MEANT TO BE INSTALLED DIRECTLY**
+
+## Using this library
+
+Include this chart as a dependency in your `Chart.yaml` e.g.
+
+```yaml
+# Chart.yaml
+dependencies:
+- name: common
+  version: 1.0.0
+  repository: https://bjw-s.github.io/helm-charts/
+```
+
+For more information, take a look at the [Docs](http://bjw-s.github.io/helm-charts/docs/common-library/introduction/).
+
+## Configuration
+
+Read through the [values.yaml](./values.yaml) file. It has several commented out suggested values.
+
+## Custom configuration
+
+N/A
 
 ## Values
+
+**Important**: When deploying an application Helm chart you can add more values from our common library chart [here](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common)
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
@@ -34,7 +63,7 @@ Kubernetes: `>=1.16.0-0`
 | addons.codeserver.image.repository | string | `"ghcr.io/coder/code-server"` | Specify the code-server image |
 | addons.codeserver.image.tag | string | `"4.8.1"` | Specify the code-server image tag |
 | addons.codeserver.ingress.enabled | bool | `false` | Enable an ingress for the code-server add-on. |
-| addons.codeserver.ingress.ingressClassName | string | `nil` | Set the ingressClass that is used for this ingress. Requires Kubernetes >=1.19 |
+| addons.codeserver.ingress.ingressClassName | string | `nil` | Set the ingressClass that is used for this ingress. |
 | addons.codeserver.service.enabled | bool | `true` | Enable a service for the code-server add-on. |
 | addons.codeserver.volumeMounts | list | `[]` | Specify a list of volumes that get mounted in the code-server container. At least 1 volumeMount is required! |
 | addons.codeserver.workingDir | string | `""` | Specify the working dir that will be opened when code-server starts If not given, the app will default to the mountpah of the first specified volumeMount |
@@ -114,10 +143,9 @@ Kubernetes: `>=1.16.0-0`
 | ingress.main.enabled | bool | `false` | Enables or disables the ingress |
 | ingress.main.hosts[0].host | string | `"chart-example.local"` | Host address. Helm template can be passed. |
 | ingress.main.hosts[0].paths[0].path | string | `"/"` | Path.  Helm template can be passed. |
-| ingress.main.hosts[0].paths[0].pathType | string | `"Prefix"` | Ignored if not kubeVersion >= 1.14-0 |
 | ingress.main.hosts[0].paths[0].service.name | string | `nil` | Overrides the service name reference for this path |
 | ingress.main.hosts[0].paths[0].service.port | string | `nil` | Overrides the service port reference for this path |
-| ingress.main.ingressClassName | string | `nil` | Set the ingressClass that is used for this ingress. Requires Kubernetes >=1.19 |
+| ingress.main.ingressClassName | string | `nil` | Set the ingressClass that is used for this ingress. |
 | ingress.main.labels | object | `{}` | Provide additional labels which may be required. |
 | ingress.main.nameOverride | string | `nil` | Override the name suffix that is used for this ingress. |
 | ingress.main.primary | bool | `true` | Make this the primary ingress (used in probes, notes, etc...). If there is more than 1 ingress, make sure that only 1 ingress is marked as primary. |
@@ -150,14 +178,17 @@ Kubernetes: `>=1.16.0-0`
 | probes.liveness.custom | bool | `false` | Set this to `true` if you wish to specify your own livenessProbe |
 | probes.liveness.enabled | bool | `true` | Enable the liveness probe |
 | probes.liveness.spec | object | See below | The spec field contains the values for the default livenessProbe. If you selected `custom: true`, this field holds the definition of the livenessProbe. |
+| probes.liveness.type | string | "TCP" | sets the probe type when not using a custom probe |
 | probes.readiness | object | See below | Redainess probe configuration |
 | probes.readiness.custom | bool | `false` | Set this to `true` if you wish to specify your own readinessProbe |
 | probes.readiness.enabled | bool | `true` | Enable the readiness probe |
 | probes.readiness.spec | object | See below | The spec field contains the values for the default readinessProbe. If you selected `custom: true`, this field holds the definition of the readinessProbe. |
+| probes.readiness.type | string | "TCP" | sets the probe type when not using a custom probe |
 | probes.startup | object | See below | Startup probe configuration |
 | probes.startup.custom | bool | `false` | Set this to `true` if you wish to specify your own startupProbe |
 | probes.startup.enabled | bool | `true` | Enable the startup probe |
 | probes.startup.spec | object | See below | The spec field contains the values for the default startupProbe. If you selected `custom: true`, this field holds the definition of the startupProbe. |
+| probes.startup.type | string | "TCP" | sets the probe type when not using a custom probe |
 | resources | object | `{}` | Set the resource requests / limits for the main container. |
 | runtimeClassName | string | `nil` | Allow specifying a runtimeClassName other than the default one (ie: nvidia) |
 | schedulerName | string | `nil` | Allows specifying a custom scheduler name |
@@ -174,9 +205,6 @@ Kubernetes: `>=1.16.0-0`
 | service.main.ipFamilies | list | `[]` | The ip families that should be used. Options: IPv4, IPv6 |
 | service.main.ipFamilyPolicy | string | `nil` | Specify the ip policy. Options: SingleStack, PreferDualStack, RequireDualStack |
 | service.main.labels | object | `{}` | Provide additional labels which may be required. |
-| service.main.monitor | object | See below | Configure a serviceMonitor for this Service. |
-| service.main.monitor.enabled | bool | `false` | Enables or disables the serviceMonitor. |
-| service.main.monitor.endpoints | list | See values.yaml | Configures the endpoints for the serviceMonitor. |
 | service.main.nameOverride | string | `nil` | Override the name suffix that is used for this service |
 | service.main.ports | object | See below | Configure the Service port information here. Additional ports can be added by adding a dictionary key similar to the 'http' service. |
 | service.main.ports.http.enabled | bool | `true` | Enables or disables the port |
@@ -191,12 +219,26 @@ Kubernetes: `>=1.16.0-0`
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.create | bool | `false` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `""` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template |
+| serviceMonitor | object | See below | Configure the ServiceMonitors for the chart here. Additional ServiceMonitors can be added by adding a dictionary key similar to the 'main' ServiceMonitors. |
+| serviceMonitor.main.annotations | object | `{}` | Provide additional annotations which may be required. |
+| serviceMonitor.main.enabled | bool | `false` | Enables or disables the serviceMonitor. |
+| serviceMonitor.main.endpoints | list | See values.yaml | Configures the endpoints for the serviceMonitor. |
+| serviceMonitor.main.labels | object | `{}` | Provide additional labels which may be required. |
+| serviceMonitor.main.nameOverride | string | `nil` | Override the name suffix that is used for this serviceMonitor. |
+| serviceMonitor.main.selector | object | `{}` | Configures a custom selector for the serviceMonitor, this takes precedence over specifying a service name. Helm templates can be used. |
+| serviceMonitor.main.serviceName | string | `"main"` | Configures the target Service for the serviceMonitor. Helm templates can be used. |
 | termination.gracePeriodSeconds | string | `nil` | Duration in seconds the pod needs to terminate gracefully -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle)] |
 | termination.messagePath | string | `nil` | Configure the path at which the file to which the main container's termination message will be written. -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |
 | termination.messagePolicy | string | `nil` | Indicate how the main container's termination message should be populated. Valid options are `File` and `FallbackToLogsOnError`. -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |
 | tolerations | list | `[]` | Specify taint tolerations [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) |
 | topologySpreadConstraints | list | `[]` | Defines topologySpreadConstraint rules. [[ref]](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/) |
 | volumeClaimTemplates | list | `[]` | Used in conjunction with `controller.type: statefulset` to create individual disks for each instance. |
+
+## Support
+
+- See the [Docs](http://bjw-s.github.io/helm-charts/docs/)
+- Open an [issue](https://github.com/bjw-s/helm-charts/issues/new/choose)
+- Join the k8s-at-home [Discord](https://discord.gg/sTMX7Vh) community
 
 ----------------------------------------------
 Autogenerated from chart metadata using [helm-docs v0.1.1](https://github.com/k8s-at-home/helm-docs/releases/v0.1.1)
