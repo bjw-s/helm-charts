@@ -31,6 +31,8 @@ annotations:
     - kind: fixed
       description: Fix NOTES always showing ingress protocol as http
     - kind: changed
+      description: Updated gluetun image to v3.32.0
+    - kind: changed
       description: Restructure of template components
     - kind: removed
       description: "**BREAKING**: Removed support for HorizontalPodAutoscaler"
