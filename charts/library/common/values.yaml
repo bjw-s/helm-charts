@@ -507,7 +507,7 @@ addons:
         # -- Specify the Gluetun image
         repository: docker.io/qmcgaw/gluetun
         # -- Specify the Gluetun image tag
-        tag: v3.31.1
+        tag: v3.32.0
         # -- Specify the Gluetun image pull policy
         pullPolicy: IfNotPresent
 
