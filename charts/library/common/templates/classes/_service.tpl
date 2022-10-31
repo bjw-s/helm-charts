@@ -23,14 +23,14 @@ metadata:
   name: {{ $serviceName }}
   labels:
     app.kubernetes.io/service: {{ $serviceName }}
-    {{- with (merge ($values.labels | default dict) (include "common.labels" $ | fromYaml)) }}
+    {{- with (merge ($values.labels | default dict) (include "bjw-s.common.lib.metadata.allLabels" $ | fromYaml)) }}
       {{- toYaml . | nindent 4 }}
     {{- end }}
   annotations:
   {{- if eq ( $primaryPort.protocol | default "" ) "HTTPS" }}
     traefik.ingress.kubernetes.io/service.serversscheme: https
   {{- end }}
-  {{- with (merge ($values.annotations | default dict) (include "common.annotations" $ | fromYaml)) }}
+  {{- with (merge ($values.annotations | default dict) (include "bjw-s.common.lib.metadata.globalAnnotations" $ | fromYaml)) }}
     {{ toYaml . | nindent 4 }}
   {{- end }}
 spec:
@@ -95,7 +95,7 @@ spec:
     {{ end }}
   {{- end }}
   {{- end }}
-  {{- with (merge ($values.extraSelectorLabels | default dict) (include "common.labels.selectorLabels" . | fromYaml)) }}
+  {{- with (merge ($values.extraSelectorLabels | default dict) (include "bjw-s.common.lib.metadata.selectorLabels" . | fromYaml)) }}
   selector: {{- toYaml . | nindent 4 }}
   {{- end }}
 {{- end }}

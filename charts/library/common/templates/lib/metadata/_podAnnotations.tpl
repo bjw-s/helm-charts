@@ -1,16 +1,5 @@
-{{/* Common annotations shared across objects */}}
-{{- define "common.annotations" -}}
-  {{- with .Values.global.annotations }}
-    {{- range $k, $v := . }}
-      {{- $name := $k }}
-      {{- $value := tpl $v $ }}
-{{ $name }}: {{ quote $value }}
-    {{- end }}
-  {{- end }}
-{{- end -}}
-
 {{/* Determine the Pod annotations used in the controller */}}
-{{- define "common.podAnnotations" -}}
+{{- define "bjw-s.common.lib.metadata.podAnnotations" -}}
   {{- if .Values.podAnnotations -}}
     {{- tpl (toYaml .Values.podAnnotations) . | nindent 0 -}}
   {{- end -}}
