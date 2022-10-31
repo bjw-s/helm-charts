@@ -22,7 +22,7 @@ Default NOTES.txt content.
 {{- if $primaryIngress }}
 1. Access the application by visiting one of these URL's:
 {{ range $primaryIngress.hosts }}
-  {{- $protocol := "http" -}}
+  {{- $prefix = "http" -}}
   {{ if $primaryIngress.tls -}}
     {{- $prefix = "https" -}}
   {{ end -}}
@@ -34,7 +34,7 @@ Default NOTES.txt content.
   {{ if (first .paths).pathTpl -}}
     {{- $path = tpl (first .paths).pathTpl $ -}}
   {{ end }}
-  - {{ $protocol }}://{{- $host }}{{- $path }}
+  - {{ $prefix }}://{{- $host }}{{- $path }}
 {{- end }}
 {{- else if and $primaryService $primaryPort }}
 1. Get the application URL by running these commands:
