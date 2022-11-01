@@ -466,10 +466,14 @@ persistence:
 # -- Used in conjunction with `controller.type: statefulset` to create individual disks for each instance.
 volumeClaimTemplates: []
 # - name: data
+#   labels: {}
+#   annotations: {}
 #   mountPath: /data
 #   accessMode: "ReadWriteOnce"
 #   size: 1Gi
 # - name: backup
+#   labels: {}
+#   annotations: {}
 #   mountPath: /backup
 #   subPath: theSubPath
 #   accessMode: "ReadWriteOnce"

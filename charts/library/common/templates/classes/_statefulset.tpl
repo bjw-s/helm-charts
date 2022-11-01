@@ -49,6 +49,12 @@ spec:
     {{- range $index, $volumeClaimTemplate := .Values.volumeClaimTemplates }}
     - metadata:
         name: {{ $volumeClaimTemplate.name }}
+        {{- with ($volumeClaimTemplate.labels | default dict) }}
+        labels: {{- toYaml . | nindent 10 }}
+        {{- end }}
+        {{- with ($volumeClaimTemplate.annotations | default dict) }}
+        annotations: {{- toYaml . | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
           - {{ required (printf "accessMode is required for volumeClaimTemplate %v" $volumeClaimTemplate.name) $volumeClaimTemplate.accessMode  | quote }}

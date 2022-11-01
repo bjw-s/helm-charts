@@ -16,6 +16,8 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: Added support for `httpGet` probes
+    - kind: added
+      description: Added support for setting labels / annotations on volumeClaimTemplates
     - kind: changed
       description: "**BREAKING**: Raised minimum supported k8s version to 1.22"
     - kind: changed
