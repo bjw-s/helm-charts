@@ -2,8 +2,8 @@
 This template serves as a blueprint for all Ingress objects that are created
 within the common library.
 */}}
-{{- define "common.classes.ingress" -}}
-  {{- $fullName := include "common.names.fullname" . -}}
+{{- define "bjw-s.common.class.ingress" -}}
+  {{- $fullName := include "bjw-s.common.lib.chart.names.fullname" . -}}
   {{- $ingressName := $fullName -}}
   {{- $values := .Values.ingress -}}
 
@@ -17,26 +17,25 @@ within the common library.
     {{- $ingressName = printf "%v-%v" $ingressName $values.nameOverride -}}
   {{- end -}}
 
-  {{- $primaryService := get .Values.service (include "common.service.primary" .) -}}
+  {{- $primaryService := get .Values.service (include "bjw-s.common.lib.service.primary" .) -}}
   {{- $defaultServiceName := $fullName -}}
   {{- if and (hasKey $primaryService "nameOverride") $primaryService.nameOverride -}}
     {{- $defaultServiceName = printf "%v-%v" $defaultServiceName $primaryService.nameOverride -}}
   {{- end -}}
-  {{- $defaultServicePort := get $primaryService.ports (include "common.classes.service.ports.primary" (dict "values" $primaryService)) -}}
-  {{- $isStable := include "common.capabilities.ingress.isStable" . }}
+  {{- $defaultServicePort := get $primaryService.ports (include "bjw-s.common.lib.service.primaryPort" (dict "values" $primaryService)) -}}
 ---
-apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ $ingressName }}
-  {{- with (merge ($values.labels | default dict) (include "common.labels" $ | fromYaml)) }}
+  {{- with (merge ($values.labels | default dict) (include "bjw-s.common.lib.metadata.allLabels" $ | fromYaml)) }}
   labels: {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- with (merge ($values.annotations | default dict) (include "common.annotations" $ | fromYaml)) }}
+  {{- with (merge ($values.annotations | default dict) (include "bjw-s.common.lib.metadata.globalAnnotations" $ | fromYaml)) }}
   annotations: {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  {{- if and $isStable $values.ingressClassName }}
+  {{- if $values.ingressClassName }}
   ingressClassName: {{ $values.ingressClassName }}
   {{- end }}
   {{- if $values.tls }}
@@ -64,19 +63,12 @@ spec:
             {{- $port = default $port .service.port -}}
           {{- end }}
           - path: {{ tpl .path $ | quote }}
-            {{- if $isStable }}
             pathType: {{ default "Prefix" .pathType }}
-            {{- end }}
             backend:
-              {{- if $isStable }}
               service:
                 name: {{ $service }}
                 port:
                   number: {{ $port }}
-              {{- else }}
-              serviceName: {{ $service }}
-              servicePort: {{ $port }}
-              {{- end }}
           {{- end }}
   {{- end }}
 {{- end }}

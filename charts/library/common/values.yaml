@@ -59,16 +59,6 @@ podAnnotations: {}
 # -- Set labels on the pod
 podLabels: {}
 
-# -- Add a Horizontal Pod Autoscaler
-# @default -- <disabled>
-autoscaling:
-  enabled: false
-  target:  # deploymentname
-  minReplicas:  # 1
-  maxReplicas:  # 100
-  targetCPUUtilizationPercentage:  # 80
-  targetMemoryUtilizationPercentage:  # 80
-
 serviceAccount:
   # -- Specifies whether a service account should be created
   create: false
@@ -83,16 +73,27 @@ serviceAccount:
 # -- Specifies whether a service account token should be automatically mounted.
 automountServiceAccountToken: true
 
-# -- Use this to populate a secret with the values you specify.
+# -- Use this to populate secrets with the values you specify.
 # Be aware that these values are not encrypted by default, and could therefore visible
 # to anybody with access to the values.yaml file.
-secret: {}
-  # PASSWORD: my-password
+# Additional Secrets can be added by adding a dictionary key similar to the 'secret' object.
+# @default -- See below
+secrets:
+  secret:
+    # -- Enables or disables the Secret
+    enabled: false
+    # -- Labels to add to the Secret
+    labels: {}
+    # -- Annotations to add to the Secret
+    annotations: {}
+    # -- Secret stringData content. Helm template enabled.
+    stringData: {}
+      # foo: bar
 
 # -- Configure configMaps for the chart here.
 # Additional configMaps can be added by adding a dictionary key similar to the 'config' object.
 # @default -- See below
-configmap:
+configMaps:
   config:
     # -- Enables or disables the configMap
     enabled: false
@@ -188,6 +189,9 @@ probes:
     enabled: true
     # -- Set this to `true` if you wish to specify your own livenessProbe
     custom: false
+    # -- sets the probe type when not using a custom probe
+    # @default -- "TCP"
+    type: TCP
     # -- The spec field contains the values for the default livenessProbe.
     # If you selected `custom: true`, this field holds the definition of the livenessProbe.
     # @default -- See below
@@ -204,6 +208,9 @@ probes:
     enabled: true
     # -- Set this to `true` if you wish to specify your own readinessProbe
     custom: false
+    # -- sets the probe type when not using a custom probe
+    # @default -- "TCP"
+    type: TCP
     # -- The spec field contains the values for the default readinessProbe.
     # If you selected `custom: true`, this field holds the definition of the readinessProbe.
     # @default -- See below
@@ -220,6 +227,9 @@ probes:
     enabled: true
     # -- Set this to `true` if you wish to specify your own startupProbe
     custom: false
+    # -- sets the probe type when not using a custom probe
+    # @default -- "TCP"
+    type: TCP
     # -- The spec field contains the values for the default startupProbe.
     # If you selected `custom: true`, this field holds the definition of the startupProbe.
     # @default -- See below
@@ -277,20 +287,6 @@ service:
     # -- Provide additional labels which may be required.
     labels: {}
 
-    # -- Configure a serviceMonitor for this Service.
-    # @default -- See below
-    monitor:
-      # -- Enables or disables the serviceMonitor.
-      enabled: false
-      # -- Configures the endpoints for the serviceMonitor.
-      # @default -- See values.yaml
-      endpoints:
-        - port: http
-          scheme: http
-          path: /metrics
-          interval: 1m
-          scrapeTimeout: 10s
-
     # -- Configure the Service port information here.
     # Additional ports can be added by adding a dictionary key similar to the 'http' service.
     # @default -- See below
@@ -323,6 +319,40 @@ service:
         # -- Allow adding additional match labels
         extraSelectorLabels: {}
 
+# -- Configure the ServiceMonitors for the chart here.
+# Additional ServiceMonitors can be added by adding a dictionary key similar to the 'main' ServiceMonitors.
+# @default -- See below
+serviceMonitor:
+  main:
+    # -- Enables or disables the serviceMonitor.
+    enabled: false
+
+    # -- Override the name suffix that is used for this serviceMonitor.
+    nameOverride:
+
+    # -- Provide additional annotations which may be required.
+    annotations: {}
+
+    # -- Provide additional labels which may be required.
+    labels: {}
+
+    # -- Configures a custom selector for the serviceMonitor, this takes precedence over
+    # specifying a service name.
+    # Helm templates can be used.
+    selector: {}
+
+    # -- Configures the target Service for the serviceMonitor. Helm templates can be used.
+    serviceName: main
+
+    # -- Configures the endpoints for the serviceMonitor.
+    # @default -- See values.yaml
+    endpoints:
+      - port: http
+        scheme: http
+        path: /metrics
+        interval: 1m
+        scrapeTimeout: 10s
+
 # -- Configure the ingresses for the chart here.
 # Additional ingresses can be added by adding a dictionary key similar to the 'main' ingress.
 # @default -- See below
@@ -347,7 +377,6 @@ ingress:
     labels: {}
 
     # -- Set the ingressClass that is used for this ingress.
-    # Requires Kubernetes >=1.19
     ingressClassName:  # "nginx"
 
     ## Configure the hosts for the ingress
@@ -358,7 +387,6 @@ ingress:
         paths:
           -  # -- Path.  Helm template can be passed.
             path: /
-            # -- Ignored if not kubeVersion >= 1.14-0
             pathType: Prefix
             service:
               # -- Overrides the service name reference for this path
@@ -438,10 +466,14 @@ persistence:
 # -- Used in conjunction with `controller.type: statefulset` to create individual disks for each instance.
 volumeClaimTemplates: []
 # - name: data
+#   labels: {}
+#   annotations: {}
 #   mountPath: /data
 #   accessMode: "ReadWriteOnce"
 #   size: 1Gi
 # - name: backup
+#   labels: {}
+#   annotations: {}
 #   mountPath: /backup
 #   subPath: theSubPath
 #   accessMode: "ReadWriteOnce"
@@ -510,7 +542,7 @@ addons:
         # -- Specify the Gluetun image
         repository: docker.io/qmcgaw/gluetun
         # -- Specify the Gluetun image tag
-        tag: v3.31.1
+        tag: v3.32.0
         # -- Specify the Gluetun image pull policy
         pullPolicy: IfNotPresent
 
@@ -654,7 +686,7 @@ addons:
           port: 12321
           enabled: true
           protocol: TCP
-          targetPort: codeserver
+          targetPort: 12321
           ## Specify the nodePort value for the LoadBalancer and NodePort service types.
           ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
           ##
@@ -673,14 +705,12 @@ addons:
       labels: {}
 
       # -- Set the ingressClass that is used for this ingress.
-      # Requires Kubernetes >=1.19
       ingressClassName:  # "nginx"
 
       hosts:
         - host: code.chart-example.local
           paths:
             - path: /
-              # Ignored if not kubeVersion >= 1.14-0
               pathType: Prefix
       tls: []
       #  - secretName: chart-example-tls

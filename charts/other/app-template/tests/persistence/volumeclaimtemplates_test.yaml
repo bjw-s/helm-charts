@@ -11,6 +11,10 @@ tests:
           accessMode: "ReadWriteOnce"
           size: "10Gi"
           storageClass: "storage"
+          labels:
+            test: "label"
+          annotations:
+            test: "annotation"
     asserts:
       - documentIndex: 0
         isKind:
@@ -21,6 +25,10 @@ tests:
           value:
             metadata:
               name: storage
+              labels:
+                test: "label"
+              annotations:
+                test: "annotation"
             spec:
               accessModes:
                 - ReadWriteOnce

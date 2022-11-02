@@ -23,10 +23,11 @@ persistence:
 addons:
   codeserver:
     enabled: true
+    git:
+      deployKey: test
     workingDir: "/www/assets"
     ingress:
-      main:
-        enabled: true
+      enabled: true
     volumeMounts:
     - name: config
       mountPath: /www/assets

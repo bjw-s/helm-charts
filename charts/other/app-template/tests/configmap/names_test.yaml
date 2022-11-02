@@ -17,7 +17,7 @@ tests:
 
   - it: with disabled configMap should pass
     set:
-      configmap:
+      configMaps:
         config:
           enabled: false
     asserts:
@@ -34,7 +34,7 @@ tests:
 
   - it: with multiple configMap should pass
     set:
-      configmap:
+      configMaps:
         config:
           enabled: true
           data:
@@ -59,7 +59,7 @@ tests:
 
   - it: default name should pass
     set:
-      configmap:
+      configMaps:
         config:
           enabled: true
     asserts:
@@ -75,7 +75,7 @@ tests:
 
   - it: with nameOverride should pass
     set:
-      configmap:
+      configMaps:
         config:
           enabled: true
           nameOverride: http

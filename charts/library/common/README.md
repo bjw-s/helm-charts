@@ -1,6 +1,6 @@
 # common
 
-![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -8,7 +8,7 @@ Since a lot of the bjw-s charts follow a similar pattern, this library was built
 
 ## Requirements
 
-Kubernetes: `>=1.16.0-0`
+Kubernetes: `>=1.22.0-0`
 
 ## Dependencies
 
@@ -29,7 +29,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
 - name: common
-  version: 0.2.0
+  version: 1.0.0
   repository: https://bjw-s.github.io/helm-charts/
 ```
 
@@ -61,9 +61,9 @@ N/A
 | addons.codeserver.git.deployKeySecret | string | `""` | Existing secret containing SSH private key The chart expects it to be present under the `id_rsa` key. |
 | addons.codeserver.image.pullPolicy | string | `"IfNotPresent"` | Specify the code-server image pull policy |
 | addons.codeserver.image.repository | string | `"ghcr.io/coder/code-server"` | Specify the code-server image |
-| addons.codeserver.image.tag | string | `"4.7.0"` | Specify the code-server image tag |
+| addons.codeserver.image.tag | string | `"4.8.1"` | Specify the code-server image tag |
 | addons.codeserver.ingress.enabled | bool | `false` | Enable an ingress for the code-server add-on. |
-| addons.codeserver.ingress.ingressClassName | string | `nil` | Set the ingressClass that is used for this ingress. Requires Kubernetes >=1.19 |
+| addons.codeserver.ingress.ingressClassName | string | `nil` | Set the ingressClass that is used for this ingress. |
 | addons.codeserver.service.enabled | bool | `true` | Enable a service for the code-server add-on. |
 | addons.codeserver.volumeMounts | list | `[]` | Specify a list of volumes that get mounted in the code-server container. At least 1 volumeMount is required! |
 | addons.codeserver.workingDir | string | `""` | Specify the working dir that will be opened when code-server starts If not given, the app will default to the mountpah of the first specified volumeMount |
@@ -92,7 +92,7 @@ N/A
 | addons.vpn.gluetun | object | See below | Gluetun specific configuration -- Make sure to read the [documentation](https://github.com/qdm12/gluetun/wiki) to see how to configure this addon! |
 | addons.vpn.gluetun.image.pullPolicy | string | `"IfNotPresent"` | Specify the Gluetun image pull policy |
 | addons.vpn.gluetun.image.repository | string | `"docker.io/qmcgaw/gluetun"` | Specify the Gluetun image |
-| addons.vpn.gluetun.image.tag | string | `"v3.31.1"` | Specify the Gluetun image tag |
+| addons.vpn.gluetun.image.tag | string | `"v3.32.0"` | Specify the Gluetun image tag |
 | addons.vpn.livenessProbe | object | `{}` | Optionally specify a livenessProbe, e.g. to check if the connection is still being protected by the VPN |
 | addons.vpn.networkPolicy.annotations | object | `{}` | Provide additional annotations which may be required. |
 | addons.vpn.networkPolicy.egress | string | `nil` | The egress configuration for your network policy, All outbound traffic from the pod will be blocked unless specified here. [[ref]](https://kubernetes.io/docs/concepts/services-networking/network-policies/) [[recipes]](https://github.com/ahmetb/kubernetes-network-policy-recipes) |
@@ -105,13 +105,12 @@ N/A
 | affinity | object | `{}` | Defines affinity constraint rules. [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity) |
 | args | list | `[]` | Override the args for the default container |
 | automountServiceAccountToken | bool | `true` | Specifies whether a service account token should be automatically mounted. |
-| autoscaling | object | <disabled> | Add a Horizontal Pod Autoscaler |
 | command | list | `[]` | Override the command(s) for the default container |
-| configmap | object | See below | Configure configMaps for the chart here. Additional configMaps can be added by adding a dictionary key similar to the 'config' object. |
-| configmap.config.annotations | object | `{}` | Annotations to add to the configMap |
-| configmap.config.data | object | `{}` | configMap data content. Helm template enabled. |
-| configmap.config.enabled | bool | `false` | Enables or disables the configMap |
-| configmap.config.labels | object | `{}` | Labels to add to the configMap |
+| configMaps | object | See below | Configure configMaps for the chart here. Additional configMaps can be added by adding a dictionary key similar to the 'config' object. |
+| configMaps.config.annotations | object | `{}` | Annotations to add to the configMap |
+| configMaps.config.data | object | `{}` | configMap data content. Helm template enabled. |
+| configMaps.config.enabled | bool | `false` | Enables or disables the configMap |
+| configMaps.config.labels | object | `{}` | Labels to add to the configMap |
 | controller.annotations | object | `{}` | Set annotations on the deployment/statefulset/daemonset |
 | controller.enabled | bool | `true` | enable the controller. |
 | controller.labels | object | `{}` | Set labels on the deployment/statefulset/daemonset |
@@ -144,10 +143,9 @@ N/A
 | ingress.main.enabled | bool | `false` | Enables or disables the ingress |
 | ingress.main.hosts[0].host | string | `"chart-example.local"` | Host address. Helm template can be passed. |
 | ingress.main.hosts[0].paths[0].path | string | `"/"` | Path.  Helm template can be passed. |
-| ingress.main.hosts[0].paths[0].pathType | string | `"Prefix"` | Ignored if not kubeVersion >= 1.14-0 |
 | ingress.main.hosts[0].paths[0].service.name | string | `nil` | Overrides the service name reference for this path |
 | ingress.main.hosts[0].paths[0].service.port | string | `nil` | Overrides the service port reference for this path |
-| ingress.main.ingressClassName | string | `nil` | Set the ingressClass that is used for this ingress. Requires Kubernetes >=1.19 |
+| ingress.main.ingressClassName | string | `nil` | Set the ingressClass that is used for this ingress. |
 | ingress.main.labels | object | `{}` | Provide additional labels which may be required. |
 | ingress.main.nameOverride | string | `nil` | Override the name suffix that is used for this ingress. |
 | ingress.main.primary | bool | `true` | Make this the primary ingress (used in probes, notes, etc...). If there is more than 1 ingress, make sure that only 1 ingress is marked as primary. |
@@ -180,18 +178,25 @@ N/A
 | probes.liveness.custom | bool | `false` | Set this to `true` if you wish to specify your own livenessProbe |
 | probes.liveness.enabled | bool | `true` | Enable the liveness probe |
 | probes.liveness.spec | object | See below | The spec field contains the values for the default livenessProbe. If you selected `custom: true`, this field holds the definition of the livenessProbe. |
+| probes.liveness.type | string | "TCP" | sets the probe type when not using a custom probe |
 | probes.readiness | object | See below | Redainess probe configuration |
 | probes.readiness.custom | bool | `false` | Set this to `true` if you wish to specify your own readinessProbe |
 | probes.readiness.enabled | bool | `true` | Enable the readiness probe |
 | probes.readiness.spec | object | See below | The spec field contains the values for the default readinessProbe. If you selected `custom: true`, this field holds the definition of the readinessProbe. |
+| probes.readiness.type | string | "TCP" | sets the probe type when not using a custom probe |
 | probes.startup | object | See below | Startup probe configuration |
 | probes.startup.custom | bool | `false` | Set this to `true` if you wish to specify your own startupProbe |
 | probes.startup.enabled | bool | `true` | Enable the startup probe |
 | probes.startup.spec | object | See below | The spec field contains the values for the default startupProbe. If you selected `custom: true`, this field holds the definition of the startupProbe. |
+| probes.startup.type | string | "TCP" | sets the probe type when not using a custom probe |
 | resources | object | `{}` | Set the resource requests / limits for the main container. |
 | runtimeClassName | string | `nil` | Allow specifying a runtimeClassName other than the default one (ie: nvidia) |
 | schedulerName | string | `nil` | Allows specifying a custom scheduler name |
-| secret | object | `{}` | Use this to populate a secret with the values you specify. Be aware that these values are not encrypted by default, and could therefore visible to anybody with access to the values.yaml file. |
+| secrets | object | See below | Use this to populate secrets with the values you specify. Be aware that these values are not encrypted by default, and could therefore visible to anybody with access to the values.yaml file. Additional Secrets can be added by adding a dictionary key similar to the 'secret' object. |
+| secrets.secret.annotations | object | `{}` | Annotations to add to the Secret |
+| secrets.secret.enabled | bool | `false` | Enables or disables the Secret |
+| secrets.secret.labels | object | `{}` | Labels to add to the Secret |
+| secrets.secret.stringData | object | `{}` | Secret stringData content. Helm template enabled. |
 | securityContext | object | `{}` | Configure the Security Context for the main container |
 | service | object | See below | Configure the services for the chart here. Additional services can be added by adding a dictionary key similar to the 'main' service. |
 | service.main.annotations | object | `{}` | Provide additional annotations which may be required. |
@@ -200,12 +205,10 @@ N/A
 | service.main.ipFamilies | list | `[]` | The ip families that should be used. Options: IPv4, IPv6 |
 | service.main.ipFamilyPolicy | string | `nil` | Specify the ip policy. Options: SingleStack, PreferDualStack, RequireDualStack |
 | service.main.labels | object | `{}` | Provide additional labels which may be required. |
-| service.main.monitor | object | See below | Configure a serviceMonitor for this Service. |
-| service.main.monitor.enabled | bool | `false` | Enables or disables the serviceMonitor. |
-| service.main.monitor.endpoints | list | See values.yaml | Configures the endpoints for the serviceMonitor. |
 | service.main.nameOverride | string | `nil` | Override the name suffix that is used for this service |
 | service.main.ports | object | See below | Configure the Service port information here. Additional ports can be added by adding a dictionary key similar to the 'http' service. |
 | service.main.ports.http.enabled | bool | `true` | Enables or disables the port |
+| service.main.ports.http.extraSelectorLabels | object | `{}` | Allow adding additional match labels |
 | service.main.ports.http.nodePort | string | `nil` | Specify the nodePort value for the LoadBalancer and NodePort service types. [[ref]](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport) |
 | service.main.ports.http.port | string | `nil` | The port number |
 | service.main.ports.http.primary | bool | `true` | Make this the primary port (used in probes, notes, etc...) If there is more than 1 service, make sure that only 1 port is marked as primary. |
@@ -216,6 +219,14 @@ N/A
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.create | bool | `false` | Specifies whether a service account should be created |
 | serviceAccount.name | string | `""` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template |
+| serviceMonitor | object | See below | Configure the ServiceMonitors for the chart here. Additional ServiceMonitors can be added by adding a dictionary key similar to the 'main' ServiceMonitors. |
+| serviceMonitor.main.annotations | object | `{}` | Provide additional annotations which may be required. |
+| serviceMonitor.main.enabled | bool | `false` | Enables or disables the serviceMonitor. |
+| serviceMonitor.main.endpoints | list | See values.yaml | Configures the endpoints for the serviceMonitor. |
+| serviceMonitor.main.labels | object | `{}` | Provide additional labels which may be required. |
+| serviceMonitor.main.nameOverride | string | `nil` | Override the name suffix that is used for this serviceMonitor. |
+| serviceMonitor.main.selector | object | `{}` | Configures a custom selector for the serviceMonitor, this takes precedence over specifying a service name. Helm templates can be used. |
+| serviceMonitor.main.serviceName | string | `"main"` | Configures the target Service for the serviceMonitor. Helm templates can be used. |
 | termination.gracePeriodSeconds | string | `nil` | Duration in seconds the pod needs to terminate gracefully -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle)] |
 | termination.messagePath | string | `nil` | Configure the path at which the file to which the main container's termination message will be written. -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |
 | termination.messagePolicy | string | `nil` | Indicate how the main container's termination message should be populated. Valid options are `File` and `FallbackToLogsOnError`. -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |

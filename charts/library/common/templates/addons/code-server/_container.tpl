@@ -1,7 +1,7 @@
 {{/*
 The code-server sidecar container to be inserted.
 */}}
-{{- define "common.addon.codeserver.container" -}}
+{{- define "bjw-s.common.addon.codeserver.container" -}}
 {{- if lt (len .Values.addons.codeserver.volumeMounts) 1 }}
 {{- fail "At least 1 volumeMount is required for codeserver container" }}
 {{- end -}}

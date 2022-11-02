@@ -1,9 +1,10 @@
+---
 apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 0.3.0
-kubeVersion: ">=1.16.0-0"
+version: 1.0.0
+kubeVersion: ">=1.22.0-0"
 keywords:
   - common
   - library
@@ -13,9 +14,27 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: added
+      description: Added support for `httpGet` probes
+    - kind: added
+      description: Added support for setting labels / annotations on volumeClaimTemplates
+    - kind: changed
+      description: "**BREAKING**: Raised minimum supported k8s version to 1.22"
+    - kind: changed
+      description: "**BREAKING**: Renamed `configmap` key to `configMaps`"
+    - kind: changed
+      description: "**BREAKING**: Moved `serviceMonitor` from `service` to its own key"
+    - kind: changed
+      description: "**BREAKING**: Renamed `secret` key to `secrets`, which now works similar to `configMaps`"
     - kind: changed
       description: Support services have extraSelectorLabels
     - kind: changed
       description: Updated code-server image to v4.8.1
     - kind: fixed
       description: Fix NOTES always showing ingress protocol as http
+    - kind: changed
+      description: Updated gluetun image to v3.32.0
+    - kind: changed
+      description: Restructure of template components
+    - kind: removed
+      description: "**BREAKING**: Removed support for HorizontalPodAutoscaler"
