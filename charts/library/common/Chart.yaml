@@ -14,10 +14,16 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: removed
+      description: "**BREAKING**: Removed support for HorizontalPodAutoscaler"
     - kind: added
       description: Added support for `httpGet` probes
     - kind: added
       description: Added support for setting labels / annotations on volumeClaimTemplates
+    - kind: added
+      description: Support services have extraSelectorLabels
+    - kind: changed
+      description: "**BREAKING**: Restructure of template components. All Helm template names have changed!"
     - kind: changed
       description: "**BREAKING**: Raised minimum supported k8s version to 1.22"
     - kind: changed
@@ -27,14 +33,8 @@ annotations:
     - kind: changed
       description: "**BREAKING**: Renamed `secret` key to `secrets`, which now works similar to `configMaps`"
     - kind: changed
-      description: Support services have extraSelectorLabels
-    - kind: changed
       description: Updated code-server image to v4.8.1
-    - kind: fixed
-      description: Fix NOTES always showing ingress protocol as http
     - kind: changed
       description: Updated gluetun image to v3.32.0
-    - kind: changed
-      description: Restructure of template components
-    - kind: removed
-      description: "**BREAKING**: Removed support for HorizontalPodAutoscaler"
+    - kind: fixed
+      description: Fix NOTES always showing ingress protocol as http
