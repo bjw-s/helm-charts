@@ -21,7 +21,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
-            helm.sh/chart: app-template-1.0.1
+            helm.sh/chart: app-template-1.1.0
 
   - it: custom metadata should pass
     set:
@@ -48,7 +48,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
-            helm.sh/chart: app-template-1.0.1
+            helm.sh/chart: app-template-1.1.0
             test_label: test
 
   - it: custom metadata with global metadata should pass
@@ -83,5 +83,5 @@ tests:
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
             global_label: test
-            helm.sh/chart: app-template-1.0.1
+            helm.sh/chart: app-template-1.1.0
             test_label: test
