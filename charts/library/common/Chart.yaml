@@ -1,9 +1,10 @@
+---
 apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 0.2.2
-kubeVersion: ">=1.16.0-0"
+version: 1.0.0
+kubeVersion: ">=1.22.0-0"
 keywords:
   - common
   - library
@@ -13,7 +14,27 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: fixed
-      description: Fix deprecation warning on unsupported vpn types.
+    - kind: removed
+      description: "**BREAKING**: Removed support for HorizontalPodAutoscaler"
+    - kind: added
+      description: Added support for `httpGet` probes
+    - kind: added
+      description: Added support for setting labels / annotations on volumeClaimTemplates
+    - kind: added
+      description: Support services have extraSelectorLabels
     - kind: changed
-      description: Updated code-server image to v4.7.1
+      description: "**BREAKING**: Restructure of template components. All Helm template names have changed!"
+    - kind: changed
+      description: "**BREAKING**: Raised minimum supported k8s version to 1.22"
+    - kind: changed
+      description: "**BREAKING**: Renamed `configmap` key to `configMaps`"
+    - kind: changed
+      description: "**BREAKING**: Moved `serviceMonitor` from `service` to its own key"
+    - kind: changed
+      description: "**BREAKING**: Renamed `secret` key to `secrets`, which now works similar to `configMaps`"
+    - kind: changed
+      description: Updated code-server image to v4.8.2
+    - kind: changed
+      description: Updated gluetun image to v3.32.0
+    - kind: fixed
+      description: Fix NOTES always showing ingress protocol as http

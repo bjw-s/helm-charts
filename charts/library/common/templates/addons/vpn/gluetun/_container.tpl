@@ -1,7 +1,7 @@
 {{/*
 The gluetun sidecar container to be inserted.
 */}}
-{{- define "common.addon.gluetun.container" -}}
+{{- define "bjw-s.common.addon.gluetun.container" -}}
 name: gluetun
 image: "{{ .Values.addons.vpn.gluetun.image.repository }}:{{ .Values.addons.vpn.gluetun.image.tag }}"
 imagePullPolicy: {{ .Values.addons.vpn.gluetun.pullPolicy }}

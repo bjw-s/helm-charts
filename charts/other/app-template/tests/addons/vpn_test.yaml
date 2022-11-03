@@ -68,11 +68,63 @@ tests:
               items:
                 - key: vpnConfigfile
                   path: vpnConfigfile
-              secretName: RELEASE-NAME-vpnconfig
+              secretName: RELEASE-NAME-addon-vpn-config
       - documentIndex: *AddonVPNConfigSecretDocument
         equal:
           path: metadata.name
-          value: RELEASE-NAME-vpnconfig
+          value: RELEASE-NAME-addon-vpn-config
+
+  - it: addon enabled with up/down scripts should pass
+    set:
+      addons:
+        vpn:
+          enabled: true
+          scripts:
+            up: |
+              test_up
+            down: |
+              test_down
+    asserts:
+      - hasDocuments:
+          count: 3
+      - documentIndex: &AddonVPNConfigConfigMapDocument 0
+        isKind:
+          of: ConfigMap
+      - documentIndex: &DeploymentDocument 1
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDocument
+        contains:
+          path: spec.template.spec.containers[1].volumeMounts
+          content:
+            mountPath: /gluetun/scripts/up.sh
+            name: vpnscript
+            subPath: up.sh
+      - documentIndex: *DeploymentDocument
+        contains:
+          path: spec.template.spec.containers[1].volumeMounts
+          content:
+            mountPath: /gluetun/scripts/down.sh
+            name: vpnscript
+            subPath: down.sh
+      - documentIndex: *DeploymentDocument
+        contains:
+          path: spec.template.spec.volumes
+          content:
+            configMap:
+              items:
+              - key: up.sh
+                mode: 511
+                path: up.sh
+              - key: down.sh
+                mode: 511
+                path: down.sh
+              name: RELEASE-NAME-addon-vpn
+            name: vpnscript
+      - documentIndex: *AddonVPNConfigConfigMapDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-addon-vpn
 
   - it: addon enabled with existing configFile secret should pass
     set:

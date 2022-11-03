@@ -4,7 +4,7 @@ templates:
 tests:
   - it: default metadata should pass
     set:
-      configmap:
+      configMaps:
         config:
           enabled: true
     asserts:
@@ -21,11 +21,11 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
-            helm.sh/chart: app-template-0.2.2
+            helm.sh/chart: app-template-1.0.0
 
   - it: custom metadata should pass
     set:
-      configmap:
+      configMaps:
         config:
           enabled: true
           annotations:
@@ -48,7 +48,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
-            helm.sh/chart: app-template-0.2.2
+            helm.sh/chart: app-template-1.0.0
             test_label: test
 
   - it: custom metadata with global metadata should pass
@@ -58,7 +58,7 @@ tests:
           global_label: test
         annotations:
           global_annotation: test
-      configmap:
+      configMaps:
         config:
           enabled: true
           annotations:
@@ -83,5 +83,5 @@ tests:
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
             global_label: test
-            helm.sh/chart: app-template-0.2.2
+            helm.sh/chart: app-template-1.0.0
             test_label: test

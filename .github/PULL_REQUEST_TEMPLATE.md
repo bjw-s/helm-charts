@@ -10,28 +10,39 @@ Thank you for contributing! I will try to test and integrate the change as soon 
 Also don't be worried if the request is closed or not integrated. Sometimes our priorities might not match the priorities of the pull request. Don't fret, the open source community thrives on forks and GitHub makes it easy to keep your changes in a forked repo.
 -->
 
-**Description of the change**
+### Description of the change
+<!--
+Describe the scope of your change - i.e. what the change does.
+Remove any sections that are not applicable.
+-->
 
-<!-- Describe the scope of your change - i.e. what the change does. -->
+#### Removed
+<!-- Any features that have been removed -->
 
-**Benefits**
+#### Fixed
+<!-- Any functionality that has been fixed -->
 
+#### Added
+<!-- Any new features that have been added -->
+
+#### Changed
+<!-- Any features that have been changed from how they were working before -->
+
+### Benefits
 <!-- What benefits will be realized by the code change? -->
 
-**Possible drawbacks**
-
+### Possible drawbacks
 <!-- Describe any known limitations with your change -->
 
-**Applicable issues**
-
+### Applicable issues
 <!-- Enter any applicable Issues here (You can reference an issue using #) -->
 - fixes #
 
-**Additional information**
-
+## Additional information
 <!-- If there's anything else that's important and relevant to your pull request, mention that information here.-->
 
-**Checklist** <!-- [Place an '[X]' (no spaces) in all applicable fields. Please remove unrelated fields.] -->
+## Checklist
+<!-- [Place an '[X]' (no spaces) in all applicable fields. Please remove unrelated fields.] -->
 - [ ] Title of the PR conforms to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard.
 - [ ] Scope of the of the PR title contains the chart name.
 - [ ] Chart version in `Chart.yaml` has been bumped according to [Semantic Versioning](https://semver.org/).

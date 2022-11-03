@@ -1,23 +1,14 @@
 {{/*
 The VPN config and scripts to be included.
 */}}
-{{- define "common.addon.vpn.configmap" -}}
-{{- if or .Values.addons.vpn.scripts.up .Values.addons.vpn.scripts.down }}
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "common.names.fullname" . }}-vpn
-  labels: {{- include "common.labels" $ | nindent 4 }}
-  annotations: {{- include "common.annotations" $ | nindent 4 }}
-data:
+{{- define "bjw-s.common.addon.vpn.configmap" -}}
 {{- with .Values.addons.vpn.scripts.up }}
-  up.sh: |-
-    {{- . | nindent 4}}
+up.sh: |-
+  {{- . | nindent 2}}
 {{- end }}
+
 {{- with .Values.addons.vpn.scripts.down }}
-  down.sh: |-
-    {{- . | nindent 4}}
-{{- end }}
+down.sh: |-
+  {{- . | nindent 2}}
 {{- end -}}
 {{- end -}}
