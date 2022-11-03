@@ -639,7 +639,7 @@ addons:
       # -- Specify the code-server image
       repository: ghcr.io/coder/code-server
       # -- Specify the code-server image tag
-      tag: 4.8.1
+      tag: 4.8.2
       # -- Specify the code-server image pull policy
       pullPolicy: IfNotPresent
 
