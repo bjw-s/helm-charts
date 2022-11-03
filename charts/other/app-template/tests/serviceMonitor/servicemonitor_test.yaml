@@ -55,7 +55,7 @@ tests:
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
-            app.kubernetes.io/service: main
+            app.kubernetes.io/service: RELEASE-NAME
       - documentIndex: *ServiceMonitorDocument
         equal:
           path: spec.endpoints
@@ -88,7 +88,7 @@ tests:
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
-            app.kubernetes.io/service: main
+            app.kubernetes.io/service: RELEASE-NAME
 
   - it: a serviceMonitor is created with a templated service
     set:
