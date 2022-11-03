@@ -768,7 +768,7 @@ addons:
       # -- Specify the netshoot image
       repository: ghcr.io/nicolaka/netshoot
       # -- Specify the netshoot image tag
-      tag: v0.7
+      tag: v0.8
       # -- Specify the netshoot image pull policy
       pullPolicy: IfNotPresent
 
