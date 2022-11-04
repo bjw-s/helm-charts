@@ -1,5 +1,5 @@
 {{/* Renders the Route objects required by the chart */}}
-{{- define "common.route" -}}
+{{- define "bjw-s.common.render.routes" -}}
   {{- /* Generate named routes as required */ -}}
   {{- range $name, $route := .Values.route }}
     {{- if $route.enabled -}}
@@ -11,7 +11,8 @@
       {{- end -}}
 
       {{- $_ := set $ "ObjectValues" (dict "route" $routeValues) -}}
-      {{- include "common.classes.route" $ | nindent 0 -}}
+      {{- include "bjw-s.common.class.route" $ | nindent 0 -}}
+      {{- $_ := unset $.ObjectValues "route" -}}
     {{- end }}
   {{- end }}
 {{- end }}
