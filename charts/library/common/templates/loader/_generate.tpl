@@ -31,4 +31,5 @@ Secondary entrypoint and primary loader for the common chart
   {{- include "bjw-s.common.render.services" . | nindent 0 -}}
   {{- include "bjw-s.common.render.ingresses" . | nindent 0 -}}
   {{- include "bjw-s.common.render.serviceMonitors" . | nindent 0 -}}
+  {{- include "bjw-s.common.render.routes" . | nindent 0 -}}
 {{- end -}}
