@@ -21,8 +21,11 @@ annotations:
       links:
         - name: Secret management for ServiceAccounts
           url: https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#manual-secret-management-for-serviceaccounts
-    - kind: changed
+    - kind: added
       description: Added support for Gateway API Routes
+      links:
+        - name: Gateway API docs
+          url: https://gateway-api.sigs.k8s.io
     - kind: changed
       description: Updated promtail image to v2.7.0
     - kind: changed
