@@ -22,7 +22,7 @@ Probes selection logic.
         {{- else -}}
           {{- $probeType = $probe.type | default "TCP" -}}
         {{- end }}
-        {{- if or ( eq $probeType "HTTPS" ) ( eq $probeType "HTTP" ) -}}
+        {{- if or ( eq $probeType "HTTPS" ) ( eq $probeType "HTTP" ) }}
   httpGet:
     path: {{ $probe.path }}
     scheme: {{ $probeType }}
