@@ -19,6 +19,9 @@ within the common library.
 ---
 apiVersion: v1
 kind: Secret
+{{- with $values.type }}
+type: {{ . }}
+{{- end }}
 metadata:
   name: {{ $secretName }}
   {{- with (merge ($values.labels | default dict) (include "bjw-s.common.lib.metadata.allLabels" $ | fromYaml)) }}
@@ -27,8 +30,8 @@ metadata:
   {{- with (merge ($values.annotations | default dict) (include "bjw-s.common.lib.metadata.globalAnnotations" $ | fromYaml)) }}
   annotations: {{- toYaml . | nindent 4 }}
   {{- end }}
-stringData:
 {{- with $values.stringData }}
+stringData:
   {{- tpl (toYaml .) $ | nindent 2 }}
 {{- end }}
 {{- end -}}

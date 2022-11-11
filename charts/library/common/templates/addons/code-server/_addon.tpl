@@ -14,7 +14,7 @@ It will include / inject the required templates based on the given values.
     {{- if or .Values.addons.codeserver.git.deployKey .Values.addons.codeserver.git.deployKeyBase64 -}}
       {{- $deployKeySecret := include "bjw-s.common.addon.codeserver.deployKeySecret" . -}}
       {{- if $deployKeySecret -}}
-        {{- $_ := set .Values.secrets "addon-codeserver-deploykey" (dict "enabled" "true" "stringData" ($deployKeySecret | fromYaml)) -}}
+        {{- $_ := set .Values.secrets "addon-codeserver-deploykey" (dict "enabled" true "stringData" ($deployKeySecret | fromYaml)) -}}
       {{- end -}}
     {{- end -}}
 
@@ -22,7 +22,7 @@ It will include / inject the required templates based on the given values.
     {{- if or .Values.addons.codeserver.git.deployKey .Values.addons.codeserver.git.deployKeyBase64 .Values.addons.codeserver.git.deployKeySecret }}
       {{- $volume := include "bjw-s.common.addon.codeserver.deployKeyVolumeSpec" . | fromYaml -}}
       {{- if $volume -}}
-        {{- $_ := set .Values.persistence "deploykey" (dict "enabled" "true" "mountPath" "-" "type" "custom" "volumeSpec" $volume) -}}
+        {{- $_ := set .Values.persistence "deploykey" (dict "enabled" true "mountPath" "-" "type" "custom" "volumeSpec" $volume) -}}
       {{- end -}}
     {{- end -}}
 

@@ -13,13 +13,13 @@ It will include / inject the required templates based on the given values.
   {{/* Append the promtail configMap to the configmaps dict */}}
   {{- $configmap := include "bjw-s.common.addon.promtail.configmap" . -}}
   {{- if $configmap -}}
-    {{- $_ := set .Values.configMaps "addon-promtail" (dict "enabled" "true" "data" ($configmap | fromYaml)) -}}
+    {{- $_ := set .Values.configMaps "addon-promtail" (dict "enabled" true "data" ($configmap | fromYaml)) -}}
   {{- end -}}
 
   {{/* Append the promtail config volume to the volumes */}}
   {{- $volume := include "bjw-s.common.addon.promtail.volumeSpec" . | fromYaml -}}
   {{- if $volume -}}
-    {{- $_ := set .Values.persistence "addon-promtail" (dict "enabled" "true" "mountPath" "-" "type" "custom" "volumeSpec" $volume) -}}
+    {{- $_ := set .Values.persistence "addon-promtail" (dict "enabled" true "mountPath" "-" "type" "custom" "volumeSpec" $volume) -}}
   {{- end -}}
 {{- end -}}
 {{- end -}}

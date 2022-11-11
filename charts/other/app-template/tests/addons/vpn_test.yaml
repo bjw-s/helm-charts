@@ -46,10 +46,10 @@ tests:
     asserts:
       - hasDocuments:
           count: 3
-      - documentIndex: &AddonVPNConfigSecretDocument 0
+      - documentIndex: &AddonVPNConfigSecretDocument 2
         isKind:
           of: Secret
-      - documentIndex: &DeploymentDocument 1
+      - documentIndex: &DeploymentDocument 0
         isKind:
           of: Deployment
       - documentIndex: *DeploymentDocument
@@ -87,10 +87,10 @@ tests:
     asserts:
       - hasDocuments:
           count: 3
-      - documentIndex: &AddonVPNConfigConfigMapDocument 0
+      - documentIndex: &AddonVPNConfigConfigMapDocument 2
         isKind:
           of: ConfigMap
-      - documentIndex: &DeploymentDocument 1
+      - documentIndex: &DeploymentDocument 0
         isKind:
           of: Deployment
       - documentIndex: *DeploymentDocument

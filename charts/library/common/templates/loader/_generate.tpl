@@ -23,8 +23,6 @@ Secondary entrypoint and primary loader for the common chart
   {{- end -}}
 
   {{- /* Build the templates */ -}}
-  {{- include "bjw-s.common.render.configmaps" . | nindent 0 -}}
-  {{- include "bjw-s.common.render.secrets" . | nindent 0 -}}
   {{- include "bjw-s.common.render.pvcs" . | nindent 0 -}}
   {{- include "bjw-s.common.render.serviceAccount" . | nindent 0 -}}
   {{- include "bjw-s.common.render.controller" . | nindent 0 -}}
@@ -32,4 +30,6 @@ Secondary entrypoint and primary loader for the common chart
   {{- include "bjw-s.common.render.ingresses" . | nindent 0 -}}
   {{- include "bjw-s.common.render.serviceMonitors" . | nindent 0 -}}
   {{- include "bjw-s.common.render.routes" . | nindent 0 -}}
+  {{- include "bjw-s.common.render.configmaps" . | nindent 0 -}}
+  {{- include "bjw-s.common.render.secrets" . | nindent 0 -}}
 {{- end -}}

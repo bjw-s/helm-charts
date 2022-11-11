@@ -16,6 +16,11 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: Fixed httpGet probe whitespace rendering
+    - kind: fixed
+      description: Fixed serviceAccount definition to be compatible with k8s 1.25
+      links:
+        - name: Secret management for ServiceAccounts
+          url: https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#manual-secret-management-for-serviceaccounts
     - kind: changed
       description: Added support for Gateway API Routes
     - kind: changed
