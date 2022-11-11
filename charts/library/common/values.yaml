@@ -693,7 +693,7 @@ addons:
       # -- Specify the code-server image
       repository: ghcr.io/coder/code-server
       # -- Specify the code-server image tag
-      tag: 4.8.2
+      tag: 4.8.3
       # -- Specify the code-server image pull policy
       pullPolicy: IfNotPresent
 
@@ -784,7 +784,7 @@ addons:
       # -- Specify the promtail image
       repository: docker.io/grafana/promtail
       # -- Specify the promtail image tag
-      tag: 2.6.1
+      tag: 2.7.0
       # -- Specify the promtail image pull policy
       pullPolicy: IfNotPresent
 
@@ -822,7 +822,7 @@ addons:
       # -- Specify the netshoot image
       repository: ghcr.io/nicolaka/netshoot
       # -- Specify the netshoot image tag
-      tag: v0.7
+      tag: v0.8
       # -- Specify the netshoot image pull policy
       pullPolicy: IfNotPresent
 

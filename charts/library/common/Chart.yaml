@@ -14,5 +14,13 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: fixed
+      description: Fixed httpGet probe whitespace rendering
     - kind: changed
       description: Added support for Gateway API Routes
+    - kind: changed
+      description: Updated promtail image to v2.7.0
+    - kind: changed
+      description: Updated netshoot image to v0.8
+    - kind: changed
+      description: Updated code-server image to v4.8.3
