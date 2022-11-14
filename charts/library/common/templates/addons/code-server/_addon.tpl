@@ -27,7 +27,13 @@ It will include / inject the required templates based on the given values.
     {{- end -}}
 
     {{/* Add the code-server service */}}
-    {{- $_ := set .Values.service "addon-codeserver" .Values.addons.codeserver.service -}}
+    {{- if .Values.addons.codeserver.service.enabled -}}
+      {{- $serviceValues := .Values.addons.codeserver.service -}}
+      {{- $_ := set $serviceValues "nameOverride" "addon-codeserver" -}}
+      {{- $_ := set $ "ObjectValues" (dict "service" $serviceValues) -}}
+      {{- include "bjw-s.common.class.service" $ -}}
+      {{- $_ := unset $.ObjectValues "service" -}}
+    {{- end -}}
 
     {{/* Add the code-server ingress */}}
     {{- $svcName := printf "%v-addon-codeserver" (include "bjw-s.common.lib.chart.names.fullname" .) -}}

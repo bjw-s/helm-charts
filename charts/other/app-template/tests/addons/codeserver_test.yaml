@@ -29,13 +29,13 @@ tests:
     asserts:
       - hasDocuments:
           count: 3
-      - documentIndex: &DeploymentDocument 0
+      - documentIndex: &DeploymentDocument 1
         isKind:
           of: Deployment
-      - documentIndex: &AddonServiceDocument 1
+      - documentIndex: &AddonServiceDocument 0
         isKind:
           of: Service
-      - documentIndex: 1
+      - documentIndex: &ApplicationServiceDocument 2
         isKind:
           of: Service
       - documentIndex: *DeploymentDocument
@@ -63,7 +63,7 @@ tests:
       - documentIndex: &AddonDeployKeySecretDocument 3
         isKind:
           of: Secret
-      - documentIndex: &DeploymentDocument 0
+      - documentIndex: &DeploymentDocument 1
         isKind:
           of: Deployment
       - documentIndex: *DeploymentDocument
@@ -105,7 +105,7 @@ tests:
       - documentIndex: &AddonDeployKeySecretDocument 3
         isKind:
           of: Secret
-      - documentIndex: &DeploymentDocument 0
+      - documentIndex: &DeploymentDocument 1
         isKind:
           of: Deployment
       - documentIndex: *DeploymentDocument
@@ -144,7 +144,7 @@ tests:
     asserts:
       - hasDocuments:
           count: 3
-      - documentIndex: &DeploymentDocument 0
+      - documentIndex: &DeploymentDocument 1
         isKind:
           of: Deployment
       - documentIndex: *DeploymentDocument
