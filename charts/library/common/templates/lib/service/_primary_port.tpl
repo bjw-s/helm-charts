@@ -2,16 +2,7 @@
 Return the primary port for a given Service object.
 */}}
 {{- define "bjw-s.common.lib.service.primaryPort" -}}
-  {{- $enabledPorts := dict -}}
-  {{- range $name, $port := .values.ports -}}
-    {{- if $port.enabled -}}
-      {{- $_ := set $enabledPorts $name . -}}
-    {{- end -}}
-  {{- end -}}
-
-  {{- if eq 0 (len $enabledPorts) }}
-    {{- fail (printf "No ports are enabled for service \"%s\"!" .serviceName) }}
-  {{- end }}
+  {{- $enabledPorts := (include "bjw-s.common.lib.service.enabledPorts" . | fromYaml) }}
 
   {{- $result := "" -}}
   {{- range $name, $port := $enabledPorts -}}

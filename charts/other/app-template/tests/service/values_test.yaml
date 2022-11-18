@@ -2,6 +2,24 @@ suite: service values
 templates:
   - common.yaml
 tests:
+  - it: ports and services are enabled by default
+    set:
+      service:
+        second:
+          type: ClusterIP
+          ports:
+            first:
+              port: 80
+    asserts:
+      - hasDocuments:
+          count: 3
+      - documentIndex: &FirstServiceDocument 1
+        isKind:
+          of: Service
+      - documentIndex: &SecondServiceDocument 2
+        isKind:
+          of: Service
+
   - it: externalTrafficPolicy should pass for NodePort service
     set:
       service:

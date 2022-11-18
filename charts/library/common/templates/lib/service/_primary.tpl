@@ -2,12 +2,7 @@
 Return the primary service object
 */}}
 {{- define "bjw-s.common.lib.service.primary" -}}
-  {{- $enabledServices := dict -}}
-  {{- range $name, $service := .Values.service -}}
-    {{- if $service.enabled -}}
-      {{- $_ := set $enabledServices $name . -}}
-    {{- end -}}
-  {{- end -}}
+  {{- $enabledServices := (include "bjw-s.common.lib.service.enabledServices" $ | fromYaml ) }}
 
   {{- $result := "" -}}
   {{- range $name, $service := $enabledServices -}}
