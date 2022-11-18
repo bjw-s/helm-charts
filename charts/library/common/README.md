@@ -73,23 +73,13 @@ N/A
 | addons.netshoot.image.pullPolicy | string | `"IfNotPresent"` | Specify the netshoot image pull policy |
 | addons.netshoot.image.repository | string | `"ghcr.io/nicolaka/netshoot"` | Specify the netshoot image |
 | addons.netshoot.image.tag | string | `"v0.8"` | Specify the netshoot image tag |
-| addons.promtail | object | See values.yaml | The common library supports adding a promtail add-on to to access logs and ship them to loki. It can be configured under this key. |
-| addons.promtail.args | list | `[]` | Set promtail command line arguments |
-| addons.promtail.enabled | bool | `false` | Enable running a promtail container in the pod |
-| addons.promtail.env | object | `{}` | Set any environment variables for promtail here |
-| addons.promtail.image.pullPolicy | string | `"IfNotPresent"` | Specify the promtail image pull policy |
-| addons.promtail.image.repository | string | `"docker.io/grafana/promtail"` | Specify the promtail image |
-| addons.promtail.image.tag | string | `"2.7.0"` | Specify the promtail image tag |
-| addons.promtail.logs | list | `[]` | The paths to logs on the volume |
-| addons.promtail.loki | string | `""` | The URL to Loki |
-| addons.promtail.volumeMounts | list | `[]` | Specify a list of volumes that get mounted in the promtail container. At least 1 volumeMount is required! |
 | addons.vpn | object | See values.yaml | The common chart supports adding a VPN add-on. It can be configured under this key. |
 | addons.vpn.args | list | `[]` | Override the args for the vpn sidecar container |
 | addons.vpn.configFile | string | `nil` | Provide a customized vpn configuration file to be used by the VPN. |
 | addons.vpn.configFileSecret | string | `nil` | Reference an existing secret that contains the VPN configuration file The chart expects it to be present under the `vpnConfigfile` key. |
 | addons.vpn.enabled | bool | `false` | Enable running a VPN in the pod to route traffic through a VPN |
 | addons.vpn.env | object | `{}` | All variables specified here will be added to the vpn sidecar container See the documentation of the VPN image for all config values |
-| addons.vpn.gluetun | object | See below | Gluetun specific configuration -- Make sure to read the [documentation](https://github.com/qdm12/gluetun/wiki) to see how to configure this addon! |
+| addons.vpn.gluetun | object | See below | Make sure to read the [documentation](https://github.com/qdm12/gluetun/wiki) to see how to configure this addon! |
 | addons.vpn.gluetun.image.pullPolicy | string | `"IfNotPresent"` | Specify the Gluetun image pull policy |
 | addons.vpn.gluetun.image.repository | string | `"docker.io/qmcgaw/gluetun"` | Specify the Gluetun image |
 | addons.vpn.gluetun.image.tag | string | `"v3.32.0"` | Specify the Gluetun image tag |
@@ -173,7 +163,7 @@ N/A
 | podLabels | object | `{}` | Set labels on the pod |
 | podSecurityContext | object | `{}` | Configure the Security Context for the Pod |
 | priorityClassName | string | `nil` | Custom priority class for different treatment by the scheduler |
-| probes | object | See below | Probe configuration -- [[ref]](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
+| probes | object | See below | [[ref]](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
 | probes.liveness | object | See below | Liveness probe configuration |
 | probes.liveness.custom | bool | `false` | Set this to `true` if you wish to specify your own livenessProbe |
 | probes.liveness.enabled | bool | `true` | Enable the liveness probe |
@@ -210,7 +200,7 @@ N/A
 | service | object | See below | Configure the services for the chart here. Additional services can be added by adding a dictionary key similar to the 'main' service. |
 | service.main.annotations | object | `{}` | Provide additional annotations which may be required. |
 | service.main.enabled | bool | `true` | Enables or disables the service |
-| service.main.externalTrafficPolicy | string | `nil` | Specify the externalTrafficPolicy for the service. Options: Cluster, Local -- [[ref](https://kubernetes.io/docs/tutorials/services/source-ip/)] |
+| service.main.externalTrafficPolicy | string | `nil` | [[ref](https://kubernetes.io/docs/tutorials/services/source-ip/)] |
 | service.main.ipFamilies | list | `[]` | The ip families that should be used. Options: IPv4, IPv6 |
 | service.main.ipFamilyPolicy | string | `nil` | Specify the ip policy. Options: SingleStack, PreferDualStack, RequireDualStack |
 | service.main.labels | object | `{}` | Provide additional labels which may be required. |
@@ -236,9 +226,9 @@ N/A
 | serviceMonitor.main.nameOverride | string | `nil` | Override the name suffix that is used for this serviceMonitor. |
 | serviceMonitor.main.selector | object | `{}` | Configures a custom selector for the serviceMonitor, this takes precedence over specifying a service name. Helm templates can be used. |
 | serviceMonitor.main.serviceName | string | `"{{ include \"bjw-s.common.lib.chart.names.fullname\" $ }}"` | Configures the target Service for the serviceMonitor. Helm templates can be used. |
-| termination.gracePeriodSeconds | string | `nil` | Duration in seconds the pod needs to terminate gracefully -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle)] |
-| termination.messagePath | string | `nil` | Configure the path at which the file to which the main container's termination message will be written. -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |
-| termination.messagePolicy | string | `nil` | Indicate how the main container's termination message should be populated. Valid options are `File` and `FallbackToLogsOnError`. -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |
+| termination.gracePeriodSeconds | string | `nil` | [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle)] |
+| termination.messagePath | string | `nil` | [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |
+| termination.messagePolicy | string | `nil` | [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |
 | tolerations | list | `[]` | Specify taint tolerations [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) |
 | topologySpreadConstraints | list | `[]` | Defines topologySpreadConstraint rules. [[ref]](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/) |
 | volumeClaimTemplates | list | `[]` | Used in conjunction with `controller.type: statefulset` to create individual disks for each instance. |
@@ -250,4 +240,4 @@ N/A
 - Join the k8s-at-home [Discord](https://discord.gg/sTMX7Vh) community
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v0.1.1](https://github.com/k8s-at-home/helm-docs/releases/v0.1.1)
+Autogenerated from chart metadata using [helm-docs v1.11.0](https://github.com/norwoodj/helm-docs/releases/v1.11.0)

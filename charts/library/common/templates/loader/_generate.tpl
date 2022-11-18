@@ -12,11 +12,6 @@ Secondary entrypoint and primary loader for the common chart
     {{- include "bjw-s.common.addon.vpn" . | nindent 0 -}}
   {{- end -}}
 
-  {{- /* Enable promtail add-on if required */ -}}
-  {{- if .Values.addons.promtail.enabled -}}
-    {{- include "bjw-s.common.addon.promtail" . | nindent 0 -}}
-  {{- end -}}
-
   {{- /* Enable netshoot add-on if required */ -}}
   {{- if .Values.addons.netshoot.enabled -}}
     {{- include "bjw-s.common.addon.netshoot" . | nindent 0 -}}

@@ -34,3 +34,5 @@ annotations:
       description: Updated netshoot image to v0.8
     - kind: changed
       description: Updated code-server image to v4.8.3
+    - kind: removed
+      description: Removed promtail add-on
