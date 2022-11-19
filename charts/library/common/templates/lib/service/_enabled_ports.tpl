@@ -15,9 +15,5 @@ Return the enabled ports for a given Service object.
       {{- end -}}
     {{- end -}}
   {{- end -}}
-
-  {{- if eq 0 (len $enabledPorts) }}
-    {{- fail (printf "No ports are enabled for service \"%s\"!" (.serviceName | default "")) }}
-  {{- end }}
   {{- $enabledPorts | toYaml -}}
 {{- end -}}
