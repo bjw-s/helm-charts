@@ -31,8 +31,6 @@ annotations:
     - kind: changed
       description: Services and their ports are now assumed enabled by default
     - kind: changed
-      description: Updated promtail image to v2.7.0
-    - kind: changed
       description: Updated netshoot image to v0.8
     - kind: changed
       description: Updated code-server image to v4.8.3
