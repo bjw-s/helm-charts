@@ -4,7 +4,11 @@ Renders the Service objects required by the chart.
 {{- define "bjw-s.common.render.services" -}}
   {{- /* Generate named services as required */ -}}
   {{- range $name, $service := .Values.service -}}
-    {{- if ($service.enabled | default true ) -}}
+    {{- $serviceEnabled := true -}}
+    {{- if hasKey $service "enabled" -}}
+      {{- $serviceEnabled = $service.enabled -}}
+    {{- end -}}
+    {{- if $serviceEnabled -}}
       {{- $serviceValues := $service -}}
 
       {{/* set the default nameOverride to the service name */}}

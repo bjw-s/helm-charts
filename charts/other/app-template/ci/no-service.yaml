@@ -1,0 +1,20 @@
+image:
+  repository: b4bz/homer
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  main:
+    enabled: false
+
+ingress:
+  main:
+    enabled: false
+
+probes:
+  liveness:
+    enabled: false
+  readiness:
+    enabled: false
+  startup:
+    enabled: false
