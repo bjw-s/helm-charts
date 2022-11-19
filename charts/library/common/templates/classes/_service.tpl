@@ -15,6 +15,7 @@ within the common library.
   {{- $serviceName = printf "%v-%v" $serviceName $values.nameOverride -}}
 {{ end -}}
 {{- $svcType := $values.type | default "" -}}
+{{- $enabledPorts := include "bjw-s.common.lib.service.enabledPorts" (dict "serviceName" $serviceName "values" $values) | fromYaml }}
 {{- $primaryPort := get $values.ports (include "bjw-s.common.lib.service.primaryPort" (dict "values" $values)) }}
 ---
 apiVersion: v1
@@ -76,25 +77,23 @@ spec:
     {{ toYaml . | nindent 4 }}
   {{- end }}
   ports:
-  {{- range $name, $port := $values.ports }}
-  {{- if $port.enabled }}
-  - port: {{ $port.port }}
-    targetPort: {{ $port.targetPort | default $name }}
-    {{- if $port.protocol }}
-    {{- if or ( eq $port.protocol "HTTP" ) ( eq $port.protocol "HTTPS" ) ( eq $port.protocol "TCP" ) }}
-    protocol: TCP
-    {{- else }}
-    protocol: {{ $port.protocol }}
-    {{- end }}
-    {{- else }}
-    protocol: TCP
-    {{- end }}
-    name: {{ $name }}
-    {{- if (and (eq $svcType "NodePort") (not (empty $port.nodePort))) }}
-    nodePort: {{ $port.nodePort }}
-    {{ end }}
-  {{- end }}
-  {{- end }}
+  {{- range $name, $port := $enabledPorts }}
+    - port: {{ $port.port }}
+      targetPort: {{ $port.targetPort | default $name }}
+        {{- if $port.protocol }}
+          {{- if or ( eq $port.protocol "HTTP" ) ( eq $port.protocol "HTTPS" ) ( eq $port.protocol "TCP" ) }}
+      protocol: TCP
+          {{- else }}
+      protocol: {{ $port.protocol }}
+          {{- end }}
+        {{- else }}
+      protocol: TCP
+        {{- end }}
+      name: {{ $name }}
+        {{- if (and (eq $svcType "NodePort") (not (empty $port.nodePort))) }}
+      nodePort: {{ $port.nodePort }}
+        {{ end }}
+      {{- end -}}
   {{- with (merge ($values.extraSelectorLabels | default dict) (include "bjw-s.common.lib.metadata.selectorLabels" . | fromYaml)) }}
   selector: {{- toYaml . | nindent 4 }}
   {{- end }}

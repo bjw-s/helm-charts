@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 1.0.1
+version: 1.1.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -14,27 +14,25 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: removed
-      description: "**BREAKING**: Removed support for HorizontalPodAutoscaler"
-    - kind: added
-      description: Added support for `httpGet` probes
-    - kind: added
-      description: Added support for setting labels / annotations on volumeClaimTemplates
-    - kind: added
-      description: Support services have extraSelectorLabels
-    - kind: changed
-      description: "**BREAKING**: Restructure of template components. All Helm template names have changed!"
-    - kind: changed
-      description: "**BREAKING**: Raised minimum supported k8s version to 1.22"
-    - kind: changed
-      description: "**BREAKING**: Renamed `configmap` key to `configMaps`"
-    - kind: changed
-      description: "**BREAKING**: Moved `serviceMonitor` from `service` to its own key"
-    - kind: changed
-      description: "**BREAKING**: Renamed `secret` key to `secrets`, which now works similar to `configMaps`"
-    - kind: changed
-      description: Updated code-server image to v4.8.2
-    - kind: changed
-      description: Updated gluetun image to v3.32.0
     - kind: fixed
-      description: Fix NOTES always showing ingress protocol as http
+      description: Fixed code-server add-on Service rendering
+    - kind: fixed
+      description: Fixed httpGet probe whitespace rendering
+    - kind: fixed
+      description: Fixed serviceAccount definition to be compatible with k8s 1.25
+      links:
+        - name: Secret management for ServiceAccounts
+          url: https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#manual-secret-management-for-serviceaccounts
+    - kind: added
+      description: Added support for Gateway API Routes
+      links:
+        - name: Gateway API docs
+          url: https://gateway-api.sigs.k8s.io
+    - kind: changed
+      description: Services and their ports are now assumed enabled by default
+    - kind: changed
+      description: Updated netshoot image to v0.8
+    - kind: changed
+      description: Updated code-server image to v4.8.3
+    - kind: removed
+      description: Removed promtail add-on

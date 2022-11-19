@@ -1,50 +1,57 @@
-suite: service metadata
+suite: route metadata
 templates:
   - common.yaml
 tests:
   - it: default metadata should pass
+    set:
+      route.main:
+        enabled: true
+        parentRefs:
+          - name: test
+            namespace: test
     asserts:
-      - documentIndex: &ServiceDocument 1
+      - documentIndex: &routeDocument 2
         isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
+          of: HTTPRoute
+      - documentIndex: *routeDocument
         isNull:
           path: metadata.annotations
-      - documentIndex: *ServiceDocument
+      - documentIndex: *routeDocument
         equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
-            app.kubernetes.io/service: RELEASE-NAME
             helm.sh/chart: app-template-1.1.0
 
   - it: custom metadata should pass
     set:
-      service:
-        main:
-          annotations:
-            test_annotation: test
-          labels:
-            test_label: test
+      route.main:
+        enabled: true
+        annotations:
+          test_annotation: test
+        labels:
+          test_label: test
+        parentRefs:
+          - name: test
+            namespace: test
     asserts:
-      - documentIndex: &ServiceDocument 1
+      - documentIndex: &routeDocument 2
         isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
+          of: HTTPRoute
+      - documentIndex: *routeDocument
         equal:
           path: metadata.annotations
           value:
             test_annotation: test
-      - documentIndex: *ServiceDocument
+      - documentIndex: *routeDocument
         equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
-            app.kubernetes.io/service: RELEASE-NAME
             helm.sh/chart: app-template-1.1.0
             test_label: test
 
@@ -55,30 +62,32 @@ tests:
           global_label: test
         annotations:
           global_annotation: test
-      service:
-        main:
-          annotations:
-            test_annotation: test
-          labels:
-            test_label: test
+      route.main:
+        enabled: true
+        annotations:
+          test_annotation: test
+        labels:
+          test_label: test
+        parentRefs:
+          - name: test
+            namespace: test
     asserts:
-      - documentIndex: &ServiceDocument 1
+      - documentIndex: &routeDocument 2
         isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
+          of: HTTPRoute
+      - documentIndex: *routeDocument
         equal:
           path: metadata.annotations
           value:
             global_annotation: test
             test_annotation: test
-      - documentIndex: *ServiceDocument
+      - documentIndex: *routeDocument
         equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
-            app.kubernetes.io/service: RELEASE-NAME
             global_label: test
             helm.sh/chart: app-template-1.1.0
             test_label: test

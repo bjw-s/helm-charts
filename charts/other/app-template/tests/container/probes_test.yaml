@@ -1,0 +1,313 @@
+suite: container probes
+templates:
+  - common.yaml
+tests:
+  - it: default should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              enabled: true
+              port: &port 80
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].livenessProbe
+          value:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: *port
+            timeoutSeconds: 1
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].readinessProbe
+          value:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: *port
+            timeoutSeconds: 1
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].startupProbe
+          value:
+            failureThreshold: 30
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            tcpSocket:
+              port: *port
+            timeoutSeconds: 1
+
+  - it: custom primary port should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              enabled: true
+              port: 80
+            test:
+              enabled: true
+              primary: true
+              port: &port 8080
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].livenessProbe
+          value:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: *port
+            timeoutSeconds: 1
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].readinessProbe
+          value:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: *port
+            timeoutSeconds: 1
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].startupProbe
+          value:
+            failureThreshold: 30
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            tcpSocket:
+              port: *port
+            timeoutSeconds: 1
+
+  - it: disabled service should pass
+    set:
+      service:
+        main:
+          enabled: false
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        isNull:
+          path: spec.template.spec.containers[0].livenessProbe
+      - documentIndex: 0
+        isNull:
+          path: spec.template.spec.containers[0].readinessProbe
+      - documentIndex: 0
+        isNull:
+          path: spec.template.spec.containers[0].startupProbe
+
+  - it: AUTO type probe should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              port: &port 80
+
+      probes:
+        liveness:
+          enabled: true
+          type: AUTO
+          path: /api/version
+
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].livenessProbe
+          value:
+            httpGet:
+              path: /api/version
+              port: *port
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+
+  - it: HTTP type probe should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              port: &port 80
+
+      probes:
+        liveness:
+          enabled: true
+          type: HTTP
+          path: /api/version
+
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].livenessProbe
+          value:
+            httpGet:
+              path: /api/version
+              port: *port
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+
+  - it: HTTPS type probe should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              port: &port 80
+
+      probes:
+        liveness:
+          enabled: true
+          type: HTTPS
+          path: /api/version
+
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].livenessProbe
+          value:
+            httpGet:
+              path: /api/version
+              port: *port
+              scheme: HTTPS
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+
+  - it: custom liveness probe should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              port: &port 80
+
+      probes:
+        liveness:
+          enabled: true
+          custom: true
+          spec:
+            httpGet:
+              path: /api/version
+              port: *port
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].livenessProbe
+          value:
+            httpGet:
+              path: /api/version
+              port: *port
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+
+  - it: custom readiness probe should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              port: &port 80
+
+      probes:
+        readiness:
+          enabled: true
+          custom: true
+          spec:
+            httpGet:
+              path: /api/version
+              port: *port
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].readinessProbe
+          value:
+            httpGet:
+              path: /api/version
+              port: *port
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+
+  - it: custom startup probe should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              port: &port 80
+
+      probes:
+        startup:
+          enabled: true
+          custom: true
+          spec:
+            httpGet:
+              path: /api/version
+              port: *port
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].startupProbe
+          value:
+            httpGet:
+              path: /api/version
+              port: *port
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+            failureThreshold: 3

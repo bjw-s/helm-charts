@@ -1,0 +1,183 @@
+suite: route values
+templates:
+  - common.yaml
+tests:
+  - it: setting gateway should pass
+    set:
+      route.main:
+        enabled: true
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+    asserts:
+      - documentIndex: &HTTPRouteDocument 2
+        isKind:
+          of: HTTPRoute
+      - documentIndex: *HTTPRouteDocument
+        equal:
+          path: spec.parentRefs[0].name
+          value: parentName
+      - documentIndex: *HTTPRouteDocument
+        equal:
+          path: spec.parentRefs[0].namespace
+          value: parentNamespace
+
+  - it: custom host and path should pass
+    set:
+      route.main:
+        enabled: true
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        hostnames:
+          - chart-test.local
+    asserts:
+      - documentIndex: &HTTPRouteDocument 2
+        isKind:
+          of: HTTPRoute
+      - documentIndex: *HTTPRouteDocument
+        equal:
+          path: spec.hostnames[0]
+          value: chart-test.local
+
+  - it: path matches should only be used for HTTPRoutes
+    set:
+      route:
+        main:
+          enabled: true
+          kind: HTTPRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+              - name: test
+                namespace: test
+              matches:
+                - path:
+                    type: PathPrefix
+                    value: /test
+        grpc:
+          enabled: true
+          kind: GRPCRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+              - name: test
+                namespace: test
+              matches:
+                - path:
+                    type: PathPrefix
+                    value: /test
+        tcp:
+          enabled: true
+          kind: TCPRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+              - name: test
+                namespace: test
+              matches:
+                - path:
+                    type: PathPrefix
+                    value: /test
+        tls:
+          enabled: true
+          kind: TLSRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+              - name: test
+                namespace: test
+              matches:
+                - path:
+                    type: PathPrefix
+                    value: /test
+        udp:
+          enabled: true
+          kind: UDPRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+              - name: test
+                namespace: test
+              matches:
+                - path:
+                    type: PathPrefix
+                    value: /test
+    asserts:
+      - documentIndex: &HTTPRouteDocument 2
+        isKind:
+          of: GRPCRoute
+      - documentIndex: &HTTPRouteDocument 2
+        isNull:
+          path: spec.rules[0].matches
+      - documentIndex: &HTTPRouteDocument 3
+        isKind:
+          of: HTTPRoute
+      - documentIndex: &HTTPRouteDocument 3
+        equal:
+          path: spec.rules[0].matches
+          value:
+            - path:
+                type: PathPrefix
+                value: /test
+      - documentIndex: &HTTPRouteDocument 4
+        isKind:
+          of: TCPRoute
+      - documentIndex: &HTTPRouteDocument 4
+        isNull:
+          path: spec.rules[0].matches
+      - documentIndex: &HTTPRouteDocument 5
+        isKind:
+          of: TLSRoute
+      - documentIndex: &HTTPRouteDocument 5
+        isNull:
+          path: spec.rules[0].matches
+      - documentIndex: &HTTPRouteDocument 6
+        isKind:
+          of: UDPRoute
+      - documentIndex: &HTTPRouteDocument 6
+        isNull:
+          path: spec.rules[0].matches
+
+  - it: hostnames shouldn't be used for TCPRoutes and UDPRoutes
+    set:
+      route:
+        main:
+          enabled: true
+          kind: TCPRoute
+          hostnames:
+            - chart-test.local
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+        udp:
+          enabled: true
+          kind: UDPRoute
+          hostnames:
+            - chart-test.local
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+    asserts:
+      - documentIndex: &HTTPRouteDocument 2
+        isKind:
+          of: TCPRoute
+      - documentIndex: &HTTPRouteDocument 2
+        isNull:
+          path: spec.hostnames
+      - documentIndex: &HTTPRouteDocument 3
+        isKind:
+          of: UDPRoute
+      - documentIndex: &HTTPRouteDocument 3
+        isNull:
+          path: spec.hostnames

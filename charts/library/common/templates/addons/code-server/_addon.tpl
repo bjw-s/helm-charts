@@ -14,7 +14,7 @@ It will include / inject the required templates based on the given values.
     {{- if or .Values.addons.codeserver.git.deployKey .Values.addons.codeserver.git.deployKeyBase64 -}}
       {{- $deployKeySecret := include "bjw-s.common.addon.codeserver.deployKeySecret" . -}}
       {{- if $deployKeySecret -}}
-        {{- $_ := set .Values.secrets "addon-codeserver-deploykey" (dict "enabled" "true" "stringData" ($deployKeySecret | fromYaml)) -}}
+        {{- $_ := set .Values.secrets "addon-codeserver-deploykey" (dict "enabled" true "stringData" ($deployKeySecret | fromYaml)) -}}
       {{- end -}}
     {{- end -}}
 
@@ -22,12 +22,18 @@ It will include / inject the required templates based on the given values.
     {{- if or .Values.addons.codeserver.git.deployKey .Values.addons.codeserver.git.deployKeyBase64 .Values.addons.codeserver.git.deployKeySecret }}
       {{- $volume := include "bjw-s.common.addon.codeserver.deployKeyVolumeSpec" . | fromYaml -}}
       {{- if $volume -}}
-        {{- $_ := set .Values.persistence "deploykey" (dict "enabled" "true" "mountPath" "-" "type" "custom" "volumeSpec" $volume) -}}
+        {{- $_ := set .Values.persistence "deploykey" (dict "enabled" true "mountPath" "-" "type" "custom" "volumeSpec" $volume) -}}
       {{- end -}}
     {{- end -}}
 
     {{/* Add the code-server service */}}
-    {{- $_ := set .Values.service "addon-codeserver" .Values.addons.codeserver.service -}}
+    {{- if .Values.addons.codeserver.service.enabled -}}
+      {{- $serviceValues := .Values.addons.codeserver.service -}}
+      {{- $_ := set $serviceValues "nameOverride" "addon-codeserver" -}}
+      {{- $_ := set $ "ObjectValues" (dict "service" $serviceValues) -}}
+      {{- include "bjw-s.common.class.service" $ -}}
+      {{- $_ := unset $.ObjectValues "service" -}}
+    {{- end -}}
 
     {{/* Add the code-server ingress */}}
     {{- $svcName := printf "%v-addon-codeserver" (include "bjw-s.common.lib.chart.names.fullname" .) -}}

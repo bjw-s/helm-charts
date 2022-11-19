@@ -10,7 +10,7 @@ tests:
           data:
             test: value 1
     asserts:
-      - documentIndex: &ControllerDoc 1
+      - documentIndex: &ControllerDoc 0
         isKind:
           of: Deployment
       - documentIndex: *ControllerDoc

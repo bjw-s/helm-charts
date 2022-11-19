@@ -8,8 +8,12 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: {{ include "bjw-s.common.lib.chart.names.serviceAccountName" . }}
-  labels: {{- include "bjw-s.common.lib.metadata.allLabels" $ | nindent 4 }}
+  {{- with include "bjw-s.common.lib.metadata.allLabels" $ | fromYaml }}
+  labels: {{- toYaml . | nindent 4 }}
+  {{- end }}
   {{- with (merge (.Values.serviceAccount.annotations | default dict) (include "bjw-s.common.lib.metadata.globalAnnotations" $ | fromYaml)) }}
   annotations: {{- toYaml . | nindent 4 }}
   {{- end }}
+secrets:
+  - name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}-sa-token
 {{- end -}}
