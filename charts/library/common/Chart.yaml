@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 1.1.4
+version: 1.1.z
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -36,3 +36,5 @@ annotations:
       description: Updated code-server image to v4.8.3
     - kind: removed
       description: Removed promtail add-on
+    - kind: added
+      description: added cronjob as controller.type
