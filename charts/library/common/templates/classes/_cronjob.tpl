@@ -18,7 +18,7 @@ metadata:
 spec:
   concurrencyPolicy: "{{ .Values.controller.cronjob.concurrencyPolicy }}"
   startingDeadlineSeconds: {{ .Values.controller.cronjob.startingDeadlineSeconds }}
-  schedule: "{{ .Values.controller.schedule }}"
+  schedule: "{{ .Values.controller.cronjob.schedule }}"
   jobTemplate:
     spec:
       selector:
