@@ -1,4 +1,4 @@
-# Deployment example using Kustomize
+# Deployment example using Helm
 
 ### Prerequisites
 
