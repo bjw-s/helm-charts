@@ -42,7 +42,9 @@ spec:
       kind: {{ default "Gateway" .kind }}
       name: {{ required (printf "parentRef name is required for %v %v" $routeKind $fullName) .name }}
       namespace: {{ required (printf "parentRef namespace is required for %v %v" $routeKind $fullName) .namespace }}
-      sectionName: {{ default "" .sectionName | quote}}
+      {{- if .sectionName }}
+      sectionName: {{ .sectionName | quote }}
+      {{- end }}
   {{- end }}
   {{- if and (ne $routeKind "TCPRoute") (ne $routeKind "UDPRoute") $values.hostnames }}
   hostnames:
