@@ -18,3 +18,5 @@ annotations:
       description: Fixed sectionName not being optional for gateway routes
     - kind: fixed
       description: Fixed primary gateway route having incorrect name
+    - kind: added
+      description: added cronjob as controller.type

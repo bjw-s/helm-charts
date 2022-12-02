@@ -12,18 +12,18 @@ controller:
   # -- enable the controller.
   enabled: true
   # -- Set the controller type.
-  # Valid options are deployment, daemonset or statefulset
+  # Valid options are deployment, daemonset, statefulset or cronjob
   type: deployment
-  # -- Set annotations on the deployment/statefulset/daemonset
+  # -- Set annotations on the deployment/statefulset/daemonset/cronjob
   annotations: {}
-  # -- Set labels on the deployment/statefulset/daemonset
+  # -- Set labels on the deployment/statefulset/daemonset/cronjob
   labels: {}
   # -- Number of desired pods
   replicas: 1
   # -- Set the controller upgrade strategy
   # For Deployments, valid values are Recreate (default) and RollingUpdate.
   # For StatefulSets, valid values are OnDelete and RollingUpdate (default).
-  # DaemonSets ignore this.
+  # DaemonSets/CronJobs ignore this.
   strategy:
   rollingUpdate:
     # -- Set deployment RollingUpdate max unavailable
@@ -36,6 +36,14 @@ controller:
   revisionHistoryLimit: 3
   # -- Set statefulset podManagementPolicy, valid values are Parallel and OrderedReady (default).
   podManagementPolicy:
+  # cronjob section only required when using controller.type: cronjob
+  cronjob:
+    # -- concurrencyPolicy specifies how to treat concurrent executions of a job that is created by this cron job, valid values are Allow, Forbid or Replace
+    concurrencyPolicy: Forbid
+    # -- schedule sets the cronjob time when to execute your jobs
+    schedule: "*/20 * * * *"
+    # -- startingDeadlineSeconds stands for the deadline in seconds for starting the job if it misses its scheduled time for any reason ( Integer )
+    startingDeadlineSeconds: 30
 
 image:
   # -- image repository
