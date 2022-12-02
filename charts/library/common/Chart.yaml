@@ -15,26 +15,8 @@ maintainers:
 annotations:
   artifacthub.io/changes: |-
     - kind: fixed
-      description: Fixed code-server add-on Service rendering
+      description: Fixed sectionName not being optional for gateway routes
     - kind: fixed
-      description: Fixed httpGet probe whitespace rendering
-    - kind: fixed
-      description: Fixed serviceAccount definition to be compatible with k8s 1.25
-      links:
-        - name: Secret management for ServiceAccounts
-          url: https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/#manual-secret-management-for-serviceaccounts
-    - kind: added
-      description: Added support for Gateway API Routes
-      links:
-        - name: Gateway API docs
-          url: https://gateway-api.sigs.k8s.io
-    - kind: changed
-      description: Services and their ports are now assumed enabled by default
-    - kind: changed
-      description: Updated netshoot image to v0.8
-    - kind: changed
-      description: Updated code-server image to v4.8.3
-    - kind: removed
-      description: Removed promtail add-on
+      description: Fixed primary gateway route having incorrect name
     - kind: added
       description: added cronjob as controller.type

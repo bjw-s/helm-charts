@@ -6,7 +6,7 @@
       {{- $routeValues := $route -}}
 
       {{/* set defaults */}}
-      {{- if not $routeValues.nameOverride -}}
+      {{- if and (not $routeValues.nameOverride) (ne $name (include "bjw-s.common.lib.route.primary" $)) -}}
         {{- $_ := set $routeValues "nameOverride" $name -}}
       {{- end -}}
 
