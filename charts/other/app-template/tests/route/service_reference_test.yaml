@@ -19,7 +19,7 @@ tests:
           value:
             group: ""
             kind: Service
-            name: RELEASE-NAME-main
+            name: RELEASE-NAME
             namespace: NAMESPACE
             port: null
             weight: 1

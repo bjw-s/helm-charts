@@ -422,7 +422,7 @@ route:
     # -- Provide additional labels which may be required.
     labels: {}
 
-    ## -- Configure the resource the route attaches to.
+    # -- Configure the resource the route attaches to.
     parentRefs:
     -  # Group of the referent resource.
       group: gateway.networking.k8s.io
@@ -433,7 +433,7 @@ route:
       # Namespace of the referent resource
       namespace:
       # Name of the section within the target resource.
-      sectionName: ""
+      sectionName:
 
     # -- Host addresses
     hostnames: []
