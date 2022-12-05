@@ -26,11 +26,16 @@ tests:
         equal:
           path: spec.failedJobsHistoryLimit
           value: 1
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.jobTemplate.spec.template.spec.restartPolicy
+          value: Never
 
   - it: custom cronjob configuration should pass
     set:
       controller:
         type: cronjob
+        restartPolicy: OnFailure
         cronjob:
           schedule: &CronJobSchedule "0 3 * * *"
           concurrencyPolicy: &CronJobConcurrencyPolicy "Test"
@@ -56,3 +61,7 @@ tests:
         equal:
           path: spec.failedJobsHistoryLimit
           value: *CronJobFailedJobsHistory
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.jobTemplate.spec.template.spec.restartPolicy
+          value: OnFailure

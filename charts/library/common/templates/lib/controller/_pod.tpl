@@ -102,4 +102,7 @@ topologySpreadConstraints:
 tolerations:
     {{- toYaml . | nindent 2 }}
   {{- end }}
+  {{- with .Values.controller.restartPolicy }}
+restartPolicy: {{ . }}
+  {{- end }}
 {{- end -}}

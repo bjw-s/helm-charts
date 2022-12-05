@@ -105,7 +105,6 @@ N/A
 | controller.cronjob | object | See below | CronJob configuration. Required only when using `controller.type: cronjob`. |
 | controller.cronjob.concurrencyPolicy | string | `"Forbid"` | Specifies how to treat concurrent executions of a job that is created by this cron job, valid values are Allow, Forbid or Replace |
 | controller.cronjob.failedJobsHistory | int | `1` | The number of failed Jobs to keep |
-| controller.cronjob.restartPolicy | string | `"Never"` | Container restart policy |
 | controller.cronjob.schedule | string | `"*/20 * * * *"` | Sets the CronJob time when to execute your jobs |
 | controller.cronjob.startingDeadlineSeconds | int | `30` | The deadline in seconds for starting the job if it misses its scheduled time for any reason |
 | controller.cronjob.successfulJobsHistory | int | `1` | The number of succesful Jobs to keep |
@@ -113,6 +112,7 @@ N/A
 | controller.labels | object | `{}` | Set labels on the deployment/statefulset/daemonset/cronjob |
 | controller.podManagementPolicy | string | `nil` | Set statefulset podManagementPolicy, valid values are Parallel and OrderedReady (default). |
 | controller.replicas | int | `1` | Number of desired pods |
+| controller.restartPolicy | string | `Always`. When `controller.type` is `cronjob` it defaults to `Never`. | Set Container restart policy. |
 | controller.revisionHistoryLimit | int | `3` | ReplicaSet revision history limit |
 | controller.rollingUpdate.partition | string | `nil` | Set statefulset RollingUpdate partition |
 | controller.rollingUpdate.surge | string | `nil` | Set deployment RollingUpdate max surge |

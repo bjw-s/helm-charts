@@ -21,4 +21,6 @@ annotations:
     - kind: fixed
       description: Fixed invalid persistence type message
     - kind: added
-      description: added cronjob as controller.type
+      description: Added cronjob as controller.type
+    - kind: added
+      description: Allow setting container restartPolicy

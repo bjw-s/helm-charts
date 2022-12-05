@@ -36,6 +36,9 @@ controller:
   revisionHistoryLimit: 3
   # -- Set statefulset podManagementPolicy, valid values are Parallel and OrderedReady (default).
   podManagementPolicy:
+  # -- Set Container restart policy.
+  # @default -- `Always`. When `controller.type` is `cronjob` it defaults to `Never`.
+  restartPolicy:
   # -- CronJob configuration. Required only when using `controller.type: cronjob`.
   # @default -- See below
   cronjob:
@@ -49,8 +52,6 @@ controller:
     successfulJobsHistory: 1
     # -- The number of failed Jobs to keep
     failedJobsHistory: 1
-    # -- Container restart policy
-    restartPolicy: Never
 
 image:
   # -- image repository

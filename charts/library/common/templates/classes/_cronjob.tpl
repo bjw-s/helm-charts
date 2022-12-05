@@ -3,6 +3,11 @@ This template serves as a blueprint for Cronjob objects that are created
 using the common library.
 */}}
 {{- define "bjw-s.common.class.cronjob" -}}
+  {{- $restartPolicy := default "Never" .Values.controller.restartPolicy -}}
+  {{- if and (ne $restartPolicy "Never") (ne $restartPolicy "OnFailure") -}}
+    {{- fail (printf "Not a valid restartPolicy for CronJob (%s)" $restartPolicy) -}}
+  {{- end -}}
+  {{- $_ := set .Values.controller "restartPolicy" $restartPolicy -}}
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -35,5 +40,4 @@ spec:
             {{- end }}
         spec:
           {{- include "bjw-s.common.lib.controller.pod" . | nindent 10 }}
-          restartPolicy: {{ .Values.controller.cronjob.restartPolicy }}
 {{- end -}}
