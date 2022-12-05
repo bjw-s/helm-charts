@@ -24,8 +24,7 @@ spec:
   jobTemplate:
     spec:
       selector:
-        matchLabels:
-          {{- include "bjw-s.common.lib.metadata.selectorLabels" . | nindent 10 }}
+        {{- include "bjw-s.common.lib.metadata.selectorLabels" . | nindent 8 }}
       template:
         metadata:
           {{- with include ("bjw-s.common.lib.metadata.podAnnotations") . }}
@@ -39,4 +38,5 @@ spec:
             {{- end }}
         spec:
           {{- include "bjw-s.common.lib.controller.pod" . | nindent 10 }}
+          restartPolicy: {{ .Values.controller.cronjob.restartPolicy }}
 {{- end -}}

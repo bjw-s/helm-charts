@@ -49,6 +49,8 @@ controller:
     successfulJobsHistory: 1
     # -- The number of failed Jobs to keep
     failedJobsHistory: 1
+    # -- Container restart policy
+    restartPolicy: Never
 
 image:
   # -- image repository
