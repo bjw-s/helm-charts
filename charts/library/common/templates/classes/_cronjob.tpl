@@ -3,7 +3,6 @@ This template serves as a blueprint for Cronjob objects that are created
 using the common library.
 */}}
 {{- define "bjw-s.common.class.cronjob" -}}
-
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -23,8 +22,6 @@ spec:
   failedJobsHistoryLimit: {{ .Values.controller.cronjob.failedJobsHistory }}
   jobTemplate:
     spec:
-      selector:
-        {{- include "bjw-s.common.lib.metadata.selectorLabels" . | nindent 8 }}
       template:
         metadata:
           {{- with include ("bjw-s.common.lib.metadata.podAnnotations") . }}
