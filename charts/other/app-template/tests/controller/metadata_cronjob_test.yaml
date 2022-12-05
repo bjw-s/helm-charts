@@ -1,22 +1,18 @@
-suite: route metadata
+suite: controller metadata cronjob
 templates:
   - common.yaml
 tests:
   - it: default metadata should pass
     set:
-      route.main:
-        enabled: true
-        parentRefs:
-          - name: test
-            namespace: test
+      controller.type: cronjob
     asserts:
-      - documentIndex: &routeDocument 2
+      - documentIndex: &ControllerDoc 0
         isKind:
-          of: HTTPRoute
-      - documentIndex: *routeDocument
+          of: CronJob
+      - documentIndex: *ControllerDoc
         isNull:
           path: metadata.annotations
-      - documentIndex: *routeDocument
+      - documentIndex: *ControllerDoc
         equal:
           path: metadata.labels
           value:
@@ -27,25 +23,22 @@ tests:
 
   - it: custom metadata should pass
     set:
-      route.main:
-        enabled: true
+      controller:
+        type: cronjob
         annotations:
           test_annotation: test
         labels:
           test_label: test
-        parentRefs:
-          - name: test
-            namespace: test
     asserts:
-      - documentIndex: &routeDocument 2
+      - documentIndex: &ControllerDoc 0
         isKind:
-          of: HTTPRoute
-      - documentIndex: *routeDocument
+          of: CronJob
+      - documentIndex: *ControllerDoc
         equal:
           path: metadata.annotations
           value:
             test_annotation: test
-      - documentIndex: *routeDocument
+      - documentIndex: *ControllerDoc
         equal:
           path: metadata.labels
           value:
@@ -62,26 +55,23 @@ tests:
           global_label: test
         annotations:
           global_annotation: test
-      route.main:
-        enabled: true
+      controller:
+        type: cronjob
         annotations:
           test_annotation: test
         labels:
           test_label: test
-        parentRefs:
-          - name: test
-            namespace: test
     asserts:
-      - documentIndex: &routeDocument 2
+      - documentIndex: &ControllerDoc 0
         isKind:
-          of: HTTPRoute
-      - documentIndex: *routeDocument
+          of: CronJob
+      - documentIndex: *ControllerDoc
         equal:
           path: metadata.annotations
           value:
             global_annotation: test
             test_annotation: test
-      - documentIndex: *routeDocument
+      - documentIndex: *ControllerDoc
         equal:
           path: metadata.labels
           value:

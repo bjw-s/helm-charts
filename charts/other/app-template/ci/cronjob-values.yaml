@@ -1,0 +1,11 @@
+controller:
+  type: cronjob
+
+image:
+  repository: b4bz/homer
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  main:
+    enabled: false

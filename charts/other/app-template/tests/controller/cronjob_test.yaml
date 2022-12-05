@@ -1,0 +1,67 @@
+suite: cronjob configuration
+templates:
+  - common.yaml
+tests:
+  - it: default cronjob configuration should pass
+    set:
+      controller:
+        type: cronjob
+    asserts:
+      - documentIndex: &ControllerDoc 0
+        isKind:
+          of: CronJob
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.schedule
+          value: "*/20 * * * *"
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.concurrencyPolicy
+          value: Forbid
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.successfulJobsHistoryLimit
+          value: 1
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.failedJobsHistoryLimit
+          value: 1
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.jobTemplate.spec.template.spec.restartPolicy
+          value: Never
+
+  - it: custom cronjob configuration should pass
+    set:
+      controller:
+        type: cronjob
+        restartPolicy: OnFailure
+        cronjob:
+          schedule: &CronJobSchedule "0 3 * * *"
+          concurrencyPolicy: &CronJobConcurrencyPolicy "Test"
+          failedJobsHistory: &CronJobFailedJobsHistory 2
+          successfulJobsHistory: &CronJobSuccessfulJobsHistory 3
+    asserts:
+      - documentIndex: &ControllerDoc 0
+        isKind:
+          of: CronJob
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.schedule
+          value: *CronJobSchedule
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.concurrencyPolicy
+          value: *CronJobConcurrencyPolicy
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.successfulJobsHistoryLimit
+          value: *CronJobSuccessfulJobsHistory
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.failedJobsHistoryLimit
+          value: *CronJobFailedJobsHistory
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.jobTemplate.spec.template.spec.restartPolicy
+          value: OnFailure

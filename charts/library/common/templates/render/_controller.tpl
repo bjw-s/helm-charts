@@ -5,6 +5,8 @@ Renders the controller object required by the chart.
   {{- if .Values.controller.enabled -}}
     {{- if eq .Values.controller.type "deployment" -}}
       {{- include "bjw-s.common.class.deployment" . | nindent 0 -}}
+    {{- else if eq .Values.controller.type "cronjob" -}}
+      {{- include "bjw-s.common.class.cronjob" . | nindent 0 -}}
     {{ else if eq .Values.controller.type "daemonset" -}}
       {{- include "bjw-s.common.class.daemonset" . | nindent 0 -}}
     {{ else if eq .Values.controller.type "statefulset"  -}}

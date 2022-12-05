@@ -181,3 +181,32 @@ tests:
       - documentIndex: &HTTPRouteDocument 3
         isNull:
           path: spec.hostnames
+
+  - it: sectionName in parentRefs should be optional
+    set:
+      route:
+        main:
+          enabled: true
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+        second:
+          enabled: true
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+              sectionName: parentSection
+    asserts:
+      - documentIndex: &HTTPRouteDocument 2
+        isKind:
+          of: HTTPRoute
+      - documentIndex: &HTTPRouteDocument 2
+        isNull:
+          path: spec.parentRefs[0].sectionName
+      - documentIndex: &HTTPRouteDocument 3
+        isKind:
+          of: HTTPRoute
+      - documentIndex: &HTTPRouteDocument 3
+        equal:
+          path: spec.parentRefs[0].sectionName
+          value: parentSection

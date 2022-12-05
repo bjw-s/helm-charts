@@ -1,6 +1,6 @@
 # common
 
-![Version: 1.1.1](https://img.shields.io/badge/Version-1.1.1-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -29,7 +29,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
 - name: common
-  version: 1.1.1
+  version: 1.2.0
   repository: https://bjw-s.github.io/helm-charts/
 ```
 
@@ -101,17 +101,24 @@ N/A
 | configMaps.config.data | object | `{}` | configMap data content. Helm template enabled. |
 | configMaps.config.enabled | bool | `false` | Enables or disables the configMap |
 | configMaps.config.labels | object | `{}` | Labels to add to the configMap |
-| controller.annotations | object | `{}` | Set annotations on the deployment/statefulset/daemonset |
+| controller.annotations | object | `{}` | Set annotations on the deployment/statefulset/daemonset/cronjob |
+| controller.cronjob | object | See below | CronJob configuration. Required only when using `controller.type: cronjob`. |
+| controller.cronjob.concurrencyPolicy | string | `"Forbid"` | Specifies how to treat concurrent executions of a job that is created by this cron job, valid values are Allow, Forbid or Replace |
+| controller.cronjob.failedJobsHistory | int | `1` | The number of failed Jobs to keep |
+| controller.cronjob.schedule | string | `"*/20 * * * *"` | Sets the CronJob time when to execute your jobs |
+| controller.cronjob.startingDeadlineSeconds | int | `30` | The deadline in seconds for starting the job if it misses its scheduled time for any reason |
+| controller.cronjob.successfulJobsHistory | int | `1` | The number of succesful Jobs to keep |
 | controller.enabled | bool | `true` | enable the controller. |
-| controller.labels | object | `{}` | Set labels on the deployment/statefulset/daemonset |
+| controller.labels | object | `{}` | Set labels on the deployment/statefulset/daemonset/cronjob |
 | controller.podManagementPolicy | string | `nil` | Set statefulset podManagementPolicy, valid values are Parallel and OrderedReady (default). |
 | controller.replicas | int | `1` | Number of desired pods |
+| controller.restartPolicy | string | `Always`. When `controller.type` is `cronjob` it defaults to `Never`. | Set Container restart policy. |
 | controller.revisionHistoryLimit | int | `3` | ReplicaSet revision history limit |
 | controller.rollingUpdate.partition | string | `nil` | Set statefulset RollingUpdate partition |
 | controller.rollingUpdate.surge | string | `nil` | Set deployment RollingUpdate max surge |
 | controller.rollingUpdate.unavailable | string | `nil` | Set deployment RollingUpdate max unavailable |
-| controller.strategy | string | `nil` | Set the controller upgrade strategy For Deployments, valid values are Recreate (default) and RollingUpdate. For StatefulSets, valid values are OnDelete and RollingUpdate (default). DaemonSets ignore this. |
-| controller.type | string | `"deployment"` | Set the controller type. Valid options are deployment, daemonset or statefulset |
+| controller.strategy | string | `nil` | Set the controller upgrade strategy For Deployments, valid values are Recreate (default) and RollingUpdate. For StatefulSets, valid values are OnDelete and RollingUpdate (default). DaemonSets/CronJobs ignore this. |
+| controller.type | string | `"deployment"` | Set the controller type. Valid options are deployment, daemonset, statefulset or cronjob |
 | dnsConfig | object | `{}` | Optional DNS settings, configuring the ndots option may resolve nslookup issues on some Kubernetes setups. |
 | dnsPolicy | string | `nil` | Defaults to "ClusterFirst" if hostNetwork is false and "ClusterFirstWithHostNet" if hostNetwork is true. |
 | enableServiceLinks | bool | `true` | Enable/disable the generation of environment variables for services. [[ref]](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service) |
@@ -187,6 +194,7 @@ N/A
 | route.main.kind | string | `"HTTPRoute"` | Set the route kind Valid options are GRPCRoute, HTTPRoute, TCPRoute, TLSRoute, UDPRoute |
 | route.main.labels | object | `{}` | Provide additional labels which may be required. |
 | route.main.nameOverride | string | `nil` | Override the name suffix that is used for this route. |
+| route.main.parentRefs | list | `[{"group":"gateway.networking.k8s.io","kind":"Gateway","name":null,"namespace":null,"sectionName":null}]` | Configure the resource the route attaches to. |
 | route.main.rules | list | `[{"backendRefs":[{"group":"","kind":"Service","name":null,"namespace":null,"port":null,"weight":1}],"matches":[{"path":{"type":"PathPrefix","value":"/"}}]}]` | Configure rules for routing. Defaults to the primary service. |
 | route.main.rules[0].backendRefs | list | `[{"group":"","kind":"Service","name":null,"namespace":null,"port":null,"weight":1}]` | Configure backends where matching requests should be sent. |
 | runtimeClassName | string | `nil` | Allow specifying a runtimeClassName other than the default one (ie: nvidia) |
