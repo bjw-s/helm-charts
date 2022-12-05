@@ -36,14 +36,19 @@ controller:
   revisionHistoryLimit: 3
   # -- Set statefulset podManagementPolicy, valid values are Parallel and OrderedReady (default).
   podManagementPolicy:
-  # cronjob section only required when using controller.type: cronjob
+  # -- CronJob configuration. Required only when using `controller.type: cronjob`.
+  # @default -- See below
   cronjob:
-    # -- concurrencyPolicy specifies how to treat concurrent executions of a job that is created by this cron job, valid values are Allow, Forbid or Replace
+    # -- Specifies how to treat concurrent executions of a job that is created by this cron job, valid values are Allow, Forbid or Replace
     concurrencyPolicy: Forbid
-    # -- schedule sets the cronjob time when to execute your jobs
+    # -- Sets the CronJob time when to execute your jobs
     schedule: "*/20 * * * *"
-    # -- startingDeadlineSeconds stands for the deadline in seconds for starting the job if it misses its scheduled time for any reason ( Integer )
+    # -- The deadline in seconds for starting the job if it misses its scheduled time for any reason
     startingDeadlineSeconds: 30
+    # -- The number of succesful Jobs to keep
+    successfulJobsHistory: 1
+    # -- The number of failed Jobs to keep
+    failedJobsHistory: 1
 
 image:
   # -- image repository

@@ -19,6 +19,8 @@ spec:
   concurrencyPolicy: "{{ .Values.controller.cronjob.concurrencyPolicy }}"
   startingDeadlineSeconds: {{ .Values.controller.cronjob.startingDeadlineSeconds }}
   schedule: "{{ .Values.controller.cronjob.schedule }}"
+  successfulJobsHistoryLimit: {{ .Values.controller.cronjob.successfulJobsHistory }}
+  failedJobsHistoryLimit: {{ .Values.controller.cronjob.failedJobsHistory }}
   jobTemplate:
     spec:
       selector:
