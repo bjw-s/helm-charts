@@ -38,15 +38,9 @@
   env:
     {{- get (fromYaml (include "bjw-s.common.lib.container.envVars" $)) "env" | toYaml | nindent 4 -}}
   {{- end }}
-  {{- if or .Values.envFrom .Values.secret }}
+  {{- with .Values.envFrom }}
   envFrom:
-    {{- with .Values.envFrom }}
-      {{- toYaml . | nindent 4 }}
-    {{- end }}
-    {{- if .Values.secret }}
-    - secretRef:
-        name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}
-    {{- end }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
   ports:
   {{- include "bjw-s.common.lib.container.ports" . | trim | nindent 4 }}
