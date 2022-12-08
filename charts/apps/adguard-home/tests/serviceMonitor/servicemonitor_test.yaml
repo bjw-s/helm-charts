@@ -1,0 +1,229 @@
+suite: serviceMonitor values
+templates:
+  - common.yaml
+tests:
+  - it: a serviceMonitor is not created by default
+    asserts:
+      - hasDocuments:
+          count: 5
+      - documentIndex: 0
+        not: true
+        isKind:
+          of: ServiceMonitor
+      - documentIndex: 1
+        not: true
+        isKind:
+          of: ServiceMonitor
+      - documentIndex: 2
+        not: true
+        isKind:
+          of: ServiceMonitor
+      - documentIndex: 3
+        not: true
+        isKind:
+          of: ServiceMonitor
+      - documentIndex: 4
+        not: true
+        isKind:
+          of: ServiceMonitor
+
+  - it: a serviceMonitor is not created when disabled
+    set:
+      serviceMonitor:
+        main:
+          enabled: false
+    asserts:
+      - hasDocuments:
+          count: 5
+      - documentIndex: 0
+        not: true
+        isKind:
+          of: ServiceMonitor
+      - documentIndex: 1
+        not: true
+        isKind:
+          of: ServiceMonitor
+      - documentIndex: 2
+        not: true
+        isKind:
+          of: ServiceMonitor
+      - documentIndex: 3
+        not: true
+        isKind:
+          of: ServiceMonitor
+      - documentIndex: 4
+        not: true
+        isKind:
+          of: ServiceMonitor
+
+  - it: a serviceMonitor is created
+    set:
+      serviceMonitor:
+        main:
+          enabled: true
+          endpoints:
+            - port: http
+              scheme: http
+              path: /metrics
+              interval: 1m
+              scrapeTimeout: 10s
+    asserts:
+      - hasDocuments:
+          count: 6
+      - documentIndex: &DeploymentDocument 0
+        isKind:
+          of: Deployment
+      - documentIndex: &ServiceTCPDocument 1
+        isKind:
+          of: Service
+      - documentIndex: &ServiceUDPDocument 2
+        isKind:
+          of: Service
+      - documentIndex: &ServiceMainDocument 3
+        isKind:
+          of: Service
+      - documentIndex: &ServiceMonitorDocument 4
+        isKind:
+          of: ServiceMonitor
+      - documentIndex: &ConfigMapDocument 5
+        isKind:
+          of: ConfigMap
+
+      - documentIndex: *ServiceMonitorDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME
+      - documentIndex: *ServiceMonitorDocument
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: RELEASE-NAME
+      - documentIndex: *ServiceMonitorDocument
+        equal:
+          path: spec.endpoints
+          value:
+            - port: http
+              scheme: http
+              path: /metrics
+              interval: 1m
+              scrapeTimeout: 10s
+
+  - it: a serviceMonitor is created with nameOverride
+    set:
+      serviceMonitor:
+        main:
+          enabled: true
+          nameOverride: test
+    asserts:
+      - hasDocuments:
+          count: 6
+      - documentIndex: &DeploymentDocument 0
+        isKind:
+          of: Deployment
+      - documentIndex: &ServiceTCPDocument 1
+        isKind:
+          of: Service
+      - documentIndex: &ServiceUDPDocument 2
+        isKind:
+          of: Service
+      - documentIndex: &ServiceMainDocument 3
+        isKind:
+          of: Service
+      - documentIndex: &ServiceMonitorDocument 4
+        isKind:
+          of: ServiceMonitor
+      - documentIndex: &ConfigMapDocument 5
+        isKind:
+          of: ConfigMap
+      - documentIndex: *ServiceMonitorDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-test
+      - documentIndex: *ServiceMonitorDocument
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: RELEASE-NAME
+
+  - it: a serviceMonitor is created with a templated service
+    set:
+      serviceMonitor:
+        main:
+          enabled: true
+          serviceName: "{{ .Release.Name }}"
+    asserts:
+      - hasDocuments:
+          count: 6
+      - documentIndex: &DeploymentDocument 0
+        isKind:
+          of: Deployment
+      - documentIndex: &ServiceTCPDocument 1
+        isKind:
+          of: Service
+      - documentIndex: &ServiceUDPDocument 2
+        isKind:
+          of: Service
+      - documentIndex: &ServiceMainDocument 3
+        isKind:
+          of: Service
+      - documentIndex: &ServiceMonitorDocument 4
+        isKind:
+          of: ServiceMonitor
+      - documentIndex: &ConfigMapDocument 5
+        isKind:
+          of: ConfigMap
+      - documentIndex: *ServiceMonitorDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME
+      - documentIndex: *ServiceMonitorDocument
+        equal:
+          path: spec.selector.matchLabels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: RELEASE-NAME
+
+  - it: a serviceMonitor is created with a custom selector
+    set:
+      serviceMonitor:
+        main:
+          enabled: true
+          selector:
+            mySelector:
+              test: "true"
+    asserts:
+      - hasDocuments:
+          count: 6
+      - documentIndex: &DeploymentDocument 0
+        isKind:
+          of: Deployment
+      - documentIndex: &ServiceTCPDocument 1
+        isKind:
+          of: Service
+      - documentIndex: &ServiceUDPDocument 2
+        isKind:
+          of: Service
+      - documentIndex: &ServiceMainDocument 3
+        isKind:
+          of: Service
+      - documentIndex: &ServiceMonitorDocument 4
+        isKind:
+          of: ServiceMonitor
+      - documentIndex: &ConfigMapDocument 5
+        isKind:
+          of: ConfigMap
+      - documentIndex: *ServiceMonitorDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME
+      - documentIndex: *ServiceMonitorDocument
+        equal:
+          path: spec.selector
+          value:
+            mySelector:
+              test: "true"

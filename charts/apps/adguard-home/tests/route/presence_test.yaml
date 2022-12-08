@@ -1,0 +1,130 @@
+suite: route presence
+templates:
+  - common.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - hasDocuments:
+          count: 5
+      - documentIndex: 0
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 1
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 2
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 3
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 4
+        not: true
+        isKind:
+          of: HTTPRoute
+
+  - it: explicitly disabled should pass
+    asserts:
+      - hasDocuments:
+          count: 5
+      - documentIndex: 0
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 1
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 2
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 3
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 4
+        not: true
+        isKind:
+          of: HTTPRoute
+
+  - it: explicitly enabled should pass
+    set:
+      route.main:
+        enabled: true
+        parentRefs:
+          - name: test
+            namespace: test
+    asserts:
+      - hasDocuments:
+          count: 6
+      - documentIndex: 0
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 1
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 2
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 3
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 4
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 5
+        not: true
+        isKind:
+          of: HTTPRoute
+
+  - it: multiple enabled should pass
+    set:
+      route:
+        main:
+          enabled: true
+          parentRefs:
+            - name: main
+              namespace: main
+        test:
+          enabled: true
+          parentRefs:
+            - name: test
+              namespace: test
+    asserts:
+      - hasDocuments:
+          count: 7
+      - documentIndex: 0
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 1
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 2
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 3
+        not: true
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 4
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 5
+        isKind:
+          of: HTTPRoute
+      - documentIndex: 6
+        not: true
+        isKind:
+          of: HTTPRoute

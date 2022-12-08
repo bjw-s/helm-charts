@@ -1,0 +1,85 @@
+suite: service protocols
+templates:
+  - common.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - hasDocuments:
+          count: 5
+      - documentIndex: &ServiceDocument-main 3
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-udp 2
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-tcp 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument-main
+        equal:
+          path: spec.ports[0].protocol
+          value: TCP
+      - documentIndex: *ServiceDocument-tcp
+        equal:
+          path: spec.ports[0].protocol
+          value: TCP
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: spec.ports[0].protocol
+          value: UDP
+
+  - it: explicit TCP should pass
+    set:
+      service.dns-udp.ports.dns-udp.protocol: TCP
+    asserts:
+      - documentIndex: &ServiceDocument-udp 2
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: spec.ports[0].protocol
+          value: TCP
+
+  - it: explicit UDP should pass
+    set:
+      service.main.ports.http.protocol: UDP
+    asserts:
+      - documentIndex: &ServiceDocument-main 3
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument-main
+        equal:
+          path: spec.ports[0].protocol
+          value: UDP
+
+  - it: explicit HTTP should pass
+    set:
+      service.dns-udp.ports.dns-udp.protocol: HTTP
+    asserts:
+      - documentIndex: &ServiceDocument-udp 2
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: spec.ports[0].protocol
+          value: TCP
+      - documentIndex: *ServiceDocument-udp
+        isNull:
+          path: metadata.annotations
+
+  - it: explicit HTTPS should pass
+    set:
+      service.dns-udp.ports.dns-udp.protocol: HTTPS
+    asserts:
+      - documentIndex: &ServiceDocument 2
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: spec.ports[0].protocol
+          value: TCP
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: metadata.annotations
+          value:
+            traefik.ingress.kubernetes.io/service.serversscheme: https

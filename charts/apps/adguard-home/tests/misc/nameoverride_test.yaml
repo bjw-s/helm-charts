@@ -1,0 +1,25 @@
+suite: nameOverride tests
+templates:
+  - common.yaml
+tests:
+  - it: default name is set to release name
+    asserts:
+      - documentIndex: &ControllerDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *ControllerDoc
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME
+
+  - it: global.nameOverride can be set
+    set:
+      global.nameOverride: custom-name
+    asserts:
+      - documentIndex: &ControllerDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *ControllerDoc
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-custom-name

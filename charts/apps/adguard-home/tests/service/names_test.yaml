@@ -1,0 +1,57 @@
+suite: service names
+templates:
+  - common.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - hasDocuments:
+          count: 5
+      - documentIndex: &ServiceDocument-main 3
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-udp 2
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-tcp 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument-main
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME
+      - documentIndex: *ServiceDocument-tcp
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-dns-tcp
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-dns-udp
+
+  - it: custom name suffix should pass
+    set:
+      service:
+        dns-tcp:
+          nameOverride: http
+    asserts:
+      - documentIndex: &ServiceDocument-main 3
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-udp 2
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-tcp 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument-main
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME
+      - documentIndex: *ServiceDocument-tcp
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-http
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-dns-udp

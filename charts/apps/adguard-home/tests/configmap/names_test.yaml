@@ -1,0 +1,127 @@
+suite: configMap names
+templates:
+  - common.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - hasDocuments:
+          count: 5
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 1
+        isKind:
+          of: Service
+      - documentIndex: 2
+        isKind:
+          of: Service
+      - documentIndex: 3
+        isKind:
+          of: Service
+      - documentIndex: 4
+        isKind:
+          of: ConfigMap
+
+  - it: with disabled config configMap should pass
+    set:
+      configMaps:
+        config:
+          enabled: false
+    asserts:
+      - hasDocuments:
+          count: 5
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 1
+        isKind:
+          of: Service
+      - documentIndex: 2
+        isKind:
+          of: Service
+      - documentIndex: 3
+        isKind:
+          of: Service
+      - documentIndex: 4 # config ConfigMap if forced on
+        isKind:
+          of: ConfigMap
+
+  - it: with multiple configMap should pass
+    set:
+      configMaps:
+        secondary:
+          enabled: true
+    asserts:
+      - hasDocuments:
+          count: 6
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 1
+        isKind:
+          of: Service
+      - documentIndex: 2
+        isKind:
+          of: Service
+      - documentIndex: 3
+        isKind:
+          of: Service
+      - documentIndex: &FirstConfigmapDocument 4
+        isKind:
+          of: ConfigMap
+      - documentIndex: &SecondConfigmapDocument 5
+        isKind:
+          of: ConfigMap
+
+      - documentIndex: *FirstConfigmapDocument
+        isNotNull:
+          path: metadata.name
+      - documentIndex: *SecondConfigmapDocument
+        isNotNull:
+          path: metadata.name
+
+  - it: default name should pass
+    asserts:
+      - hasDocuments:
+          count: 5
+      - documentIndex: &ConfigmapDocument 4
+        isKind:
+          of: ConfigMap
+      - documentIndex: *ConfigmapDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-config
+
+  - it: with nameOverride should not pass on `config` configMap
+    set:
+      configMaps:
+        config:
+          enabled: true
+          nameOverride: http
+    asserts:
+      - hasDocuments:
+          count: 5
+      - documentIndex: &ConfigmapDocument 4
+        isKind:
+          of: ConfigMap
+      - documentIndex: *ConfigmapDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-config
+
+  - it: with nameOverride should not pass on not `config` configMap
+    set:
+      configMaps:
+        test:
+          enabled: true
+          nameOverride: http
+    asserts:
+      - hasDocuments:
+          count: 6
+      - documentIndex: &ConfigmapDocument 5
+        isKind:
+          of: ConfigMap
+      - documentIndex: *ConfigmapDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-http

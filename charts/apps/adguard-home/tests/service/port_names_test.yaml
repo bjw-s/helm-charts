@@ -1,0 +1,129 @@
+suite: service port names
+templates:
+  - common.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - hasDocuments:
+          count: 5
+      - documentIndex: &ServiceDocument-main 3
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-udp 2
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-tcp 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument-main
+        equal:
+          path: spec.ports[0]
+          value:
+            name: http
+            port: 3000
+            protocol: TCP
+            targetPort: http
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: spec.ports[0]
+          value:
+            name: dns-udp
+            port: 53
+            protocol: UDP
+            targetPort: 53
+      - documentIndex: *ServiceDocument-tcp
+        equal:
+          path: spec.ports[0]
+          value:
+            name: dns-tcp
+            port: 53
+            protocol: TCP
+            targetPort: 53
+
+  - it: custom name should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              enabled: false
+            server:
+              enabled: true
+              port: 8080
+    asserts:
+      - documentIndex: &ServiceDocument-main 3
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-udp 2
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-tcp 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument-main
+        equal:
+          path: spec.ports[0]
+          value:
+            name: server
+            port: 8080
+            protocol: TCP
+            targetPort: server
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: spec.ports[0]
+          value:
+            name: dns-udp
+            port: 53
+            protocol: UDP
+            targetPort: 53
+      - documentIndex: *ServiceDocument-tcp
+        equal:
+          path: spec.ports[0]
+          value:
+            name: dns-tcp
+            port: 53
+            protocol: TCP
+            targetPort: 53
+
+  - it: custom target port should pass
+    set:
+      service:
+        main:
+          ports:
+            http:
+              enabled: true
+              targetPort: 80
+    asserts:
+      - documentIndex: &ServiceDocument-main 3
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-udp 2
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-tcp 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument-main
+        equal:
+          path: spec.ports[0]
+          value:
+            name: http
+            port: 3000
+            protocol: TCP
+            targetPort: 80
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: spec.ports[0]
+          value:
+            name: dns-udp
+            port: 53
+            protocol: UDP
+            targetPort: 53
+      - documentIndex: *ServiceDocument-tcp
+        equal:
+          path: spec.ports[0]
+          value:
+            name: dns-tcp
+            port: 53
+            protocol: TCP
+            targetPort: 53

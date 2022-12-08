@@ -1,0 +1,47 @@
+---
+{{- include "bjw-s.common.loader.init" . }}
+
+{{- if eq .Values.controller.type "cronjob" }}
+{{- fail "Controller type (cronjob) not accepted for this chart." }}
+{{- end }}
+
+{{- define "adguard-home.hardcodedValues" -}}
+# Set the nameOverride based on the release name if no override has been set
+{{ if not .Values.global.nameOverride }}
+global:
+  nameOverride: "{{ .Release.Name }}"
+{{ end }}
+{{- end -}}
+{{- $_ := mergeOverwrite .Values (include "adguard-home.hardcodedValues" . | fromYaml) -}}
+
+{{/* Append the configMap volume to the volumes */}}
+{{- define "adguard-home.configVolume" -}}
+enabled: "true"
+mountPath: "/tmp/AdGuardHome.yaml"
+subPath: "AdGuardHome.yaml"
+type: "configMap"
+name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}-config
+{{- end -}}
+{{- $_ := set .Values.persistence "adguard-home-configmap" (include "adguard-home.configVolume" . | fromYaml) -}}
+
+{{/* Create the configMap elements */}}
+{{- define "adguard.configMap" -}}
+enabled: true
+
+{{- with (.Values.configMaps.config.labels | default dict) }}
+labels: {{- toYaml . | nindent 4 }}
+{{- end }}
+
+{{- with (.Values.configMaps.config.annotations | default dict) }}
+annotations: {{- toYaml . | nindent 4 }}
+{{- end }}
+
+data:
+  AdGuardHome.yaml: |
+{{ .Values.config | indent 4 }}
+{{- end -}}
+{{- $_ := set .Values.configMaps "config" (include "adguard.configMap" . | fromYaml) -}}
+
+
+{{/* Render the templates */}}
+{{ include "bjw-s.common.loader.generate" . }}

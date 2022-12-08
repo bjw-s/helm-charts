@@ -1,0 +1,189 @@
+suite: service metadata
+templates:
+  - common.yaml
+tests:
+  - it: default metadata should pass
+    asserts:
+      - documentIndex: &ServiceDocument-main 3
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-udp 2
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-tcp 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument-main
+        isNull:
+          path: metadata.annotations
+      - documentIndex: *ServiceDocument-main
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: RELEASE-NAME
+            app.kubernetes.io/version: v0.107.19
+            helm.sh/chart: adguard-home-1.1.0
+      - documentIndex: *ServiceDocument-udp
+        isNull:
+          path: metadata.annotations
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: RELEASE-NAME-dns-udp
+            app.kubernetes.io/version: v0.107.19
+            helm.sh/chart: adguard-home-1.1.0
+      - documentIndex: *ServiceDocument-tcp
+        isNull:
+          path: metadata.annotations
+      - documentIndex: *ServiceDocument-tcp
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: RELEASE-NAME-dns-tcp
+            app.kubernetes.io/version: v0.107.19
+            helm.sh/chart: adguard-home-1.1.0
+
+  - it: custom metadata should pass
+    set:
+      service:
+        main:
+          annotations:
+            test_annotation: test
+          labels:
+            test_label: test
+    asserts:
+      - documentIndex: &ServiceDocument-main 3
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-udp 2
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-tcp 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument-main
+        equal:
+          path: metadata.annotations
+          value:
+            test_annotation: test
+      - documentIndex: *ServiceDocument-main
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: RELEASE-NAME
+            app.kubernetes.io/version: v0.107.19
+            helm.sh/chart: adguard-home-1.1.0
+            test_label: test
+      - documentIndex: *ServiceDocument-udp
+        isNull:
+          path: metadata.annotations
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: RELEASE-NAME-dns-udp
+            app.kubernetes.io/version: v0.107.19
+            helm.sh/chart: adguard-home-1.1.0
+      - documentIndex: *ServiceDocument-tcp
+        isNull:
+          path: metadata.annotations
+      - documentIndex: *ServiceDocument-tcp
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: RELEASE-NAME-dns-tcp
+            app.kubernetes.io/version: v0.107.19
+            helm.sh/chart: adguard-home-1.1.0
+
+  - it: custom metadata with global metadata should pass
+    set:
+      global:
+        labels:
+          global_label: test
+        annotations:
+          global_annotation: test
+      service:
+        main:
+          annotations:
+            test_annotation: test
+          labels:
+            test_label: test
+    asserts:
+      - documentIndex: &ServiceDocument-main 3
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-udp 2
+        isKind:
+          of: Service
+      - documentIndex: &ServiceDocument-tcp 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument-main
+        equal:
+          path: metadata.annotations
+          value:
+            test_annotation: test
+            global_annotation: test
+      - documentIndex: *ServiceDocument-main
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: RELEASE-NAME
+            app.kubernetes.io/version: v0.107.19
+            helm.sh/chart: adguard-home-1.1.0
+            test_label: test
+            global_label: test
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: metadata.annotations
+          value:
+            global_annotation: test
+      - documentIndex: *ServiceDocument-udp
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: RELEASE-NAME-dns-udp
+            app.kubernetes.io/version: v0.107.19
+            helm.sh/chart: adguard-home-1.1.0
+            global_label: test
+      - documentIndex: *ServiceDocument-tcp
+        equal:
+          path: metadata.annotations
+          value:
+            global_annotation: test
+      - documentIndex: *ServiceDocument-tcp
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: RELEASE-NAME-dns-tcp
+            app.kubernetes.io/version: v0.107.19
+            helm.sh/chart: adguard-home-1.1.0
+            global_label: test

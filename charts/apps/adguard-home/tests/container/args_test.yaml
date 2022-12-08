@@ -1,0 +1,58 @@
+suite: container args override
+templates:
+  - common.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].args[0]
+          value: --config
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].args[1]
+          value: /opt/adguardhome/conf/AdGuardHome.yaml
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].args[2]
+          value: --work-dir
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].args[3]
+          value: /opt/adguardhome/work
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].args[4]
+          value: --no-check-update
+
+  - it: single string should pass
+    set:
+      args: sleep infinity
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].args
+          value:
+            - sleep infinity
+
+  - it: list of strings should pass
+    set:
+      args:
+        - sleep
+        - infinity
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].args
+          value:
+            - sleep
+            - infinity

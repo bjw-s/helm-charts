@@ -1,0 +1,19 @@
+{{- include "bjw-s.common.loader.init" . }}
+{{- define "adguard.hardcodedValues" -}}
+# Set the nameOverride based on the release name if no override has been set
+{{ if not .Values.global.nameOverride }}
+global:
+  nameOverride: "{{ .Release.Name }}"
+{{ end }}
+{{- end -}}
+{{- $_ := mergeOverwrite .Values (include "adguard.hardcodedValues" . | fromYaml) -}}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "bjw-s.common.lib.chart.names.fullname" . }}-config
+  labels:
+    {{- include "bjw-s.common.lib.metadata.allLabels" . | nindent 4 }}
+data:
+  AdGuardHome.yaml: |
+{{ .Values.config | indent 4 }}
