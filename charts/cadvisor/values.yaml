@@ -1,7 +1,7 @@
 image:
   repository: gcr.io/cadvisor/cadvisor
-  tag: v0.45.0
-  pullPolicy: IfNotPresent
+  tag:
+  pullPolicy: Always
 
   ## Reference to one or more secrets to be used when pulling images
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -15,7 +15,6 @@ container:
     - --event_storage_event_limit=default=0
     - --event_storage_age_limit=default=0
     - --disable_metrics=percpu,process,sched,tcp,udp,referenced_memory # enable only diskIO, cpu, memory, network, disk
-    - --docker_only
   hostPaths:
     - name: rootfs
       path: '/'

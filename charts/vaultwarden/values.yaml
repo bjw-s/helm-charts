@@ -45,41 +45,18 @@ ingress:
           - path: /
             pathType: Prefix
             service:
-              port: http
+              port: 80
           - path: /notifications/hub/negotiate
             pathType: Prefix
             service:
-              port: http
+              port: 80
           - path: /notifications/hub
             pathType: Prefix
             service:
-              port: websocket
+              port: 3012
 
 # -- Configure persistence settings for the chart under this key.
 # @default -- See values.yaml
 persistence:
   config:
     enabled: false
-
-# https://github.com/bitnami/charts/tree/master/bitnami/mariadb/#installing-the-chart
-mariadb:
-  enabled: false
-  # primary:
-  #   persistence:
-  #     enabled: true
-  # auth:
-  #   username: "username"
-  #   password: "password"
-  #   database: database
-
-# https://github.com/bitnami/charts/tree/master/bitnami/postgresql/#installing-the-chart
-postgresql:
-  enabled: false
-  # postgresqlUsername: ""
-  # postgresqlPassword: ""
-  # postgresqlDatabase: ""
-  # persistence:
-  #   enabled: true
-  #   storageClass:
-  #   accessModes:
-  #     - ReadWriteOnce
