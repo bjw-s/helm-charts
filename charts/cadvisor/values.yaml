@@ -1,6 +1,6 @@
 image:
   repository: gcr.io/cadvisor/cadvisor
-  tag:
+  tag: v0.46.0
   pullPolicy: Always
 
   ## Reference to one or more secrets to be used when pulling images
