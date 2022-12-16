@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 1.2.0
+version: 1.2.1
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -14,13 +14,5 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: fixed
-      description: Fixed sectionName not being optional for gateway routes
-    - kind: fixed
-      description: Fixed primary gateway route having incorrect name
-    - kind: fixed
-      description: Fixed invalid persistence type message
     - kind: added
-      description: Added cronjob as controller.type
-    - kind: added
-      description: Allow setting container restartPolicy
+      description: fixed indentation in cronjob component to allow podAnnotations
