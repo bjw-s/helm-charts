@@ -31,7 +31,7 @@ spec:
         metadata:
           {{- with include ("bjw-s.common.lib.metadata.podAnnotations") . }}
           annotations:
-            {{- . | nindent 8 }}
+            {{- . | nindent 10 }}
           {{- end }}
           labels:
             {{- include "bjw-s.common.lib.metadata.selectorLabels" . | nindent 12 }}
