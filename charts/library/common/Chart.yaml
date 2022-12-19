@@ -14,5 +14,10 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: added
+    - kind: fixed
       description: fixed indentation in cronjob component to allow podAnnotations
+    - kind: fixed
+      description: Cleaned leftover `secret` behavior under `envFrom`.
+      links:
+        - name: GitHub Issue
+          url: https://github.com/bjw-s/helm-charts/issues/94
