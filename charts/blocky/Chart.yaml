@@ -3,8 +3,8 @@ apiVersion: v2
 appVersion: v0.20
 description: DNS proxy as ad-blocker for local network
 name: blocky
-version: 10.10.0
-kubeVersion: '>=1.19.0-0'
+version: 11.0.0
+kubeVersion: '>=1.22.0-0'
 keywords:
   - blocky
   - adblock
