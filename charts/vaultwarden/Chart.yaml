@@ -3,8 +3,8 @@ apiVersion: v2
 appVersion: 1.27.0
 description: Vaultwarden is a Bitwarden compatable server in Rust
 name: vaultwarden
-version: 5.8.1
-kubeVersion: '>=1.16.0-0'
+version: 6.0.0
+kubeVersion: '>=1.22.0-0'
 keywords:
   - Vaultwarden
   - bitwardenrs
@@ -18,4 +18,4 @@ maintainers:
 dependencies:
   - name: common
     repository: https://bjw-s.github.io/helm-charts
-    version: 0.2.2
+    version: 1.2.0

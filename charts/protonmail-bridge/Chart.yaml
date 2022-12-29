@@ -1,10 +1,10 @@
 ---
 apiVersion: v2
-appVersion: 1.8.7-1
+appVersion: 2.4.8-1
 description: Container for protonmail bridge to work on the network.
 name: protonmail-bridge
-version: 5.8.0
-kubeVersion: '>=1.16.0-0'
+version: 6.0.0
+kubeVersion: '>=1.22.0-0'
 keywords:
   - protonmail
   - protonmail-bridge
@@ -19,8 +19,4 @@ maintainers:
 dependencies:
   - name: common
     repository: https://bjw-s.github.io/helm-charts
-    version: 0.2.2
-annotations:
-  artifacthub.io/changes: |-
-    - kind: changed
-      description: Upgraded `common` chart dependency to version 0.1.0
+    version: 1.2.0
