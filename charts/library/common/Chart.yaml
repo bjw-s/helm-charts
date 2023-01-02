@@ -21,3 +21,5 @@ annotations:
       links:
         - name: GitHub Issue
           url: https://github.com/bjw-s/helm-charts/issues/94
+    - kind: changed
+      description: Updated code-server image tag to 4.9.1
