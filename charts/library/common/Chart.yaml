@@ -15,7 +15,7 @@ maintainers:
 annotations:
   artifacthub.io/changes: |-
     - kind: fixed
-      description: fixed indentation in cronjob component to allow podAnnotations
+      description: Fixed indentation in cronjob component to allow podAnnotations
     - kind: fixed
       description: Cleaned leftover `secret` behavior under `envFrom`.
       links:
