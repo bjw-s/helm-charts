@@ -52,6 +52,8 @@ controller:
     successfulJobsHistory: 1
     # -- The number of failed Jobs to keep
     failedJobsHistory: 1
+    # --  If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to be automatically deleted.
+    ttlSecondsAfterFinished:
 
 image:
   # -- image repository

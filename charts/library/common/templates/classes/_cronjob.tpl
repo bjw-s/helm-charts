@@ -27,6 +27,9 @@ spec:
   failedJobsHistoryLimit: {{ .Values.controller.cronjob.failedJobsHistory }}
   jobTemplate:
     spec:
+      {{- with .Values.controller.cronjob.ttlSecondsAfterFinished }}
+      ttlSecondsAfterFinished: {{ . }}
+      {{- end }}
       template:
         metadata:
           {{- with include ("bjw-s.common.lib.metadata.podAnnotations") . }}
