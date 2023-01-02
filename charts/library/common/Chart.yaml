@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 1.2.0
+version: 1.2.1
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -15,12 +15,13 @@ maintainers:
 annotations:
   artifacthub.io/changes: |-
     - kind: fixed
-      description: Fixed sectionName not being optional for gateway routes
+      description: Fixed indentation in cronjob component to allow podAnnotations
     - kind: fixed
-      description: Fixed primary gateway route having incorrect name
-    - kind: fixed
-      description: Fixed invalid persistence type message
+      description: Cleaned leftover `secret` behavior under `envFrom`.
+      links:
+        - name: GitHub Issue
+          url: https://github.com/bjw-s/helm-charts/issues/94
+    - kind: changed
+      description: Updated code-server image tag to 4.9.1
     - kind: added
-      description: Added cronjob as controller.type
-    - kind: added
-      description: Allow setting container restartPolicy
+      description: Allow setting `ttlSecondsAfterFinished` for CronJobs
