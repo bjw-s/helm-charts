@@ -63,6 +63,10 @@ jobs:
         run: |
           kubectl taint --all=true nodes node.cloudprovider.kubernetes.io/uninitialized- || true
 
+      - name: Install metrics-server
+        run: |
+          kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/metrics-server-helm-chart-3.8.3/components.yaml
+
       - name: Override chart dependencies
         uses: ./.github/actions/override-chart-deps
         if: ${{ inputs.overrideDeps != '[]' }}
