@@ -3,7 +3,7 @@ apiVersion: v2
 appVersion: 2.1.3
 description: Collect ALL UniFi Controller, Site, Device & Client Data - Export to InfluxDB or Prometheus
 name: unifi-poller
-version: 12.0.0
+version: 12.0.1
 kubeVersion: '>=1.22.0-0'
 keywords:
   - unifi
