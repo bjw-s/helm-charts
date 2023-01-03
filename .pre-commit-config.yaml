@@ -6,7 +6,7 @@ exclude: |
 
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.0.1
+  rev: v4.4.0
   hooks:
   - id: trailing-whitespace
   - id: end-of-file-fixer
@@ -16,7 +16,7 @@ repos:
   - id: check-case-conflict
 
 - repo: https://github.com/Lucas-C/pre-commit-hooks
-  rev: v1.1.10
+  rev: v1.3.1
   hooks:
   - id: remove-crlf
   - id: remove-tabs

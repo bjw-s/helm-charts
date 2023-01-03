@@ -20,4 +20,4 @@ jobs:
       - name: Run against changes
         uses: pre-commit/action@v3.0.0
         with:
-          extra_args: --files ${{ join(fromJson(inputs.modifiedFiles), ' ') }} --config .ci/pre-commit/config.yaml
+          extra_args: --files ${{ join(fromJson(inputs.modifiedFiles), ' ') }} --config ./.pre-commit-config.yaml
