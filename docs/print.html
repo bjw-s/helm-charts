@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible no-js navy">
+<html lang="en" class="sidebar-visible no-js latte">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -9,6 +9,7 @@
 
         <!-- Custom HTML head -->
         
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
@@ -31,17 +32,19 @@
 
         <!-- Custom theme stylesheets -->
         <link rel="stylesheet" href="././assets/css/mdbook-admonish.css">
+        <link rel="stylesheet" href="./theme/catppuccin.css">
+        <link rel="stylesheet" href="./theme/catppuccin-highlight.css">
 
     </head>
     <body>
         <!-- Provide site root to javascript -->
-        <script>
+        <script type="text/javascript">
             var path_to_root = "";
-            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "navy";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "macchiato" : "latte";
         </script>
 
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
-        <script>
+        <script type="text/javascript">
             try {
                 var theme = localStorage.getItem('mdbook-theme');
                 var sidebar = localStorage.getItem('mdbook-sidebar');
@@ -57,19 +60,19 @@
         </script>
 
         <!-- Set the theme before any content is loaded, prevents flash -->
-        <script>
+        <script type="text/javascript">
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
             var html = document.querySelector('html');
             html.classList.remove('no-js')
-            html.classList.remove('navy')
+            html.classList.remove('latte')
             html.classList.add(theme);
             html.classList.add('js');
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
-        <script>
+        <script type="text/javascript">
             var html = document.querySelector('html');
             var sidebar = 'hidden';
             if (document.body.clientWidth >= 1080) {
@@ -82,7 +85,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="common-library/introduction.html">Common library chart</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="common-library/add-ons.html">Add-ons</a></li><li class="chapter-item expanded "><a href="common-library/storage.html">Storage</a></li></ol></li><li class="chapter-item expanded "><a href="app-template/introduction.html">App Template chart</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Helm Charts</li><li class="chapter-item expanded "><a href="common-library/introduction.html">Common Library</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/add-ons/index.html">Add-ons</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/add-ons/code-server/index.html">code-server</a></li></ol></li><li class="chapter-item "><a href="common-library/storage/index.html">Storage</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/storage/permissions.html">Permissions</a></li><li class="chapter-item "><a href="common-library/storage/types.html">Storage types</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/storage/types/pvc.html">PersistentVolumeClaim</a></li><li class="chapter-item "><a href="common-library/storage/types/emptydir.html">EmptyDir</a></li><li class="chapter-item "><a href="common-library/storage/types/hostpath.html">HostPath</a></li><li class="chapter-item "><a href="common-library/storage/types/configmap.html">ConfigMap</a></li><li class="chapter-item "><a href="common-library/storage/types/secret.html">Secret</a></li><li class="chapter-item "><a href="common-library/storage/types/nfs-share.html">NFS share</a></li><li class="chapter-item "><a href="common-library/storage/types/custom.html">Custom</a></li></ol></li></ol></li><li class="chapter-item "><a href="common-library/howto/index.html">How to...</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/howto/multiple-subpath.html">Multiple subPaths for 1 volume</a></li><li class="chapter-item "><a href="common-library/howto/helm-templates.html">Helm templates</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="app-template/introduction.html">App Template</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -100,11 +103,10 @@
                             <i class="fa fa-paint-brush"></i>
                         </button>
                         <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
-                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
-                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="latte">Latte (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="frappe">Frappé</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="macchiato">Macchiato</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mocha">Mocha</button></li>
                         </ul>
                         <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
                             <i class="fa fa-search"></i>
@@ -136,7 +138,7 @@
                 </div>
 
                 <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
-                <script>
+                <script type="text/javascript">
                     document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
                     document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
                     Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
@@ -218,18 +220,18 @@ dependency on what we call the <code>common</code> library.</p>
 <p>The common library chart supplies a few add-ons which are meant to simplify some features
 you might be looking for. These are sidecars that run in the same pod as your
 application you configured it with.</p>
-<h2 id="code-server"><a class="header" href="#code-server">Code Server</a></h2>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/add-ons/index.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="code-server"><a class="header" href="#code-server">Code Server</a></h1>
 <p>The <a href="https://github.com/cdr/code-server">code-server</a> add-on can be used to
 access and modify persistent volume data in your application. This can be
 useful when you need to edit the persistent volume data, for example with
 Home Assistant.</p>
-<h3 id="example-values"><a class="header" href="#example-values">Example values</a></h3>
+<h2 id="example-values"><a class="header" href="#example-values">Example values</a></h2>
 <p>Below is a snippet from a <code>values.yaml</code> using the add-on. More configuration
 options can be found in our common chart documentation.</p>
 <div id="admonition-note" class="admonition note">
 <div class="admonition-title">
 <p>Note</p>
-<p><a class="admonition-anchor-link" href="common-library/add-ons.html#admonition-note"></a></p>
+<p><a class="admonition-anchor-link" href="common-library/add-ons/code-server/index.html#admonition-note"></a></p>
 </div>
 <div>
 <p>This example will mount <code>/config</code> into the code-server sidecar.</p>
@@ -265,33 +267,24 @@ options can be found in our common chart documentation.</p>
     - name: config
       mountPath: /config
 </code></pre>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/add-ons.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="common-library-storage"><a class="header" href="#common-library-storage">Common library Storage</a></h1>
-<p>This page describes the different ways you can attach storage to charts
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/add-ons/code-server/index.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="common-library-storage"><a class="header" href="#common-library-storage">Common library Storage</a></h1>
+<p>This page describes the different ways you can configure and attach storage to charts
 using the common library.</p>
-<h2 id="types"><a class="header" href="#types">Types</a></h2>
-<p>These are the types of storage that are supported in the common library.
-Of course, other types are possible with the <code>custom</code> type.</p>
-<ul>
-<li><a href="common-library/storage.html#persistent-volume-claim">Persistent Volume Claim</a>
-<ul>
-<li><a href="common-library/storage.html#dynamically-provisioned">Dynamically provisioned</a></li>
-<li><a href="common-library/storage.html#existing-claim">Existing claim</a></li>
-</ul>
-</li>
-<li><a href="common-library/storage.html#empty-dir">Empty Dir</a></li>
-<li><a href="common-library/storage.html#host-path">Host path</a></li>
-<li><a href="common-library/storage.html#configmap">configMap</a></li>
-<li><a href="common-library/storage.html#secret">Secret</a></li>
-<li><a href="common-library/storage.html#nfs-volume">NFS Volume</a></li>
-<li><a href="common-library/storage.html#custom">Custom</a></li>
-<li><a href="common-library/storage.html#permissions">Permissions</a></li>
-<li><a href="common-library/storage.html#multiple-subpaths-for-1-volume">Multiple subPaths for 1 volume</a></li>
-</ul>
-<h3 id="persistent-volume-claim"><a class="header" href="#persistent-volume-claim">Persistent Volume Claim</a></h3>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/index.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="permissions"><a class="header" href="#permissions">Permissions</a></h1>
+<p>Charts do not modify file or folder permissions on volumes out of the box.</p>
+<p>This means that you will have to make sure that your storage can be written to
+by the application.</p>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/permissions.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="storage-types"><a class="header" href="#storage-types">Storage types</a></h1>
+<p>Here you can find information on the different types of storage available in the common library chart.</p>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="persistent-volume-claim"><a class="header" href="#persistent-volume-claim">Persistent Volume Claim</a></h1>
 <p>This is probably the most common storage type, therefore it is also the
 default when no <code>type</code> is specified.</p>
 <p>It can be attached in two ways.</p>
-<h4 id="dynamically-provisioned"><a class="header" href="#dynamically-provisioned">Dynamically provisioned</a></h4>
+<ul>
+<li><a href="common-library/storage/types/pvc.html#dynamically-provisioned">Dynamically provisioned</a></li>
+<li><a href="common-library/storage/types/pvc.html#existing-claim">Existing claim</a></li>
+</ul>
+<h2 id="dynamically-provisioned"><a class="header" href="#dynamically-provisioned">Dynamically provisioned</a></h2>
 <p>Charts can be configured to create the required persistentVolumeClaim
 manifests on the fly.</p>
 <div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
@@ -306,7 +299,7 @@ manifests on the fly.</p>
 <tr><td><code>retain</code></td><td>No</td><td>Set to true to retain the PVC upon <code>helm uninstall</code>.</td></tr>
 </tbody></table>
 </div>
-<p>Minimal config:</p>
+<h3 id="minimal-configuration"><a class="header" href="#minimal-configuration">Minimal configuration:</a></h3>
 <pre><code class="language-yaml">persistence:
   config:
     enabled: true
@@ -316,7 +309,7 @@ manifests on the fly.</p>
 </code></pre>
 <p>This will create a 1Gi RWO PVC named <code>RELEASE-NAME-config</code> with the default
 storageClass, which will mount to <code>/config</code>.</p>
-<h4 id="existing-claim"><a class="header" href="#existing-claim">Existing claim</a></h4>
+<h2 id="existing-claim"><a class="header" href="#existing-claim">Existing claim</a></h2>
 <p>Charts can be configured to attach to a pre-existing persistentVolumeClaim.</p>
 <div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
 <tr><td><code>enabled</code></td><td>Yes</td><td></td></tr>
@@ -328,7 +321,7 @@ storageClass, which will mount to <code>/config</code>.</p>
 <tr><td><code>nameOverride</code></td><td>No</td><td>Override the name suffix that is used for this volume.</td></tr>
 </tbody></table>
 </div>
-<p>Minimal config:</p>
+<h3 id="minimal-configuration-1"><a class="header" href="#minimal-configuration-1">Minimal configuration:</a></h3>
 <pre><code class="language-yaml">persistence:
   config:
     enabled: true
@@ -336,7 +329,7 @@ storageClass, which will mount to <code>/config</code>.</p>
     existingClaim: myAppData
 </code></pre>
 <p>This will mount an existing PVC named <code>myAppData</code> to <code>/config</code>.</p>
-<h3 id="empty-dir"><a class="header" href="#empty-dir">Empty Dir</a></h3>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/pvc.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="empty-dir"><a class="header" href="#empty-dir">Empty Dir</a></h1>
 <p>Sometimes you need to share some data between containers, or need some
 scratch space. That is where an emptyDir can come in.</p>
 <p>See the <a href="https://kubernetes.io/docs/concepts/storage/volumes/#emptydir">Kubernetes docs</a>
@@ -350,14 +343,14 @@ for more information.</p>
 <tr><td><code>nameOverride</code></td><td>No</td><td>Override the name suffix that is used for this volume.</td></tr>
 </tbody></table>
 </div>
-<p>Minimal config:</p>
+<h2 id="minimal-configuration-2"><a class="header" href="#minimal-configuration-2">Minimal configuration:</a></h2>
 <pre><code class="language-yaml">persistence:
   config:
     enabled: true
     type: emptyDir
 </code></pre>
 <p>This will create an ephemeral emptyDir volume and mount it to <code>/config</code>.</p>
-<h3 id="host-path"><a class="header" href="#host-path">Host path</a></h3>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/emptydir.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="host-path"><a class="header" href="#host-path">Host path</a></h1>
 <p>In order to mount a path from the node where the Pod is running you can use a
 <code>hostPath</code> type persistence item.</p>
 <p>This can also be used to mount an attached USB device to a Pod. Note that
@@ -374,7 +367,7 @@ for more information.</p>
 <tr><td><code>nameOverride</code></td><td>No</td><td>Override the name suffix that is used for this volume.</td></tr>
 </tbody></table>
 </div>
-<p>Minimal config:</p>
+<h2 id="minimal-configuration-3"><a class="header" href="#minimal-configuration-3">Minimal configuration:</a></h2>
 <pre><code class="language-yaml">persistence:
   config:
     enabled: true
@@ -382,7 +375,7 @@ for more information.</p>
     hostPath: /dev
 </code></pre>
 <p>This will mount the <code>/dev</code> folder from the underlying host to <code>/dev</code> in the container.</p>
-<h3 id="configmap"><a class="header" href="#configmap">configMap</a></h3>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/hostpath.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="configmap"><a class="header" href="#configmap">ConfigMap</a></h1>
 <p>In order to mount a configMap to a mount point within the Pod you can use the
 <code>configMap</code> type persistence item.</p>
 <div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
@@ -394,7 +387,7 @@ for more information.</p>
 <tr><td><code>readOnly</code></td><td>No</td><td>Explicitly specify if the volume should be mounted read-only. Even if not specified, the configMap will be read-only.</td></tr>
 </tbody></table>
 </div>
-<p>Minimal config:</p>
+<h2 id="minimal-configuration-4"><a class="header" href="#minimal-configuration-4">Minimal configuration:</a></h2>
 <pre><code class="language-yaml">persistence:
   config:
     enabled: true
@@ -402,7 +395,7 @@ for more information.</p>
     name: mySettings
 </code></pre>
 <p>This will mount the contents of the pre-existing <code>mySettings</code> configMap to <code>/config</code>.</p>
-<h3 id="secret"><a class="header" href="#secret">Secret</a></h3>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/configmap.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="secret"><a class="header" href="#secret">Secret</a></h1>
 <p>In order to mount a Secret to a mount point within the Pod you can use the
 <code>secret</code> type persistence item.</p>
 <div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
@@ -414,7 +407,7 @@ for more information.</p>
 <tr><td><code>readOnly</code></td><td>No</td><td>Explicitly specify if the volume should be mounted read-only. Even if not specified, the Secret will be read-only.</td></tr>
 </tbody></table>
 </div>
-<p>Minimal config:</p>
+<h2 id="minimal-configuration-5"><a class="header" href="#minimal-configuration-5">Minimal configuration:</a></h2>
 <pre><code class="language-yaml">persistence:
   config:
     enabled: true
@@ -422,13 +415,13 @@ for more information.</p>
     name: mySecret
 </code></pre>
 <p>This will mount the contents of the pre-existing <code>mySecret</code> Secret to <code>/config</code>.</p>
-<h3 id="nfs-volume"><a class="header" href="#nfs-volume">NFS Volume</a></h3>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/secret.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="nfs-share"><a class="header" href="#nfs-share">NFS Share</a></h1>
 <p>To mount an NFS share to your Pod you can either pre-create a persistentVolumeClaim
 referring to it, or you can specify an inline NFS volume:</p>
 <div id="admonition-note" class="admonition note">
 <div class="admonition-title">
 <p>Note</p>
-<p><a class="admonition-anchor-link" href="common-library/storage.html#admonition-note"></a></p>
+<p><a class="admonition-anchor-link" href="common-library/storage/types/nfs-share.html#admonition-note"></a></p>
 </div>
 <div>
 <p>Mounting an NFS share this way does not allow for specifying mount options.
@@ -443,7 +436,7 @@ If you require these, you must create a PVC to mount the share.</p>
 <tr><td><code>readOnly</code></td><td>No</td><td>Explicitly specify if the volume should be mounted read-only. Even if not specified, the Secret will be read-only.</td></tr>
 </tbody></table>
 </div>
-<p>Minimal config:</p>
+<h2 id="minimal-configuration-6"><a class="header" href="#minimal-configuration-6">Minimal configuration:</a></h2>
 <pre><code class="language-yaml">persistence:
   config:
     enabled: true
@@ -452,7 +445,7 @@ If you require these, you must create a PVC to mount the share.</p>
     path: /tank/nas/library
 </code></pre>
 <p>This will mount the NFS share <code>/tank/nas/library</code> on server <code>10.10.0.8</code> to <code>/config</code>.</p>
-<h3 id="custom"><a class="header" href="#custom">Custom</a></h3>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/nfs-share.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="custom"><a class="header" href="#custom">Custom</a></h1>
 <p>When you wish to specify a custom volume, you can use the <code>custom</code> type.
 This can be used for example to mount configMap or Secret objects.</p>
 <p>See the <a href="https://kubernetes.io/docs/concepts/storage/volumes/">Kubernetes docs</a>
@@ -465,19 +458,16 @@ for more information.</p>
 <tr><td><code>readOnly</code></td><td>No</td><td>Specify if the volume should be mounted read-only.</td></tr>
 <tr><td><code>nameOverride</code></td><td>No</td><td>Override the name suffix that is used for this volume.</td></tr>
 </tbody></table>
-</div>
-<h2 id="permissions"><a class="header" href="#permissions">Permissions</a></h2>
-<p>Charts do not modify file or folder permissions on volumes out of the box.</p>
-<p>This means that you will have to make sure that your storage can be written to
-by the application.</p>
-<h2 id="multiple-subpaths-for-1-volume"><a class="header" href="#multiple-subpaths-for-1-volume">Multiple subPaths for 1 volume</a></h2>
+</div><footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/custom.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="how-to"><a class="header" href="#how-to">How to...</a></h1>
+<p>Here you can find information on how to accomplish specific scenario's.</p>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/howto/index.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="multiple-subpaths-for-1-volume"><a class="header" href="#multiple-subpaths-for-1-volume">Multiple subPaths for 1 volume</a></h1>
 <p>It is possible to mount multiple subPaths from the same volume to the main
 container. This can be achieved by specifying <code>subPath</code> with a list
 instead of a string.</p>
-<div id="admonition-note-1" class="admonition note">
+<div id="admonition-note" class="admonition note">
 <div class="admonition-title">
 <p>Note</p>
-<p><a class="admonition-anchor-link" href="common-library/storage.html#admonition-note-1"></a></p>
+<p><a class="admonition-anchor-link" href="common-library/howto/multiple-subpath.html#admonition-note"></a></p>
 </div>
 <div>
 <p>It is not possible to define <code>mountPath</code> at the top level when using this
@@ -512,14 +502,50 @@ feature</p>
       - path: Downloads
         mountPath: /downloads
 </code></pre>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="app-template"><a class="header" href="#app-template">App Template</a></h1>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/howto/multiple-subpath.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="helm-templates"><a class="header" href="#helm-templates">Helm templates</a></h1>
+<p>Some fields in the common library <code>values.yaml</code> allow the use of Helm templates for their values.
+This is often indicated by a remark similar to <code>Helm template enabled</code> in the field description.</p>
+<p>This feature allows you to have the value of that key set to the output of the given Helm template.</p>
+<p>Example:</p>
+<p>Given the following <code>values.yaml</code></p>
+<pre><code class="language-yaml">image:
+  repository: k8s.gcr.io/git-sync/git-sync
+  tag: v3.6.2
+
+additionalContainers:
+  subcleaner:
+    name: subcleaner
+    image: |-
+      {{ printf &quot;%s:%s&quot; .Values.image.repository (default .Chart.AppVersion .Values.image.tag) | quote }}
+    args:
+      - --repo=https://github.com/KBlixt/subcleaner.git
+      - --branch=master
+      - --depth=1
+      - --root=/add-ons/subcleaner
+</code></pre>
+<p>This would render as follows:</p>
+<pre><code class="language-yaml">image:
+  repository: k8s.gcr.io/git-sync/git-sync
+  tag: v3.6.2
+
+additionalContainers:
+  subcleaner:
+    name: subcleaner
+    image: k8s.gcr.io/git-sync/git-sync:v3.6.2
+    args:
+      - --repo=https://github.com/KBlixt/subcleaner.git
+      - --branch=master
+      - --depth=1
+      - --root=/add-ons/subcleaner
+</code></pre>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/howto/helm-templates.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="app-template"><a class="header" href="#app-template">App Template</a></h1>
 <h2 id="background-1"><a class="header" href="#background-1">Background</a></h2>
 <p>Since Helm <a href="https://helm.sh/docs/topics/library_charts/">library charts</a> cannot be
-installed directly I have created a companion chart for the <a href="app-template/../../common-library/introduction.html">common library</a>.</p>
+installed directly I have created a companion chart for the <a href="app-template/../common-library/introduction.html">common library</a>.</p>
 <h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
 <p>In order to use this template chart, you would deploy it as you would any other Helm chart.
 By setting the desired values, the common library chart will render the desired resources.</p>
-<p>Be sure to check out the <a href="app-template/../../common-library/introduction.html">common library docs</a>
+<p>Be sure to check out the <a href="app-template/../common-library/introduction.html">common library docs</a>
 and its <a href="https://github.com/bjw-s/helm-charts/tree/main/charts/library/common/values.yaml"><code>values.yaml</code></a> for
 more information about the available configuration options.</p>
 <h4 id="examples"><a class="header" href="#examples">Examples</a></h4>
@@ -608,17 +634,17 @@ persistence:
 
 
 
-        <script src="elasticlunr.min.js"></script>
-        <script src="mark.min.js"></script>
-        <script src="searcher.js"></script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
 
-        <script src="clipboard.min.js"></script>
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
 
-        <script>
+        <script type="text/javascript">
         window.addEventListener('load', function() {
             window.setTimeout(window.print, 100);
         });
