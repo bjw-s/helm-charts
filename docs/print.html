@@ -1,0 +1,628 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js navy">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Helm Charts</title>
+        <meta name="robots" content="noindex" />
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="././assets/css/mdbook-admonish.css">
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "navy";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('navy')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="common-library/introduction.html">Common library chart</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="common-library/add-ons.html">Add-ons</a></li><li class="chapter-item expanded "><a href="common-library/storage.html">Storage</a></li></ol></li><li class="chapter-item expanded "><a href="app-template/introduction.html">App Template chart</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Helm Charts</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/bjw-s/helm-charts" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="welcome"><a class="header" href="#welcome">Welcome</a></h1>
+<p>Welcome to the documentation for the <a href="https://github.com/bjw-s/helm-charts">bjw-s Helm charts</a> project.</p>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h2>
+<p><a href="https://helm.sh">Helm</a> must be installed to use the charts in this repository.</p>
+<p>Refer to Helm's <a href="https://helm.sh/docs/">documentation</a> to get started.</p>
+<h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
+<pre><code class="language-sh">helm repo add bjw-s http://bjw-s.github.io/helm-charts/
+</code></pre>
+<p>You can then run <code>helm search repo bjw-s</code> to search the charts.</p>
+<h2 id="support"><a class="header" href="#support">Support</a></h2>
+<p>If you like this project, please consider supporting my work through my <a href="https://github.com/sponsors/bjw-s?frequency=one-time">GitHub sponsorship page</a>.</p>
+<h2 id="how-do-i-find-people-running-kubernetes-at-home"><a class="header" href="#how-do-i-find-people-running-kubernetes-at-home">How do I find people running Kubernetes at home?</a></h2>
+<h3 id="discord"><a class="header" href="#discord">Discord</a></h3>
+<p>Join the k8s-at-home <a href="https://discord.gg/sTMX7Vh">Discord</a> community on Discord.</p>
+<h3 id="repository-topics"><a class="header" href="#repository-topics">Repository topics</a></h3>
+<p>Have a look at people running Kubernetes at home
+<a href="https://github.com/topics/k8s-at-home?o=desc&amp;s=updated">on GitHub</a> and</p>
+<!-- Disable link check because it requires login -->
+<!-- markdown-link-check-disable-next-line -->
+<p><a href="https://gitlab.com/search?search=k8s-at-home">on GitLab</a>.</p>
+<h3 id="search"><a class="header" href="#search">Search</a></h3>
+<p>You can use this following <a href="https://nanne.dev/k8s-at-home-search/">search engine</a> provided by <a href="https://github.com/whazor">@whazor</a> to search for public
+repositories containing any application you might wish to run.</p>
+<h2 id="license"><a class="header" href="#license">License</a></h2>
+<p>This project is licensed under the terms of the Apache 2.0 License license.</p>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/introduction.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="common-library"><a class="header" href="#common-library">Common library</a></h1>
+<div id="admonition-note" class="admonition note">
+<div class="admonition-title">
+<p>Note</p>
+<p><a class="admonition-anchor-link" href="common-library/introduction.html#admonition-note"></a></p>
+</div>
+<div>
+<p>The Common library chart is not meant to be installed directly, application
+charts use the Common library as a dependency.
+See the <a href="common-library/../../app-template/introduction.html">app template</a> for an example how to
+deploy it.</p>
+</div>
+</div>
+<h2 id="background"><a class="header" href="#background">Background</a></h2>
+<p>In Helm 3, their team introduced the concept of a
+<a href="https://helm.sh/docs/topics/library_charts/">Library chart</a>.</p>
+<blockquote>
+<p>A library chart is a type of Helm chart that defines chart primitives or
+definitions which can be shared by Helm templates in other charts. This
+allows users to share snippets of code that can be re-used across charts,
+avoiding repetition and keeping charts DRY.</p>
+</blockquote>
+<p>The common library was created because I saw many charts requiring only a
+few select configuration options in their Helm charts.</p>
+<div id="admonition-note-1" class="admonition note">
+<div class="admonition-title">
+<p>Note</p>
+<p><a class="admonition-anchor-link" href="common-library/introduction.html#admonition-note-1"></a></p>
+</div>
+<div>
+<p>Take one of the many applications like <code>sonarr</code> or <code>nzbget</code>. Each of these
+charts only require setting <code>service</code>, <code>port</code>, <code>persistence</code>, <code>ingress</code>
+and <code>image</code> since state and app configuration is handled by the application
+itself.</p>
+</div>
+</div>
+<p>In order to stay somewhat DRY (Don't Repeat Yourself) and keeping with Helm 3
+usage for a Library chart, I saw this pattern and decided it was worth it to
+create a library. This means each one of these app charts has a
+dependency on what we call the <code>common</code> library.</p>
+<h2 id="source-code"><a class="header" href="#source-code">Source code</a></h2>
+<p>The source code for the common library chart can be found
+<a href="https://github.com/bjw-s/helm-charts/tree/main/charts/library/common">here</a>.</p>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/introduction.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="common-library-add-ons"><a class="header" href="#common-library-add-ons">Common library add-ons</a></h1>
+<p>The common library chart supplies a few add-ons which are meant to simplify some features
+you might be looking for. These are sidecars that run in the same pod as your
+application you configured it with.</p>
+<h2 id="code-server"><a class="header" href="#code-server">Code Server</a></h2>
+<p>The <a href="https://github.com/cdr/code-server">code-server</a> add-on can be used to
+access and modify persistent volume data in your application. This can be
+useful when you need to edit the persistent volume data, for example with
+Home Assistant.</p>
+<h3 id="example-values"><a class="header" href="#example-values">Example values</a></h3>
+<p>Below is a snippet from a <code>values.yaml</code> using the add-on. More configuration
+options can be found in our common chart documentation.</p>
+<div id="admonition-note" class="admonition note">
+<div class="admonition-title">
+<p>Note</p>
+<p><a class="admonition-anchor-link" href="common-library/add-ons.html#admonition-note"></a></p>
+</div>
+<div>
+<p>This example will mount <code>/config</code> into the code-server sidecar.</p>
+</div>
+</div>
+<pre><code class="language-yaml">addons:
+  codeserver:
+    enabled: true
+    image:
+      repository: codercom/code-server
+      tag: 3.9.0
+    workingDir: &quot;/config&quot;
+    args:
+    - --auth
+    - &quot;none&quot;
+    - --user-data-dir
+    - &quot;/config/.vscode&quot;
+    - --extensions-dir
+    - &quot;/config/.vscode&quot;
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: &quot;nginx&quot;
+      hosts:
+      - host: app-config.domain.tld
+        paths:
+        - path: /
+          pathType: Prefix
+      tls:
+      - hosts:
+        - app-config.domain.tld
+    volumeMounts:
+    - name: config
+      mountPath: /config
+</code></pre>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/add-ons.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="common-library-storage"><a class="header" href="#common-library-storage">Common library Storage</a></h1>
+<p>This page describes the different ways you can attach storage to charts
+using the common library.</p>
+<h2 id="types"><a class="header" href="#types">Types</a></h2>
+<p>These are the types of storage that are supported in the common library.
+Of course, other types are possible with the <code>custom</code> type.</p>
+<ul>
+<li><a href="common-library/storage.html#persistent-volume-claim">Persistent Volume Claim</a>
+<ul>
+<li><a href="common-library/storage.html#dynamically-provisioned">Dynamically provisioned</a></li>
+<li><a href="common-library/storage.html#existing-claim">Existing claim</a></li>
+</ul>
+</li>
+<li><a href="common-library/storage.html#empty-dir">Empty Dir</a></li>
+<li><a href="common-library/storage.html#host-path">Host path</a></li>
+<li><a href="common-library/storage.html#configmap">configMap</a></li>
+<li><a href="common-library/storage.html#secret">Secret</a></li>
+<li><a href="common-library/storage.html#nfs-volume">NFS Volume</a></li>
+<li><a href="common-library/storage.html#custom">Custom</a></li>
+<li><a href="common-library/storage.html#permissions">Permissions</a></li>
+<li><a href="common-library/storage.html#multiple-subpaths-for-1-volume">Multiple subPaths for 1 volume</a></li>
+</ul>
+<h3 id="persistent-volume-claim"><a class="header" href="#persistent-volume-claim">Persistent Volume Claim</a></h3>
+<p>This is probably the most common storage type, therefore it is also the
+default when no <code>type</code> is specified.</p>
+<p>It can be attached in two ways.</p>
+<h4 id="dynamically-provisioned"><a class="header" href="#dynamically-provisioned">Dynamically provisioned</a></h4>
+<p>Charts can be configured to create the required persistentVolumeClaim
+manifests on the fly.</p>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
+<tr><td><code>enabled</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>type</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>accessMode</code></td><td>Yes</td><td><a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes">link</a></td></tr>
+<tr><td><code>size</code></td><td>Yes</td><td><a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/#resources">link</a></td></tr>
+<tr><td><code>mountPath</code></td><td>No</td><td>Where to mount the volume in the main container. Defaults to <code>/&lt;name_of_the_volume&gt;</code>.</td></tr>
+<tr><td><code>readOnly</code></td><td>No</td><td>Specify if the volume should be mounted read-only.</td></tr>
+<tr><td><code>nameOverride</code></td><td>No</td><td>Override the name suffix that is used for this volume.</td></tr>
+<tr><td><code>storageClass</code></td><td>No</td><td>Storage class to use for this volume.</td></tr>
+<tr><td><code>retain</code></td><td>No</td><td>Set to true to retain the PVC upon <code>helm uninstall</code>.</td></tr>
+</tbody></table>
+</div>
+<p>Minimal config:</p>
+<pre><code class="language-yaml">persistence:
+  config:
+    enabled: true
+    type: pvc
+    accessMode: ReadWriteOnce
+    size: 1Gi
+</code></pre>
+<p>This will create a 1Gi RWO PVC named <code>RELEASE-NAME-config</code> with the default
+storageClass, which will mount to <code>/config</code>.</p>
+<h4 id="existing-claim"><a class="header" href="#existing-claim">Existing claim</a></h4>
+<p>Charts can be configured to attach to a pre-existing persistentVolumeClaim.</p>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
+<tr><td><code>enabled</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>type</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>existingClaim</code></td><td>Yes</td><td>Name of the existing PVC</td></tr>
+<tr><td><code>mountPath</code></td><td>No</td><td>Where to mount the volume in the main container. Defaults to <code>/&lt;name_of_the_volume&gt;</code>.</td></tr>
+<tr><td><code>subPath</code></td><td>No</td><td>Specifies a sub-path inside the referenced volume instead of its root.</td></tr>
+<tr><td><code>readOnly</code></td><td>No</td><td>Specify if the volume should be mounted read-only.</td></tr>
+<tr><td><code>nameOverride</code></td><td>No</td><td>Override the name suffix that is used for this volume.</td></tr>
+</tbody></table>
+</div>
+<p>Minimal config:</p>
+<pre><code class="language-yaml">persistence:
+  config:
+    enabled: true
+    type: pvc
+    existingClaim: myAppData
+</code></pre>
+<p>This will mount an existing PVC named <code>myAppData</code> to <code>/config</code>.</p>
+<h3 id="empty-dir"><a class="header" href="#empty-dir">Empty Dir</a></h3>
+<p>Sometimes you need to share some data between containers, or need some
+scratch space. That is where an emptyDir can come in.</p>
+<p>See the <a href="https://kubernetes.io/docs/concepts/storage/volumes/#emptydir">Kubernetes docs</a>
+for more information.</p>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
+<tr><td><code>enabled</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>type</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>medium</code></td><td>No</td><td>Set this to <code>Memory</code> to mount a tmpfs (RAM-backed filesystem) instead of the storage medium that backs the node.</td></tr>
+<tr><td><code>sizeLimit</code></td><td>No</td><td>If the <code>SizeMemoryBackedVolumes</code> feature gate is enabled, you can specify a size for memory backed volumes.</td></tr>
+<tr><td><code>mountPath</code></td><td>No</td><td>Where to mount the volume in the main container. Defaults to <code>/&lt;name_of_the_volume&gt;</code>.</td></tr>
+<tr><td><code>nameOverride</code></td><td>No</td><td>Override the name suffix that is used for this volume.</td></tr>
+</tbody></table>
+</div>
+<p>Minimal config:</p>
+<pre><code class="language-yaml">persistence:
+  config:
+    enabled: true
+    type: emptyDir
+</code></pre>
+<p>This will create an ephemeral emptyDir volume and mount it to <code>/config</code>.</p>
+<h3 id="host-path"><a class="header" href="#host-path">Host path</a></h3>
+<p>In order to mount a path from the node where the Pod is running you can use a
+<code>hostPath</code> type persistence item.</p>
+<p>This can also be used to mount an attached USB device to a Pod. Note that
+this will most likely also require setting an elevated <code>securityContext</code>.</p>
+<p>See the <a href="https://kubernetes.io/docs/concepts/storage/volumes/#hostpath">Kubernetes docs</a>
+for more information.</p>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
+<tr><td><code>enabled</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>type</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>hostPath</code></td><td>Yes</td><td>Which path on the host should be mounted.</td></tr>
+<tr><td><code>hostPathType</code></td><td>No</td><td>Specifying a hostPathType adds a check before trying to mount the path. See Kubernetes documentation for options.</td></tr>
+<tr><td><code>mountPath</code></td><td>No</td><td>Where to mount the volume in the main container. Defaults to the value of <code>hostPath</code>.</td></tr>
+<tr><td><code>readOnly</code></td><td>No</td><td>Specify if the volume should be mounted read-only.</td></tr>
+<tr><td><code>nameOverride</code></td><td>No</td><td>Override the name suffix that is used for this volume.</td></tr>
+</tbody></table>
+</div>
+<p>Minimal config:</p>
+<pre><code class="language-yaml">persistence:
+  config:
+    enabled: true
+    type: hostPath
+    hostPath: /dev
+</code></pre>
+<p>This will mount the <code>/dev</code> folder from the underlying host to <code>/dev</code> in the container.</p>
+<h3 id="configmap"><a class="header" href="#configmap">configMap</a></h3>
+<p>In order to mount a configMap to a mount point within the Pod you can use the
+<code>configMap</code> type persistence item.</p>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
+<tr><td><code>enabled</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>type</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>name</code></td><td>Yes</td><td>Which configMap should be mounted. Supports Helm templating.</td></tr>
+<tr><td><code>defaultMode</code></td><td>No</td><td>The default file access permission bit.</td></tr>
+<tr><td><code>items</code></td><td>No</td><td>Specify item-specific configuration. Will be passed 1:1 to the volumeSpec.</td></tr>
+<tr><td><code>readOnly</code></td><td>No</td><td>Explicitly specify if the volume should be mounted read-only. Even if not specified, the configMap will be read-only.</td></tr>
+</tbody></table>
+</div>
+<p>Minimal config:</p>
+<pre><code class="language-yaml">persistence:
+  config:
+    enabled: true
+    type: configMap
+    name: mySettings
+</code></pre>
+<p>This will mount the contents of the pre-existing <code>mySettings</code> configMap to <code>/config</code>.</p>
+<h3 id="secret"><a class="header" href="#secret">Secret</a></h3>
+<p>In order to mount a Secret to a mount point within the Pod you can use the
+<code>secret</code> type persistence item.</p>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
+<tr><td><code>enabled</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>type</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>name</code></td><td>Yes</td><td>Which Secret should be mounted. Supports Helm templating.</td></tr>
+<tr><td><code>defaultMode</code></td><td>No</td><td>The default file access permission bit.</td></tr>
+<tr><td><code>items</code></td><td>No</td><td>Specify item-specific configuration. Will be passed 1:1 to the volumeSpec.</td></tr>
+<tr><td><code>readOnly</code></td><td>No</td><td>Explicitly specify if the volume should be mounted read-only. Even if not specified, the Secret will be read-only.</td></tr>
+</tbody></table>
+</div>
+<p>Minimal config:</p>
+<pre><code class="language-yaml">persistence:
+  config:
+    enabled: true
+    type: secret
+    name: mySecret
+</code></pre>
+<p>This will mount the contents of the pre-existing <code>mySecret</code> Secret to <code>/config</code>.</p>
+<h3 id="nfs-volume"><a class="header" href="#nfs-volume">NFS Volume</a></h3>
+<p>To mount an NFS share to your Pod you can either pre-create a persistentVolumeClaim
+referring to it, or you can specify an inline NFS volume:</p>
+<div id="admonition-note" class="admonition note">
+<div class="admonition-title">
+<p>Note</p>
+<p><a class="admonition-anchor-link" href="common-library/storage.html#admonition-note"></a></p>
+</div>
+<div>
+<p>Mounting an NFS share this way does not allow for specifying mount options.
+If you require these, you must create a PVC to mount the share.</p>
+</div>
+</div>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
+<tr><td><code>enabled</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>type</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>server</code></td><td>Yes</td><td>Host name or IP address of the NFS server.</td></tr>
+<tr><td><code>path</code></td><td>Yes</td><td>The path on the server to mount.</td></tr>
+<tr><td><code>readOnly</code></td><td>No</td><td>Explicitly specify if the volume should be mounted read-only. Even if not specified, the Secret will be read-only.</td></tr>
+</tbody></table>
+</div>
+<p>Minimal config:</p>
+<pre><code class="language-yaml">persistence:
+  config:
+    enabled: true
+    type: nfs
+    server: 10.10.0.8
+    path: /tank/nas/library
+</code></pre>
+<p>This will mount the NFS share <code>/tank/nas/library</code> on server <code>10.10.0.8</code> to <code>/config</code>.</p>
+<h3 id="custom"><a class="header" href="#custom">Custom</a></h3>
+<p>When you wish to specify a custom volume, you can use the <code>custom</code> type.
+This can be used for example to mount configMap or Secret objects.</p>
+<p>See the <a href="https://kubernetes.io/docs/concepts/storage/volumes/">Kubernetes docs</a>
+for more information.</p>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
+<tr><td><code>enabled</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>type</code></td><td>Yes</td><td></td></tr>
+<tr><td><code>volumeSpec</code></td><td>Yes</td><td>Define the raw Volume spec here.</td></tr>
+<tr><td><code>mountPath</code></td><td>No</td><td>Where to mount the volume in the main container. Defaults to the value of <code>hostPath</code>.</td></tr>
+<tr><td><code>readOnly</code></td><td>No</td><td>Specify if the volume should be mounted read-only.</td></tr>
+<tr><td><code>nameOverride</code></td><td>No</td><td>Override the name suffix that is used for this volume.</td></tr>
+</tbody></table>
+</div>
+<h2 id="permissions"><a class="header" href="#permissions">Permissions</a></h2>
+<p>Charts do not modify file or folder permissions on volumes out of the box.</p>
+<p>This means that you will have to make sure that your storage can be written to
+by the application.</p>
+<h2 id="multiple-subpaths-for-1-volume"><a class="header" href="#multiple-subpaths-for-1-volume">Multiple subPaths for 1 volume</a></h2>
+<p>It is possible to mount multiple subPaths from the same volume to the main
+container. This can be achieved by specifying <code>subPath</code> with a list
+instead of a string.</p>
+<div id="admonition-note-1" class="admonition note">
+<div class="admonition-title">
+<p>Note</p>
+<p><a class="admonition-anchor-link" href="common-library/storage.html#admonition-note-1"></a></p>
+</div>
+<div>
+<p>It is not possible to define <code>mountPath</code> at the top level when using this
+feature</p>
+</div>
+</div>
+<p>Examples:</p>
+<pre><code class="language-yaml">persistence:
+  config:
+    enabled: true
+    type: custom
+    volumeSpec:
+      configMap:
+        name: myData
+    subPath:
+      - path: myFirstScript.sh
+        mountPath: /data/myFirstScript.sh
+      - path: myCertificate.pem
+        mountPath: /certs/myCertificate.pem
+        readOnly: true
+</code></pre>
+<pre><code class="language-yaml">persistence:
+  config:
+    enabled: true
+    type: pvc
+    existingClaim: myAppData
+    subPath:
+      - path: .
+        mountPath: /my_media
+      - path: Series
+        mountPath: /series
+      - path: Downloads
+        mountPath: /downloads
+</code></pre>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="app-template"><a class="header" href="#app-template">App Template</a></h1>
+<h2 id="background-1"><a class="header" href="#background-1">Background</a></h2>
+<p>Since Helm <a href="https://helm.sh/docs/topics/library_charts/">library charts</a> cannot be
+installed directly I have created a companion chart for the <a href="app-template/../../common-library/introduction.html">common library</a>.</p>
+<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
+<p>In order to use this template chart, you would deploy it as you would any other Helm chart.
+By setting the desired values, the common library chart will render the desired resources.</p>
+<p>Be sure to check out the <a href="app-template/../../common-library/introduction.html">common library docs</a>
+and its <a href="https://github.com/bjw-s/helm-charts/tree/main/charts/library/common/values.yaml"><code>values.yaml</code></a> for
+more information about the available configuration options.</p>
+<h4 id="examples"><a class="header" href="#examples">Examples</a></h4>
+<p>This is an example <code>values.yaml</code> file that would deploy the <a href="https://github.com/dani-garcia/vaultwarden">vaultwarden</a>
+application. For more deployment examples, check out the <a href="https://github.com/bjw-s/helm-charts/tree/main/examples/"><code>examples</code> folder</a>.</p>
+<pre><code class="language-yaml">image:
+  # -- image repository
+  repository: vaultwarden/server
+  # -- image pull policy
+  pullPolicy: IfNotPresent
+  # -- image tag
+  # this example is not automatically updated, so be sure to use the latest image
+  tag: 1.25.2
+
+strategy:
+  type: Recreate
+
+# -- environment variables.
+# See [image docs](https://github.com/dani-garcia/vaultwarden/blob/main/.env.template) for more details.
+env:
+  # -- Config dir
+  DATA_FOLDER: &quot;config&quot;
+
+# -- Configures service settings for the chart.
+service:
+  main:
+    ports:
+      http:
+        port: 80
+      websocket:
+        enabled: true
+        port: 3012
+
+ingress:
+  # -- Enable and configure ingress settings for the chart under this key.
+  main:
+    enabled: false
+    hosts:
+      - host: chart-example.local
+        paths:
+          - path: /
+            pathType: Prefix
+            service:
+              port: http
+          - path: /notifications/hub/negotiate
+            pathType: Prefix
+            service:
+              port: http
+          - path: /notifications/hub
+            pathType: Prefix
+            service:
+              port: websocket
+
+# -- Configure persistence settings for the chart under this key.
+persistence:
+  config:
+    enabled: true
+    type: pvc
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    mountPath: /config
+</code></pre>
+<h2 id="source-code-1"><a class="header" href="#source-code-1">Source code</a></h2>
+<p>The source code for the app template chart can be found
+<a href="https://github.com/bjw-s/helm-charts/tree/main/charts/other/app-template">here</a>.</p>
+<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/app-template/introduction.md">Edit this page on GitHub</a></footer>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </body>
+</html>
