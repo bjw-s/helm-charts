@@ -1,0 +1,41 @@
+[book]
+authors = ["Bernd Schorgers"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Helm Charts"
+
+[build]
+create-missing = false
+
+[output.html]
+default-theme = "latte"
+preferred-dark-theme = "macchiato"
+git-repository-url = "https://github.com/bjw-s/helm-charts"
+git-repository-icon = "fa-github"
+no-section-label = true
+additional-css = ["././assets/css/mdbook-admonish.css", "./theme/catppuccin.css", "./theme/catppuccin-highlight.css"]
+git-branch = "main"
+open-on-text = "[Edit this page on GitHub]"
+
+[output.html.fold]
+enable = true
+level = 1
+
+[output.html.playground]
+copyable = false
+
+[output.html.search]
+limit-results = 15
+
+[output.linkcheck]
+
+[preprocessor]
+
+[preprocessor.admonish]
+command = "mdbook-admonish"
+assets_version = "2.0.0" # do not edit: managed by `mdbook-admonish install`
+
+[preprocessor.open-on-gh]
+command = "mdbook-open-on-gh"
+renderer = ["html"]

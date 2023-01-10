@@ -16,6 +16,10 @@ helm repo add bjw-s http://bjw-s.github.io/helm-charts/
 
 You can then run `helm search repo bjw-s` to search the charts.
 
+## Support
+
+If you like this project, please consider supporting my work through my [GitHub sponsorship page](https://github.com/sponsors/bjw-s?frequency=one-time).
+
 ## How do I find people running Kubernetes at home?
 
 ### Discord
@@ -30,10 +34,10 @@ Have a look at people running Kubernetes at home
 <!-- markdown-link-check-disable-next-line -->
 [on GitLab](https://gitlab.com/search?search=k8s-at-home).
 
-### Awesome Home Kubernetes
+### Search
 
-[Checkout](https://github.com/k8s-at-home/awesome-home-kubernetes) our curation
-of projects and resources involving running Kubernetes at home.
+You can use this following [search engine](https://nanne.dev/k8s-at-home-search/) provided by [@whazor](https://github.com/whazor) to search for public
+repositories containing any application you might wish to run.
 
 ## License
 

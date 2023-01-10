@@ -6,14 +6,15 @@ on:
     branches:
       - main
     paths:
-      - '.ci/mkdocs/mkdocs.yaml'
-      - '.github/workflows/docs-release.yaml'
+      - ".github/workflows/docs-release.yaml"
       - "docs/**"
 
 jobs:
   release-docs:
     name: Release documentation
     runs-on: ubuntu-22.04
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - name: Get GitHub API token
         id: get-app-token
@@ -22,7 +23,7 @@ jobs:
           app_id: ${{ secrets.BJWS_APP_ID }}
           private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
 
-      - name: Checkout charts branch
+      - name: Checkout main branch
         uses: actions/checkout@v3
         with:
           token: ${{ steps.get-app-token.outputs.token }}
@@ -37,22 +38,50 @@ jobs:
           ref: "gh-pages"
           fetch-depth: 0
 
-      - name: Install Python
-        uses: actions/setup-python@v4
+      - name: Create binaries folder
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/bin"
+          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
+
+      - name: Setup mdBook
+        uses: peaceiris/actions-mdbook@v1.2.0
+
+      - name: Download mdbook-admonish
+        uses: robinraju/release-downloader@v1.7
         with:
-          python-version: "3.10"
+          repository: tommilligan/mdbook-admonish
+          fileName: "*-unknown-linux-gnu.tar.gz"
+          latest: true
 
-      - name: Install mkdocs
-        shell: bash
+      - name: Download mdbook-open-on-gh
+        uses: robinraju/release-downloader@v1.7
+        with:
+          repository: badboy/mdbook-open-on-gh
+          fileName: "*-unknown-linux-gnu.tar.gz"
+          latest: true
+
+      - name: Extract plug-ins
+        run: |
+          for f in *.tar.gz; do tar xvf "$GITHUB_WORKSPACE/$f" -C bin/; done
+
+      - name: Download mdbook-linkcheck
+        run: |
+          cd /tmp
+          curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/latest/download/mdbook-linkcheck.x86_64-unknown-linux-gnu.zip -o mdbook-linkcheck.zip
+          unzip "$_"
+          chmod +x mdbook-linkcheck
+          mv mdbook-linkcheck "$GITHUB_WORKSPACE/bin/"
+
+      - name: Build docs
         working-directory: src
         run: |
-          pip install -r ./.ci/mkdocs/requirements.txt
+          mdbook build "docs"
 
-      - name: Build documentation
-        shell: bash
+      - name: Move docs to destination
         working-directory: src
         run: |
-          mkdocs build --config-file ./.ci/mkdocs/mkdocs.yaml -d "$PWD/../dest/docs"
+          rm -rf "$PWD/../dest/docs"
+          mv docs/book/html "$PWD/../dest/docs"
 
       - name: Commit changes
         shell: bash
