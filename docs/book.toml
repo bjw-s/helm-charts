@@ -36,6 +36,5 @@ limit-results = 15
 command = "mdbook-admonish"
 assets_version = "2.0.0" # do not edit: managed by `mdbook-admonish install`
 
-[preprocessor.open-on-gh]
-command = "mdbook-open-on-gh"
-renderer = ["html"]
+[preprocessor.emojicodes]
+after = [ "links" ]
