@@ -38,3 +38,11 @@ assets_version = "2.0.0" # do not edit: managed by `mdbook-admonish install`
 
 [preprocessor.emojicodes]
 after = [ "links" ]
+
+[preprocessor.toc]
+command = "mdbook-toc"
+renderer = ["html"]
+
+[preprocessor.regex]
+after = [ "links" ]
+patterns = "replace-patterns.json"

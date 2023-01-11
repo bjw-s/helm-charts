@@ -1,0 +1,6 @@
+[
+  {
+      "pattern" : "\n### 📖 Docs[\\s\\S\n]*?---\n",
+      "template" : ""
+  }
+]

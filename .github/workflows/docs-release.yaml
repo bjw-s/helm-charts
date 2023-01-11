@@ -30,7 +30,7 @@ jobs:
           fetch-depth: 0
 
       - name: Build docs
-        uses: docker://ghcr.io/bjw-s/mdbook:0.4.25
+        uses: docker://ghcr.io/bjw-s/mdbook:0.4.25@sha256:0374aa3022448dbd061d731e489c5f7492e39a7df33234bdc94b901fe6c05b83
         with:
           args: mdbook build docs
 
