@@ -148,32 +148,42 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="welcome"><a class="header" href="#welcome">Welcome</a></h1>
-<p>Welcome to the documentation for the <a href="https://github.com/bjw-s/helm-charts">bjw-s Helm charts</a> project.</p>
-<h2 id="getting-started"><a class="header" href="#getting-started">Getting started</a></h2>
-<p><a href="https://helm.sh">Helm</a> must be installed to use the charts in this repository.</p>
-<p>Refer to Helm's <a href="https://helm.sh/docs/">documentation</a> to get started.</p>
+                        <div align="center">
+<img src="https://github.com/bjw-s/bjw-s/blob/main/_assets/images/logo.jpg?raw=true" align="left" width="144px" height="144px"/>
+<h2 id="helm-charts"><a class="header" href="#helm-charts">helm-charts</a></h2>
+</div>
+<div align="center">
+<p><a href="https://discord.gg/k8s-at-home"><img src="https://img.shields.io/discord/673534664354430999?style=for-the-badge&amp;label&amp;logo=discord&amp;logoColor=white&amp;color=blue" alt="Discord" /></a></p>
+</div>
+<p><br><br></p>
+<p>👋 Welcome to my Helm Charts repository. This repo contains Helm charts that I have developed to run applications in my <a href="https://github.com/bjw-s/home-ops/">home Kubernetes cluster</a>.
+This repo is <strong>not</strong> intended to be a replacement for any of the large collections of Helm charts that are out there.</p>
+<hr />
 <h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
-<pre><code class="language-sh">helm repo add bjw-s http://bjw-s.github.io/helm-charts/
+<p><a href="https://helm.sh">Helm</a> must be installed to use the charts in this repository.</p>
+<p>The Helm repository can be installed as follows:</p>
+<pre><code class="language-console">helm repo add bjw-s https://bjw-s.github.io/helm-charts
 </code></pre>
 <p>You can then run <code>helm search repo bjw-s</code> to search the charts.</p>
-<h2 id="support"><a class="header" href="#support">Support</a></h2>
+<hr />
+<h3 id="-docs"><a class="header" href="#-docs">📖 Docs</a></h3>
+<p>The documentation that goes along with this repo can be found <a href="https://bjw-s.github.io/helm-charts/">over here</a>.</p>
+<hr />
+<h3 id="-support"><a class="header" href="#-support">🔎 Support</a></h3>
 <p>If you like this project, please consider supporting my work through my <a href="https://github.com/sponsors/bjw-s?frequency=one-time">GitHub sponsorship page</a>.</p>
-<h2 id="how-do-i-find-people-running-kubernetes-at-home"><a class="header" href="#how-do-i-find-people-running-kubernetes-at-home">How do I find people running Kubernetes at home?</a></h2>
+<hr />
+<h2 id="how-do-i-find-people-running-these-charts"><a class="header" href="#how-do-i-find-people-running-these-charts">How do I find people running these charts?</a></h2>
 <h3 id="discord"><a class="header" href="#discord">Discord</a></h3>
 <p>Join the k8s-at-home <a href="https://discord.gg/sTMX7Vh">Discord</a> community on Discord.</p>
 <h3 id="repository-topics"><a class="header" href="#repository-topics">Repository topics</a></h3>
-<p>Have a look at people running Kubernetes at home
-<a href="https://github.com/topics/k8s-at-home?o=desc&amp;s=updated">on GitHub</a> and</p>
-<!-- Disable link check because it requires login -->
-<!-- markdown-link-check-disable-next-line -->
-<p><a href="https://gitlab.com/search?search=k8s-at-home">on GitLab</a>.</p>
+<p>Have a look at people running Kubernetes at home by checking the <a href="https://github.com/topics/k8s-at-home?o=desc&amp;s=updated">&quot;<code>k8s-at-home</code>&quot; topic on GitHub</a>.</p>
 <h3 id="search"><a class="header" href="#search">Search</a></h3>
 <p>You can use this following <a href="https://nanne.dev/k8s-at-home-search/">search engine</a> provided by <a href="https://github.com/whazor">@whazor</a> to search for public
 repositories containing any application you might wish to run.</p>
-<h2 id="license"><a class="header" href="#license">License</a></h2>
-<p>This project is licensed under the terms of the Apache 2.0 License license.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/introduction.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="common-library"><a class="header" href="#common-library">Common library</a></h1>
+<hr />
+<h3 id="-license"><a class="header" href="#-license">🔏 License</a></h3>
+<p>See <a href="https://github.com/bjw-s/helm-charts/blob/main/LICENSE">LICENSE</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="common-library"><a class="header" href="#common-library">Common library</a></h1>
 <div id="admonition-note" class="admonition note">
 <div class="admonition-title">
 <p>Note</p>
@@ -216,11 +226,11 @@ dependency on what we call the <code>common</code> library.</p>
 <h2 id="source-code"><a class="header" href="#source-code">Source code</a></h2>
 <p>The source code for the common library chart can be found
 <a href="https://github.com/bjw-s/helm-charts/tree/main/charts/library/common">here</a>.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/introduction.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="common-library-add-ons"><a class="header" href="#common-library-add-ons">Common library add-ons</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="common-library-add-ons"><a class="header" href="#common-library-add-ons">Common library add-ons</a></h1>
 <p>The common library chart supplies a few add-ons which are meant to simplify some features
 you might be looking for. These are sidecars that run in the same pod as your
 application you configured it with.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/add-ons/index.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="code-server"><a class="header" href="#code-server">Code Server</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="code-server"><a class="header" href="#code-server">Code Server</a></h1>
 <p>The <a href="https://github.com/cdr/code-server">code-server</a> add-on can be used to
 access and modify persistent volume data in your application. This can be
 useful when you need to edit the persistent volume data, for example with
@@ -267,16 +277,16 @@ options can be found in our common chart documentation.</p>
     - name: config
       mountPath: /config
 </code></pre>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/add-ons/code-server/index.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="common-library-storage"><a class="header" href="#common-library-storage">Common library Storage</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="common-library-storage"><a class="header" href="#common-library-storage">Common library Storage</a></h1>
 <p>This page describes the different ways you can configure and attach storage to charts
 using the common library.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/index.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="permissions"><a class="header" href="#permissions">Permissions</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="permissions"><a class="header" href="#permissions">Permissions</a></h1>
 <p>Charts do not modify file or folder permissions on volumes out of the box.</p>
 <p>This means that you will have to make sure that your storage can be written to
 by the application.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/permissions.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="storage-types"><a class="header" href="#storage-types">Storage types</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="storage-types"><a class="header" href="#storage-types">Storage types</a></h1>
 <p>Here you can find information on the different types of storage available in the common library chart.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="persistent-volume-claim"><a class="header" href="#persistent-volume-claim">Persistent Volume Claim</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="persistent-volume-claim"><a class="header" href="#persistent-volume-claim">Persistent Volume Claim</a></h1>
 <p>This is probably the most common storage type, therefore it is also the
 default when no <code>type</code> is specified.</p>
 <p>It can be attached in two ways.</p>
@@ -329,7 +339,7 @@ storageClass, which will mount to <code>/config</code>.</p>
     existingClaim: myAppData
 </code></pre>
 <p>This will mount an existing PVC named <code>myAppData</code> to <code>/config</code>.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/pvc.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="empty-dir"><a class="header" href="#empty-dir">Empty Dir</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="empty-dir"><a class="header" href="#empty-dir">Empty Dir</a></h1>
 <p>Sometimes you need to share some data between containers, or need some
 scratch space. That is where an emptyDir can come in.</p>
 <p>See the <a href="https://kubernetes.io/docs/concepts/storage/volumes/#emptydir">Kubernetes docs</a>
@@ -350,7 +360,7 @@ for more information.</p>
     type: emptyDir
 </code></pre>
 <p>This will create an ephemeral emptyDir volume and mount it to <code>/config</code>.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/emptydir.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="host-path"><a class="header" href="#host-path">Host path</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="host-path"><a class="header" href="#host-path">Host path</a></h1>
 <p>In order to mount a path from the node where the Pod is running you can use a
 <code>hostPath</code> type persistence item.</p>
 <p>This can also be used to mount an attached USB device to a Pod. Note that
@@ -375,7 +385,7 @@ for more information.</p>
     hostPath: /dev
 </code></pre>
 <p>This will mount the <code>/dev</code> folder from the underlying host to <code>/dev</code> in the container.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/hostpath.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="configmap"><a class="header" href="#configmap">ConfigMap</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="configmap"><a class="header" href="#configmap">ConfigMap</a></h1>
 <p>In order to mount a configMap to a mount point within the Pod you can use the
 <code>configMap</code> type persistence item.</p>
 <div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
@@ -395,7 +405,7 @@ for more information.</p>
     name: mySettings
 </code></pre>
 <p>This will mount the contents of the pre-existing <code>mySettings</code> configMap to <code>/config</code>.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/configmap.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="secret"><a class="header" href="#secret">Secret</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="secret"><a class="header" href="#secret">Secret</a></h1>
 <p>In order to mount a Secret to a mount point within the Pod you can use the
 <code>secret</code> type persistence item.</p>
 <div class="table-wrapper"><table><thead><tr><th>Field</th><th>Mandatory</th><th>Docs / Description</th></tr></thead><tbody>
@@ -415,7 +425,7 @@ for more information.</p>
     name: mySecret
 </code></pre>
 <p>This will mount the contents of the pre-existing <code>mySecret</code> Secret to <code>/config</code>.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/secret.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="nfs-share"><a class="header" href="#nfs-share">NFS Share</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="nfs-share"><a class="header" href="#nfs-share">NFS Share</a></h1>
 <p>To mount an NFS share to your Pod you can either pre-create a persistentVolumeClaim
 referring to it, or you can specify an inline NFS volume:</p>
 <div id="admonition-note" class="admonition note">
@@ -445,7 +455,7 @@ If you require these, you must create a PVC to mount the share.</p>
     path: /tank/nas/library
 </code></pre>
 <p>This will mount the NFS share <code>/tank/nas/library</code> on server <code>10.10.0.8</code> to <code>/config</code>.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/nfs-share.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="custom"><a class="header" href="#custom">Custom</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="custom"><a class="header" href="#custom">Custom</a></h1>
 <p>When you wish to specify a custom volume, you can use the <code>custom</code> type.
 This can be used for example to mount configMap or Secret objects.</p>
 <p>See the <a href="https://kubernetes.io/docs/concepts/storage/volumes/">Kubernetes docs</a>
@@ -458,9 +468,9 @@ for more information.</p>
 <tr><td><code>readOnly</code></td><td>No</td><td>Specify if the volume should be mounted read-only.</td></tr>
 <tr><td><code>nameOverride</code></td><td>No</td><td>Override the name suffix that is used for this volume.</td></tr>
 </tbody></table>
-</div><footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/storage/types/custom.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="how-to"><a class="header" href="#how-to">How to...</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="how-to"><a class="header" href="#how-to">How to...</a></h1>
 <p>Here you can find information on how to accomplish specific scenario's.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/howto/index.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="multiple-subpaths-for-1-volume"><a class="header" href="#multiple-subpaths-for-1-volume">Multiple subPaths for 1 volume</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="multiple-subpaths-for-1-volume"><a class="header" href="#multiple-subpaths-for-1-volume">Multiple subPaths for 1 volume</a></h1>
 <p>It is possible to mount multiple subPaths from the same volume to the main
 container. This can be achieved by specifying <code>subPath</code> with a list
 instead of a string.</p>
@@ -502,7 +512,7 @@ feature</p>
       - path: Downloads
         mountPath: /downloads
 </code></pre>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/howto/multiple-subpath.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="helm-templates"><a class="header" href="#helm-templates">Helm templates</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="helm-templates"><a class="header" href="#helm-templates">Helm templates</a></h1>
 <p>Some fields in the common library <code>values.yaml</code> allow the use of Helm templates for their values.
 This is often indicated by a remark similar to <code>Helm template enabled</code> in the field description.</p>
 <p>This feature allows you to set the value of that key to the output of the given Helm template.</p>
@@ -538,7 +548,7 @@ additionalContainers:
       - --depth=1
       - --root=/add-ons/subcleaner
 </code></pre>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/common-library/howto/helm-templates.md">Edit this page on GitHub</a></footer><div style="break-before: page; page-break-before: always;"></div><h1 id="app-template"><a class="header" href="#app-template">App Template</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="app-template"><a class="header" href="#app-template">App Template</a></h1>
 <h2 id="background-1"><a class="header" href="#background-1">Background</a></h2>
 <p>Since Helm <a href="https://helm.sh/docs/topics/library_charts/">library charts</a> cannot be
 installed directly I have created a companion chart for the <a href="app-template/../common-library/introduction.html">common library</a>.</p>
@@ -611,7 +621,7 @@ persistence:
 <h2 id="source-code-1"><a class="header" href="#source-code-1">Source code</a></h2>
 <p>The source code for the app template chart can be found
 <a href="https://github.com/bjw-s/helm-charts/tree/main/charts/other/app-template">here</a>.</p>
-<footer id="open-on-gh"><a href="https://github.com/bjw-s/helm-charts/edit/main/docs/src/app-template/introduction.md">Edit this page on GitHub</a></footer>
+
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
