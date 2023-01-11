@@ -27,68 +27,19 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ steps.get-app-token.outputs.token }}
-          path: "src"
           fetch-depth: 0
-
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v3
-        with:
-          token: ${{ steps.get-app-token.outputs.token }}
-          path: "dest"
-          ref: "gh-pages"
-          fetch-depth: 0
-
-      - name: Create binaries folder
-        run: |
-          mkdir -p "$GITHUB_WORKSPACE/bin"
-          echo "$GITHUB_WORKSPACE/bin" >> $GITHUB_PATH
-
-      - name: Setup mdBook
-        uses: peaceiris/actions-mdbook@v1.2.0
-
-      - name: Download mdbook-admonish
-        uses: robinraju/release-downloader@v1.7
-        with:
-          repository: tommilligan/mdbook-admonish
-          fileName: "*-unknown-linux-gnu.tar.gz"
-          latest: true
-
-      - name: Download mdbook-open-on-gh
-        uses: robinraju/release-downloader@v1.7
-        with:
-          repository: badboy/mdbook-open-on-gh
-          fileName: "*-unknown-linux-gnu.tar.gz"
-          latest: true
-
-      - name: Extract plug-ins
-        run: |
-          for f in *.tar.gz; do tar xvf "$GITHUB_WORKSPACE/$f" -C bin/; done
-
-      - name: Download mdbook-linkcheck
-        run: |
-          cd /tmp
-          curl -L https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/latest/download/mdbook-linkcheck.x86_64-unknown-linux-gnu.zip -o mdbook-linkcheck.zip
-          unzip "$_"
-          chmod +x mdbook-linkcheck
-          mv mdbook-linkcheck "$GITHUB_WORKSPACE/bin/"
 
       - name: Build docs
-        working-directory: src
-        run: |
-          mdbook build "docs"
+        uses: docker://ghcr.io/bjw-s/mdbook:0.4.25
+        with:
+          args: mdbook build docs
 
-      - name: Move docs to destination
-        working-directory: src
-        run: |
-          rm -rf "$PWD/../dest/docs"
-          mv docs/book/html "$PWD/../dest/docs"
-
-      - name: Commit changes
-        shell: bash
-        working-directory: dest
-        run: |
-          git config user.name "bjw-s-bot[bot]"
-          git config user.email "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"
-          git add docs
-          git commit -m "Updated docs from ref: $GITHUB_SHA"
-          git push
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3.9.1
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          github_token: ${{ steps.get-app-token.outputs.token }}
+          publish_dir: ./docs/book/html
+          destination_dir: docs
+          user_name: 'bjw-s-bot[bot]'
+          user_email: 'bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>'
