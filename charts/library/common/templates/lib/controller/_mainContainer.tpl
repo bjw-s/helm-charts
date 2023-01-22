@@ -42,8 +42,10 @@
   envFrom:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+  {{- with (include "bjw-s.common.lib.container.ports" . | trim) }}
   ports:
-  {{- include "bjw-s.common.lib.container.ports" . | trim | nindent 4 }}
+    {{- nindent 4 . }}
+  {{- end }}
   {{- with (include "bjw-s.common.lib.container.volumeMounts" . | trim) }}
   volumeMounts:
     {{- nindent 4 . }}
