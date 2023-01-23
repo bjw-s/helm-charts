@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 1.2.1
+version: 1.3.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -15,13 +15,9 @@ maintainers:
 annotations:
   artifacthub.io/changes: |-
     - kind: fixed
-      description: Fixed indentation in cronjob component to allow podAnnotations
-    - kind: fixed
-      description: Cleaned leftover `secret` behavior under `envFrom`.
+      description: Don't render ports/probes when not required
       links:
         - name: GitHub Issue
-          url: https://github.com/bjw-s/helm-charts/issues/94
+          url: https://github.com/bjw-s/helm-charts/issues/111
     - kind: changed
-      description: Updated code-server image tag to 4.9.1
-    - kind: added
-      description: Allow setting `ttlSecondsAfterFinished` for CronJobs
+      description: Renamed `additionalContainers` to `sidecars`. The former will however still continue to work for the time being.
