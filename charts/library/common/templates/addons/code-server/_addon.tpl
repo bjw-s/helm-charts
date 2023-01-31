@@ -4,10 +4,10 @@ It will include / inject the required templates based on the given values.
 */}}
 {{- define "bjw-s.common.addon.codeserver" -}}
   {{- if .Values.addons.codeserver.enabled -}}
-    {{/* Append the code-server container to the additionalContainers */}}
+    {{/* Append the code-server container to the sidecars */}}
     {{- $container := include "bjw-s.common.addon.codeserver.container" . | fromYaml -}}
     {{- if $container -}}
-      {{- $_ := set .Values.additionalContainers "addon-codeserver" $container -}}
+      {{- $_ := set .Values.sidecars "addon-codeserver" $container -}}
     {{- end -}}
 
     {{/* Include the deployKeySecret if not empty */}}

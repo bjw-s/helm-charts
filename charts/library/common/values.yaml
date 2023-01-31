@@ -192,9 +192,9 @@ lifecycle: {}
 # The dictionary item key will determine the order. Helm templates can be used.
 initContainers: {}
 
-# -- Specify any additional containers here as dictionary items. Each additional container should have its own key.
+# -- Specify any sidecar containers here as dictionary items. Each sidecar container should have its own key.
 # Helm templates can be used.
-additionalContainers: {}
+sidecars: {}
 
 # -- Probe configuration
 # -- [[ref]](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)

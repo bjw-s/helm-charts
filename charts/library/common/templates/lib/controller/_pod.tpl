@@ -62,8 +62,8 @@ initContainers:
   {{- end }}
 containers:
   {{- include "bjw-s.common.lib.controller.mainContainer" . | nindent 2 }}
-  {{- with .Values.additionalContainers }}
-    {{- $additionalContainers := list }}
+  {{- with (merge .Values.sidecars .Values.additionalContainers) }}
+    {{- $sidecarContainers := list }}
     {{- range $name, $container := . }}
       {{- if not $container.name -}}
         {{- $_ := set $container "name" $name }}
@@ -74,9 +74,9 @@ containers:
         {{- $_ := set $container "env" $newEnv.env }}
         {{- $_ := unset $.ObjectValues "envVars" -}}
       {{- end }}
-      {{- $additionalContainers = append $additionalContainers $container }}
+      {{- $sidecarContainers = append $sidecarContainers $container }}
     {{- end }}
-    {{- tpl (toYaml $additionalContainers) $ | nindent 2 }}
+    {{- tpl (toYaml $sidecarContainers) $ | nindent 2 }}
   {{- end }}
   {{- with (include "bjw-s.common.lib.controller.volumes" . | trim) }}
 volumes:
