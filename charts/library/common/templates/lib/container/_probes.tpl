@@ -51,7 +51,7 @@ Probes selection logic.
           {{- else if $primaryPort.targetPort }}
             {{- $_ := set (index $probeDefinition $probeHeader) "port" $primaryPort.targetPort -}}
           {{- else }}
-            {{- $_ := set (index $probeDefinition $probeHeader) "port" $primaryPort.port -}}
+            {{- $_ := set (index $probeDefinition $probeHeader) "port" ($primaryPort.port | toString | atoi ) -}}
           {{- end }}
 
           {{- $probeOutput = $probeDefinition | toYaml | trim -}}
