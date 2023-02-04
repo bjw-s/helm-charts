@@ -46,11 +46,11 @@ Default NOTES.txt content.
      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
            You can watch the status of by running 'kubectl get svc -w {{ include "bjw-s.common.lib.chart.names.fullname" . }}'
   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "bjw-s.common.lib.chart.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-  echo {{ $prefix }}://$SERVICE_IP:{{ $primaryPort.port }}
+  echo {{ $prefix }}://$SERVICE_IP:{{ $primaryPort.port | toString | atoi }}
 {{- else if contains "ClusterIP" $primaryService.type }}
   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "bjw-s.common.lib.chart.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
   echo "Visit {{ $prefix }}://127.0.0.1:8080 to use your application"
-  kubectl port-forward $POD_NAME 8080:{{ $primaryPort.port }}
+  kubectl port-forward $POD_NAME 8080:{{ $primaryPort.port | toString | atoi }}
 {{- end }}
 {{- end }}
 {{- end -}}
