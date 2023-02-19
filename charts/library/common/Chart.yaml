@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 1.3.1
+version: 1.3.2
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -15,4 +15,4 @@ maintainers:
 annotations:
   artifacthub.io/changes: |-
     - kind: fixed
-      description: Probes were rendered incorrectly when primary service port was a string.
+      description: Pod annotations were not indented enough when controller type was cronjob
