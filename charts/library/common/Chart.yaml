@@ -14,5 +14,7 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: changed
+      description: Updated netshoot image tag to v0.9
     - kind: fixed
       description: Pod annotations were not indented enough when controller type was cronjob
