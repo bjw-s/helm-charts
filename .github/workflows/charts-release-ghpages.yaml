@@ -65,8 +65,7 @@ jobs:
             mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
             CHART_TYPE=${CHART_PATH_PARTS[0]}
 
-            helm dep up "${SRC_DIR}/${CHART}"
-            helm package "${SRC_DIR}/${CHART}" -u -d "${DEST_DIR}/${CHART_TYPE}"
+            helm package "${SRC_DIR}/${CHART}" --dependency-update --destination "${DEST_DIR}/${CHART_TYPE}"
           done
 
       - name: Update chart index

@@ -18,53 +18,44 @@ on:
 
 env:
   HELM_VERSION: 3.11.1
+  CHARTS_SRC_DIR: "charts"
+  TARGET_REGISTRY: ghcr.io
 
 jobs:
   release-charts:
     name: Release charts
     runs-on: ubuntu-22.04
     steps:
-      - name: Get GitHub API token
-        id: get-app-token
-        uses: getsentry/action-github-app-token@v1
-        with:
-          app_id: ${{ secrets.BJWS_APP_ID }}
-          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
-
-      - name: Login to GitHub Container Registry
-        id: login-to-ghcr
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
-
-      - name: Checkout charts branch
+      - name: Checkout chart sources
         uses: actions/checkout@v3
         with:
-          token: ${{ steps.get-app-token.outputs.token }}
-          path: "src"
           fetch-depth: 0
 
       - name: Install Kubernetes tools
-        uses: yokawasa/action-setup-kube-tools@v0.8.2
+        uses: yokawasa/action-setup-kube-tools@v0.9.2
         with:
           setup-tools: |
             helmv3
           helm: "${{ env.HELM_VERSION }}"
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.TARGET_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Package & Push Helm Charts
         shell: bash
-        env:
-          SRC_DIR: "src/charts"
         run: |
           CHARTS=( $(yq --null-input e '${{ inputs.charts }}[]' ) )
 
           for CHART in "${CHARTS[@]}" ; do
             mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
             CHART_TYPE=${CHART_PATH_PARTS[0]}
+            CHART_NAME=${CHART_PATH_PARTS[1]}
+            CHART_VERSION=$(yq e '.version' ${{ env.CHARTS_SRC_DIR }}/${CHART}/Chart.yaml)
 
-            helm dep up "${SRC_DIR}/${CHART}"
-            helm package "${SRC_DIR}/${CHART}" -u
-            helm push ${CHART} oci://ghcr.io/${{ github.actor }}
+            helm package "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}/${CHART_NAME}" --dependency-update --destination "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}"
+            helm push "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}/${CHART_NAME}-${CHART_VERSION}.tgz" oci://${{ env.TARGET_REGISTRY }}/${{ github.actor }}
           done

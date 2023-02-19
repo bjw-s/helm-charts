@@ -61,7 +61,7 @@ jobs:
     secrets: inherit
 
   release-github-oci:
-    name: Release Application charts to GitHub pages
+    name: Release Application charts to GitHub Container Registry
     uses: ./.github/workflows/charts-release-oci.yaml
     needs:
       - prepare
