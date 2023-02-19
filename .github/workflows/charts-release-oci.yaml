@@ -17,7 +17,7 @@ on:
         required: true
 
 env:
-  HELM_VERSION: 3.9.2
+  HELM_VERSION: 3.11.1
 
 jobs:
   release-charts:
@@ -66,5 +66,5 @@ jobs:
 
             helm dep up "${SRC_DIR}/${CHART}"
             helm package "${SRC_DIR}/${CHART}" -u
-            helm push ${CHART} oci://ghcr.io/bjw-s
+            helm push ${CHART} oci://ghcr.io/${{ github.actor }}
           done

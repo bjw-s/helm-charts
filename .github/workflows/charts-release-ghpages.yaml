@@ -17,7 +17,7 @@ on:
         required: true
 
 env:
-  HELM_VERSION: 3.9.2
+  HELM_VERSION: 3.11.1
 
 jobs:
   release-charts:
