@@ -15,6 +15,8 @@ maintainers:
 annotations:
   artifacthub.io/changes: |-
     - kind: changed
+      description: Updated code-server image tag to v4.10.0
+    - kind: changed
       description: Updated netshoot image tag to v0.9
     - kind: fixed
       description: Pod annotations were not indented enough when controller type was cronjob
