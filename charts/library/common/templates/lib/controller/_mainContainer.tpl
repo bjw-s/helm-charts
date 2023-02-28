@@ -6,7 +6,7 @@
   {{- with .Values.command }}
   command:
     {{- if kindIs "string" . }}
-    - {{ . }}
+    - {{ quote . }}
     {{- else }}
       {{ toYaml . | nindent 4 }}
     {{- end }}
