@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 1.3.2
+version: 1.3.3
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -14,6 +14,8 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: changed
+      description: Quoting args string to support multiline arguments
     - kind: changed
       description: Updated code-server image tag to v4.10.0
     - kind: changed
