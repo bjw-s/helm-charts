@@ -14,7 +14,7 @@
   {{- with .Values.args }}
   args:
     {{- if kindIs "string" . }}
-    - {{ . }}
+    - {{ quote . }}
     {{- else }}
     {{ toYaml . | nindent 4 }}
     {{- end }}
