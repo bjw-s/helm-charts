@@ -711,7 +711,7 @@ addons:
       # -- Specify the code-server image
       repository: ghcr.io/coder/code-server
       # -- Specify the code-server image tag
-      tag: 4.10.0
+      tag: 4.11.0
       # -- Specify the code-server image pull policy
       pullPolicy: IfNotPresent
 
