@@ -15,7 +15,7 @@ maintainers:
 annotations:
   artifacthub.io/changes: |-
     - kind: changed
-      description: Quoting args string to support multiline arguments
+      description: Quoting command and args strings to support multiline arguments
     - kind: changed
       description: Updated code-server image tag to v4.10.0
     - kind: changed
