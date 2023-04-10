@@ -1,0 +1,4 @@
+{
+  "prettier.configPath": ".ci/prettier/.prettierrc.yaml",
+  "prettier.ignorePath": ".ci/prettier/.prettierignore"
+}
