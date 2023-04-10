@@ -15,7 +15,9 @@ maintainers:
 annotations:
   artifacthub.io/changes: |-
     - kind: added
-      description: reload pod when secrets change
+      description: Reload Pod when secrets change
+    - kind: changed
+      description: Updated code-server image to v4.11.0
     - kind: fixed
       description: Integer style image tags now render correctly
       links:
