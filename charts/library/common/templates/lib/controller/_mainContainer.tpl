@@ -1,7 +1,7 @@
 {{- /* The main container included in the controller */ -}}
 {{- define "bjw-s.common.lib.controller.mainContainer" -}}
 - name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}
-  image: {{ printf "%s:%v" .Values.image.repository (default .Chart.AppVersion .Values.image.tag) }}
+  image: {{ include "bjw-s.common.lib.container.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- with .Values.command }}
   command:
