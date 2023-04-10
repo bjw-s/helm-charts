@@ -1,3 +1,4 @@
+---
 global:
   # -- Set an override for the prefix of the fullname
   nameOverride:
@@ -42,7 +43,8 @@ controller:
   # -- CronJob configuration. Required only when using `controller.type: cronjob`.
   # @default -- See below
   cronjob:
-    # -- Specifies how to treat concurrent executions of a job that is created by this cron job, valid values are Allow, Forbid or Replace
+    # -- Specifies how to treat concurrent executions of a job that is created by this cron job
+    # valid values are Allow, Forbid or Replace
     concurrencyPolicy: Forbid
     # -- Sets the CronJob time when to execute your jobs
     schedule: "*/20 * * * *"
@@ -52,7 +54,8 @@ controller:
     successfulJobsHistory: 1
     # -- The number of failed Jobs to keep
     failedJobsHistory: 1
-    # --  If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to be automatically deleted.
+    # --  If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to
+    # be automatically deleted.
     ttlSecondsAfterFinished:
 
 image:
@@ -168,10 +171,11 @@ hostname:
 # -- When using hostNetwork make sure you set dnsPolicy to `ClusterFirstWithHostNet`
 hostNetwork: false
 
-# -- Defaults to "ClusterFirst" if hostNetwork is false and "ClusterFirstWithHostNet" if hostNetwork is true.
+# -- Defaults to "ClusterFirst" if hostNetwork is false
+# and "ClusterFirstWithHostNet" if hostNetwork is true.
 dnsPolicy: # ClusterFirst
 
-# -- Optional DNS settings, configuring the ndots option may resolve nslookup issues on some Kubernetes setups.
+# -- Configuring the ndots option may resolve nslookup issues on some Kubernetes setups.
 dnsConfig: {}
 #   options:
 #     - name: ndots
@@ -190,11 +194,13 @@ securityContext: {}
 # -- Configure the lifecycle for the main container
 lifecycle: {}
 
-# -- Specify any initContainers here as dictionary items. Each initContainer should have its own key.
-# The dictionary item key will determine the order. Helm templates can be used.
+# -- Specify any initContainers here as dictionary items.
+# Each initContainer should have its own key. The dictionary item key will determine the order.
+# Helm templates can be used.
 initContainers: {}
 
-# -- Specify any sidecar containers here as dictionary items. Each sidecar container should have its own key.
+# -- Specify any sidecar containers here as dictionary items.
+# Each sidecar container should have its own key. The dictionary item key will determine the order.
 # Helm templates can be used.
 sidecars: {}
 
@@ -610,7 +616,8 @@ addons:
     type: gluetun
 
     # -- Gluetun specific configuration
-    # -- Make sure to read the [documentation](https://github.com/qdm12/gluetun/wiki) to see how to configure this addon!
+    # -- Make sure to read the [documentation](https://github.com/qdm12/gluetun/wiki)
+    # to see how to configure this addon!
     # @default -- See below
     gluetun:
       image:
@@ -655,9 +662,9 @@ addons:
     scripts:
       # @default -- See below
       up:
-        # |-
-        # !/bin/bash
-        # echo "connected" > /shared/vpnstatus
+      # |-
+      # !/bin/bash
+      # echo "connected" > /shared/vpnstatus
 
       # @default -- See below
       down:
@@ -709,7 +716,6 @@ addons:
         #     protocol: TCP
 
   # -- The common library supports adding a code-server add-on to access files. It can be configured under this key.
-  # For more info, check out [our docs](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-add-ons/##code-server)
   # @default -- See values.yaml
   codeserver:
     # -- Enable running a code-server container in the pod
@@ -802,7 +808,8 @@ addons:
     securityContext:
       runAsUser: 0
 
-  # -- The common library supports adding a netshoot add-on to troubleshoot network issues within a Pod. It can be configured under this key.
+  # -- The common library supports adding a netshoot add-on to troubleshoot network issues within a Pod.
+  # It can be configured under this key.
   # @default -- See values.yaml
   netshoot:
     # -- Enable running a netshoot container in the pod
