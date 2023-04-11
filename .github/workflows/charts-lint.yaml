@@ -8,7 +8,7 @@ on:
         type: string
       isRenovatePR:
         required: true
-        default: 'false'
+        default: "false"
         type: string
       chartsToLint:
         description: >
@@ -20,10 +20,10 @@ on:
           A JSON encoded array of dependencies to override before linting
         type: string
         required: false
-        default: '[]'
+        default: "[]"
 
 env:
-  HELM_VERSION: 3.9.2
+  HELM_VERSION: 3.11.2
 
 jobs:
   lint-chart:
@@ -62,7 +62,7 @@ jobs:
           helm: "${{ env.HELM_VERSION }}"
 
       - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2.3.1
+        uses: helm/chart-testing-action@v2.4.0
 
       - name: Override chart dependencies
         uses: ./.github/actions/override-chart-deps

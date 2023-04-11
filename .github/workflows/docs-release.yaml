@@ -30,12 +30,12 @@ jobs:
           fetch-depth: 0
 
       - name: Build docs
-        uses: docker://ghcr.io/bjw-s/mdbook:0.4.27@sha256:62e0fe58acf5376cf4877dc2f4d44e2730843d238356559ccb5553884d52b80c
+        uses: docker://ghcr.io/bjw-s/mdbook:0.4.28@sha256:58e2962e7cc01d81f719ac4dad37f9573daca6a76c2ca211cdf1316c32e95c76
         with:
           args: bash -c "cd docs && mdbook build"
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3.9.2
+        uses: peaceiris/actions-gh-pages@v3.9.3
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ steps.get-app-token.outputs.token }}

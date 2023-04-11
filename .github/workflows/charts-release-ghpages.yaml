@@ -17,7 +17,7 @@ on:
         required: true
 
 env:
-  HELM_VERSION: 3.11.1
+  HELM_VERSION: 3.11.2
 
 jobs:
   release-charts:
@@ -83,7 +83,7 @@ jobs:
           commit_user_name: "bjw-s-bot[bot]"
           commit_user_email: 87358111+bjw-s-bot[bot]@users.noreply.github.com
           commit_author: bjw-s-bot[bot] <87358111+bjw-s-bot[bot]@users.noreply.github.com>
-          file_pattern: 'index.yaml **/*.tgz'
+          file_pattern: "index.yaml **/*.tgz"
           disable_globbing: true
 
       - name: Wait for deploy

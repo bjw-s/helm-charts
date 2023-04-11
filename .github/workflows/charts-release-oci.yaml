@@ -17,7 +17,7 @@ on:
         required: true
 
 env:
-  HELM_VERSION: 3.11.1
+  HELM_VERSION: 3.11.2
   CHARTS_SRC_DIR: "charts"
   TARGET_REGISTRY: ghcr.io
 
