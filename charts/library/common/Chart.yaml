@@ -17,7 +17,9 @@ annotations:
     - kind: added
       description: Reload Pod when secrets change
     - kind: changed
-      description: Updated code-server image to v4.11.0
+      description: Quoting command and args strings to support multiline arguments
+    - kind: changed
+      description: Updated code-server image tag to v4.11.0
     - kind: fixed
       description: Integer style image tags now render correctly
       links:
