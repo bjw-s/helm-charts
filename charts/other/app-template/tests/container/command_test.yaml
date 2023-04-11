@@ -24,11 +24,41 @@ tests:
           value:
             - /bin/sh
 
+  - it: multiline string should pass
+    set:
+      command: |
+        /bin/sh
+        -c
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].command
+          value:
+            - |
+              /bin/sh
+              -c
+
+  - it: single quoted string should pass
+    set:
+      command: "/bin/sh"
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].command
+          value:
+            - /bin/sh
+
   - it: list of strings should pass
     set:
       command:
         - /bin/sh
-        - -c
+        - "-c"
     asserts:
       - documentIndex: 0
         isKind:
