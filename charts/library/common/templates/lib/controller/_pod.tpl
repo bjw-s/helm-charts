@@ -57,9 +57,7 @@ initContainers:
         {{- $_ := set $container "name" $key }}
       {{- end }}
       {{- if $container.env -}}
-        {{- $_ := set $ "ObjectValues" (dict "envVars" $container.env) -}}
-        {{- $newEnv := fromYaml (include "bjw-s.common.lib.container.envVars" $) -}}
-        {{- $_ := unset $.ObjectValues "envVars" -}}
+        {{- $newEnv := fromYaml (include "bjw-s.common.lib.container.envVars" (dict "rootContext" $ "env" $container.env)) -}}
         {{- $_ := set $container "env" $newEnv.env }}
       {{- end }}
       {{- $initContainers = append $initContainers $container }}
@@ -75,10 +73,8 @@ containers:
         {{- $_ := set $container "name" $name }}
       {{- end }}
       {{- if $container.env -}}
-        {{- $_ := set $ "ObjectValues" (dict "envVars" $container.env) -}}
-        {{- $newEnv := fromYaml (include "bjw-s.common.lib.container.envVars" $) -}}
+        {{- $newEnv := fromYaml (include "bjw-s.common.lib.container.envVars" (dict "rootContext" $ "env" $container.env)) -}}
         {{- $_ := set $container "env" $newEnv.env }}
-        {{- $_ := unset $.ObjectValues "envVars" -}}
       {{- end }}
       {{- $sidecarContainers = append $sidecarContainers $container }}
     {{- end }}

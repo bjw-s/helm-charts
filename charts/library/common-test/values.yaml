@@ -1,0 +1,6 @@
+---
+service:
+  main:
+    ports:
+      http:
+        port: 9876

@@ -28,19 +28,17 @@ It will include / inject the required templates based on the given values.
 
     {{/* Add the code-server service */}}
     {{- if .Values.addons.codeserver.service.enabled -}}
-      {{- $serviceValues := .Values.addons.codeserver.service -}}
-      {{- $_ := set $serviceValues "nameOverride" "addon-codeserver" -}}
-      {{- $_ := set $ "ObjectValues" (dict "service" $serviceValues) -}}
-      {{- include "bjw-s.common.class.service" $ -}}
-      {{- $_ := unset $.ObjectValues "service" -}}
+      {{- $_ := set .Values.service "addon-codeserver" .Values.addons.codeserver.service -}}
     {{- end -}}
 
     {{/* Add the code-server ingress */}}
-    {{- $svcName := printf "%v-addon-codeserver" (include "bjw-s.common.lib.chart.names.fullname" .) -}}
-    {{- $svcPort := .Values.addons.codeserver.service.ports.codeserver.port -}}
-    {{- range $_, $host := .Values.addons.codeserver.ingress.hosts -}}
-      {{- $_ := set (index $host.paths 0) "service" (dict "name" $svcName "port" $svcPort) -}}
+    {{- if .Values.addons.codeserver.ingress.enabled -}}
+      {{- $svcName := printf "%v-addon-codeserver" (include "bjw-s.common.lib.chart.names.fullname" .) -}}
+      {{- $svcPort := .Values.addons.codeserver.service.ports.codeserver.port -}}
+      {{- range $_, $host := .Values.addons.codeserver.ingress.hosts -}}
+        {{- $_ := set (index $host.paths 0) "service" (dict "name" $svcName "port" $svcPort) -}}
+      {{- end -}}
+      {{- $_ := set .Values.ingress "addon-codeserver" .Values.addons.codeserver.ingress -}}
     {{- end -}}
-    {{- $_ := set .Values.ingress "addon-codeserver" .Values.addons.codeserver.ingress -}}
   {{- end -}}
 {{- end -}}

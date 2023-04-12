@@ -2,10 +2,10 @@
 Probes selection logic.
 */}}
 {{- define "bjw-s.common.lib.container.probes" -}}
-  {{- $primaryService := get .Values.service (include "bjw-s.common.lib.service.primary" .) -}}
-  {{- $primaryPort := "" -}}
+  {{- $primaryService := include "bjw-s.common.lib.service.primary" $ | fromYaml -}}
+  {{- $primaryServiceDefaultPort := dict -}}
   {{- if $primaryService -}}
-    {{- $primaryPort = get $primaryService.ports (include "bjw-s.common.lib.service.primaryPort" (dict "serviceName" (include "bjw-s.common.lib.service.primary" .) "values" $primaryService)) -}}
+    {{- $primaryServiceDefaultPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $ "object" $primaryService) | fromYaml -}}
   {{- end -}}
 
   {{- range $probeName, $probe := .Values.probes -}}
@@ -16,10 +16,10 @@ Probes selection logic.
           {{- $probeOutput = $probe.spec | toYaml -}}
         {{- end -}}
       {{- else -}}
-        {{- if $primaryPort -}}
+        {{- if $primaryServiceDefaultPort -}}
           {{- $probeType := "" -}}
           {{- if eq $probe.type "AUTO" -}}
-            {{- $probeType = $primaryPort.protocol -}}
+            {{- $probeType = $primaryServiceDefaultPort.protocol -}}
           {{- else -}}
             {{- $probeType = $probe.type | default "TCP" -}}
           {{- end -}}
@@ -48,10 +48,10 @@ Probes selection logic.
 
           {{- if $probe.port }}
             {{- $_ := set (index $probeDefinition $probeHeader) "port" (tpl ( $probe.port | toString ) $) -}}
-          {{- else if $primaryPort.targetPort }}
-            {{- $_ := set (index $probeDefinition $probeHeader) "port" $primaryPort.targetPort -}}
+          {{- else if $primaryServiceDefaultPort.targetPort }}
+            {{- $_ := set (index $probeDefinition $probeHeader) "port" $primaryServiceDefaultPort.targetPort -}}
           {{- else }}
-            {{- $_ := set (index $probeDefinition $probeHeader) "port" ($primaryPort.port | toString | atoi ) -}}
+            {{- $_ := set (index $probeDefinition $probeHeader) "port" ($primaryServiceDefaultPort.port | toString | atoi ) -}}
           {{- end }}
 
           {{- $probeOutput = $probeDefinition | toYaml | trim -}}
