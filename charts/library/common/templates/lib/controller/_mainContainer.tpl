@@ -36,7 +36,7 @@
 
   {{- with .Values.env }}
   env:
-    {{- get (fromYaml (include "bjw-s.common.lib.container.envVars" $)) "env" | toYaml | nindent 4 -}}
+    {{- get (fromYaml (include "bjw-s.common.lib.container.envVars" (dict "rootContext" $ "env" .))) "env" | toYaml | nindent 4 -}}
   {{- end }}
   {{- with .Values.envFrom }}
   envFrom:

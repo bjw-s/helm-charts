@@ -35,13 +35,6 @@ jobs:
       checkoutCommit: ${{ github.sha }}
       chartsToLint: ${{ needs.pr-metadata.outputs.chartsToLint }}
       isRenovatePR: ${{ needs.pr-metadata.outputs.isRenovatePR }}
-      overrideDeps: |-
-        ${{
-           (
-             needs.pr-metadata.outputs.commonLibraryUpdated &&
-            '[{"name": "common", "repository": "file://../../library/common", "version": "*"}]'
-           ) || '[]'
-         }}
 
   charts-test:
     uses: ./.github/workflows/charts-test.yaml
@@ -53,13 +46,6 @@ jobs:
         ${{
            (
              needs.pr-metadata.outputs.commonLibraryUpdated &&
-             '["other/app-template"]'
+             '["library/common-test"]'
            ) || needs.pr-metadata.outputs.chartsToInstall
-         }}
-      overrideDeps: |-
-        ${{
-           (
-             needs.pr-metadata.outputs.commonLibraryUpdated &&
-            '[{"name": "common", "repository": "file://../../library/common", "version": "*"}]'
-           ) || '[]'
          }}

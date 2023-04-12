@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 1.4.0
+version: 2.0.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -13,17 +13,7 @@ maintainers:
   - name: bjw-s
     email: me@bjw-s.dev
 annotations:
+  # TODO: Update this before releasing
   artifacthub.io/changes: |-
-    - kind: added
-      description: Reload Pod when secrets change
     - kind: changed
-      description: Quoting command and args strings to support multiline arguments
-    - kind: changed
-      description: Updated code-server image tag to v4.11.0
-    - kind: changed
-      description: Updated gluetun image tag to v3.33.0
-    - kind: fixed
-      description: Integer style image tags now render correctly
-      links:
-        - name: GitHub Issue
-          url: https://github.com/bjw-s/helm-charts/issues/128
+      description: Many things :P

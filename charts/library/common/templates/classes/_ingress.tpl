@@ -3,66 +3,63 @@ This template serves as a blueprint for all Ingress objects that are created
 within the common library.
 */}}
 {{- define "bjw-s.common.class.ingress" -}}
-  {{- $fullName := include "bjw-s.common.lib.chart.names.fullname" . -}}
-  {{- $ingressName := $fullName -}}
-  {{- $values := .Values.ingress -}}
+  {{- $rootContext := .rootContext -}}
+  {{- $ingressObject := .object -}}
 
-  {{- if hasKey . "ObjectValues" -}}
-    {{- with .ObjectValues.ingress -}}
-      {{- $values = . -}}
-    {{- end -}}
-  {{ end -}}
-
-  {{- if and (hasKey $values "nameOverride") $values.nameOverride -}}
-    {{- $ingressName = printf "%v-%v" $ingressName $values.nameOverride -}}
+  {{- /* Make the Ingress reference the primary Service if no service has been set */ -}}
+  {{- $primaryService := include "bjw-s.common.lib.service.primary" $rootContext | fromYaml -}}
+  {{- $primaryServiceDefaultPort := dict -}}
+  {{- if $primaryService -}}
+    {{- $primaryServiceDefaultPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "object" $primaryService) | fromYaml -}}
   {{- end -}}
-
-  {{- $primaryService := get .Values.service (include "bjw-s.common.lib.service.primary" .) -}}
-  {{- $defaultServiceName := $fullName -}}
-  {{- if and (hasKey $primaryService "nameOverride") $primaryService.nameOverride -}}
-    {{- $defaultServiceName = printf "%v-%v" $defaultServiceName $primaryService.nameOverride -}}
-  {{- end -}}
-  {{- $defaultServicePort := get $primaryService.ports (include "bjw-s.common.lib.service.primaryPort" (dict "values" $primaryService)) -}}
+  {{- $labels := merge
+    ($ingressObject.labels | default dict)
+    (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
+  -}}
+  {{- $annotations := merge
+    ($ingressObject.annotations | default dict)
+    (include "bjw-s.common.lib.metadata.globalAnnotations" $rootContext | fromYaml)
+  -}}
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ $ingressName }}
-  {{- with (merge ($values.labels | default dict) (include "bjw-s.common.lib.metadata.allLabels" $ | fromYaml)) }}
-  labels: {{- toYaml . | nindent 4 }}
+  name: {{ $ingressObject.name }}
+  {{- with $labels }}
+  labels: {{- toYaml . | nindent 4 -}}
   {{- end }}
-  {{- with (merge ($values.annotations | default dict) (include "bjw-s.common.lib.metadata.globalAnnotations" $ | fromYaml)) }}
-  annotations: {{- toYaml . | nindent 4 }}
+  {{- with $annotations }}
+  annotations: {{- toYaml . | nindent 4 -}}
   {{- end }}
 spec:
-  {{- if $values.ingressClassName }}
-  ingressClassName: {{ $values.ingressClassName }}
+  {{- if $ingressObject.ingressClassName }}
+  ingressClassName: {{ $ingressObject.ingressClassName }}
   {{- end }}
-  {{- if $values.tls }}
+  {{- if $ingressObject.tls }}
   tls:
-    {{- range $values.tls }}
+    {{- range $ingressObject.tls }}
     - hosts:
         {{- range .hosts }}
-        - {{ tpl . $ | quote }}
+        - {{ tpl . $rootContext | quote }}
         {{- end }}
       {{- if .secretName }}
-      secretName: {{ tpl .secretName $ | quote}}
+      secretName: {{ tpl .secretName $rootContext | quote}}
       {{- end }}
     {{- end }}
   {{- end }}
   rules:
-  {{- range $values.hosts }}
-    - host: {{ tpl .host $ | quote }}
+  {{- range $ingressObject.hosts }}
+    - host: {{ tpl .host $rootContext | quote }}
       http:
         paths:
           {{- range .paths }}
-          {{- $service := $defaultServiceName -}}
-          {{- $port := $defaultServicePort.port -}}
-          {{- if .service -}}
-            {{- $service = default $service .service.name -}}
-            {{- $port = default $port .service.port -}}
-          {{- end }}
-          - path: {{ tpl .path $ | quote }}
+            {{- $service := $primaryService.name -}}
+            {{- $port := $primaryServiceDefaultPort.port -}}
+            {{- if .service -}}
+              {{- $service = default $service .service.name -}}
+              {{- $port = default $port .service.port -}}
+            {{- end }}
+          - path: {{ tpl .path $rootContext | quote }}
             pathType: {{ default "Prefix" .pathType }}
             backend:
               service:
