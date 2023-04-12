@@ -1,12 +1,12 @@
 {{- /* The main container included in the controller */ -}}
 {{- define "bjw-s.common.lib.controller.mainContainer" -}}
 - name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}
-  image: {{ printf "%s:%s" .Values.image.repository (default .Chart.AppVersion .Values.image.tag) | quote }}
+  image: {{ include "bjw-s.common.lib.container.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy }}
   {{- with .Values.command }}
   command:
     {{- if kindIs "string" . }}
-    - {{ . }}
+    - {{ . | quote }}
     {{- else }}
       {{ toYaml . | nindent 4 }}
     {{- end }}
@@ -14,7 +14,7 @@
   {{- with .Values.args }}
   args:
     {{- if kindIs "string" . }}
-    - {{ . }}
+    - {{ . | quote }}
     {{- else }}
     {{ toYaml . | nindent 4 }}
     {{- end }}

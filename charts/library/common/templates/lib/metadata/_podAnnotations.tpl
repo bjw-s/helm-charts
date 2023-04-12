@@ -13,4 +13,14 @@
   {{- if $configMapsFound -}}
     {{- printf "checksum/config: %v" (toYaml $configMapsFound | sha256sum) | nindent 0 -}}
   {{- end -}}
+
+  {{- $secretsFound := dict -}}
+  {{- range $name, $secret := .Values.secrets -}}
+    {{- if $secret.enabled -}}
+      {{- $_ := set $secretsFound $name (toYaml $secret.data | sha256sum) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if $secretsFound -}}
+    {{- printf "checksum/secrets: %v" (toYaml $secretsFound | sha256sum) | nindent 0 -}}
+  {{- end -}}
 {{- end -}}

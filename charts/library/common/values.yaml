@@ -1,3 +1,4 @@
+---
 global:
   # -- Set an override for the prefix of the fullname
   nameOverride:
@@ -42,7 +43,8 @@ controller:
   # -- CronJob configuration. Required only when using `controller.type: cronjob`.
   # @default -- See below
   cronjob:
-    # -- Specifies how to treat concurrent executions of a job that is created by this cron job, valid values are Allow, Forbid or Replace
+    # -- Specifies how to treat concurrent executions of a job that is created by this cron job
+    # valid values are Allow, Forbid or Replace
     concurrencyPolicy: Forbid
     # -- Sets the CronJob time when to execute your jobs
     schedule: "*/20 * * * *"
@@ -52,7 +54,8 @@ controller:
     successfulJobsHistory: 1
     # -- The number of failed Jobs to keep
     failedJobsHistory: 1
-    # --  If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to be automatically deleted.
+    # --  If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to
+    # be automatically deleted.
     ttlSecondsAfterFinished:
 
 image:
@@ -105,7 +108,8 @@ secrets:
     # -- Annotations to add to the Secret
     annotations: {}
     # -- Secret stringData content. Helm template enabled.
-    stringData: {}
+    stringData:
+      {}
       # foo: bar
 
 # -- Configure configMaps for the chart here.
@@ -120,7 +124,8 @@ configMaps:
     # -- Annotations to add to the configMap
     annotations: {}
     # -- configMap data content. Helm template enabled.
-    data: {}
+    data:
+      {}
       # foo: bar
 
 # -- Main environment variables. Template enabled.
@@ -152,13 +157,13 @@ envFrom: []
 #     name: secret-name
 
 # -- Custom priority class for different treatment by the scheduler
-priorityClassName:  # system-node-critical
+priorityClassName: # system-node-critical
 
 # -- Allow specifying a runtimeClassName other than the default one (ie: nvidia)
-runtimeClassName:  # nvidia
+runtimeClassName: # nvidia
 
 # -- Allows specifying a custom scheduler name
-schedulerName:  # awkward-dangerous-scheduler
+schedulerName: # awkward-dangerous-scheduler
 
 # -- Allows specifying explicit hostname setting
 hostname:
@@ -166,10 +171,11 @@ hostname:
 # -- When using hostNetwork make sure you set dnsPolicy to `ClusterFirstWithHostNet`
 hostNetwork: false
 
-# -- Defaults to "ClusterFirst" if hostNetwork is false and "ClusterFirstWithHostNet" if hostNetwork is true.
-dnsPolicy:  # ClusterFirst
+# -- Defaults to "ClusterFirst" if hostNetwork is false
+# and "ClusterFirstWithHostNet" if hostNetwork is true.
+dnsPolicy: # ClusterFirst
 
-# -- Optional DNS settings, configuring the ndots option may resolve nslookup issues on some Kubernetes setups.
+# -- Configuring the ndots option may resolve nslookup issues on some Kubernetes setups.
 dnsConfig: {}
 #   options:
 #     - name: ndots
@@ -188,11 +194,13 @@ securityContext: {}
 # -- Configure the lifecycle for the main container
 lifecycle: {}
 
-# -- Specify any initContainers here as dictionary items. Each initContainer should have its own key.
-# The dictionary item key will determine the order. Helm templates can be used.
+# -- Specify any initContainers here as dictionary items.
+# Each initContainer should have its own key. The dictionary item key will determine the order.
+# Helm templates can be used.
 initContainers: {}
 
-# -- Specify any sidecar containers here as dictionary items. Each sidecar container should have its own key.
+# -- Specify any sidecar containers here as dictionary items.
+# Each sidecar container should have its own key. The dictionary item key will determine the order.
 # Helm templates can be used.
 sidecars: {}
 
@@ -387,7 +395,8 @@ ingress:
     nameOverride:
 
     # -- Provide additional annotations which may be required.
-    annotations: {}
+    annotations:
+      {}
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
 
@@ -395,15 +404,15 @@ ingress:
     labels: {}
 
     # -- Set the ingressClass that is used for this ingress.
-    ingressClassName:  # "nginx"
+    ingressClassName: # "nginx"
 
     ## Configure the hosts for the ingress
     hosts:
-      -  # -- Host address. Helm template can be passed.
+      - # -- Host address. Helm template can be passed.
         host: chart-example.local
         ## Configure the paths for the host
         paths:
-          -  # -- Path.  Helm template can be passed.
+          - # -- Path.  Helm template can be passed.
             path: /
             pathType: Prefix
             service:
@@ -442,30 +451,30 @@ route:
 
     # -- Configure the resource the route attaches to.
     parentRefs:
-    -  # Group of the referent resource.
-      group: gateway.networking.k8s.io
-      # Kind of the referent resource.
-      kind: Gateway
-      # Name of the referent resource
-      name:
-      # Namespace of the referent resource
-      namespace:
-      # Name of the section within the target resource.
-      sectionName:
+      - # Group of the referent resource.
+        group: gateway.networking.k8s.io
+        # Kind of the referent resource.
+        kind: Gateway
+        # Name of the referent resource
+        name:
+        # Namespace of the referent resource
+        namespace:
+        # Name of the section within the target resource.
+        sectionName:
 
     # -- Host addresses
     hostnames: []
 
     # -- Configure rules for routing. Defaults to the primary service.
     rules:
-      -  # -- Configure backends where matching requests should be sent.
+      - # -- Configure backends where matching requests should be sent.
         backendRefs:
-        - group: ""
-          kind: Service
-          name:
-          namespace:
-          port:
-          weight: 1
+          - group: ""
+            kind: Service
+            name:
+            namespace:
+            port:
+            weight: 1
         ## Configure conditions used for matching incoming requests. Only for HTTPRoutes
         matches:
           - path:
@@ -490,7 +499,7 @@ persistence:
     # -- Where to mount the volume in the main container.
     # Defaults to `/<name_of_the_volume>`,
     # setting to '-' creates the volume but disables the volumeMount.
-    mountPath:  # /config
+    mountPath: # /config
     # -- Specify if the volume should be mounted read-only.
     readOnly: false
     # -- Override the name suffix that is used for this volume.
@@ -500,13 +509,13 @@ persistence:
     # If set to `-`, dynamic provisioning is disabled.
     # If set to something else, the given storageClass is used.
     # If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner.
-    storageClass:  # "-"
+    storageClass: # "-"
 
     # -- If you want to reuse an existing claim, the name of the existing PVC can be passed here.
-    existingClaim:  # your-claim
+    existingClaim: # your-claim
 
     # -- Used in conjunction with `existingClaim`. Specifies a sub-path inside the referenced volume instead of its root
-    subPath:  # some-subpath
+    subPath: # some-subpath
 
     # -- AccessMode for the persistent volume.
     # Make sure to select an access mode that is supported by your storage provider!
@@ -529,11 +538,11 @@ persistence:
 
     # -- Set the medium to "Memory" to mount a tmpfs (RAM-backed filesystem) instead
     # of the storage medium that backs the node.
-    medium:  # Memory
+    medium: # Memory
 
     # -- If the `SizeMemoryBackedVolumes` feature gate is enabled, you can
     # specify a size for memory backed volumes.
-    sizeLimit:  # 1Gi
+    sizeLimit: # 1Gi
 
 # -- Used in conjunction with `controller.type: statefulset` to create individual disks for each instance.
 volumeClaimTemplates: []
@@ -581,7 +590,8 @@ hostAliases: []
 #   - "www.example.com"
 
 # -- Set the resource requests / limits for the main container.
-resources: {}
+resources:
+  {}
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -596,7 +606,6 @@ resources: {}
 # -- The common chart supports several add-ons. These can be configured under this key.
 # @default -- See below
 addons:
-
   # -- The common chart supports adding a VPN add-on. It can be configured under this key.
   # @default -- See values.yaml
   vpn:
@@ -607,14 +616,15 @@ addons:
     type: gluetun
 
     # -- Gluetun specific configuration
-    # -- Make sure to read the [documentation](https://github.com/qdm12/gluetun/wiki) to see how to configure this addon!
+    # -- Make sure to read the [documentation](https://github.com/qdm12/gluetun/wiki)
+    # to see how to configure this addon!
     # @default -- See below
     gluetun:
       image:
         # -- Specify the Gluetun image
         repository: docker.io/qmcgaw/gluetun
         # -- Specify the Gluetun image tag
-        tag: v3.32.0
+        tag: v3.33.0
         # -- Specify the Gluetun image pull policy
         pullPolicy: IfNotPresent
 
@@ -628,14 +638,16 @@ addons:
 
     # -- All variables specified here will be added to the vpn sidecar container
     # See the documentation of the VPN image for all config values
-    env: {}
+    env:
+      {}
       # TZ: UTC
 
     # -- Override the args for the vpn sidecar container
     args: []
 
     # -- Provide a customized vpn configuration file to be used by the VPN.
-    configFile:  # |-
+    configFile:
+      # |-
       # Some Example Config
       # remote greatvpnhost.com 8888
       # auth-user-pass
@@ -649,12 +661,14 @@ addons:
     # @default -- See values.yaml
     scripts:
       # @default -- See below
-      up:  # |-
-        # #!/bin/bash
-        # echo "connected" > /shared/vpnstatus
+      up:
+      # |-
+      # !/bin/bash
+      # echo "connected" > /shared/vpnstatus
 
       # @default -- See below
-      down:  # |-
+      down:
+        # |-
         # #!/bin/bash
         # echo "disconnected" > /shared/vpnstatus
 
@@ -662,7 +676,8 @@ addons:
 
     # -- Optionally specify a livenessProbe, e.g. to check if the connection is still
     # being protected by the VPN
-    livenessProbe: {}
+    livenessProbe:
+      {}
       # exec:
       #   command:
       #     - sh
@@ -701,7 +716,6 @@ addons:
         #     protocol: TCP
 
   # -- The common library supports adding a code-server add-on to access files. It can be configured under this key.
-  # For more info, check out [our docs](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-add-ons/##code-server)
   # @default -- See values.yaml
   codeserver:
     # -- Enable running a code-server container in the pod
@@ -711,12 +725,13 @@ addons:
       # -- Specify the code-server image
       repository: ghcr.io/coder/code-server
       # -- Specify the code-server image tag
-      tag: 4.10.0
+      tag: 4.11.0
       # -- Specify the code-server image pull policy
       pullPolicy: IfNotPresent
 
     # -- Set any environment variables for code-server here
-    env: {}
+    env:
+      {}
       # TZ: UTC
 
     # -- Set codeserver command line arguments.
@@ -770,14 +785,15 @@ addons:
       # -- Enable an ingress for the code-server add-on.
       enabled: false
 
-      annotations: {}
+      annotations:
+        {}
         # kubernetes.io/ingress.class: nginx
         # kubernetes.io/tls-acme: "true"
 
       labels: {}
 
       # -- Set the ingressClass that is used for this ingress.
-      ingressClassName:  # "nginx"
+      ingressClassName: # "nginx"
 
       hosts:
         - host: code.chart-example.local
@@ -792,7 +808,8 @@ addons:
     securityContext:
       runAsUser: 0
 
-  # -- The common library supports adding a netshoot add-on to troubleshoot network issues within a Pod. It can be configured under this key.
+  # -- The common library supports adding a netshoot add-on to troubleshoot network issues within a Pod.
+  # It can be configured under this key.
   # @default -- See values.yaml
   netshoot:
     # -- Enable running a netshoot container in the pod
