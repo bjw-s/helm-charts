@@ -20,6 +20,8 @@ annotations:
       description: Quoting command and args strings to support multiline arguments
     - kind: changed
       description: Updated code-server image tag to v4.11.0
+    - kind: changed
+      description: Updated gluetun image tag to v3.33.0
     - kind: fixed
       description: Integer style image tags now render correctly
       links:
