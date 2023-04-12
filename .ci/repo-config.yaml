@@ -1,5 +1,9 @@
+---
 excluded-charts-lint:
   - library/common-test
 
 excluded-charts-install:
   - library/common
+
+excluded-charts-release:
+  - library/common-test

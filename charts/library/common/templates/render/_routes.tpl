@@ -15,6 +15,7 @@
         {{- end -}}
       {{- end -}}
       {{- $_ := set $routeValues "name" $routeName -}}
+      {{- $_ := set $routeValues "key" $key -}}
 
       {{- /* Perform validations on the Route before rendering */ -}}
       {{- include "bjw-s.common.lib.route.validate" (dict "rootContext" $ "object" $routeValues) -}}
