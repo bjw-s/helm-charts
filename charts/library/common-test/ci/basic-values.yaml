@@ -3,12 +3,6 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
-service:
-  main:
-    ports:
-      http:
-        port: 8080
-
 ingress:
   main:
     enabled: true
@@ -20,9 +14,3 @@ probes:
     enabled: true
   startup:
     enabled: true
-
-sidecars:
-  additional1:
-    image: template-test
-    env:
-      TZ: test
