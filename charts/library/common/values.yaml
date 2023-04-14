@@ -19,7 +19,7 @@ controller:
   annotations: {}
   # -- Set labels on the deployment/statefulset/daemonset/cronjob
   labels: {}
-  # -- Number of desired pods
+  # -- Number of desired pods. When using a HorizontalPodAutoscaler, set this to `null`.
   replicas: 1
   # -- Set the controller upgrade strategy
   # For Deployments, valid values are Recreate (default) and RollingUpdate.
