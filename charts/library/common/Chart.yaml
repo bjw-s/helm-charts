@@ -14,6 +14,8 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: changed
+      description: Omit replicas field in Deployment if null is given
     - kind: added
       description: Reload Pod when secrets change
     - kind: changed
