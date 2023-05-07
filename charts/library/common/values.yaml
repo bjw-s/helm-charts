@@ -168,8 +168,14 @@ schedulerName: # awkward-dangerous-scheduler
 # -- Allows specifying explicit hostname setting
 hostname:
 
+# -- Use the host's ipc namespace
+hostIPC: false
+
 # -- When using hostNetwork make sure you set dnsPolicy to `ClusterFirstWithHostNet`
 hostNetwork: false
+
+# -- Use the host's pid namespace
+hostPID: false
 
 # -- Defaults to "ClusterFirst" if hostNetwork is false
 # and "ClusterFirstWithHostNet" if hostNetwork is true.

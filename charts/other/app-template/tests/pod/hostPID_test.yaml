@@ -1,0 +1,35 @@
+suite: pod security
+templates:
+  - common.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        isNull:
+          path: spec.template.spec.hostPID
+
+  - it: hostPID disabled should pass
+    set:
+      hostPID: false
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        isNull:
+          path: spec.template.spec.hostPID
+
+  - it: hostPID enabled should pass
+    set:
+      hostPID: true
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.hostPID
+          value: true
