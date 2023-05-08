@@ -57,6 +57,8 @@ controller:
     # --  If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to
     # be automatically deleted.
     ttlSecondsAfterFinished:
+    # -- Limits the number of times a failed job will be retried
+    backoffLimit: 6
 
 image:
   # -- image repository

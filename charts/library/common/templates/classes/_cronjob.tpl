@@ -30,6 +30,7 @@ spec:
       {{- with .Values.controller.cronjob.ttlSecondsAfterFinished }}
       ttlSecondsAfterFinished: {{ . }}
       {{- end }}
+      backoffLimit: {{ .Values.controller.cronjob.backoffLimit }}
       template:
         metadata:
           {{- with include ("bjw-s.common.lib.metadata.podAnnotations") . }}
