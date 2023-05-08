@@ -11,7 +11,7 @@ Validate Service values
     {{- fail (
       printf "invalid service type \"%s\" for Service with key \"%s\". Allowed values are [%s]"
       $serviceObject.type
-      $serviceObject.key
+      $serviceObject.identifier
       (join ", " $validServiceTypes)
     ) -}}
   {{- end -}}
@@ -20,13 +20,13 @@ Validate Service values
     {{- $enabledPorts := include "bjw-s.common.lib.service.enabledPorts" (dict "rootContext" $rootContext "object" $serviceObject) | fromYaml }}
     {{- /* Validate at least one port is enabled */ -}}
     {{- if not $enabledPorts -}}
-      {{- fail (printf "no ports are enabled for Service with key \"%s\"" $serviceObject.key) -}}
+      {{- fail (printf "no ports are enabled for Service with key \"%s\"" $serviceObject.identifier) -}}
     {{- end -}}
 
     {{- range $name, $port := $enabledPorts -}}
       {{- /* Validate a port number is configured */ -}}
       {{- if not $port.port -}}
-        {{- fail (printf "no port number is configured for port \"%s\" under Service with key \"%s\"" $name $serviceObject.key) -}}
+        {{- fail (printf "no port number is configured for port \"%s\" under Service with key \"%s\"" $name $serviceObject.identifier) -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}

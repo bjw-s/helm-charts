@@ -5,23 +5,14 @@
     {{- if $route.enabled -}}
       {{- $routeValues := (mustDeepCopy $route) -}}
 
-      {{/* Determine the Route name */}}
-      {{- $routeName := (include "bjw-s.common.lib.chart.names.fullname" $) -}}
-      {{- if $routeValues.nameOverride -}}
-        {{- $routeName = printf "%s-%s" $routeName $routeValues.nameOverride -}}
-      {{- else -}}
-        {{- if ne $key (include "bjw-s.common.lib.route.primary" $) -}}
-          {{- $routeName = printf "%s-%s" $routeName $key -}}
-        {{- end -}}
-      {{- end -}}
-      {{- $_ := set $routeValues "name" $routeName -}}
-      {{- $_ := set $routeValues "key" $key -}}
+      {{- /* Create object from the raw Route values */ -}}
+      {{- $routeObject := (include "bjw-s.common.lib.route.valuesToObject" (dict "rootContext" $ "id" $key "values" $routeValues)) | fromYaml -}}
 
       {{- /* Perform validations on the Route before rendering */ -}}
-      {{- include "bjw-s.common.lib.route.validate" (dict "rootContext" $ "object" $routeValues) -}}
+      {{- include "bjw-s.common.lib.route.validate" (dict "rootContext" $ "object" $routeObject) -}}
 
       {{- /* Include the Route class */ -}}
-      {{- include "bjw-s.common.class.route" (dict "rootContext" $ "object" $routeValues) | nindent 0 -}}
+      {{- include "bjw-s.common.class.route" (dict "rootContext" $ "object" $routeObject) | nindent 0 -}}
     {{- end }}
   {{- end }}
 {{- end }}
