@@ -102,6 +102,7 @@ N/A
 | configMaps.config.labels | object | `{}` | Labels to add to the configMap |
 | controller.annotations | object | `{}` | Set annotations on the deployment/statefulset/daemonset/cronjob |
 | controller.cronjob | object | See below | CronJob configuration. Required only when using `controller.type: cronjob`. |
+| controller.cronjob.backoffLimit | int | `6` | Limits the number of times a failed job will be retried |
 | controller.cronjob.concurrencyPolicy | string | `"Forbid"` | Specifies how to treat concurrent executions of a job that is created by this cron job, valid values are Allow, Forbid or Replace |
 | controller.cronjob.failedJobsHistory | int | `1` | The number of failed Jobs to keep |
 | controller.cronjob.schedule | string | `"*/20 * * * *"` | Sets the CronJob time when to execute your jobs |
