@@ -15,6 +15,10 @@ maintainers:
 annotations:
   artifacthub.io/changes: |-
     - kind: added
+      description: support for for hostPID
+    - kind: added
+      description: support for for hostPID
+    - kind: added
       description: Add support for CronJob backoffLimit
     - kind: changed
       description: Omit replicas field in Deployment if null is given

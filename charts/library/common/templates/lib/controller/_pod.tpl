@@ -21,8 +21,14 @@ runtimeClassName: {{ . }}
   {{- with .Values.schedulerName }}
 schedulerName: {{ . }}
   {{- end }}
+  {{- with .Values.hostIPC }}
+hostIPC: {{ . }}
+  {{- end }}
   {{- with .Values.hostNetwork }}
 hostNetwork: {{ . }}
+  {{- end }}
+  {{- with .Values.hostPID }}
+hostPID: {{ . }}
   {{- end }}
   {{- with .Values.hostname }}
 hostname: {{ . }}
