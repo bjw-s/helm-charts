@@ -20,7 +20,9 @@ metadata:
   {{- end }}
 spec:
   revisionHistoryLimit: {{ .Values.controller.revisionHistoryLimit }}
+  {{- if not (eq .Values.controller.replicas nil) }}
   replicas: {{ .Values.controller.replicas }}
+  {{- end }}
   strategy:
     type: {{ $strategy }}
     {{- with .Values.controller.rollingUpdate }}
