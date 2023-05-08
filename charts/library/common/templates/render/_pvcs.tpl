@@ -7,17 +7,8 @@ Renders the Persistent Volume Claim objects required by the chart.
     {{- if and $pvc.enabled (eq (default "pvc" $pvc.type) "pvc") (not $pvc.existingClaim) -}}
       {{- $pvcValues := (mustDeepCopy $pvc) -}}
 
-      {{/* Determine the PVC name */}}
-      {{- $pvcName := (include "bjw-s.common.lib.chart.names.fullname" $) -}}
-      {{- if $pvcValues.nameOverride -}}
-        {{- if ne $pvcValues.nameOverride "-" -}}
-          {{- $pvcName = printf "%s-%s" $pvcName $pvcValues.nameOverride -}}
-        {{ end -}}
-      {{- else -}}
-        {{- $pvcName = printf "%s-%s" $pvcName $key -}}
-      {{- end -}}
-      {{- $_ := set $pvcValues "name" $pvcName -}}
-      {{- $_ := set $pvcValues "key" $key -}}
+      {{- /* Create object from the raw PVC values */ -}}
+      {{- $pvcObject := (include "bjw-s.common.lib.pvc.valuesToObject" (dict "rootContext" $ "id" $key "values" $pvcValues)) | fromYaml -}}
 
       {{- /* Perform validations on the PVC before rendering */ -}}
       {{- include "bjw-s.common.lib.pvc.validate" (dict "rootContext" $ "object" $pvcValues) -}}

@@ -6,6 +6,6 @@ Validate serviceMonitor values
   {{- $serviceMonitorObject := .object -}}
 
   {{- if not $serviceMonitorObject.endpoints -}}
-    {{- fail (printf "endpoints are required for serviceMonitor with key \"%v\"" $serviceMonitorObject.key) -}}
+    {{- fail (printf "endpoints are required for serviceMonitor with key \"%v\"" $serviceMonitorObject.identifier) -}}
   {{- end -}}
 {{- end -}}

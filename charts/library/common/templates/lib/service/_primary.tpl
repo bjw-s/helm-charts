@@ -20,6 +20,6 @@ Return the primary service object
       {{- $result = get $enabledServices $firstServiceKey -}}
     {{- end -}}
 
-    {{- include "bjw-s.common.lib.service.massage" (dict "rootContext" $ "object" $result) -}}
+    {{- include "bjw-s.common.lib.service.valuesToObject" (dict "rootContext" $ "values" $result) -}}
   {{- end -}}
 {{- end -}}

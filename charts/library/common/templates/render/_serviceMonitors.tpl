@@ -7,23 +7,14 @@ Renders the serviceMonitor objects required by the chart.
     {{- if $serviceMonitor.enabled -}}
       {{- $serviceMonitorValues := (mustDeepCopy $serviceMonitor) -}}
 
-      {{/* Determine the serviceMonitor name */}}
-      {{- $serviceMonitorName := (include "bjw-s.common.lib.chart.names.fullname" $) -}}
-      {{- if $serviceMonitorValues.nameOverride -}}
-        {{- $serviceMonitorName = printf "%s-%s" $serviceMonitorName $serviceMonitorValues.nameOverride -}}
-      {{- else -}}
-        {{- if ne $key "main" -}}
-          {{- $serviceMonitorName = printf "%s-%s" $serviceMonitorName $key -}}
-        {{- end -}}
-      {{- end -}}
-      {{- $_ := set $serviceMonitorValues "name" $serviceMonitorName -}}
-      {{- $_ := set $serviceMonitorValues "key" $key -}}
+      {{- /* Create object from the raw ServiceMonitor values */ -}}
+      {{- $serviceMonitorObject := (include "bjw-s.common.lib.serviceMonitor.valuesToObject" (dict "rootContext" $ "id" $key "values" $serviceMonitorValues)) | fromYaml -}}
 
       {{- /* Perform validations on the serviceMonitor before rendering */ -}}
-      {{- include "bjw-s.common.lib.serviceMonitor.validate" (dict "rootContext" $ "object" $serviceMonitorValues) -}}
+      {{- include "bjw-s.common.lib.serviceMonitor.validate" (dict "rootContext" $ "object" $serviceMonitorObject) -}}
 
       {{/* Include the serviceMonitor class */}}
-      {{- include "bjw-s.common.class.serviceMonitor" (dict "rootContext" $ "object" $serviceMonitorValues) | nindent 0 -}}
+      {{- include "bjw-s.common.class.serviceMonitor" (dict "rootContext" $ "object" $serviceMonitorObject) | nindent 0 -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
