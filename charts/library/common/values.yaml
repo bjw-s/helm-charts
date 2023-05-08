@@ -19,7 +19,7 @@ controller:
   annotations: {}
   # -- Set labels on the deployment/statefulset/daemonset/cronjob
   labels: {}
-  # -- Number of desired pods
+  # -- Number of desired pods. When using a HorizontalPodAutoscaler, set this to `null`.
   replicas: 1
   # -- Set the controller upgrade strategy
   # For Deployments, valid values are Recreate (default) and RollingUpdate.
@@ -57,6 +57,8 @@ controller:
     # --  If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to
     # be automatically deleted.
     ttlSecondsAfterFinished:
+    # -- Limits the number of times a failed job will be retried
+    backoffLimit: 6
 
 image:
   # -- image repository
@@ -731,7 +733,7 @@ addons:
       # -- Specify the code-server image
       repository: ghcr.io/coder/code-server
       # -- Specify the code-server image tag
-      tag: 4.11.0
+      tag: 4.12.0
       # -- Specify the code-server image pull policy
       pullPolicy: IfNotPresent
 
@@ -825,7 +827,7 @@ addons:
       # -- Specify the netshoot image
       repository: ghcr.io/nicolaka/netshoot
       # -- Specify the netshoot image tag
-      tag: v0.9
+      tag: v0.10
       # -- Specify the netshoot image pull policy
       pullPolicy: IfNotPresent
 
