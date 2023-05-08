@@ -1,6 +1,6 @@
 # common
 
-![Version: 1.3.2](https://img.shields.io/badge/Version-1.3.2-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 1.5.0](https://img.shields.io/badge/Version-1.5.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -29,7 +29,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
 - name: common
-  version: 1.3.1
+  version: 1.5.0
   repository: https://bjw-s.github.io/helm-charts/
 ```
 
@@ -50,7 +50,7 @@ N/A
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | addons | object | See below | The common chart supports several add-ons. These can be configured under this key. |
-| addons.codeserver | object | See values.yaml | The common library supports adding a code-server add-on to access files. It can be configured under this key. For more info, check out [our docs](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-add-ons/##code-server) |
+| addons.codeserver | object | See values.yaml | The common library supports adding a code-server add-on to access files. It can be configured under this key. |
 | addons.codeserver.args | list | `["--auth","none"]` | Set codeserver command line arguments. Consider setting --user-data-dir to a persistent location to preserve code-server setting changes |
 | addons.codeserver.enabled | bool | `false` | Enable running a code-server container in the pod |
 | addons.codeserver.env | object | `{}` | Set any environment variables for code-server here |
@@ -60,7 +60,7 @@ N/A
 | addons.codeserver.git.deployKeySecret | string | `""` | Existing secret containing SSH private key The chart expects it to be present under the `id_rsa` key. |
 | addons.codeserver.image.pullPolicy | string | `"IfNotPresent"` | Specify the code-server image pull policy |
 | addons.codeserver.image.repository | string | `"ghcr.io/coder/code-server"` | Specify the code-server image |
-| addons.codeserver.image.tag | string | `"4.9.1"` | Specify the code-server image tag |
+| addons.codeserver.image.tag | string | `"4.12.0"` | Specify the code-server image tag |
 | addons.codeserver.ingress.enabled | bool | `false` | Enable an ingress for the code-server add-on. |
 | addons.codeserver.ingress.ingressClassName | string | `nil` | Set the ingressClass that is used for this ingress. |
 | addons.codeserver.service.enabled | bool | `true` | Enable a service for the code-server add-on. |
@@ -71,7 +71,7 @@ N/A
 | addons.netshoot.env | object | `{}` | Set any environment variables for netshoot here |
 | addons.netshoot.image.pullPolicy | string | `"IfNotPresent"` | Specify the netshoot image pull policy |
 | addons.netshoot.image.repository | string | `"ghcr.io/nicolaka/netshoot"` | Specify the netshoot image |
-| addons.netshoot.image.tag | string | `"v0.8"` | Specify the netshoot image tag |
+| addons.netshoot.image.tag | string | `"v0.10"` | Specify the netshoot image tag |
 | addons.vpn | object | See values.yaml | The common chart supports adding a VPN add-on. It can be configured under this key. |
 | addons.vpn.args | list | `[]` | Override the args for the vpn sidecar container |
 | addons.vpn.configFile | string | `nil` | Provide a customized vpn configuration file to be used by the VPN. |
@@ -81,7 +81,7 @@ N/A
 | addons.vpn.gluetun | object | See below | Make sure to read the [documentation](https://github.com/qdm12/gluetun/wiki) to see how to configure this addon! |
 | addons.vpn.gluetun.image.pullPolicy | string | `"IfNotPresent"` | Specify the Gluetun image pull policy |
 | addons.vpn.gluetun.image.repository | string | `"docker.io/qmcgaw/gluetun"` | Specify the Gluetun image |
-| addons.vpn.gluetun.image.tag | string | `"v3.32.0"` | Specify the Gluetun image tag |
+| addons.vpn.gluetun.image.tag | string | `"v3.33.0"` | Specify the Gluetun image tag |
 | addons.vpn.livenessProbe | object | `{}` | Optionally specify a livenessProbe, e.g. to check if the connection is still being protected by the VPN |
 | addons.vpn.networkPolicy.annotations | object | `{}` | Provide additional annotations which may be required. |
 | addons.vpn.networkPolicy.egress | string | `nil` | The egress configuration for your network policy, All outbound traffic from the pod will be blocked unless specified here. [[ref]](https://kubernetes.io/docs/concepts/services-networking/network-policies/) [[recipes]](https://github.com/ahmetb/kubernetes-network-policy-recipes) |
@@ -103,7 +103,7 @@ N/A
 | controller.annotations | object | `{}` | Set annotations on the deployment/statefulset/daemonset/cronjob |
 | controller.cronjob | object | See below | CronJob configuration. Required only when using `controller.type: cronjob`. |
 | controller.cronjob.backoffLimit | int | `6` | Limits the number of times a failed job will be retried |
-| controller.cronjob.concurrencyPolicy | string | `"Forbid"` | Specifies how to treat concurrent executions of a job that is created by this cron job, valid values are Allow, Forbid or Replace |
+| controller.cronjob.concurrencyPolicy | string | `"Forbid"` | Specifies how to treat concurrent executions of a job that is created by this cron job valid values are Allow, Forbid or Replace |
 | controller.cronjob.failedJobsHistory | int | `1` | The number of failed Jobs to keep |
 | controller.cronjob.schedule | string | `"*/20 * * * *"` | Sets the CronJob time when to execute your jobs |
 | controller.cronjob.startingDeadlineSeconds | int | `30` | The deadline in seconds for starting the job if it misses its scheduled time for any reason |
@@ -112,7 +112,7 @@ N/A
 | controller.enabled | bool | `true` | enable the controller. |
 | controller.labels | object | `{}` | Set labels on the deployment/statefulset/daemonset/cronjob |
 | controller.podManagementPolicy | string | `nil` | Set statefulset podManagementPolicy, valid values are Parallel and OrderedReady (default). |
-| controller.replicas | int | `1` | Number of desired pods |
+| controller.replicas | int | `1` | Number of desired pods. When using a HorizontalPodAutoscaler, set this to `null`. |
 | controller.restartPolicy | string | `Always`. When `controller.type` is `cronjob` it defaults to `Never`. | Set Container restart policy. |
 | controller.revisionHistoryLimit | int | `3` | ReplicaSet revision history limit |
 | controller.rollingUpdate.partition | string | `nil` | Set statefulset RollingUpdate partition |
@@ -120,7 +120,7 @@ N/A
 | controller.rollingUpdate.unavailable | string | `nil` | Set deployment RollingUpdate max unavailable |
 | controller.strategy | string | `nil` | Set the controller upgrade strategy For Deployments, valid values are Recreate (default) and RollingUpdate. For StatefulSets, valid values are OnDelete and RollingUpdate (default). DaemonSets/CronJobs ignore this. |
 | controller.type | string | `"deployment"` | Set the controller type. Valid options are deployment, daemonset, statefulset or cronjob |
-| dnsConfig | object | `{}` | Optional DNS settings, configuring the ndots option may resolve nslookup issues on some Kubernetes setups. |
+| dnsConfig | object | `{}` | Configuring the ndots option may resolve nslookup issues on some Kubernetes setups. |
 | dnsPolicy | string | `nil` | Defaults to "ClusterFirst" if hostNetwork is false and "ClusterFirstWithHostNet" if hostNetwork is true. |
 | enableServiceLinks | bool | `true` | Enable/disable the generation of environment variables for services. [[ref]](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service) |
 | env | string | `nil` | Main environment variables. Template enabled. Syntax options: A) TZ: UTC B) PASSWD: '{{ .Release.Name }}' C) PASSWD:      configMapKeyRef:        name: config-map-name        key: key-name D) PASSWD:      valueFrom:        secretKeyRef:          name: secret-name          key: key-name      ... E) - name: TZ      value: UTC F) - name: TZ      value: '{{ .Release.Name }}' |
@@ -235,7 +235,7 @@ N/A
 | serviceMonitor.main.nameOverride | string | `nil` | Override the name suffix that is used for this serviceMonitor. |
 | serviceMonitor.main.selector | object | `{}` | Configures a custom selector for the serviceMonitor, this takes precedence over specifying a service name. Helm templates can be used. |
 | serviceMonitor.main.serviceName | string | `"{{ include \"bjw-s.common.lib.chart.names.fullname\" $ }}"` | Configures the target Service for the serviceMonitor. Helm templates can be used. |
-| sidecars | object | `{}` | Specify any sidecar containers here as dictionary items. Each sidecar container should have its own key. Helm templates can be used. |
+| sidecars | object | `{}` | Specify any sidecar containers here as dictionary items. Each sidecar container should have its own key. The dictionary item key will determine the order. Helm templates can be used. |
 | termination.gracePeriodSeconds | string | `nil` | [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle)] |
 | termination.messagePath | string | `nil` | [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |
 | termination.messagePolicy | string | `nil` | [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |

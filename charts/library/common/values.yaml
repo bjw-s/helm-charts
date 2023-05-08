@@ -727,7 +727,7 @@ addons:
       # -- Specify the code-server image
       repository: ghcr.io/coder/code-server
       # -- Specify the code-server image tag
-      tag: 4.11.0
+      tag: 4.12.0
       # -- Specify the code-server image pull policy
       pullPolicy: IfNotPresent
 
@@ -821,7 +821,7 @@ addons:
       # -- Specify the netshoot image
       repository: ghcr.io/nicolaka/netshoot
       # -- Specify the netshoot image tag
-      tag: v0.9
+      tag: v0.10
       # -- Specify the netshoot image pull policy
       pullPolicy: IfNotPresent
 
