@@ -130,7 +130,9 @@ N/A
 | global.labels | object | `{}` | Set additional global labels. Helm templates can be used. |
 | global.nameOverride | string | `nil` | Set an override for the prefix of the fullname |
 | hostAliases | list | `[]` | Use hostAliases to add custom entries to /etc/hosts - mapping IP addresses to hostnames. [[ref]](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) |
+| hostIPC | bool | `false` | Use the host's ipc namespace |
 | hostNetwork | bool | `false` | When using hostNetwork make sure you set dnsPolicy to `ClusterFirstWithHostNet` |
+| hostPID | bool | `false` | Use the host's pid namespace |
 | hostname | string | `nil` | Allows specifying explicit hostname setting |
 | image.pullPolicy | string | `nil` | image pull policy |
 | image.repository | string | `nil` | image repository |
