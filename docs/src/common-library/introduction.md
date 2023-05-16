@@ -3,7 +3,7 @@
 ```admonish note
 The Common library chart is not meant to be installed directly, application
 charts use the Common library as a dependency.
-See the [app template](../../app-template/introduction.md ) for an example how to
+See the [app template](../app-template/introduction.md ) for an example how to
 deploy it.
 ```
 
