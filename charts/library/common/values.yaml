@@ -338,7 +338,7 @@ service:
 
         # -- Port protocol.
         # Support values are `HTTP`, `HTTPS`, `TCP` and `UDP`.
-        # HTTPS and HTTPS spawn a TCP service and get used for internal URL and name generation
+        # HTTP and HTTPS spawn a TCP service and get used for internal URL and name generation
         protocol: HTTP
 
         # -- Specify a service targetPort if you wish to differ the service port from the application port.
