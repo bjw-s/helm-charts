@@ -57,5 +57,5 @@ jobs:
             CHART_VERSION=$(yq e '.version' ${{ env.CHARTS_SRC_DIR }}/${CHART}/Chart.yaml)
 
             helm package "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}/${CHART_NAME}" --dependency-update --destination "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}"
-            helm push "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}/${CHART_NAME}-${CHART_VERSION}.tgz" oci://${{ env.TARGET_REGISTRY }}/${{ github.actor }}
+            helm push "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}/${CHART_NAME}-${CHART_VERSION}.tgz" oci://${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm
           done
