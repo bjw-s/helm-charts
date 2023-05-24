@@ -11,9 +11,9 @@ on:
         required: false
         type: string
     secrets:
-      BJWS_APP_ID:
+      GH_APP_ID:
         required: true
-      BJWS_APP_PRIVATE_KEY:
+      GH_APP_PRIVATE_KEY:
         required: true
 
 env:

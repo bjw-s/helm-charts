@@ -11,9 +11,9 @@ on:
         required: false
         type: string
     secrets:
-      BJWS_APP_ID:
+      GH_APP_ID:
         required: true
-      BJWS_APP_PRIVATE_KEY:
+      GH_APP_PRIVATE_KEY:
         required: true
 
 env:
@@ -28,8 +28,8 @@ jobs:
         id: get-app-token
         uses: getsentry/action-github-app-token@v2
         with:
-          app_id: ${{ secrets.BJWS_APP_ID }}
-          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
+          app_id: ${{ secrets.GH_APP_ID }}
+          private_key: ${{ secrets.GH_APP_PRIVATE_KEY }}
 
       - name: Checkout charts branch
         uses: actions/checkout@v3
