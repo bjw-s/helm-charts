@@ -1,5 +1,5 @@
 [book]
-authors = ["Bernd Schorgers"]
+authors = ["Tom Roush"]
 language = "en"
 multilingual = false
 src = "src"
@@ -11,7 +11,7 @@ create-missing = false
 [output.html]
 default-theme = "latte"
 preferred-dark-theme = "macchiato"
-git-repository-url = "https://github.com/bjw-s/helm-charts"
+git-repository-url = "https://github.com/TomRoush/helm-charts"
 git-repository-icon = "fa-github"
 no-section-label = true
 additional-css = ["././assets/css/mdbook-admonish.css", "./theme/catppuccin.css", "./theme/catppuccin-highlight.css"]

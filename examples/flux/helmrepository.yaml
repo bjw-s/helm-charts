@@ -2,9 +2,9 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: bjw-s-helm-charts
+  name: tomroush-helm-charts
   namespace: flux-system
 spec:
   interval: 30m
-  url: https://bjw-s.github.io/helm-charts/
+  url: https://tomroush.github.io/helm-charts/
   timeout: 3m

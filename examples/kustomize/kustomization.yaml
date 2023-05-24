@@ -3,7 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 helmCharts:
   - name: app-template
-    repo: https://bjw-s.github.io/helm-charts/
+    repo: https://tomroush.github.io/helm-charts/
     # this example is not automatically updated, so be sure to use the latest chart version
     version: 0.1.1
     releaseName: &releaseName vaultwarden

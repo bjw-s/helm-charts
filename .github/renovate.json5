@@ -4,7 +4,7 @@
     "github>bjw-s/renovate-config:automerge-github-actions",
   ],
   platform: "github",
-  username: "bjw-s-bot[bot]",
-  gitAuthor: "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>",
-  repositories: ["bjw-s/helm-charts"],
+  username: "tomroush-bot[bot]",
+  gitAuthor: "tomroush-bot <134459347+tomroush-bot[bot]@users.noreply.github.com>",
+  repositories: ["TomRoush/helm-charts"],
 }

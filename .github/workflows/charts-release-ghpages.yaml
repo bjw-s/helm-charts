@@ -80,9 +80,9 @@ jobs:
         with:
           repository: dest
           branch: gh-pages
-          commit_user_name: "bjw-s-bot[bot]"
-          commit_user_email: 87358111+bjw-s-bot[bot]@users.noreply.github.com
-          commit_author: bjw-s-bot[bot] <87358111+bjw-s-bot[bot]@users.noreply.github.com>
+          commit_user_name: "tomroush-bot[bot]"
+          commit_user_email: 134459347+tomroush-bot[bot]@users.noreply.github.com
+          commit_author: tomroush-bot <134459347+tomroush-bot[bot]@users.noreply.github.com>
           file_pattern: "index.yaml **/*.tgz"
           disable_globbing: true
 

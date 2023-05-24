@@ -11,7 +11,7 @@ In order to use this template chart, you would deploy it as you would any other 
 By setting the desired values, the common library chart will render the desired resources.
 
 Be sure to check out the [common library docs](../common-library/introduction.md)
-and its [`values.yaml`](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common/values.yaml) for
+and its [`values.yaml`](https://github.com/TomRoush/helm-charts/tree/main/charts/library/common/values.yaml) for
 more information about the available configuration options.
 
 #### Examples
