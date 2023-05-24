@@ -1,0 +1,30 @@
+apiVersion: v2
+name: speedtest
+version: 3.0.5
+appVersion: 2.0.0
+kubeVersion: ">= 1.19.0-0"
+description: periodic speedtest and save the results to InfluxDB
+keywords:
+- speedtest
+- influxdb
+- grafana
+home: https://github.com/TomRoush/helm-ccharts/tree/main/charts/apps/speedtest
+icon: https://i.imgur.com/nDYjKk8.png
+sources:
+- https://github.com/TomRoush/Speedtest-for-InfluxDB-and-Grafana
+maintainers:
+- name: TomRoush
+  email: tom@tom-roush.com
+annotations:
+  artifacthub.io/changes: |
+    - kind: added
+      description: Support for InfluxDB v2
+  artifacthub.io/containsSecurityUpdates: "true"
+  artifacthub.io/images: |
+    - name: speedtest
+      image: tomroush/speedtest-for-influxdb-and-grafana:2.0.0
+  artifacthub.io/links: |
+    - name: source
+      url: https://github.com/TomRoush/Speedtest-for-InfluxDB-and-Grafana
+    - name: support
+      url: https://github.com/TomRoush/Speedtest-for-InfluxDB-and-Grafana/issues
