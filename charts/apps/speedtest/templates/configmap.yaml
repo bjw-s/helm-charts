@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "speedtest.fullname" . }}
+  labels:
+    app: {{ template "speedtest.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  {{- with .Values.config }}
+  config.ini: |-
+        {{- . | nindent 4}}
+  {{- end }}

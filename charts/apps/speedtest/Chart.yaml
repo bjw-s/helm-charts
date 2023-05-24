@@ -1,0 +1,17 @@
+apiVersion: v2
+name: speedtest
+version: 3.0.5
+appVersion: 2.0.0
+description: periodic speedtest and save the results to InfluxDB
+keywords:
+- speedtest
+- influxdb
+- grafana
+home: https://github.com/k8s-at-home/charts/tree/master/charts/speedtest
+icon: https://i.imgur.com/nDYjKk8.png
+sources:
+- https://github.com/k8s-at-home/Speedtest-for-InfluxDB-and-Grafana
+- https://github.com/k8s-at-home/charts
+maintainers:
+- name: billimek
+  email: jeff@billimek.com

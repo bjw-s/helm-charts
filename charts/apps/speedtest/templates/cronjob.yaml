@@ -1,0 +1,54 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ template "speedtest.fullname" . }}
+  labels:
+    app: {{ template "speedtest.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  schedule: {{ .Values.crontab }}
+  successfulJobsHistoryLimit: {{ .Values.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: {{ template "speedtest.name" . }}
+            release: {{ .Release.Name }}
+          {{- if .Values.podAnnotations }}
+          annotations:
+            {{- range $key, $value := .Values.podAnnotations }}
+            {{ $key }}: {{ $value | quote }}
+            {{- end }}
+          {{- end }}
+        spec:
+          containers:
+            - name: {{ .Chart.Name }}
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              resources:
+{{ toYaml .Values.resources | indent 16 }}
+              volumeMounts:
+              - name: {{ template "speedtest.name" . }}
+                mountPath: /src/config.ini
+                subPath: config.ini
+          dnsConfig:
+            options:
+              - name: ndots
+                value: "1"
+        {{- if .Values.nodeSelector }}
+          nodeSelector:
+    {{ toYaml .Values.nodeSelector | indent 12 }}
+        {{- end }}
+          volumes:
+          - name: {{ template "speedtest.name" . }}
+            configMap:
+              name: {{ template "speedtest.fullname" . }}
+              items:
+              - key: config.ini
+                path: config.ini
+          restartPolicy: {{ .Values.restartPolicy }}
+      backoffLimit: {{ .Values.backoffLimit }}
