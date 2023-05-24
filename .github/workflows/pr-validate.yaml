@@ -37,10 +37,7 @@ jobs:
       isRenovatePR: ${{ needs.pr-metadata.outputs.isRenovatePR }}
       overrideDeps: |-
         ${{
-           (
-             needs.pr-metadata.outputs.commonLibraryUpdated &&
-            '[{"name": "common", "repository": "file://../../library/common", "version": "*"}]'
-           ) || '[]'
+            '[]'
          }}
 
   charts-test:
@@ -51,15 +48,9 @@ jobs:
       checkoutCommit: ${{ github.sha }}
       chartsToTest: |-
         ${{
-           (
-             needs.pr-metadata.outputs.commonLibraryUpdated &&
-             '["other/app-template"]'
-           ) || needs.pr-metadata.outputs.chartsToInstall
+            needs.pr-metadata.outputs.chartsToInstall
          }}
       overrideDeps: |-
         ${{
-           (
-             needs.pr-metadata.outputs.commonLibraryUpdated &&
-            '[{"name": "common", "repository": "file://../../library/common", "version": "*"}]'
-           ) || '[]'
+            '[]'
          }}

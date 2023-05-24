@@ -29,7 +29,7 @@ The Helm repository can be installed as follows:
 helm repo add tomroush https://tomroush.github.io/helm-charts
 ```
 
-You can then run `helm search repo bjw-s` to search the charts.
+You can then run `helm search repo tomroush` to search the charts.
 
 ---
 

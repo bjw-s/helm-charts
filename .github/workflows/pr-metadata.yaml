@@ -22,8 +22,6 @@ on:
         value: ${{ jobs.pr-changes.outputs.chartsToLint }}
       chartsToInstall:
         value: ${{ jobs.pr-changes.outputs.chartsToInstall }}
-      commonLibraryUpdated:
-        value: ${{ contains(fromJSON(jobs.pr-changes.outputs.addedOrModifiedCharts), 'library/common') }}
 
 jobs:
   pr-metadata:

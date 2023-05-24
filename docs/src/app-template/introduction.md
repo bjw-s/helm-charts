@@ -17,7 +17,7 @@ more information about the available configuration options.
 #### Examples
 
 This is an example `values.yaml` file that would deploy the [vaultwarden](https://github.com/dani-garcia/vaultwarden)
-application. For more deployment examples, check out the [`examples` folder](https://github.com/bjw-s/helm-charts/tree/main/examples/).
+application. For more deployment examples, check out the [`examples` folder](https://github.com/TomRoush/helm-charts/tree/main/examples/).
 
 
 ```yaml
@@ -27,4 +27,4 @@ application. For more deployment examples, check out the [`examples` folder](htt
 ## Source code
 
 The source code for the app template chart can be found
-[here](https://github.com/bjw-s/helm-charts/tree/main/charts/other/app-template).
+[here](https://github.com/TomRoush/helm-charts/tree/main/charts/other/app-template).
