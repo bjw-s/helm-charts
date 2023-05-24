@@ -13,7 +13,7 @@ icon: https://i.imgur.com/nDYjKk8.png
 sources:
 - https://github.com/TomRoush/Speedtest-for-InfluxDB-and-Grafana
 maintainers:
-- name: Tom Roush
+- name: TomRoush
   email: tom@tom-roush.com
 annotations:
   artifacthub.io/changes: |
