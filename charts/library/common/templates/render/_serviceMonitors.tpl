@@ -4,7 +4,13 @@ Renders the serviceMonitor objects required by the chart.
 {{- define "bjw-s.common.render.serviceMonitors" -}}
   {{- /* Generate named serviceMonitors as required */ -}}
   {{- range $key, $serviceMonitor := .Values.serviceMonitor -}}
-    {{- if $serviceMonitor.enabled -}}
+    {{- /* Enable ServiceMonitor by default, but allow override */ -}}
+    {{- $serviceMonitorEnabled := true -}}
+    {{- if hasKey $serviceMonitor "enabled" -}}
+      {{- $serviceMonitorEnabled = $serviceMonitor.enabled -}}
+    {{- end -}}
+
+    {{- if $serviceMonitorEnabled -}}
       {{- $serviceMonitorValues := (mustDeepCopy $serviceMonitor) -}}
 
       {{- /* Create object from the raw ServiceMonitor values */ -}}

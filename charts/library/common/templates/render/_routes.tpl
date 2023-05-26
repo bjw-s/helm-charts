@@ -2,7 +2,13 @@
 {{- define "bjw-s.common.render.routes" -}}
   {{- /* Generate named routes as required */ -}}
   {{- range $key, $route := .Values.route }}
-    {{- if $route.enabled -}}
+    {{- /* Enable Route by default, but allow override */ -}}
+    {{- $routeEnabled := true -}}
+    {{- if hasKey $route "enabled" -}}
+      {{- $routeEnabled = $route.enabled -}}
+    {{- end -}}
+
+    {{- if $routeEnabled -}}
       {{- $routeValues := (mustDeepCopy $route) -}}
 
       {{- /* Create object from the raw Route values */ -}}

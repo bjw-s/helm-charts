@@ -7,11 +7,20 @@ within the common library.
   {{- $routeObject := .object -}}
 
   {{- $routeKind := $routeObject.kind | default "HTTPRoute" -}}
+  {{- /* Make the Route reference the primary Service if no service has been set */ -}}
   {{- $primaryService := include "bjw-s.common.lib.service.primary" $rootContext | fromYaml -}}
   {{- $primaryServiceDefaultPort := dict -}}
   {{- if $primaryService -}}
     {{- $primaryServiceDefaultPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "object" $primaryService) | fromYaml -}}
   {{- end -}}
+  {{- $labels := merge
+    ($routeObject.labels | default dict)
+    (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
+  -}}
+  {{- $annotations := merge
+    ($routeObject.annotations | default dict)
+    (include "bjw-s.common.lib.metadata.globalAnnotations" $rootContext | fromYaml)
+  -}}
 ---
 apiVersion: gateway.networking.k8s.io/v1alpha2
 {{- if and (ne $routeKind "GRPCRoute") (ne $routeKind "HTTPRoute") (ne $routeKind "TCPRoute") (ne $routeKind "TLSRoute") (ne $routeKind "UDPRoute") }}
@@ -20,11 +29,11 @@ apiVersion: gateway.networking.k8s.io/v1alpha2
 kind: {{ $routeKind }}
 metadata:
   name: {{ $routeObject.name }}
-  {{- with (merge ($routeObject.labels | default dict) (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)) }}
-  labels: {{- toYaml . | nindent 4 }}
+  {{- with $labels }}
+  labels: {{- toYaml . | nindent 4 -}}
   {{- end }}
-  {{- with (merge ($routeObject.annotations | default dict) (include "bjw-s.common.lib.metadata.globalAnnotations" $rootContext | fromYaml)) }}
-  annotations: {{- toYaml . | nindent 4 }}
+  {{- with $annotations }}
+  annotations: {{- toYaml . | nindent 4 -}}
   {{- end }}
 spec:
   parentRefs:
