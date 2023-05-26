@@ -21,7 +21,7 @@ tests:
             kind: Service
             name: RELEASE-NAME
             namespace: NAMESPACE
-            port: 9876
+            port: 8080
             weight: 1
 
   - it: custom service reference should pass

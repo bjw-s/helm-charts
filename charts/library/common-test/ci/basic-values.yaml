@@ -1,6 +1,6 @@
 image:
-  repository: b4bz/homer
-  tag: latest
+  repository: ghcr.io/mendhak/http-https-echo
+  tag: 29
   pullPolicy: IfNotPresent
 
 ingress:

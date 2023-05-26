@@ -11,7 +11,7 @@ tests:
         equal:
           path: spec.template.spec.containers[0].ports[0]
           value:
-            containerPort: 9876
+            containerPort: 8080
             name: http
             protocol: TCP
 
@@ -52,7 +52,7 @@ tests:
         equal:
           path: spec.template.spec.containers[0].ports[0]
           value:
-            containerPort: 9876
+            containerPort: 8080
             name: http
             protocol: TCP
 
@@ -71,7 +71,7 @@ tests:
         equal:
           path: spec.template.spec.containers[0].ports[0]
           value:
-            containerPort: 9876
+            containerPort: 8080
             name: http
             protocol: TCP
 
@@ -90,6 +90,6 @@ tests:
         equal:
           path: spec.template.spec.containers[0].ports[0]
           value:
-            containerPort: 9876
+            containerPort: 8080
             name: http
             protocol: UDP

@@ -5,7 +5,7 @@ tests:
   - it: string tag should pass
     set:
       image:
-        repository: b4bz/homer
+        repository: ghcr.io/mendhak/http-https-echo
         tag: latest
     asserts:
       - documentIndex: 0
@@ -14,12 +14,12 @@ tests:
       - documentIndex: 0
         equal:
           path: spec.template.spec.containers[0].image
-          value: b4bz/homer:latest
+          value: ghcr.io/mendhak/http-https-echo:latest
 
   - it: integer tag should pass
     set:
       image:
-        repository: b4bz/homer
+        repository: ghcr.io/mendhak/http-https-echo
         tag: 1.23
     asserts:
       - documentIndex: 0
@@ -28,4 +28,4 @@ tests:
       - documentIndex: 0
         equal:
           path: spec.template.spec.containers[0].image
-          value: b4bz/homer:1.23
+          value: ghcr.io/mendhak/http-https-echo:1.23

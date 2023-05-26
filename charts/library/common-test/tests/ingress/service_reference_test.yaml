@@ -16,7 +16,7 @@ tests:
             service:
               name: RELEASE-NAME
               port:
-                number: 9876
+                number: 8080
 
   - it: custom service reference should pass
     set:

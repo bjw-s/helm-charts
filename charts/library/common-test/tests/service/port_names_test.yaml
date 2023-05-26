@@ -14,7 +14,7 @@ tests:
           path: spec.ports[0]
           value:
             name: http
-            port: 9876
+            port: 8080
             protocol: TCP
             targetPort: http
 
@@ -58,6 +58,6 @@ tests:
           path: spec.ports[0]
           value:
             name: http
-            port: 9876
+            port: 8080
             protocol: TCP
             targetPort: 80

@@ -3,4 +3,4 @@ service:
   main:
     ports:
       http:
-        port: 9876
+        port: 8080
