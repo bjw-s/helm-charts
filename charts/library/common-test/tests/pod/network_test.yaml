@@ -1,4 +1,4 @@
-suite: pod replicas
+suite: pod network
 templates:
   - common.yaml
 tests:
@@ -8,8 +8,9 @@ tests:
         isKind:
           of: Deployment
       - documentIndex: 0
-        isNull:
+        equal:
           path: spec.template.spec.hostNetwork
+          value: false
       - documentIndex: 0
         equal:
           path: spec.template.spec.dnsPolicy
@@ -17,14 +18,16 @@ tests:
 
   - it: hostNetwork disabled should pass
     set:
-      hostNetwork: false
+      defaultPodOptions:
+        hostNetwork: false
     asserts:
       - documentIndex: 0
         isKind:
           of: Deployment
       - documentIndex: 0
-        isNull:
+        equal:
           path: spec.template.spec.hostNetwork
+          value: false
       - documentIndex: 0
         equal:
           path: spec.template.spec.dnsPolicy
@@ -32,7 +35,8 @@ tests:
 
   - it: hostNetwork enabled should pass
     set:
-      hostNetwork: true
+      defaultPodOptions:
+        hostNetwork: true
     asserts:
       - documentIndex: 0
         isKind:
@@ -48,7 +52,8 @@ tests:
 
   - it: custom dnsPolicy should pass
     set:
-      dnsPolicy: None
+      defaultPodOptions:
+        dnsPolicy: None
     asserts:
       - documentIndex: 0
         isKind:

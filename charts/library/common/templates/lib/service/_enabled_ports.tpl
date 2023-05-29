@@ -3,7 +3,7 @@ Return the enabled ports for a given Service object.
 */}}
 {{- define "bjw-s.common.lib.service.enabledPorts" -}}
   {{- $rootContext := .rootContext -}}
-  {{- $serviceObject := .object -}}
+  {{- $serviceObject := .serviceObject -}}
 
   {{- $enabledPorts := dict -}}
 

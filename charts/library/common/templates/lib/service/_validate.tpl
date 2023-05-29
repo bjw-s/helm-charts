@@ -5,6 +5,10 @@ Validate Service values
   {{- $rootContext := .rootContext -}}
   {{- $serviceObject := .object -}}
 
+  {{- if empty (get $serviceObject "controller") -}}
+    {{- fail (printf "controller is required for Service. (service: %s)" $serviceObject.identifier) -}}
+  {{- end -}}
+
   {{- /* Validate Service type */ -}}
   {{- $validServiceTypes := (list "ClusterIP" "LoadBalancer" "NodePort" "ExternalName" "ExternalIP") -}}
   {{- if and $serviceObject.type (not (mustHas $serviceObject.type $validServiceTypes)) -}}
@@ -17,7 +21,7 @@ Validate Service values
   {{- end -}}
 
   {{- if ne $serviceObject.type "ExternalName" -}}
-    {{- $enabledPorts := include "bjw-s.common.lib.service.enabledPorts" (dict "rootContext" $rootContext "object" $serviceObject) | fromYaml }}
+    {{- $enabledPorts := include "bjw-s.common.lib.service.enabledPorts" (dict "rootContext" $rootContext "serviceObject" $serviceObject) | fromYaml }}
     {{- /* Validate at least one port is enabled */ -}}
     {{- if not $enabledPorts -}}
       {{- fail (printf "no ports are enabled for Service with key \"%s\"" $serviceObject.identifier) -}}

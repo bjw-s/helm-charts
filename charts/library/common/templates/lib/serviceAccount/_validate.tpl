@@ -1,5 +1,5 @@
 {{/*
-Validate Secret values
+Validate ServiceAccount values
 */}}
 {{- define "bjw-s.common.lib.serviceAccount.validate" -}}
   {{- $rootContext := .rootContext -}}

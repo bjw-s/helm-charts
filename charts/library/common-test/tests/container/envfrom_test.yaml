@@ -13,7 +13,7 @@ tests:
 
   - it: explicit envFrom should pass
     set:
-      envFrom:
+      containers.main.envFrom:
         - secretRef:
             name: myCustomSecret
     asserts:

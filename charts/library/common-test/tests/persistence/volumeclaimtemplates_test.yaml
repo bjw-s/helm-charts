@@ -4,17 +4,18 @@ templates:
 tests:
   - it: volumeClaimTemplates should pass
     set:
-      controller:
+      controllers.main:
         type: statefulset
-      volumeClaimTemplates:
-        - name: "storage"
-          accessMode: "ReadWriteOnce"
-          size: "10Gi"
-          storageClass: "storage"
-          labels:
-            test: "label"
-          annotations:
-            test: "annotation"
+        statefulset:
+          volumeClaimTemplates:
+            - name: "storage"
+              accessMode: "ReadWriteOnce"
+              size: "10Gi"
+              storageClass: "storage"
+              labels:
+                test: "label"
+              annotations:
+                test: "annotation"
     asserts:
       - documentIndex: 0
         isKind:

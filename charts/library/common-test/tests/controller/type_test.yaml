@@ -14,7 +14,7 @@ tests:
 
   - it: daemonset should pass
     set:
-      controller.type: daemonset
+      controllers.main.type: daemonset
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:
@@ -26,7 +26,7 @@ tests:
 
   - it: statefulset should pass
     set:
-      controller.type: statefulset
+      controllers.main.type: statefulset
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:
@@ -38,7 +38,7 @@ tests:
 
   - it: cronjob should pass
     set:
-      controller.type: cronjob
+      controllers.main.type: cronjob
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:
@@ -50,7 +50,7 @@ tests:
 
   - it: disabled should pass
     set:
-      controller.enabled: false
+      controllers.main.enabled: false
     asserts:
       - hasDocuments:
           count: 1

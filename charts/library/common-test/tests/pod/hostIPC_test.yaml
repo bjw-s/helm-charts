@@ -8,23 +8,27 @@ tests:
         isKind:
           of: Deployment
       - documentIndex: 0
-        isNull:
+        equal:
           path: spec.template.spec.hostIPC
+          value: false
 
   - it: hostIPC disabled should pass
     set:
-      hostIPC: false
+      defaultPodOptions:
+        hostIPC: false
     asserts:
       - documentIndex: 0
         isKind:
           of: Deployment
       - documentIndex: 0
-        isNull:
+        equal:
           path: spec.template.spec.hostIPC
+          value: false
 
   - it: hostIPC enabled should pass
     set:
-      hostIPC: true
+      defaultPodOptions:
+        hostIPC: true
     asserts:
       - documentIndex: 0
         isKind:

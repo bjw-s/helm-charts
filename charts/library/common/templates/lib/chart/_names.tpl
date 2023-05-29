@@ -33,12 +33,3 @@ If release name contains chart name it will be used as a full name.
 {{- define "bjw-s.common.lib.chart.names.chart" -}}
   {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
-
-{{/* Create the name of the ServiceAccount to use */}}
-{{- define "bjw-s.common.lib.chart.names.serviceAccountName" -}}
-  {{- if .Values.serviceAccount.create -}}
-    {{- default (include "bjw-s.common.lib.chart.names.fullname" .) .Values.serviceAccount.name -}}
-  {{- else -}}
-    {{- default "default" .Values.serviceAccount.name -}}
-  {{- end -}}
-{{- end -}}

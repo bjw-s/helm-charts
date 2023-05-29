@@ -4,7 +4,7 @@ templates:
 tests:
   - it: string tag should pass
     set:
-      image:
+      containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
         tag: latest
     asserts:
@@ -18,7 +18,7 @@ tests:
 
   - it: integer tag should pass
     set:
-      image:
+      containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
         tag: 1.23
     asserts:

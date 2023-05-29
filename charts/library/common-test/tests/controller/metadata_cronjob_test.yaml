@@ -4,7 +4,7 @@ templates:
 tests:
   - it: default metadata should pass
     set:
-      controller.type: cronjob
+      controllers.main.type: cronjob
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:
@@ -16,6 +16,7 @@ tests:
         equal:
           path: metadata.labels
           value:
+            app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
@@ -23,12 +24,13 @@ tests:
 
   - it: custom metadata should pass
     set:
-      controller:
-        type: cronjob
-        annotations:
-          test_annotation: test
-        labels:
-          test_label: test
+      controllers:
+        main:
+          type: cronjob
+          annotations:
+            test_annotation: test
+          labels:
+            test_label: test
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:
@@ -42,6 +44,7 @@ tests:
         equal:
           path: metadata.labels
           value:
+            app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
@@ -55,12 +58,13 @@ tests:
           global_label: test
         annotations:
           global_annotation: test
-      controller:
-        type: cronjob
-        annotations:
-          test_annotation: test
-        labels:
-          test_label: test
+      controllers:
+        main:
+          type: cronjob
+          annotations:
+            test_annotation: test
+          labels:
+            test_label: test
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:
@@ -75,6 +79,7 @@ tests:
         equal:
           path: metadata.labels
           value:
+            app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
@@ -84,11 +89,14 @@ tests:
 
   - it: jobTemplate metadata should pass
     set:
-      controller.type: cronjob
-      podAnnotations:
-        test_annotation: test
-      podLabels:
-        test_label: test
+      controllers:
+        main:
+          type: cronjob
+          pod:
+            annotations:
+              test_annotation: test
+            labels:
+              test_label: test
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:
@@ -102,6 +110,7 @@ tests:
         equal:
           path: spec.jobTemplate.spec.template.metadata.labels
           value:
+            app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
             test_label: test

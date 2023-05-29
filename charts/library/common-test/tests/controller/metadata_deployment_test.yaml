@@ -4,7 +4,7 @@ templates:
 tests:
   - it: default metadata should pass
     set:
-      controller.type: deployment
+      controllers.main.type: deployment
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:
@@ -16,6 +16,7 @@ tests:
         equal:
           path: metadata.labels
           value:
+            app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
@@ -23,12 +24,13 @@ tests:
 
   - it: custom metadata should pass
     set:
-      controller:
-        type: deployment
-        annotations:
-          test_annotation: test
-        labels:
-          test_label: test
+      controllers:
+        main:
+          type: deployment
+          annotations:
+            test_annotation: test
+          labels:
+            test_label: test
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:
@@ -42,6 +44,7 @@ tests:
         equal:
           path: metadata.labels
           value:
+            app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
@@ -55,12 +58,13 @@ tests:
           global_label: test
         annotations:
           global_annotation: test
-      controller:
-        type: deployment
-        annotations:
-          test_annotation: test
-        labels:
-          test_label: test
+      controllers:
+        main:
+          type: deployment
+          annotations:
+            test_annotation: test
+          labels:
+            test_label: test
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:
@@ -75,6 +79,7 @@ tests:
         equal:
           path: metadata.labels
           value:
+            app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME

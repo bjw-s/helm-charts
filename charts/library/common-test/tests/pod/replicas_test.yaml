@@ -14,7 +14,7 @@ tests:
 
   - it: custom replicas should pass
     set:
-      controller.replicas: 3
+      controllers.main.replicas: 3
     asserts:
       - documentIndex: 0
         isKind:

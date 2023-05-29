@@ -4,8 +4,9 @@ templates:
 tests:
   - it: default cronjob configuration should pass
     set:
-      controller:
-        type: cronjob
+      controllers:
+        main:
+          type: cronjob
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:
@@ -36,15 +37,17 @@ tests:
 
   - it: custom cronjob configuration should pass
     set:
-      controller:
-        type: cronjob
-        restartPolicy: OnFailure
-        cronjob:
-          schedule: &CronJobSchedule "0 3 * * *"
-          concurrencyPolicy: &CronJobConcurrencyPolicy "Test"
-          failedJobsHistory: &CronJobFailedJobsHistory 2
-          successfulJobsHistory: &CronJobSuccessfulJobsHistory 3
-          ttlSecondsAfterFinished: &ttlSecondsAfterFinished 3600
+      controllers:
+        main:
+          type: cronjob
+          pod:
+            restartPolicy: OnFailure
+          cronjob:
+            schedule: &CronJobSchedule "0 3 * * *"
+            concurrencyPolicy: &CronJobConcurrencyPolicy "Test"
+            failedJobsHistory: &CronJobFailedJobsHistory 2
+            successfulJobsHistory: &CronJobSuccessfulJobsHistory 3
+            ttlSecondsAfterFinished: &ttlSecondsAfterFinished 3600
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:

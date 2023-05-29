@@ -1,0 +1,53 @@
+suite: container name
+templates:
+  - common.yaml
+tests:
+  - it: with explicit name should pass
+    set:
+      containers:
+        main:
+          nameOverride: template-test
+          controller: main
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].name
+          value: template-test
+
+  - it: with implicit name should pass
+    set:
+      containers:
+        main:
+          controller: main
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].name
+          value: main
+
+  - it: with templated name should pass
+    set:
+      containers:
+        main:
+          nameOverride: "{{ .Release.Name }}-container"
+          controller: main
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].name
+          value: RELEASE-NAME-container

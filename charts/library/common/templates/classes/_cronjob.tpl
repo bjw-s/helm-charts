@@ -3,45 +3,48 @@ This template serves as a blueprint for Cronjob objects that are created
 using the common library.
 */}}
 {{- define "bjw-s.common.class.cronjob" -}}
-  {{- $restartPolicy := default "Never" .Values.controller.restartPolicy -}}
-  {{- if and (ne $restartPolicy "Never") (ne $restartPolicy "OnFailure") -}}
-    {{- fail (printf "Not a valid restartPolicy for CronJob (%s)" $restartPolicy) -}}
-  {{- end -}}
-  {{- $_ := set .Values.controller "restartPolicy" $restartPolicy -}}
+  {{- $rootContext := .rootContext -}}
+  {{- $cronjobObject := .object -}}
+
+  {{- $labels := merge
+    (dict "app.kubernetes.io/component" $cronjobObject.identifier)
+    ($cronjobObject.labels | default dict)
+    (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
+  -}}
+  {{- $annotations := merge
+    ($cronjobObject.annotations | default dict)
+    (include "bjw-s.common.lib.metadata.globalAnnotations" $rootContext | fromYaml)
+  -}}
 ---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}
-  {{- with include "bjw-s.common.lib.controller.metadata.labels" . }}
-  labels: {{- . | nindent 4 }}
+  name: {{ $cronjobObject.name }}
+  {{- with $labels }}
+  labels: {{- toYaml . | nindent 4 -}}
   {{- end }}
-  {{- with include "bjw-s.common.lib.controller.metadata.annotations" . }}
-  annotations: {{- . | nindent 4 }}
+  {{- with $annotations }}
+  annotations: {{- toYaml . | nindent 4 -}}
   {{- end }}
 spec:
-  concurrencyPolicy: "{{ .Values.controller.cronjob.concurrencyPolicy }}"
-  startingDeadlineSeconds: {{ .Values.controller.cronjob.startingDeadlineSeconds }}
-  schedule: "{{ .Values.controller.cronjob.schedule }}"
-  successfulJobsHistoryLimit: {{ .Values.controller.cronjob.successfulJobsHistory }}
-  failedJobsHistoryLimit: {{ .Values.controller.cronjob.failedJobsHistory }}
+  concurrencyPolicy: "{{ $cronjobObject.cronjob.concurrencyPolicy }}"
+  startingDeadlineSeconds: {{ $cronjobObject.cronjob.startingDeadlineSeconds }}
+  schedule: "{{ $cronjobObject.cronjob.schedule }}"
+  successfulJobsHistoryLimit: {{ $cronjobObject.cronjob.successfulJobsHistory }}
+  failedJobsHistoryLimit: {{ $cronjobObject.cronjob.failedJobsHistory }}
   jobTemplate:
     spec:
-      {{- with .Values.controller.cronjob.ttlSecondsAfterFinished }}
+      {{- with $cronjobObject.cronjob.ttlSecondsAfterFinished }}
       ttlSecondsAfterFinished: {{ . }}
       {{- end }}
-      backoffLimit: {{ .Values.controller.cronjob.backoffLimit }}
+      backoffLimit: {{ $cronjobObject.cronjob.backoffLimit }}
       template:
         metadata:
-          {{- with include ("bjw-s.common.lib.metadata.podAnnotations") . }}
-          annotations:
-            {{- . | nindent 12 }}
+          {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "controllerObject" $cronjobObject)) }}
+          annotations: {{ . | nindent 12 }}
+          {{- end -}}
+          {{- with (include "bjw-s.common.lib.pod.metadata.labels" (dict "rootContext" $rootContext "controllerObject" $cronjobObject)) }}
+          labels: {{ . | nindent 12 }}
           {{- end }}
-          labels:
-            {{- include "bjw-s.common.lib.metadata.selectorLabels" . | nindent 12 }}
-            {{- with .Values.podLabels }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
-        spec:
-          {{- include "bjw-s.common.lib.controller.pod" . | nindent 10 }}
+        spec: {{ include "bjw-s.common.lib.pod.spec" (dict "rootContext" $rootContext "controllerObject" $cronjobObject) | nindent 10 }}
 {{- end -}}

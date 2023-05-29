@@ -7,7 +7,7 @@ within the common library.
   {{- $serviceObject := .object -}}
 
   {{- $svcType := $serviceObject.type | default "" -}}
-  {{- $enabledPorts := include "bjw-s.common.lib.service.enabledPorts" (dict "rootContext" $rootContext "object" $serviceObject) | fromYaml }}
+  {{- $enabledPorts := include "bjw-s.common.lib.service.enabledPorts" (dict "rootContext" $rootContext "serviceObject" $serviceObject) | fromYaml }}
   {{- $labels := merge
     (dict "app.kubernetes.io/service" $serviceObject.name)
     ($serviceObject.labels | default dict)
@@ -88,7 +88,11 @@ spec:
       nodePort: {{ $port.nodePort }}
         {{ end }}
       {{- end -}}
-  {{- with (merge ($serviceObject.extraSelectorLabels | default dict) (include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | fromYaml)) }}
+  {{- with (merge
+    ($serviceObject.extraSelectorLabels | default dict)
+    (dict "app.kubernetes.io/component" $serviceObject.controller)
+    (include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | fromYaml)
+  ) }}
   selector: {{- toYaml . | nindent 4 }}
   {{- end }}
 {{- end }}
