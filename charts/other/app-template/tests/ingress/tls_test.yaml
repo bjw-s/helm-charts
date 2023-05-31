@@ -70,3 +70,22 @@ tests:
             secretName: RELEASE-NAME-secret
             hosts:
               - hostname
+
+  - it: tls enabled with secret template evaluate empty should pass
+    set:
+      ingress.main:
+        enabled: true
+        tls:
+          - secretName: '{{ "" }}'
+            hosts:
+              - hostname
+    asserts:
+      - documentIndex: &IngressDocument 2
+        isKind:
+          of: Ingress
+      - documentIndex: *IngressDocument
+        equal:
+          path: spec.tls[0]
+          value:
+            hosts:
+              - hostname

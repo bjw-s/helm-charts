@@ -41,12 +41,13 @@ spec:
   {{- if $values.tls }}
   tls:
     {{- range $values.tls }}
+    {{- $secretName := tpl .secretName $ }}
     - hosts:
         {{- range .hosts }}
         - {{ tpl . $ | quote }}
         {{- end }}
-      {{- if .secretName }}
-      secretName: {{ tpl .secretName $ | quote}}
+      {{- if $secretName }}
+      secretName: {{ $secretName | quote}}
       {{- end }}
     {{- end }}
   {{- end }}
