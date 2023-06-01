@@ -74,7 +74,7 @@ tests:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
-            helm.sh/chart: app-template-1.5.0
+            helm.sh/chart: app-template-1.5.1
             test.label: testvalue
 
   - it: a serviceMonitor is created with nameOverride
