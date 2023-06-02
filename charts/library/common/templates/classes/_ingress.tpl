@@ -45,8 +45,9 @@ spec:
         {{- range .hosts }}
         - {{ tpl . $ | quote }}
         {{- end }}
-      {{- if .secretName }}
-      secretName: {{ tpl .secretName $ | quote}}
+      {{- $secretName := tpl (default "" .secretName) $ }}
+      {{- if $secretName }}
+      secretName: {{ $secretName | quote}}
       {{- end }}
     {{- end }}
   {{- end }}
