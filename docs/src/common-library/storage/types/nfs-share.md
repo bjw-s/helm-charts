@@ -14,6 +14,7 @@ If you require these, you must create a PVC to mount the share.
 | `type`          | Yes       |                                                                                                                    |
 | `server`        | Yes       | Host name or IP address of the NFS server.                                                                         |
 | `path`          | Yes       | The path on the server to mount.                                                                                   |
+| `mountPath`     | No        | The path on the pod to mount to. Defaults to `/<name-of-the-volume>`                                               |
 | `readOnly`      | No        | Explicitly specify if the volume should be mounted read-only. Even if not specified, the Secret will be read-only. |
 
 ## Minimal configuration:
