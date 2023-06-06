@@ -440,6 +440,7 @@ If you require these, you must create a PVC to mount the share.</p>
 <tr><td><code>type</code></td><td>Yes</td><td></td></tr>
 <tr><td><code>server</code></td><td>Yes</td><td>Host name or IP address of the NFS server.</td></tr>
 <tr><td><code>path</code></td><td>Yes</td><td>The path on the server to mount.</td></tr>
+<tr><td><code>mountPath</code></td><td>No</td><td>The path on the pod to mount to. Defaults to <code>/&lt;name-of-the-volume&gt;</code></td></tr>
 <tr><td><code>readOnly</code></td><td>No</td><td>Explicitly specify if the volume should be mounted read-only. Even if not specified, the Secret will be read-only.</td></tr>
 </tbody></table>
 </div>
