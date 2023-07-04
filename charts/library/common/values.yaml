@@ -632,7 +632,7 @@ addons:
         # -- Specify the Gluetun image
         repository: docker.io/qmcgaw/gluetun
         # -- Specify the Gluetun image tag
-        tag: v3.34.3
+        tag: v3.34.3@sha256:3b4d498939ef1f9ceac9049a73598acfcda25a9e58010fcd991afed32cd16eac
         # -- Specify the Gluetun image pull policy
         pullPolicy: IfNotPresent
 
@@ -733,7 +733,7 @@ addons:
       # -- Specify the code-server image
       repository: ghcr.io/coder/code-server
       # -- Specify the code-server image tag
-      tag: 4.13.0
+      tag: 4.13.0@sha256:1aa7c6581d2f392ae5f5fb2214b935fb12f257debb53ca767775de2e99adefdf
       # -- Specify the code-server image pull policy
       pullPolicy: IfNotPresent
 
@@ -827,7 +827,7 @@ addons:
       # -- Specify the netshoot image
       repository: ghcr.io/nicolaka/netshoot
       # -- Specify the netshoot image tag
-      tag: v0.11
+      tag: v0.11@sha256:a7c92e1a2fb9287576a16e107166fee7f9925e15d2c1a683dbb1f4370ba9bfe8
       # -- Specify the netshoot image pull policy
       pullPolicy: IfNotPresent
 
