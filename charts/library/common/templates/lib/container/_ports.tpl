@@ -6,7 +6,7 @@ Ports included by the controller.
   {{- range $servicename, $service := .Values.service -}}
     {{- $serviceEnabled := true -}}
     {{- if hasKey $service "enabled" -}}
-      {{- $serviceEnabled = $service.enabled -}}
+      {{- $serviceEnabled := $service.enabled -}}
     {{- end -}}
     {{- if $serviceEnabled -}}
       {{- $enabledPorts := include "bjw-s.common.lib.service.enabledPorts" (dict "serviceName" $servicename "values" $service) | fromYaml }}
