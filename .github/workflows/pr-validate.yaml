@@ -52,7 +52,7 @@ jobs:
       chartsToTest: |-
         ${{
            (
-             needs.pr-metadata.outputs.commonLibraryUpdated &&
+             (needs.pr-metadata.outputs.commonLibraryUpdated=='true') &&
              '["other/app-template"]'
            ) || needs.pr-metadata.outputs.chartsToInstall
          }}
