@@ -82,10 +82,6 @@ jobs:
 
       - name: Debug
         run: |
-          echo ${{
-            (
-              needs.pr-metadata.outputs.commonLibraryUpdated &&
-              '["other/app-template"]'
-            ) || needs.pr-metadata.outputs.chartsToInstall
-          }}
+          echo ${{ needs.pr-metadata.outputs.commonLibraryUpdated }}
+          echo ${{ needs.pr-metadata.outputs.commonLibraryUpdated && '["other/app-template"]' }}
           echo test
