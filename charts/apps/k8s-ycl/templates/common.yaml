@@ -1,0 +1,66 @@
+---
+{{/* Make sure all variables are set properly */}}
+{{- include "bjw-s.common.loader.init" . }}
+
+{{/* Append the hardcoded settings */}}
+{{- define "k8s-ycl.hardcodedValues" -}}
+service:
+  main:
+    enabled: true
+    nameOverride: webhook
+    ports:
+      http:
+        enabled: true
+        port: 9443
+      probe:
+        enabled: true
+        port: 8081
+
+serviceAccount:
+  create: true
+
+persistence:
+  certs:
+    enabled: true
+    type: secret
+    name: {{ include "k8s-ycl.servingCertificate" . }}
+    mountPath: /tls
+
+probes:
+  liveness:
+    enabled: true
+    custom: true
+    spec:
+      httpGet:
+        path: /healthz
+        port: probe
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      timeoutSeconds: 1
+      failureThreshold: 3
+  readiness:
+    enabled: true
+    custom: true
+    spec:
+      httpGet:
+        path: /readyz
+        port: probe
+      initialDelaySeconds: 0
+      periodSeconds: 10
+      timeoutSeconds: 1
+      failureThreshold: 3
+  startup:
+    enabled: true
+    custom: true
+    spec:
+      httpGet:
+        path: /healthz
+        port: probe
+      failureThreshold: 30
+      periodSeconds: 10
+{{- end -}}
+
+{{/* Render the templates */}}
+{{- $ctx := deepCopy . -}}
+{{- $_ := include "k8s-ycl.hardcodedValues" . | fromYaml | merge $ctx.Values -}}
+{{- include "bjw-s.common.loader.all" $ctx }}
