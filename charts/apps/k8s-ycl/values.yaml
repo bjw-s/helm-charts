@@ -1,0 +1,4 @@
+---
+image:
+  repository: ghcr.io/bjw-s/k8s-ycl
+  pullPolicy: Always

@@ -1,0 +1,30 @@
+---
+apiVersion: v2
+description: Kubernetes admission controller to remove CPU limits from Pods.
+name: k8s-ycl
+version: 0.0.1
+appVersion: 0.0.1
+kubeVersion: ">=1.22.0-0"
+sources:
+  - https://github.com/bjw-s/k8s-ycl
+keywords:
+  - cpu
+  - resources
+  - limits
+  - admission
+  - controller
+maintainers:
+  - name: bjw-s
+    email: me@bjw-s.dev
+dependencies:
+  - name: common
+    repository: https://bjw-s.github.io/helm-charts
+    version: 1.5.1
+annotations:
+  artifacthub.io/changes: |-
+    - kind: changed
+      description: |
+        Initial version
+  artifacthub.io/links: |
+    - name: "source"
+      url: "https://github.com/bjw-s/k8s-ycl"
