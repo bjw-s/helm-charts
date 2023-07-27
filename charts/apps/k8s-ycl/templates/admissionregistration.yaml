@@ -16,6 +16,7 @@ webhooks:
       - key: kubernetes.io/metadata.name
         operator: NotIn
         values:
+        - kube-system
         - {{ .Release.Namespace | quote }}
     clientConfig:
       service:

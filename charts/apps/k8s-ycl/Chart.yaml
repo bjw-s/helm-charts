@@ -3,7 +3,7 @@ apiVersion: v2
 description: Kubernetes admission controller to remove CPU limits from Pods.
 name: k8s-ycl
 version: 0.1.0
-appVersion: 0.1.0
+appVersion: v0.1.0
 kubeVersion: ">=1.22.0-0"
 sources:
   - https://github.com/bjw-s/k8s-ycl
