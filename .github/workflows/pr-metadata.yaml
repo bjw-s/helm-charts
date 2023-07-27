@@ -79,3 +79,13 @@ jobs:
       - name: Collect changed charts
         uses: bjw-s/helm-charts-actions/collect-charts@main
         id: changed-charts
+
+      - name: Debug
+        run: |
+          echo ${{
+            (
+              needs.pr-metadata.outputs.commonLibraryUpdated &&
+              '["other/app-template"]'
+            ) || needs.pr-metadata.outputs.chartsToInstall
+          }}
+          echo test
