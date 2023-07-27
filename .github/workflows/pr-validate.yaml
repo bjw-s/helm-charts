@@ -59,7 +59,7 @@ jobs:
       overrideDeps: |-
         ${{
            (
-             needs.pr-metadata.outputs.commonLibraryUpdated &&
+             (needs.pr-metadata.outputs.commonLibraryUpdated=='true') &&
             '[{"name": "common", "repository": "file://../../library/common", "version": "*"}]'
            ) || '[]'
          }}
