@@ -1,4 +1,10 @@
 ---
+controller:
+  replicas: 1
+
 image:
   repository: ghcr.io/bjw-s/k8s-ycl
   pullPolicy: Always
+
+webhook:
+  path: /mutate--v1-pod

@@ -21,7 +21,7 @@ webhooks:
       service:
         namespace: {{ .Release.Namespace | quote }}
         name: {{ include "bjw-s.common.lib.chart.names.fullname" . }}-webhook
-        path: /mutate--v1-pod
+        path: {{ include "k8s-ycl.webhookPath" . }}
         port: {{ include "k8s-ycl.webhookPort" . }}
     failurePolicy: Fail
     admissionReviewVersions: ["v1", "v1beta1"]

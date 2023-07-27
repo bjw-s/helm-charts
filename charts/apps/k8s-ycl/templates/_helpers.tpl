@@ -2,6 +2,10 @@
 9443
 {{- end -}}
 
+{{- define "k8s-ycl.webhookPath" -}}
+/mutate--v1-pod
+{{- end -}}
+
 {{- define "k8s-ycl.selfSignedIssuer" -}}
 {{ printf "%s-webhook-selfsign" (include "bjw-s.common.lib.chart.names.fullname" .) }}
 {{- end -}}
