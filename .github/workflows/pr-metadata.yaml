@@ -23,7 +23,7 @@ on:
       chartsToInstall:
         value: ${{ jobs.pr-changes.outputs.chartsToInstall }}
       commonLibraryUpdated:
-        value: ${{ contains(fromJSON(jobs.pr-changes.outputs.addedOrModifiedCharts), 'library/common') }}
+        value: ${{ jobs.pr-changes.outputs.commonLibraryUpdated }}
 
 jobs:
   pr-metadata:
@@ -61,6 +61,7 @@ jobs:
       addedOrModifiedApplicationCharts: ${{ steps.changed-charts.outputs.chartsApplication }}
       chartsToLint: ${{ steps.changed-charts.outputs.chartsToLint }}
       chartsToInstall: ${{ steps.changed-charts.outputs.chartsToInstall }}
+      commonLibraryUpdated: ${{ contains(fromJSON(steps.changed-charts.outputs.charts), 'library/common') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -79,9 +80,3 @@ jobs:
       - name: Collect changed charts
         uses: bjw-s/helm-charts-actions/collect-charts@main
         id: changed-charts
-
-      - name: Debug
-        run: |
-          echo ${{ needs.pr-metadata.outputs.commonLibraryUpdated }}
-          echo ${{ needs.pr-metadata.outputs.commonLibraryUpdated && '["other/app-template"]' }}
-          echo test
