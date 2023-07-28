@@ -15,9 +15,7 @@ webhooks:
       matchExpressions:
       - key: kubernetes.io/metadata.name
         operator: NotIn
-        values:
-        - kube-system
-        - {{ .Release.Namespace | quote }}
+        values: {{ include "k8s-ycl.ignoredNamespaces" . | nindent  10 }}
     clientConfig:
       service:
         namespace: {{ .Release.Namespace | quote }}

@@ -8,3 +8,7 @@ image:
 
 webhook:
   path: /mutate--v1-pod
+
+  ignoreOwnNamespace: true
+  ignoredNamespaces:
+    - kube-system

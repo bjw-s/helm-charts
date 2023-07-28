@@ -12,6 +12,9 @@ service:
       http:
         enabled: true
         port: 9443
+      metrics:
+        enabled: true
+        port: 8080
       probe:
         enabled: true
         port: 8081
