@@ -1,6 +1,7 @@
 ---
 controller:
   replicas: 1
+  strategy: RollingUpdate
 
 image:
   repository: ghcr.io/bjw-s/k8s-ycl
