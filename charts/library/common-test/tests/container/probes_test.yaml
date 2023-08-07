@@ -162,7 +162,7 @@ tests:
             http:
               port: &port 80
 
-      probes:
+      controllers.main.containers.main.probes:
         liveness:
           enabled: true
           type: AUTO
@@ -193,7 +193,7 @@ tests:
             http:
               port: &port 80
 
-      probes:
+      controllers.main.containers.main.probes:
         liveness:
           enabled: true
           type: HTTP
@@ -224,7 +224,7 @@ tests:
             http:
               port: &port 80
 
-      probes:
+      controllers.main.containers.main.probes:
         liveness:
           enabled: true
           type: HTTPS
@@ -255,7 +255,7 @@ tests:
             http:
               port: &port 80
 
-      probes:
+      controllers.main.containers.main.probes:
         liveness:
           enabled: true
           custom: true
@@ -291,7 +291,7 @@ tests:
             http:
               port: &port 80
 
-      probes:
+      controllers.main.containers.main.probes:
         readiness:
           enabled: true
           custom: true
@@ -327,7 +327,7 @@ tests:
             http:
               port: &port 80
 
-      probes:
+      controllers.main.containers.main.probes:
         startup:
           enabled: true
           custom: true
@@ -363,7 +363,7 @@ tests:
             http:
               port: &port 80
 
-      probes:
+      controllers.main.containers.main.probes:
         liveness:
           enabled: true
           port: &port http
@@ -391,7 +391,7 @@ tests:
             http:
               port: &port 80
 
-      probes:
+      controllers.main.containers.main.probes:
         liveness:
           enabled: true
           port: &port http
@@ -419,7 +419,7 @@ tests:
             http:
               port: &port 80
 
-      probes:
+      controllers.main.containers.main.probes:
         readiness:
           enabled: true
           port: &port http
@@ -447,7 +447,7 @@ tests:
             http:
               port: &port 80
 
-      probes:
+      controllers.main.containers.main.probes:
         startup:
           enabled: true
           port: &port http

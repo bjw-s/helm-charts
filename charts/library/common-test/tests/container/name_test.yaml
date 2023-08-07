@@ -4,7 +4,7 @@ templates:
 tests:
   - it: with explicit name should pass
     set:
-      containers:
+      controllers.main.containers:
         main:
           nameOverride: template-test
           controller: main
@@ -21,7 +21,7 @@ tests:
 
   - it: with implicit name should pass
     set:
-      containers:
+      controllers.main.containers:
         main:
           controller: main
           image:
@@ -37,7 +37,7 @@ tests:
 
   - it: with templated name should pass
     set:
-      containers:
+      controllers.main.containers:
         main:
           nameOverride: "{{ .Release.Name }}-container"
           controller: main

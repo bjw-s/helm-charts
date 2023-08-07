@@ -13,7 +13,7 @@ tests:
 
   - it: single string should pass
     set:
-      containers.main.command: /bin/sh
+      controllers.main.containers.main.command: /bin/sh
     asserts:
       - documentIndex: 0
         isKind:
@@ -26,7 +26,7 @@ tests:
 
   - it: multiline string should pass
     set:
-      containers.main.command: |
+      controllers.main.containers.main.command: |
         /bin/sh
         -c
     asserts:
@@ -43,7 +43,7 @@ tests:
 
   - it: single quoted string should pass
     set:
-      containers.main.command: "/bin/sh"
+      controllers.main.containers.main.command: "/bin/sh"
     asserts:
       - documentIndex: 0
         isKind:
@@ -56,7 +56,7 @@ tests:
 
   - it: list of strings should pass
     set:
-      containers.main.command:
+      controllers.main.containers.main.command:
         - /bin/sh
         - "-c"
     asserts:

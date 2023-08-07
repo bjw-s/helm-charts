@@ -3,7 +3,7 @@ Renders the Service objects required by the chart.
 */}}
 {{- define "bjw-s.common.render.services" -}}
   {{- /* Generate named Services as required */ -}}
-  {{- $enabledServices := (include "bjw-s.common.lib.service.enabledServices" $ | fromYaml ) -}}
+  {{- $enabledServices := (include "bjw-s.common.lib.service.enabledServices" (dict "rootContext" $) | fromYaml ) -}}
   {{- range $key, $svc := $enabledServices -}}
     {{- $serviceValues := (mustDeepCopy $svc) -}}
 

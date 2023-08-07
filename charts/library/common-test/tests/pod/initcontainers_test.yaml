@@ -4,9 +4,8 @@ templates:
 tests:
   - it: with custom env vars dict should pass
     set:
-      initContainers:
+      controllers.main.initContainers:
         init1:
-          controller: main
           image:
             repository: ghcr.io/mendhak/http-https-echo
           env:

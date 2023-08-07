@@ -7,12 +7,6 @@ within the common library.
   {{- $routeObject := .object -}}
 
   {{- $routeKind := $routeObject.kind | default "HTTPRoute" -}}
-  {{- /* Make the Route reference the primary Service if no service has been set */ -}}
-  {{- $primaryService := include "bjw-s.common.lib.service.primary" $rootContext | fromYaml -}}
-  {{- $primaryServiceDefaultPort := dict -}}
-  {{- if $primaryService -}}
-    {{- $primaryServiceDefaultPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "object" $primaryService) | fromYaml -}}
-  {{- end -}}
   {{- $labels := merge
     ($routeObject.labels | default dict)
     (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
@@ -56,11 +50,16 @@ spec:
   {{- range $routeObject.rules }}
   - backendRefs:
     {{- range .backendRefs }}
+      {{ $service := include "bjw-s.common.lib.service.getByIdentifier" (dict "rootContext" $rootContext "id" .name) | fromYaml -}}
+      {{ $servicePrimaryPort := dict -}}
+      {{ if $service -}}
+        {{ $servicePrimaryPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "serviceObject" $service) | fromYaml -}}
+      {{- end }}
     - group: {{ default "" .group | quote}}
       kind: {{ default "Service" .kind }}
-      name: {{ default $primaryService.name .name }}
+      name: {{ default .name $service.name }}
       namespace: {{ default $rootContext.Release.Namespace .namespace }}
-      port: {{ default $primaryServiceDefaultPort.port .port }}
+      port: {{ default .port $servicePrimaryPort.port }}
       weight: {{ default 1 .weight }}
     {{- end }}
     {{- if (eq $routeKind "HTTPRoute") }}

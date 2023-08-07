@@ -5,7 +5,7 @@ Probes selection logic.
   {{- $primaryService := include "bjw-s.common.lib.service.primary" $ | fromYaml -}}
   {{- $primaryServiceDefaultPort := dict -}}
   {{- if $primaryService -}}
-    {{- $primaryServiceDefaultPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $ "object" $primaryService) | fromYaml -}}
+    {{- $primaryServiceDefaultPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $ "serviceObject" $primaryService) | fromYaml -}}
   {{- end -}}
 
   {{- range $probeName, $probe := .Values.probes -}}

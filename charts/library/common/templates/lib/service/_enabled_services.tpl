@@ -2,9 +2,10 @@
 Return the enabled services.
 */}}
 {{- define "bjw-s.common.lib.service.enabledServices" -}}
+  {{- $rootContext := .rootContext -}}
   {{- $enabledServices := dict -}}
 
-  {{- range $name, $service := .Values.service -}}
+  {{- range $name, $service := $rootContext.Values.service -}}
     {{- if kindIs "map" $service -}}
       {{- /* Enable Service by default, but allow override */ -}}
       {{- $serviceEnabled := true -}}

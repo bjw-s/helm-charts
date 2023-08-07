@@ -9,7 +9,7 @@ Ports used by the container.
   {{- /* Default to empty list */ -}}
   {{- $ports := list -}}
 
-  {{- $enabledServices := (include "bjw-s.common.lib.service.enabledServices" $rootContext | fromYaml ) -}}
+  {{- $enabledServices := (include "bjw-s.common.lib.service.enabledServices" (dict "rootContext" $rootContext) | fromYaml ) -}}
   {{- range $servicename, $service := $enabledServices -}}
     {{- $enabledPorts := include "bjw-s.common.lib.service.enabledPorts" (dict "rootContext" $rootContext "serviceObject" $service) | fromYaml -}}
     {{- range $portname, $port := ($enabledPorts | default dict) -}}

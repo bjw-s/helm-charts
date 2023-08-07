@@ -2,16 +2,11 @@
 This template serves as a blueprint for all Ingress objects that are created
 within the common library.
 */}}
+
 {{- define "bjw-s.common.class.ingress" -}}
   {{- $rootContext := .rootContext -}}
   {{- $ingressObject := .object -}}
 
-  {{- /* Make the Ingress reference the primary Service if no service has been set */ -}}
-  {{- $primaryService := include "bjw-s.common.lib.service.primary" $rootContext | fromYaml -}}
-  {{- $primaryServiceDefaultPort := dict -}}
-  {{- if $primaryService -}}
-    {{- $primaryServiceDefaultPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "object" $primaryService) | fromYaml -}}
-  {{- end -}}
   {{- $labels := merge
     ($ingressObject.labels | default dict)
     (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
@@ -54,19 +49,18 @@ spec:
       http:
         paths:
           {{- range .paths }}
-            {{- $service := $primaryService.name -}}
-            {{- $port := $primaryServiceDefaultPort.port -}}
-            {{- if .service -}}
-              {{- $service = default $service .service.name -}}
-              {{- $port = default $port .service.port -}}
-            {{- end }}
           - path: {{ tpl .path $rootContext | quote }}
             pathType: {{ default "Prefix" .pathType }}
             backend:
               service:
-                name: {{ $service }}
+                {{ $service := include "bjw-s.common.lib.service.getByIdentifier" (dict "rootContext" $rootContext "id" .service.name) | fromYaml -}}
+                {{ $servicePrimaryPort := dict -}}
+                {{ if $service -}}
+                  {{ $servicePrimaryPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "serviceObject" $service) | fromYaml -}}
+                {{ end -}}
+                name: {{ default .service.name $service.name }}
                 port:
-                  number: {{ $port }}
+                  number: {{ default .service.port $servicePrimaryPort.port }}
           {{- end }}
   {{- end }}
 {{- end }}

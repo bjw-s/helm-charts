@@ -26,6 +26,8 @@ tests:
           - host: chart-test.local
             paths:
               - path: /test
+                service:
+                  name: main
     asserts:
       - documentIndex: &IngressDocument 2
         isKind:
@@ -45,6 +47,7 @@ tests:
         enabled: true
         hosts:
           - host: "{{ .Release.Name }}.hostname"
+
     asserts:
       - documentIndex: &IngressDocument 2
         isKind:
@@ -62,6 +65,8 @@ tests:
           - host: chart-test.local
             paths:
               - path: "/{{ .Release.Name }}.path"
+                service:
+                  name: main
     asserts:
       - documentIndex: &IngressDocument 2
         isKind:
