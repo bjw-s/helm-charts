@@ -25,6 +25,10 @@ tests:
         existingClaim:
           enabled: true
           existingClaim: myClaim
+          mounts:
+            - controllers:
+                - main
+              mountPath: "/data"
     asserts:
       - documentIndex: 0
         isKind:
@@ -45,6 +49,10 @@ tests:
           nameOverride: "-"
           accessMode: ReadWriteMany
           size: 1G
+          mounts:
+            - controllers:
+                - main
+              mountPath: "/data"
     asserts:
       - documentIndex: 1
         isKind:
@@ -65,6 +73,10 @@ tests:
           nameOverride: suffix
           accessMode: ReadWriteMany
           size: 1G
+          mounts:
+            - controllers:
+                - main
+              mountPath: "/data"
     asserts:
       - documentIndex: 1
         isKind:
