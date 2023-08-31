@@ -33,10 +33,8 @@ spec:
       backoffLimit: {{ .Values.controller.cronjob.backoffLimit }}
       template:
         metadata:
-          {{- with include ("bjw-s.common.lib.metadata.podAnnotations") . }}
           annotations:
-            {{- . | nindent 12 }}
-          {{- end }}
+          {{- include "bjw-s.common.lib.metadata.podAnnotations" . | indent 12 }}
           labels:
             {{- include "bjw-s.common.lib.metadata.selectorLabels" . | nindent 12 }}
             {{- with .Values.podLabels }}
