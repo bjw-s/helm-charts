@@ -1,3 +1,5 @@
+  {{- /* TODO: Remove this file */ -}}
+
 {{/* Volumes included by the controller */}}
 {{- define "bjw-s.common.lib.container.volumeMounts" -}}
   {{- range $persistenceIndex, $persistenceItem := .Values.persistence }}

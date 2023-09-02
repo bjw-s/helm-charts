@@ -8,6 +8,9 @@ Returns the value for volumes
   {{- /* Default to empty list */ -}}
   {{- $volumes := list -}}
 
+  {{- /* TODO: Rework to put "mounts" under container specs */ -}}
+  {{- /* TODO: Or rework to put "persistence" under controller spec */ -}}
+
   {{- /* Loop over persistence items */ -}}
   {{- range $identifier, $persistenceValues := $rootContext.Values.persistence -}}
     {{- $persistenceEnabled := true -}}
@@ -18,7 +21,7 @@ Returns the value for volumes
     {{- if $persistenceEnabled -}}
       {{- /* Loop over mounts */ -}}
       {{- range .mounts -}}
-        {{- if (has $controllerObject.identifier .controllers) -}}
+        {{- if or (has $controllerObject.identifier .controllers) (has "_all_" .controllers) -}}
           {{- $volume := dict "name" $identifier -}}
 
           {{- /* PVC persistence type */ -}}

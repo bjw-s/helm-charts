@@ -18,3 +18,7 @@ controllers:
 ingress:
   main:
     enabled: true
+
+persistence:
+  config:
+    enabled: true
