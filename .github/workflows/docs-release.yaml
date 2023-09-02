@@ -30,7 +30,7 @@ jobs:
           fetch-depth: 0
 
       - name: Build docs
-        uses: docker://ghcr.io/bjw-s/mdbook:0.4.34@sha256:ecdbc6ce9fab9bcde916308377685f97a976b57703746bd23c00faf0483ae6ce
+        uses: docker://ghcr.io/bjw-s/mdbook:0.4.34@sha256:764e0b5c8aae84cd17f878e752b1716514c749de21a280148fb5f47dd3a9f7f4
         with:
           args: bash -c "cd docs && mdbook build"
 
