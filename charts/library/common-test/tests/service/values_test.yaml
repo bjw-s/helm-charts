@@ -7,6 +7,7 @@ tests:
       service:
         second:
           type: ClusterIP
+          controller: main
           ports:
             first:
               port: 80
