@@ -36,6 +36,9 @@ controllers:
           repository: ghcr.io/mendhak/http-https-echo
           tag: 29
           pullPolicy: IfNotPresent
+        env:
+          HTTP_PORT: 8889
+          HTTPS_PORT: 9997
 
 ingress:
   main:
