@@ -19,6 +19,9 @@ controllers:
         image:
           repository: ghcr.io/mendhak/http-https-echo
           tag: 29
+        env:
+          HTTP_PORT: 8888
+          HTTPS_PORT: 9999
 
       third-container:
         image:
