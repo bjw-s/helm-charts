@@ -489,7 +489,7 @@ ingress:
     labels: {}
 
     # -- Set the ingressClass that is used for this ingress.
-    ingressClassName: # "nginx"
+    className: # "nginx"
 
     ## Configure the hosts for the ingress
     hosts:
