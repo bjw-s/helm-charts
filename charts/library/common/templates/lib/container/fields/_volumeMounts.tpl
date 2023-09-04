@@ -8,37 +8,65 @@ volumeMounts used by the container.
   {{- $containerObject := $ctx.containerObject -}}
 
   {{- /* Default to empty dict */ -}}
+  {{- $persistenceItemsToProcess := dict -}}
   {{- $enabledVolumeMounts := list -}}
 
-  {{- /* TODO: Rework to put "mounts" under container specs */ -}}
-  {{- /* TODO: Or rework to put "persistence" under controller spec */ -}}
-
-  {{- range $persistenceIdentifier, $persistenceValues := $rootContext.Values.persistence -}}
+  {{- range $identifier, $persistenceValues := $rootContext.Values.persistence -}}
+    {{- /* Enable persistence item by default, but allow override */ -}}
     {{- $persistenceEnabled := true -}}
     {{- if hasKey $persistenceValues "enabled" -}}
       {{- $persistenceEnabled = $persistenceValues.enabled -}}
     {{- end -}}
 
     {{- if $persistenceEnabled -}}
-      {{- /* Loop over mounts */ -}}
-      {{- range .mounts -}}
-        {{- if or (has $controllerObject.persistenceIdentifier .controllers) (has "_all_" .controllers) -}}
-          {{- $volumeMount := dict -}}
-          {{- $_ := set $volumeMount "name" $persistenceIdentifier -}}
+      {{- /* Set some default values */ -}}
 
-          {{- /* Set the default mountPath to /<name_of_the_peristence_item> */ -}}
-          {{- $mountPath := (printf "/%v" $persistenceIdentifier) -}}
-          {{- if eq "hostPath" (default "pvc" $persistenceValues.type) -}}
-            {{- $mountPath = $persistenceValues.hostPath -}}
-          {{- end -}}
+      {{- /* Set the default mountPath to /<name_of_the_peristence_item> */ -}}
+      {{- $mountPath := (printf "/%v" $identifier) -}}
+      {{- if eq "hostPath" (default "pvc" $persistenceValues.type) -}}
+        {{- $mountPath = $persistenceValues.hostPath -}}
+      {{- end -}}
+
+      {{- /* Process configured mounts */ -}}
+      {{- if or .globalMounts .advancedMounts -}}
+        {{- $mounts := list -}}
+        {{- if hasKey . "globalMounts" -}}
+          {{- $mounts = .globalMounts -}}
+        {{- else if hasKey . "advancedMounts" -}}
+          {{- $mounts = dig $controllerObject.identifier $containerObject.identifier list .advancedMounts -}}
+        {{- end -}}
+
+        {{- range $mounts -}}
+          {{- $volumeMount := dict -}}
+          {{- $_ := set $volumeMount "name" $identifier -}}
+
           {{- /* Use the specified mountPath if provided */ -}}
-          {{- with $persistenceValues.mountPath -}}
+          {{- with .path -}}
             {{- $mountPath = . -}}
           {{- end -}}
           {{- $_ := set $volumeMount "mountPath" $mountPath -}}
 
+          {{- /* Use the specified subPath if provided */ -}}
+          {{- with .subPath -}}
+            {{- $subPath := . -}}
+            {{- $_ := set $volumeMount "subPath" $subPath -}}
+          {{- end -}}
+
+          {{- /* Use the specified readOnly setting if provided */ -}}
+          {{- with .readOnly -}}
+            {{- $readOnly := . -}}
+            {{- $_ := set $volumeMount "readOnly" $readOnly -}}
+          {{- end -}}
+
           {{- $enabledVolumeMounts = append $enabledVolumeMounts $volumeMount -}}
         {{- end -}}
+
+      {{- /* Mount to default path if no mounts are configured */ -}}
+      {{- else -}}
+        {{- $volumeMount := dict -}}
+        {{- $_ := set $volumeMount "name" $identifier -}}
+        {{- $_ := set $volumeMount "mountPath" $mountPath -}}
+        {{- $enabledVolumeMounts = append $enabledVolumeMounts $volumeMount -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}

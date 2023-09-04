@@ -27,11 +27,53 @@ tests:
             name: config
             mountPath: /config
 
+  - it: advanced mount config should pass
+    set:
+      controllers:
+        main:
+          containers:
+            second_container:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 29
+
+      persistence:
+        data:
+          type: configMap
+          name: myConfigMap
+          advancedMounts:
+            main:
+              main:
+                - path: /data/config.yaml
+                  readOnly: false
+                  subPath: config.yaml
+              second_container:
+                - path: /appdata/config
+                  readOnly: true
+
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: data
+            mountPath: /data/config.yaml
+            subPath: config.yaml
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[1].volumeMounts[0]
+          value:
+            name: data
+            mountPath: /appdata/config
+            readOnly: true
+
   - it: emptyDir should pass
     set:
       persistence:
         cache:
-          enabled: true
           type: emptyDir
     asserts:
       - documentIndex: &DeploymentDoc 0
@@ -49,9 +91,10 @@ tests:
       persistence:
         config:
           enabled: true
-          mountPath: /custom
           accessMode: ReadWriteMany
           size: 1G
+          globalMounts:
+            - path: /custom
     asserts:
       - documentIndex: &DeploymentDoc 1
         isKind:
@@ -69,7 +112,9 @@ tests:
         config:
           enabled: true
           existingClaim: myClaim
-          subPath: "mySubPath"
+          globalMounts:
+            - path: /config
+              subPath: "mySubPath"
     asserts:
       - documentIndex: &DeploymentDoc 0
         isKind:
@@ -88,8 +133,9 @@ tests:
         config:
           enabled: true
           type: hostPath
-          mountPath: /data
           hostPath: /tmp
+          globalMounts:
+            - path: /data
     asserts:
       - documentIndex: &DeploymentDoc 0
         isKind:
@@ -108,7 +154,8 @@ tests:
           enabled: true
           type: hostPath
           hostPath: /dev
-          subPath: mySubPath
+          globalMounts:
+            - subPath: mySubPath
     asserts:
       - documentIndex: &DeploymentDoc 0
         isKind:

@@ -573,6 +573,61 @@ route:
 # [[ref]](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-storage)
 # @default -- See below
 persistence:
+  config:
+    # -- Enables or disables the persistence item. Defaults to true
+    enabled: false
+
+    # -- Sets the persistence type
+    # Valid options are persistentVolumeClaim, emptyDir, hostPath, secret, configMap or custom
+    type: persistentVolumeClaim
+
+    # -- Storage Class for the config volume.
+    # If set to `-`, dynamic provisioning is disabled.
+    # If set to something else, the given storageClass is used.
+    # If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner.
+    storageClass: # "-"
+
+    # -- If you want to reuse an existing claim, the name of the existing PVC can be passed here.
+    existingClaim: # your-claim
+
+    # -- AccessMode for the persistent volume.
+    # Make sure to select an access mode that is supported by your storage provider!
+    # [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
+    accessMode: ReadWriteOnce
+
+    # -- The amount of storage that is requested for the persistent volume.
+    size: 1Gi
+
+    # -- Set to true to retain the PVC upon `helm uninstall`
+    retain: false
+
+    # -- Configure mounts to all controllers and containers. By default the persistence item
+    # will be mounted to `/<name_of_the_peristence_item>`.
+    # Example:
+    # globalMounts:
+    #   - path: /config
+    #     readOnly: false
+    globalMounts: []
+
+    # -- Explicitly configure mounts for specific controllers and containers.
+    # Example:
+    # advancedMounts:
+    #   main: # the controller with whe "main" identifier
+    #     main: # the container with whe "main" identifier
+    #       - path: /data/config.yaml
+    #         readOnly: true
+    #         subPath: config.yaml
+    #     second_container: # the container with whe "second_container" identifier
+    #       - path: /appdata/config
+    #         readOnly: true
+    #   second_controller: # the controller with whe "second_controller" identifier
+    #     main: # the container with whe "main" identifier
+    #       - path: /data/config.yaml
+    #         readOnly: false
+    #         subPath: config.yaml
+    advancedMounts: {}
+
+persistence_old:
   # -- Default persistence for configuration files.
   # @default -- See below
   config:
