@@ -36,8 +36,8 @@ env: {{ . | trim | nindent 2 }}
 {{- with $containerObject.envFrom }}
 envFrom: {{ toYaml . | trim | nindent 2 }}
   {{- end -}}
-  {{- with (include "bjw-s.common.lib.container.field.ports" (dict "ctx" $ctx) | trim) }}
-ports: {{- . | trim | nindent 2 }}
+  {{- with $containerObject.ports }}
+ports: {{ toYaml . | trim | nindent 2 }}
   {{- end -}}
   {{- with (include "bjw-s.common.lib.container.field.probes" (dict "ctx" $ctx) | trim) }}
     {{- . | trim | nindent 0 -}}
