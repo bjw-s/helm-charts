@@ -50,7 +50,7 @@ persistence:
 
   data:
     type: configMap
-    name: |
+    name: |-
       {{- (include "bjw-s.common.lib.chart.names.fullname" $) -}}-config
     advancedMounts:
       main: # the controller with whe "main" identifier
