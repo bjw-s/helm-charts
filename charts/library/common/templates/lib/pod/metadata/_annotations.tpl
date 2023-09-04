@@ -40,7 +40,7 @@ Returns the value for annotations
   {{- $secretsFound := dict -}}
   {{- range $name, $secret := $rootContext.Values.secrets -}}
     {{- if $secret.enabled -}}
-      {{- $_ := set $secretsFound $name (toYaml $secret.data | sha256sum) -}}
+      {{- $_ := set $secretsFound $name (toYaml $secret.stringData | sha256sum) -}}
     {{- end -}}
   {{- end -}}
   {{- if $secretsFound -}}
