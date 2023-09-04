@@ -32,7 +32,7 @@ tests:
       controllers:
         main:
           containers:
-            second_container:
+            second-container:
               image:
                 repository: ghcr.io/mendhak/http-https-echo
                 tag: 29
@@ -47,7 +47,7 @@ tests:
                 - path: /data/config.yaml
                   readOnly: false
                   subPath: config.yaml
-              second_container:
+              second-container:
                 - path: /appdata/config
                   readOnly: true
 
