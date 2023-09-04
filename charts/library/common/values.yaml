@@ -620,7 +620,7 @@ persistence:
     #     second-container: # the container with whe "second-container" identifier
     #       - path: /appdata/config
     #         readOnly: true
-    #   second_controller: # the controller with whe "second_controller" identifier
+    #   second-controller: # the controller with whe "second-controller" identifier
     #     main: # the container with whe "main" identifier
     #       - path: /data/config.yaml
     #         readOnly: false
