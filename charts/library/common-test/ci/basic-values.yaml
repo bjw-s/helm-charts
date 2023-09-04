@@ -22,3 +22,9 @@ ingress:
 persistence:
   config:
     enabled: true
+
+configMaps:
+  config:
+    enabled: true
+    data:
+      test: value 1

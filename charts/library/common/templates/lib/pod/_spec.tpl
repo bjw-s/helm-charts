@@ -64,43 +64,4 @@ containers: {{ . | nindent 2 }}
   {{- with (include "bjw-s.common.lib.pod.field.volumes" (dict "ctx" $ctx) | trim) }}
 volumes: {{ . | nindent 2 }}
   {{- end -}}
-
-{{- /*
-  {{- if .Values.initContainers }}
-initContainers:
-    {{- $initContainers := list }}
-    {{- range $index, $key := (keys .Values.initContainers | uniq | sortAlpha) }}
-      {{- $container := get $.Values.initContainers $key }}
-      {{- if not $container.name -}}
-        {{- $_ := set $container "name" $key }}
-      {{- end }}
-      {{- if $container.env -}}
-        {{- $newEnv := fromYaml (include "bjw-s.common.lib.container.envVars" (dict "rootContext" $ "env" $container.env)) -}}
-        {{- $_ := set $container "env" $newEnv.env }}
-      {{- end }}
-      {{- $initContainers = append $initContainers $container }}
-    {{- end }}
-    {{- tpl (toYaml $initContainers) $ | nindent 2 }}
-  {{- end }}
-containers:
-  {{- include "bjw-s.common.lib.controller.mainContainer" . | nindent 2 }}
-  {{- with (merge .Values.sidecars .Values.additionalContainers) }}
-    {{- $sidecarContainers := list }}
-    {{- range $name, $container := . }}
-      {{- if not $container.name -}}
-        {{- $_ := set $container "name" $name }}
-      {{- end }}
-      {{- if $container.env -}}
-        {{- $newEnv := fromYaml (include "bjw-s.common.lib.container.envVars" (dict "rootContext" $ "env" $container.env)) -}}
-        {{- $_ := set $container "env" $newEnv.env }}
-      {{- end }}
-      {{- $sidecarContainers = append $sidecarContainers $container }}
-    {{- end }}
-    {{- tpl (toYaml $sidecarContainers) $ | nindent 2 }}
-  {{- end }}
-  {{- with (include "bjw-s.common.lib.controller.volumes" . | trim) }}
-volumes:
-    {{- nindent 2 . }}
-  {{- end }}
-  */ -}}
 {{- end -}}

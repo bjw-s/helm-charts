@@ -17,4 +17,4 @@ tests:
         equal:
           path: spec.template.metadata.annotations
           value:
-            checksum/config: afdf20f511621d5cb358c5e8b0da2d14cdbe2549fb12fa123f6a6e9baabef26e
+            checksum/configMaps: afdf20f511621d5cb358c5e8b0da2d14cdbe2549fb12fa123f6a6e9baabef26e

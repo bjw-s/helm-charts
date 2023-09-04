@@ -22,6 +22,34 @@ Returns the value for annotations
     {{- end -}}
   {{- end -}}
 
+  {{- /* Add configMaps checksum */ -}}
+  {{- $configMapsFound := dict -}}
+  {{- range $name, $configmap := $rootContext.Values.configMaps -}}
+    {{- if $configmap.enabled -}}
+      {{- $_ := set $configMapsFound $name (toYaml $configmap.data | sha256sum) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if $configMapsFound -}}
+    {{- $annotations = merge
+      (dict "checksum/configMaps" (toYaml $configMapsFound | sha256sum))
+      $annotations
+    -}}
+  {{- end -}}
+
+  {{- /* Add Secrets checksum */ -}}
+  {{- $secretsFound := dict -}}
+  {{- range $name, $secret := $rootContext.Values.secrets -}}
+    {{- if $secret.enabled -}}
+      {{- $_ := set $secretsFound $name (toYaml $secret.data | sha256sum) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if $secretsFound -}}
+    {{- $annotations = merge
+      (dict "checksum/secrets" (toYaml $secretsFound | sha256sum))
+      $annotations
+    -}}
+  {{- end -}}
+
   {{- if not (empty $annotations) -}}
     {{- $annotations | toYaml -}}
   {{- end -}}
