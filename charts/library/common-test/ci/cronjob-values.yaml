@@ -1,15 +1,19 @@
 controllers:
   main:
     type: cronjob
-
-containers:
-  main:
-    controller: main
-    image:
-      repository: ghcr.io/mendhak/http-https-echo
-      tag: 29
-      pullPolicy: IfNotPresent
+    containers:
+      main:
+        image:
+          repository: ghcr.io/mendhak/http-https-echo
+          tag: 29
+          pullPolicy: IfNotPresent
 
 service:
   main:
     enabled: false
+
+configMaps:
+  config:
+    enabled: true
+    data:
+      test: value 1
