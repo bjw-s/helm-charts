@@ -7,6 +7,10 @@ controllers:
           tag: 29
           pullPolicy: IfNotPresent
 
+        env:
+          HTTP_PORT: 8887
+          HTTPS_PORT: 9997
+
         probes:
           liveness:
             enabled: true
@@ -21,7 +25,7 @@ controllers:
           tag: 29
         env:
           HTTP_PORT: 8888
-          HTTPS_PORT: 9999
+          HTTPS_PORT: 9998
 
       third-container:
         image:
@@ -38,7 +42,7 @@ controllers:
           pullPolicy: IfNotPresent
         env:
           HTTP_PORT: 8889
-          HTTPS_PORT: 9997
+          HTTPS_PORT: 9999
 
 ingress:
   main:
