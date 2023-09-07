@@ -14,7 +14,7 @@ image:
   repository: k8s.gcr.io/git-sync/git-sync
   tag: v3.6.2
 
-additionalContainers:
+sidecars:
   subcleaner:
     name: subcleaner
     image: |-
@@ -33,7 +33,7 @@ image:
   repository: k8s.gcr.io/git-sync/git-sync
   tag: v3.6.2
 
-additionalContainers:
+sidecars:
   subcleaner:
     name: subcleaner
     image: k8s.gcr.io/git-sync/git-sync:v3.6.2

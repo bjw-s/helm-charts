@@ -1,5 +1,5 @@
 {{/*
-Template to render gluetun addon. It will add the container to the list of additionalContainers.
+Template to render gluetun addon. It will add the container to the list of sidecars.
 */}}
 */}}
 {{- define "bjw-s.common.addon.gluetun" -}}

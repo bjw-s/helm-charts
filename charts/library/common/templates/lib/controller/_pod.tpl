@@ -68,7 +68,7 @@ initContainers:
   {{- end }}
 containers:
   {{- include "bjw-s.common.lib.controller.mainContainer" . | nindent 2 }}
-  {{- with (merge .Values.sidecars .Values.additionalContainers) }}
+  {{- with .Values.sidecars }}
     {{- $sidecarContainers := list }}
     {{- range $name, $container := . }}
       {{- if not $container.name -}}

@@ -89,24 +89,3 @@ tests:
           value:
             name: template
             value: RELEASE-NAME-admin
-
-  - it: with legacy additionalContainers should pass
-    set:
-      sidecars:
-        additional1:
-          name: sidecar
-      additionalContainers:
-        additional2:
-          name: legacy-sidecar
-    asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
-          path: spec.template.spec.containers[1].name
-          value: sidecar
-      - documentIndex: 0
-        equal:
-          path: spec.template.spec.containers[2].name
-          value: legacy-sidecar
