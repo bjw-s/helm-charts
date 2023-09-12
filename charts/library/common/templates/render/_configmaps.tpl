@@ -1,19 +1,26 @@
 {{/*
 Renders the configMap objects required by the chart.
 */}}
-{{- define "bjw-s.common.render.configmaps" -}}
+{{- define "bjw-s.common.render.configMaps" -}}
   {{- /* Generate named configMaps as required */ -}}
-  {{- range $name, $configmap := .Values.configMaps -}}
-    {{- if $configmap.enabled -}}
-      {{- $configmapValues := $configmap -}}
+  {{- range $key, $configMap := .Values.configMaps }}
+    {{- /* Enable configMap by default, but allow override */ -}}
+    {{- $configMapEnabled := true -}}
+    {{- if hasKey $configMap "enabled" -}}
+      {{- $configMapEnabled = $configMap.enabled -}}
+    {{- end -}}
 
-      {{- /* set the default nameOverride to the configMap name */ -}}
-      {{- if not $configmapValues.nameOverride -}}
-        {{- $_ := set $configmapValues "nameOverride" $name -}}
-      {{ end -}}
+    {{- if $configMapEnabled -}}
+      {{- $configMapValues := (mustDeepCopy $configMap) -}}
 
-      {{- $_ := set $ "ObjectValues" (dict "configmap" $configmapValues) -}}
-      {{- include "bjw-s.common.class.configmap" $ | nindent 0 -}}
+      {{- /* Create object from the raw configMap values */ -}}
+      {{- $configMapObject := (include "bjw-s.common.lib.configMap.valuesToObject" (dict "rootContext" $ "id" $key "values" $configMapValues)) | fromYaml -}}
+
+      {{- /* Perform validations on the configMap before rendering */ -}}
+      {{- include "bjw-s.common.lib.configMap.validate" (dict "rootContext" $ "object" $configMapObject) -}}
+
+      {{/* Include the configMap class */}}
+      {{- include "bjw-s.common.class.configMap" (dict "rootContext" $ "object" $configMapObject) | nindent 0 -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}

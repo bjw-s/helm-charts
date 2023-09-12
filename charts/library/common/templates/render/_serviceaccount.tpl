@@ -3,11 +3,18 @@ Renders the serviceAccount object required by the chart.
 */}}
 {{- define "bjw-s.common.render.serviceAccount" -}}
   {{- if .Values.serviceAccount.create -}}
+    {{- $serviceAccountValues := (mustDeepCopy .Values.serviceAccount) -}}
+
+    {{- /* Create object from the raw ServiceAccount values */ -}}
+    {{- $serviceAccountObject := (include "bjw-s.common.lib.serviceAccount.valuesToObject" (dict "rootContext" $ "id" "default" "values" $serviceAccountValues)) | fromYaml -}}
+
+    {{- /* Perform validations on the ServiceAccount before rendering */ -}}
+    {{- include "bjw-s.common.lib.serviceAccount.validate" (dict "rootContext" $ "object" $serviceAccountObject) -}}
+
+    {{/* Include the serviceAccount class */}}
+    {{- include "bjw-s.common.class.serviceAccount" (dict "rootContext" $ "object" $serviceAccountObject) | nindent 0 -}}
 
     {{- /* Create a service account secret */ -}}
-    {{- $serviceAccountName := include "bjw-s.common.lib.chart.names.serviceAccountName" . -}}
-    {{- $_ := set .Values.secrets "sa-token" (dict "enabled" true "annotations" (dict "kubernetes.io/service-account.name" $serviceAccountName) "type" "kubernetes.io/service-account-token") -}}
-
-    {{- include "bjw-s.common.class.serviceAccount" $ | nindent 0 -}}
+    {{- $_ := set .Values.secrets "sa-token" (dict "enabled" true "annotations" (dict "kubernetes.io/service-account.name" $serviceAccountObject.name) "type" "kubernetes.io/service-account-token") -}}
   {{- end -}}
 {{- end -}}

@@ -1,0 +1,169 @@
+suite: container volumeMounts
+templates:
+  - common.yaml
+tests:
+  - it: no persistence should pass
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        isNull:
+          path: spec.template.spec.containers[0].volumeMounts
+
+  - it: default should pass
+    set:
+      persistence:
+        config:
+          enabled: true
+    asserts:
+      - documentIndex: &DeploymentDoc 1
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: config
+            mountPath: /config
+
+  - it: advanced mount config should pass
+    set:
+      controllers:
+        main:
+          containers:
+            second-container:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 29
+
+      persistence:
+        data:
+          type: configMap
+          name: myConfigMap
+          advancedMounts:
+            main:
+              main:
+                - path: /data/config.yaml
+                  readOnly: false
+                  subPath: config.yaml
+              second-container:
+                - path: /appdata/config
+                  readOnly: true
+
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: data
+            mountPath: /data/config.yaml
+            subPath: config.yaml
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[1].volumeMounts[0]
+          value:
+            name: data
+            mountPath: /appdata/config
+            readOnly: true
+
+  - it: emptyDir should pass
+    set:
+      persistence:
+        cache:
+          type: emptyDir
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: cache
+            mountPath: /cache
+
+  - it: custom mountPath should pass
+    set:
+      persistence:
+        config:
+          enabled: true
+          accessMode: ReadWriteMany
+          size: 1G
+          globalMounts:
+            - path: /custom
+    asserts:
+      - documentIndex: &DeploymentDoc 1
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: config
+            mountPath: /custom
+
+  - it: mount with subPath should pass
+    set:
+      persistence:
+        config:
+          enabled: true
+          existingClaim: myClaim
+          globalMounts:
+            - path: /config
+              subPath: "mySubPath"
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: config
+            mountPath: /config
+            subPath: mySubPath
+
+  - it: hostPath with custom mountPath should pass
+    set:
+      persistence:
+        config:
+          enabled: true
+          type: hostPath
+          hostPath: /tmp
+          globalMounts:
+            - path: /data
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: config
+            mountPath: /data
+
+  - it: hostPath mount with subPath should pass
+    set:
+      persistence:
+        config:
+          enabled: true
+          type: hostPath
+          hostPath: /dev
+          globalMounts:
+            - subPath: mySubPath
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: config
+            mountPath: /dev
+            subPath: mySubPath

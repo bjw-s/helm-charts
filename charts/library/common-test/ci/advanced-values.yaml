@@ -1,0 +1,78 @@
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: ghcr.io/mendhak/http-https-echo
+          tag: 29
+          pullPolicy: IfNotPresent
+
+        env:
+          HTTP_PORT: 8887
+          HTTPS_PORT: 9997
+
+        probes:
+          liveness:
+            enabled: true
+          readiness:
+            enabled: true
+          startup:
+            enabled: true
+
+      second-container:
+        image:
+          repository: ghcr.io/mendhak/http-https-echo
+          tag: 29
+        env:
+          HTTP_PORT: 8888
+          HTTPS_PORT: 9998
+
+      third-container:
+        image:
+          repository: ghcr.io/mendhak/http-https-echo
+          tag: 29
+
+  second-controller:
+    type: deployment
+    containers:
+      main:
+        image:
+          repository: ghcr.io/mendhak/http-https-echo
+          tag: 29
+          pullPolicy: IfNotPresent
+        env:
+          HTTP_PORT: 8889
+          HTTPS_PORT: 9999
+
+ingress:
+  main:
+    enabled: true
+
+configMaps:
+  config:
+    enabled: true
+    data:
+      test: value 1
+
+persistence:
+  config:
+    enabled: true
+
+  data:
+    type: configMap
+    name: |-
+      {{- (include "bjw-s.common.lib.chart.names.fullname" $) -}}-config
+    advancedMounts:
+      main: # the controller with whe "main" identifier
+        main: # the container with whe "main" identifier
+          - path: /data/config.yaml
+            readOnly: false
+            subPath: config.yaml
+        second-container: # the container with whe "second-container" identifier
+          - path: /appdata/config
+            readOnly: true
+      second-controller: # the controller with whe "second-controller" identifier
+        main: # the container with whe "main" identifier
+          - path: /data/config.yaml
+            readOnly: false
+            subPath: config.yaml
