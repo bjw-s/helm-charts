@@ -5,7 +5,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/mendhak/http-https-echo
-          tag: 29
+          tag: 30
           pullPolicy: IfNotPresent
 
 service:
