@@ -118,7 +118,7 @@ jobs:
 
       - name: Run tests
         run: |
-          helm plugin install https://github.com/bjw-s/helm3-unittest --version v1.0.0
+          helm plugin install https://github.com/helm-unittest/helm-unittest.git
           helm dep update "charts/${{ matrix.chart }}"
           helm unittest -f "tests/**/*_test.yaml" "charts/${{ matrix.chart }}"
 
