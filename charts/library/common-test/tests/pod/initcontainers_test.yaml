@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+---
 suite: pod initContainers
 templates:
   - common.yaml
@@ -41,3 +43,46 @@ tests:
           value:
             name: template
             value: RELEASE-NAME-admin
+
+  - it: disabled should pass
+    set:
+      controllers.main.initContainers:
+        init1:
+          enabled: false
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+    asserts:
+      - documentIndex: &DeploymentDocument 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDocument
+        notExists:
+          path: spec.template.spec.initContainers
+
+  - it: custom order should pass
+    set:
+      controllers.main.initContainers:
+        init1:
+          order: 2
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+        init2:
+          order: 1
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+    asserts:
+      - documentIndex: &DeploymentDocument 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDocument
+        lengthEqual:
+          path: spec.template.spec.initContainers
+          count: 2
+      - documentIndex: *DeploymentDocument
+        equal:
+          path: spec.template.spec.initContainers[0].name
+          value: init2
+      - documentIndex: *DeploymentDocument
+        equal:
+          path: spec.template.spec.initContainers[1].name
+          value: init1

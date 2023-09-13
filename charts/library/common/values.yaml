@@ -314,8 +314,8 @@ controllers:
         terminationMessagePolicy:
 
     # -- Specify any initContainers here as dictionary items.
-    # Each initContainer should have its own key. The dictionary item key will determine the order.
-    # Helm templates can be used.
+    # Each initContainer should have its own key
+    # initContainers get sorted alphanumerically by the `<order>-<identifier>` combination.
     initContainers: {}
 
 serviceAccount:
