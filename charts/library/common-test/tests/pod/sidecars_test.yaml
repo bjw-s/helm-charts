@@ -16,7 +16,7 @@ tests:
           of: Deployment
       - documentIndex: 0
         equal:
-          path: spec.template.spec.containers[0].name
+          path: spec.template.spec.containers[1].name
           value: template-test
 
   - it: with implicit name should pass
@@ -32,7 +32,7 @@ tests:
           of: Deployment
       - documentIndex: 0
         equal:
-          path: spec.template.spec.containers[0].name
+          path: spec.template.spec.containers[1].name
           value: additional1
 
   - it: with templated name should pass
@@ -49,7 +49,7 @@ tests:
           of: Deployment
       - documentIndex: 0
         equal:
-          path: spec.template.spec.containers[0].name
+          path: spec.template.spec.containers[1].name
           value: RELEASE-NAME-container
 
   - it: with custom env vars dict should pass
@@ -73,31 +73,31 @@ tests:
           of: Deployment
       - documentIndex: *DeploymentDocument
         equal:
-          path: spec.template.spec.containers[1].env[0]
+          path: spec.template.spec.containers[0].env[0]
           value:
             name: main_env
             value: "value"
       - documentIndex: *DeploymentDocument
         equal:
-          path: spec.template.spec.containers[0].env[0]
+          path: spec.template.spec.containers[1].env[0]
           value:
             name: float
             value: "1.5"
       - documentIndex: *DeploymentDocument
         equal:
-          path: spec.template.spec.containers[0].env[1]
+          path: spec.template.spec.containers[1].env[1]
           value:
             name: int
             value: "1"
       - documentIndex: *DeploymentDocument
         equal:
-          path: spec.template.spec.containers[0].env[2]
+          path: spec.template.spec.containers[1].env[2]
           value:
             name: string
             value: value_of_env
       - documentIndex: *DeploymentDocument
         equal:
-          path: spec.template.spec.containers[0].env[3]
+          path: spec.template.spec.containers[1].env[3]
           value:
             name: template
             value: RELEASE-NAME-admin

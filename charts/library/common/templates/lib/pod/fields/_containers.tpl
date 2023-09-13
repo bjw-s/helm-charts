@@ -6,6 +6,7 @@ Returns the value for containers
   {{- $controllerObject := .ctx.controllerObject -}}
 
   {{- /* Default to empty list */ -}}
+  {{- $orderedContainers := dict -}}
   {{- $containers := list -}}
 
   {{- /* Fetch configured containers for this controller */ -}}
@@ -19,7 +20,13 @@ Returns the value for containers
 
     {{- /* Generate the Container spec */ -}}
     {{- $renderedContainer := include "bjw-s.common.lib.container.spec" (dict "rootContext" $rootContext "controllerObject" $controllerObject "containerObject" $containerObject) | fromYaml -}}
-    {{- $containers = append $containers $renderedContainer -}}
+
+    {{- $containerOrder := (dig "order" 99 $containerValues) -}}
+    {{- $_ := set $orderedContainers (printf "%v-%s" $containerOrder $key) $renderedContainer -}}
+  {{- end -}}
+
+  {{- range $key, $containerValues := $orderedContainers -}}
+    {{- $containers = append $containers $containerValues -}}
   {{- end -}}
 
   {{- if not (empty $containers) -}}

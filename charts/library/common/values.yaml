@@ -176,6 +176,11 @@ controllers:
         # -- Override the container name
         nameOverride:
 
+        # -- Override the default container order
+        # Containers get sorted alphanumerically by the `<order>-<identifier>` combination.
+        # @default -- 99
+        order: 1
+
         image:
           # -- image repository
           repository:
