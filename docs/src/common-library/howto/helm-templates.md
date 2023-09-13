@@ -10,15 +10,14 @@ This feature allows you to set the value of that key to the output of the given 
 Given the following `values.yaml`
 
 ```yaml
-image:
-  repository: k8s.gcr.io/git-sync/git-sync
-  tag: v3.6.2
-
-additionalContainers:
+containers:
   subcleaner:
     name: subcleaner
-    image: |-
-      {{ printf "%s:%s" .Values.image.repository (default .Chart.AppVersion .Values.image.tag) | quote }}
+
+    image:
+      repository: k8s.gcr.io/git-sync/git-sync
+      tag: {{.Chart.AppVersion}}
+
     args:
       - --repo=https://github.com/KBlixt/subcleaner.git
       - --branch=master
@@ -29,14 +28,14 @@ additionalContainers:
 This would render as follows:
 
 ```yaml
-image:
-  repository: k8s.gcr.io/git-sync/git-sync
-  tag: v3.6.2
-
-additionalContainers:
+containers:
   subcleaner:
     name: subcleaner
-    image: k8s.gcr.io/git-sync/git-sync:v3.6.2
+
+    image:
+      repository: k8s.gcr.io/git-sync/git-sync
+      tag: v3.6.2
+
     args:
       - --repo=https://github.com/KBlixt/subcleaner.git
       - --branch=master

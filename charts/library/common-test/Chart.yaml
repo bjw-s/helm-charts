@@ -1,0 +1,13 @@
+---
+apiVersion: v2
+description: A helper chart that is used to test the common library chart
+name: common-test
+version: 1.0.0
+kubeVersion: ">=1.22.0-0"
+maintainers:
+  - name: bjw-s
+    email: me@bjw-s.dev
+dependencies:
+  - name: common
+    repository: file://../common
+    version: ">0.0.0-0"

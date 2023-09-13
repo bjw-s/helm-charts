@@ -12,5 +12,4 @@ chart-dirs:
   - charts/other
 
 chart-repos:
-  - bitnami=https://charts.bitnami.com/bitnami
   - bjw-s=https://bjw-s.github.io/helm-charts

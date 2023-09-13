@@ -2,24 +2,18 @@
 Renders the Service objects required by the chart.
 */}}
 {{- define "bjw-s.common.render.services" -}}
-  {{- /* Generate named services as required */ -}}
-  {{- range $name, $service := .Values.service -}}
-    {{- $serviceEnabled := true -}}
-    {{- if hasKey $service "enabled" -}}
-      {{- $serviceEnabled = $service.enabled -}}
-    {{- end -}}
-    {{- if $serviceEnabled -}}
-      {{- $serviceValues := $service -}}
+  {{- /* Generate named Services as required */ -}}
+  {{- $enabledServices := (include "bjw-s.common.lib.service.enabledServices" (dict "rootContext" $) | fromYaml ) -}}
+  {{- range $key, $svc := $enabledServices -}}
+    {{- $serviceValues := (mustDeepCopy $svc) -}}
 
-      {{/* set the default nameOverride to the service name */}}
-      {{- if and (not $serviceValues.nameOverride) (ne $name (include "bjw-s.common.lib.service.primary" $)) -}}
-        {{- $_ := set $serviceValues "nameOverride" $name -}}
-      {{ end -}}
+    {{- /* Create object from the raw Service values */ -}}
+    {{- $serviceObject := (include "bjw-s.common.lib.service.valuesToObject" (dict "rootContext" $ "id" $key "values" $serviceValues)) | fromYaml -}}
 
-      {{/* Include the Service class */}}
-      {{- $_ := set $ "ObjectValues" (dict "service" $serviceValues) -}}
-      {{- include "bjw-s.common.class.service" $ | nindent 0 -}}
-      {{- $_ := unset $.ObjectValues "service" -}}
-    {{- end -}}
+    {{- /* Perform validations on the Service before rendering */ -}}
+    {{- include "bjw-s.common.lib.service.validate" (dict "rootContext" $ "object" $serviceObject) -}}
+
+    {{- /* Include the Service class */ -}}
+    {{- include "bjw-s.common.class.service" (dict "rootContext" $ "object" $serviceObject) | nindent 0 -}}
   {{- end -}}
 {{- end -}}

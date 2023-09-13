@@ -1,0 +1,24 @@
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: ghcr.io/mendhak/http-https-echo
+          tag: 29
+          pullPolicy: IfNotPresent
+
+        probes:
+          liveness:
+            enabled: true
+          readiness:
+            enabled: true
+          startup:
+            enabled: true
+
+ingress:
+  main:
+    enabled: true
+
+persistence:
+  config:
+    enabled: true

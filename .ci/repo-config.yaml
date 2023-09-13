@@ -1,5 +1,10 @@
-excluded-charts-lint: []
+---
+excluded-charts-lint:
+  - library/common-test
 
 excluded-charts-install:
   - apps/k8s-ycl
   - library/common
+
+excluded-charts-release:
+  - library/common-test

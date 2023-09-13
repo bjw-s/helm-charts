@@ -1,0 +1,35 @@
+suite: container ports
+templates:
+  - common.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        isNull:
+          path: spec.template.spec.containers[0].ports
+
+  - it: custom port should pass
+    set:
+      controllers:
+        main:
+          containers:
+            main:
+              ports:
+                - containerPort: 8080
+                  name: http
+                  protocol: TCP
+
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].ports[0]
+          value:
+            containerPort: 8080
+            name: http
+            protocol: TCP

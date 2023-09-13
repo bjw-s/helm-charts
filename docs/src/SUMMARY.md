@@ -11,8 +11,7 @@
 # Helm Charts
 
 - [Common Library](common-library/introduction.md)
-  - [Add-ons](common-library/add-ons/index.md)
-    - [code-server](common-library/add-ons/code-server/index.md)
+
   - [Storage](common-library/storage/index.md)
     - [Permissions](common-library/storage/permissions.md)
     - [Storage types](common-library/storage/types.md)

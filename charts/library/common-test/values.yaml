@@ -1,0 +1,15 @@
+---
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: ghcr.io/mendhak/http-https-echo
+          tag: 29
+          pullPolicy: IfNotPresent
+
+service:
+  main:
+    ports:
+      http:
+        port: 8080
