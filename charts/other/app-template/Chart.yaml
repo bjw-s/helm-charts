@@ -15,7 +15,7 @@ annotations:
   artifacthub.io/changes: |-
     - kind: changed
       description: |
-        Updated library version to 2.0.0-beta.2.
+        Updated library version to 2.0.0-beta.1.
       links:
         - name: Common library chart definition
           url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
