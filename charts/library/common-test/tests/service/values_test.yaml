@@ -1,3 +1,5 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
 suite: service values
 templates:
   - common.yaml
@@ -20,6 +22,9 @@ tests:
       - documentIndex: &SecondServiceDocument 2
         isKind:
           of: Service
+      - documentIndex: *FirstServiceDocument
+        notExists:
+          path: spec.allocateLoadBalancerNodePorts
 
   - it: services can be disabled
     set:
@@ -62,3 +67,33 @@ tests:
         equal:
           path: spec.externalTrafficPolicy
           value: Local
+
+  - it: allocateLoadBalancerNodePorts can be set to true
+    set:
+      service:
+        main:
+          type: LoadBalancer
+          allocateLoadBalancerNodePorts: true
+    asserts:
+      - documentIndex: &ServiceDocument 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument
+        equal:
+          path: spec.allocateLoadBalancerNodePorts
+          value: true
+
+  - it: allocateLoadBalancerNodePorts can be set to false
+    set:
+      service:
+        main:
+          type: LoadBalancer
+          allocateLoadBalancerNodePorts: false
+    asserts:
+      - documentIndex: &ServiceDocument 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument
+        equal:
+          path: spec.allocateLoadBalancerNodePorts
+          value: false

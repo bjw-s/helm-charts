@@ -49,6 +49,9 @@ spec:
   {{- if $serviceObject.externalTrafficPolicy }}
   externalTrafficPolicy: {{ $serviceObject.externalTrafficPolicy }}
   {{- end }}
+  {{- if hasKey $serviceObject "allocateLoadBalancerNodePorts" }}
+  allocateLoadBalancerNodePorts: {{ $serviceObject.allocateLoadBalancerNodePorts }}
+  {{- end }}
   {{- if $serviceObject.sessionAffinity }}
   sessionAffinity: {{ $serviceObject.sessionAffinity }}
   {{- if $serviceObject.sessionAffinityConfig }}
