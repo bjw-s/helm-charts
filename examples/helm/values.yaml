@@ -1,20 +1,23 @@
-image:
-  # -- image repository
-  repository: vaultwarden/server
-  # -- image pull policy
-  pullPolicy: IfNotPresent
-  # -- image tag
-  # this example is not automatically updated, so be sure to use the latest image
-  tag: 1.25.2
+controllers:
+  main:
+    strategy: Recreate
 
-strategy:
-  type: Recreate
+    containers:
+      main:
+        image:
+          # -- image repository
+          repository: vaultwarden/server
+          # -- image tag
+          # this example is not automatically updated, so be sure to use the latest image
+          tag: 1.25.2
+          # -- image pull policy
+          pullPolicy: IfNotPresent
 
-# -- environment variables.
-# See [image docs](https://github.com/dani-garcia/vaultwarden/blob/main/.env.template) for more details.
-env:
-  # -- Config dir
-  DATA_FOLDER: "config"
+        # -- environment variables.
+        # See [image docs](https://github.com/dani-garcia/vaultwarden/blob/main/.env.template) for more details.
+        env:
+          # -- Config dir
+          DATA_FOLDER: "config"
 
 # -- Configures service settings for the chart.
 service:
@@ -50,7 +53,7 @@ ingress:
 persistence:
   config:
     enabled: true
-    type: pvc
+    type: persistentVolumeClaim
     accessMode: ReadWriteOnce
     size: 1Gi
     mountPath: /config

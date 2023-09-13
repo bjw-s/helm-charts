@@ -1,4 +1,4 @@
-suite: service port names
+suite: service ports
 templates:
   - common.yaml
 tests:
@@ -16,7 +16,7 @@ tests:
             name: http
             port: 8080
             protocol: TCP
-            targetPort: http
+            targetPort: 8080
 
   - it: custom name should pass
     set:
@@ -39,7 +39,7 @@ tests:
             name: server
             port: 8080
             protocol: TCP
-            targetPort: server
+            targetPort: 8080
 
   - it: custom target port should pass
     set:
