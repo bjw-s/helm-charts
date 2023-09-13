@@ -17,3 +17,5 @@ annotations:
   artifacthub.io/changes: |-
     - kind: changed
       description: Many things :P
+    - kind: added
+      description: Added support for ordering (init)Containers within a controller.
