@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Welcome</li><li class="spacer"></li><li class="chapter-item expanded "><a href="../introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Helm Charts</li><li class="chapter-item expanded "><a href="../common-library/introduction.html">Common Library</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../common-library/add-ons/index.html">Add-ons</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../common-library/add-ons/code-server/index.html">code-server</a></li></ol></li><li class="chapter-item "><a href="../common-library/storage/index.html">Storage</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../common-library/storage/permissions.html">Permissions</a></li><li class="chapter-item "><a href="../common-library/storage/types.html">Storage types</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../common-library/storage/types/pvc.html">PersistentVolumeClaim</a></li><li class="chapter-item "><a href="../common-library/storage/types/emptydir.html">EmptyDir</a></li><li class="chapter-item "><a href="../common-library/storage/types/hostpath.html">HostPath</a></li><li class="chapter-item "><a href="../common-library/storage/types/configmap.html">ConfigMap</a></li><li class="chapter-item "><a href="../common-library/storage/types/secret.html">Secret</a></li><li class="chapter-item "><a href="../common-library/storage/types/nfs-share.html">NFS share</a></li><li class="chapter-item "><a href="../common-library/storage/types/custom.html">Custom</a></li></ol></li></ol></li><li class="chapter-item "><a href="../common-library/howto/index.html">How to...</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../common-library/howto/multiple-subpath.html">Multiple subPaths for 1 volume</a></li><li class="chapter-item "><a href="../common-library/howto/helm-templates.html">Helm templates</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../app-template/introduction.html" class="active">App Template</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Welcome</li><li class="spacer"></li><li class="chapter-item expanded "><a href="../introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Helm Charts</li><li class="chapter-item expanded "><a href="../common-library/introduction.html">Common Library</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../common-library/storage/index.html">Storage</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../common-library/storage/permissions.html">Permissions</a></li><li class="chapter-item "><a href="../common-library/storage/types.html">Storage types</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../common-library/storage/types/pvc.html">PersistentVolumeClaim</a></li><li class="chapter-item "><a href="../common-library/storage/types/emptydir.html">EmptyDir</a></li><li class="chapter-item "><a href="../common-library/storage/types/hostpath.html">HostPath</a></li><li class="chapter-item "><a href="../common-library/storage/types/configmap.html">ConfigMap</a></li><li class="chapter-item "><a href="../common-library/storage/types/secret.html">Secret</a></li><li class="chapter-item "><a href="../common-library/storage/types/nfs-share.html">NFS share</a></li><li class="chapter-item "><a href="../common-library/storage/types/custom.html">Custom</a></li></ol></li></ol></li><li class="chapter-item "><a href="../common-library/howto/index.html">How to...</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="../common-library/howto/multiple-subpath.html">Multiple subPaths for 1 volume</a></li><li class="chapter-item "><a href="../common-library/howto/helm-templates.html">Helm templates</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="../app-template/introduction.html" class="active">App Template</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -160,23 +160,26 @@ more information about the available configuration options.</p>
 <h4 id="examples"><a class="header" href="#examples">Examples</a></h4>
 <p>This is an example <code>values.yaml</code> file that would deploy the <a href="https://github.com/dani-garcia/vaultwarden">vaultwarden</a>
 application. For more deployment examples, check out the <a href="https://github.com/bjw-s/helm-charts/tree/main/examples/"><code>examples</code> folder</a>.</p>
-<pre><code class="language-yaml">image:
-  # -- image repository
-  repository: vaultwarden/server
-  # -- image pull policy
-  pullPolicy: IfNotPresent
-  # -- image tag
-  # this example is not automatically updated, so be sure to use the latest image
-  tag: 1.25.2
+<pre><code class="language-yaml">controllers:
+  main:
+    strategy: Recreate
 
-strategy:
-  type: Recreate
+    containers:
+      main:
+        image:
+          # -- image repository
+          repository: vaultwarden/server
+          # -- image tag
+          # this example is not automatically updated, so be sure to use the latest image
+          tag: 1.25.2
+          # -- image pull policy
+          pullPolicy: IfNotPresent
 
-# -- environment variables.
-# See [image docs](https://github.com/dani-garcia/vaultwarden/blob/main/.env.template) for more details.
-env:
-  # -- Config dir
-  DATA_FOLDER: &quot;config&quot;
+        # -- environment variables.
+        # See [image docs](https://github.com/dani-garcia/vaultwarden/blob/main/.env.template) for more details.
+        env:
+          # -- Config dir
+          DATA_FOLDER: &quot;config&quot;
 
 # -- Configures service settings for the chart.
 service:
@@ -191,28 +194,31 @@ service:
 ingress:
   # -- Enable and configure ingress settings for the chart under this key.
   main:
-    enabled: false
+    enabled: true
     hosts:
       - host: chart-example.local
         paths:
           - path: /
             pathType: Prefix
             service:
+              name: main
               port: http
           - path: /notifications/hub/negotiate
             pathType: Prefix
             service:
+              name: main
               port: http
           - path: /notifications/hub
             pathType: Prefix
             service:
+              name: main
               port: websocket
 
 # -- Configure persistence settings for the chart under this key.
 persistence:
   config:
     enabled: true
-    type: pvc
+    type: persistentVolumeClaim
     accessMode: ReadWriteOnce
     size: 1Gi
     mountPath: /config

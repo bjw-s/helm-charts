@@ -85,7 +85,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Welcome</li><li class="spacer"></li><li class="chapter-item expanded "><a href="introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Helm Charts</li><li class="chapter-item expanded "><a href="common-library/introduction.html">Common Library</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/add-ons/index.html">Add-ons</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/add-ons/code-server/index.html">code-server</a></li></ol></li><li class="chapter-item "><a href="common-library/storage/index.html">Storage</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/storage/permissions.html">Permissions</a></li><li class="chapter-item "><a href="common-library/storage/types.html">Storage types</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/storage/types/pvc.html">PersistentVolumeClaim</a></li><li class="chapter-item "><a href="common-library/storage/types/emptydir.html">EmptyDir</a></li><li class="chapter-item "><a href="common-library/storage/types/hostpath.html">HostPath</a></li><li class="chapter-item "><a href="common-library/storage/types/configmap.html">ConfigMap</a></li><li class="chapter-item "><a href="common-library/storage/types/secret.html">Secret</a></li><li class="chapter-item "><a href="common-library/storage/types/nfs-share.html">NFS share</a></li><li class="chapter-item "><a href="common-library/storage/types/custom.html">Custom</a></li></ol></li></ol></li><li class="chapter-item "><a href="common-library/howto/index.html">How to...</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/howto/multiple-subpath.html">Multiple subPaths for 1 volume</a></li><li class="chapter-item "><a href="common-library/howto/helm-templates.html">Helm templates</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="app-template/introduction.html">App Template</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><li class="part-title">Welcome</li><li class="spacer"></li><li class="chapter-item expanded "><a href="introduction.html">Introduction</a></li><li class="spacer"></li><li class="chapter-item expanded affix "><li class="part-title">Helm Charts</li><li class="chapter-item expanded "><a href="common-library/introduction.html">Common Library</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/storage/index.html">Storage</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/storage/permissions.html">Permissions</a></li><li class="chapter-item "><a href="common-library/storage/types.html">Storage types</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/storage/types/pvc.html">PersistentVolumeClaim</a></li><li class="chapter-item "><a href="common-library/storage/types/emptydir.html">EmptyDir</a></li><li class="chapter-item "><a href="common-library/storage/types/hostpath.html">HostPath</a></li><li class="chapter-item "><a href="common-library/storage/types/configmap.html">ConfigMap</a></li><li class="chapter-item "><a href="common-library/storage/types/secret.html">Secret</a></li><li class="chapter-item "><a href="common-library/storage/types/nfs-share.html">NFS share</a></li><li class="chapter-item "><a href="common-library/storage/types/custom.html">Custom</a></li></ol></li></ol></li><li class="chapter-item "><a href="common-library/howto/index.html">How to...</a><a class="toggle"><div>❱</div></a></li><li><ol class="section"><li class="chapter-item "><a href="common-library/howto/multiple-subpath.html">Multiple subPaths for 1 volume</a></li><li class="chapter-item "><a href="common-library/howto/helm-templates.html">Helm templates</a></li></ol></li></ol></li><li class="chapter-item expanded "><a href="app-template/introduction.html">App Template</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -189,7 +189,7 @@ repositories containing any application you might wish to run.</p>
 <div>
 <p>The Common library chart is not meant to be installed directly, application
 charts use the Common library as a dependency.
-See the <a href="common-library/../../app-template/introduction.html">app template</a> for an example how to
+See the <a href="common-library/../app-template/introduction.html">app template</a> for an example how to
 deploy it.</p>
 </div>
 </div>
@@ -223,57 +223,6 @@ dependency on what we call the <code>common</code> library.</p>
 <h2 id="source-code"><a class="header" href="#source-code">Source code</a></h2>
 <p>The source code for the common library chart can be found
 <a href="https://github.com/bjw-s/helm-charts/tree/main/charts/library/common">here</a>.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="common-library-add-ons"><a class="header" href="#common-library-add-ons">Common library add-ons</a></h1>
-<p>The common library chart supplies a few add-ons which are meant to simplify some features
-you might be looking for. These are sidecars that run in the same pod as your
-application you configured it with.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="code-server"><a class="header" href="#code-server">Code Server</a></h1>
-<p>The <a href="https://github.com/cdr/code-server">code-server</a> add-on can be used to
-access and modify persistent volume data in your application. This can be
-useful when you need to edit the persistent volume data, for example with
-Home Assistant.</p>
-<h2 id="example-values"><a class="header" href="#example-values">Example values</a></h2>
-<p>Below is a snippet from a <code>values.yaml</code> using the add-on. More configuration
-options can be found in our common chart documentation.</p>
-<div id="admonition-note" class="admonition note">
-<div class="admonition-title">
-<p>Note</p>
-<p><a class="admonition-anchor-link" href="common-library/add-ons/code-server/index.html#admonition-note"></a></p>
-</div>
-<div>
-<p>This example will mount <code>/config</code> into the code-server sidecar.</p>
-</div>
-</div>
-<pre><code class="language-yaml">addons:
-  codeserver:
-    enabled: true
-    image:
-      repository: codercom/code-server
-      tag: 3.9.0
-    workingDir: &quot;/config&quot;
-    args:
-    - --auth
-    - &quot;none&quot;
-    - --user-data-dir
-    - &quot;/config/.vscode&quot;
-    - --extensions-dir
-    - &quot;/config/.vscode&quot;
-    ingress:
-      enabled: true
-      annotations:
-        kubernetes.io/ingress.class: &quot;nginx&quot;
-      hosts:
-      - host: app-config.domain.tld
-        paths:
-        - path: /
-          pathType: Prefix
-      tls:
-      - hosts:
-        - app-config.domain.tld
-    volumeMounts:
-    - name: config
-      mountPath: /config
-</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="common-library-storage"><a class="header" href="#common-library-storage">Common library Storage</a></h1>
 <p>This page describes the different ways you can configure and attach storage to charts
 using the common library.</p>
@@ -469,46 +418,31 @@ for more information.</p>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="how-to"><a class="header" href="#how-to">How to...</a></h1>
 <p>Here you can find information on how to accomplish specific scenario's.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="multiple-subpaths-for-1-volume"><a class="header" href="#multiple-subpaths-for-1-volume">Multiple subPaths for 1 volume</a></h1>
-<p>It is possible to mount multiple subPaths from the same volume to the main
+<p>It is possible to mount multiple subPaths from the same volume to a
 container. This can be achieved by specifying <code>subPath</code> with a list
 instead of a string.</p>
-<div id="admonition-note" class="admonition note">
-<div class="admonition-title">
-<p>Note</p>
-<p><a class="admonition-anchor-link" href="common-library/howto/multiple-subpath.html#admonition-note"></a></p>
-</div>
-<div>
-<p>It is not possible to define <code>mountPath</code> at the top level when using this
-feature</p>
-</div>
-</div>
 <h2 id="examples"><a class="header" href="#examples">Examples:</a></h2>
 <pre><code class="language-yaml">persistence:
   config:
-    enabled: true
-    type: custom
-    volumeSpec:
-      configMap:
-        name: myData
-    subPath:
-      - path: myFirstScript.sh
-        mountPath: /data/myFirstScript.sh
-      - path: myCertificate.pem
-        mountPath: /certs/myCertificate.pem
-        readOnly: true
-</code></pre>
-<pre><code class="language-yaml">persistence:
-  config:
-    enabled: true
-    type: pvc
-    existingClaim: myAppData
-    subPath:
-      - path: .
-        mountPath: /my_media
-      - path: Series
-        mountPath: /series
-      - path: Downloads
-        mountPath: /downloads
+    type: configMap
+    name: my-configMap
+    advancedMounts:
+      main: # the controller with whe &quot;main&quot; identifier
+        main: # the container with whe &quot;main&quot; identifier
+          - path: /data/config.yaml
+            readOnly: false
+            subPath: config.yaml
+          - path: /data/secondConfigFile.yaml
+            readOnly: false
+            subPath: secondConfigFile.yaml
+        second-container: # the container with whe &quot;second-container&quot; identifier
+          - path: /appdata/config
+            readOnly: true
+      second-controller: # the controller with whe &quot;second-controller&quot; identifier
+        main: # the container with whe &quot;main&quot; identifier
+          - path: /data/config.yaml
+            readOnly: false
+            subPath: config.yaml
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="helm-templates"><a class="header" href="#helm-templates">Helm templates</a></h1>
 <p>Some fields in the common library <code>values.yaml</code> allow the use of Helm templates for their values.
@@ -516,15 +450,14 @@ This is often indicated by a remark similar to <code>Helm template enabled</code
 <p>This feature allows you to set the value of that key to the output of the given Helm template.</p>
 <h2 id="example"><a class="header" href="#example">Example:</a></h2>
 <p>Given the following <code>values.yaml</code></p>
-<pre><code class="language-yaml">image:
-  repository: k8s.gcr.io/git-sync/git-sync
-  tag: v3.6.2
-
-additionalContainers:
+<pre><code class="language-yaml">containers:
   subcleaner:
     name: subcleaner
-    image: |-
-      {{ printf &quot;%s:%s&quot; .Values.image.repository (default .Chart.AppVersion .Values.image.tag) | quote }}
+
+    image:
+      repository: k8s.gcr.io/git-sync/git-sync
+      tag: {{.Chart.AppVersion}}
+
     args:
       - --repo=https://github.com/KBlixt/subcleaner.git
       - --branch=master
@@ -532,14 +465,14 @@ additionalContainers:
       - --root=/add-ons/subcleaner
 </code></pre>
 <p>This would render as follows:</p>
-<pre><code class="language-yaml">image:
-  repository: k8s.gcr.io/git-sync/git-sync
-  tag: v3.6.2
-
-additionalContainers:
+<pre><code class="language-yaml">containers:
   subcleaner:
     name: subcleaner
-    image: k8s.gcr.io/git-sync/git-sync:v3.6.2
+
+    image:
+      repository: k8s.gcr.io/git-sync/git-sync
+      tag: v3.6.2
+
     args:
       - --repo=https://github.com/KBlixt/subcleaner.git
       - --branch=master
@@ -559,23 +492,26 @@ more information about the available configuration options.</p>
 <h4 id="examples-1"><a class="header" href="#examples-1">Examples</a></h4>
 <p>This is an example <code>values.yaml</code> file that would deploy the <a href="https://github.com/dani-garcia/vaultwarden">vaultwarden</a>
 application. For more deployment examples, check out the <a href="https://github.com/bjw-s/helm-charts/tree/main/examples/"><code>examples</code> folder</a>.</p>
-<pre><code class="language-yaml">image:
-  # -- image repository
-  repository: vaultwarden/server
-  # -- image pull policy
-  pullPolicy: IfNotPresent
-  # -- image tag
-  # this example is not automatically updated, so be sure to use the latest image
-  tag: 1.25.2
+<pre><code class="language-yaml">controllers:
+  main:
+    strategy: Recreate
 
-strategy:
-  type: Recreate
+    containers:
+      main:
+        image:
+          # -- image repository
+          repository: vaultwarden/server
+          # -- image tag
+          # this example is not automatically updated, so be sure to use the latest image
+          tag: 1.25.2
+          # -- image pull policy
+          pullPolicy: IfNotPresent
 
-# -- environment variables.
-# See [image docs](https://github.com/dani-garcia/vaultwarden/blob/main/.env.template) for more details.
-env:
-  # -- Config dir
-  DATA_FOLDER: &quot;config&quot;
+        # -- environment variables.
+        # See [image docs](https://github.com/dani-garcia/vaultwarden/blob/main/.env.template) for more details.
+        env:
+          # -- Config dir
+          DATA_FOLDER: &quot;config&quot;
 
 # -- Configures service settings for the chart.
 service:
@@ -590,28 +526,31 @@ service:
 ingress:
   # -- Enable and configure ingress settings for the chart under this key.
   main:
-    enabled: false
+    enabled: true
     hosts:
       - host: chart-example.local
         paths:
           - path: /
             pathType: Prefix
             service:
+              name: main
               port: http
           - path: /notifications/hub/negotiate
             pathType: Prefix
             service:
+              name: main
               port: http
           - path: /notifications/hub
             pathType: Prefix
             service:
+              name: main
               port: websocket
 
 # -- Configure persistence settings for the chart under this key.
 persistence:
   config:
     enabled: true
-    type: pvc
+    type: persistentVolumeClaim
     accessMode: ReadWriteOnce
     size: 1Gi
     mountPath: /config
