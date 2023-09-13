@@ -10,4 +10,4 @@ maintainers:
 dependencies:
   - name: common
     repository: file://../common
-    version: "*"
+    version: ">0.0.0-0"
