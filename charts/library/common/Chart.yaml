@@ -19,3 +19,5 @@ annotations:
       description: Many things :P
     - kind: added
       description: Added support for ordering (init)Containers within a controller.
+    - kind: added
+      description: Added support for creating Network Policies.

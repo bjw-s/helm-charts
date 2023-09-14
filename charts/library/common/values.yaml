@@ -631,3 +631,30 @@ persistence:
     #         readOnly: false
     #         subPath: config.yaml
     advancedMounts: {}
+
+# -- Configure the networkPolicies for the chart here.
+# Additional networkPolicies can be added by adding a dictionary key similar to the 'main' networkPolicy.
+# @default -- See below
+networkpolicies:
+  main:
+    # -- Enables or disables the networkPolicy item. Defaults to true
+    enabled: false
+
+    # -- Configure which controller this networkPolicy should target
+    controller: main
+
+    # -- Define a custom podSelector for the networkPolicy. This takes precedence over targeting a controller.
+    # podSelector: {}
+
+    # -- The policyTypes for this networkPolicy
+    policyTypes:
+      - Ingress
+      - Egress
+
+    # -- The rulesets for this networkPolicy
+    # [[ref]](https://kubernetes.io/docs/concepts/services-networking/network-policies/#networkpolicy-resource)
+    rules:
+      # -- The ingress rules for this networkPolicy
+      ingress: []
+      # -- The egress rules for this networkPolicy
+      egress: []
