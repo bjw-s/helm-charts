@@ -1,3 +1,5 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
 suite: container command override
 templates:
   - common.yaml
@@ -8,7 +10,7 @@ tests:
         isKind:
           of: Deployment
       - documentIndex: 0
-        isNull:
+        notExists:
           path: spec.template.spec.containers[0].command
 
   - it: single string should pass

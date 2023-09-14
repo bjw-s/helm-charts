@@ -1,3 +1,5 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
 suite: cronjob configuration
 templates:
   - common.yaml
@@ -28,7 +30,7 @@ tests:
           path: spec.failedJobsHistoryLimit
           value: 1
       - documentIndex: *ControllerDoc
-        isNull:
+        notExists:
           path: spec.jobTemplate.spec.ttlSecondsAfterFinished
       - documentIndex: *ControllerDoc
         equal:
