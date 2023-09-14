@@ -1,3 +1,5 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
 suite: pvc metadata
 templates:
   - common.yaml
@@ -10,7 +12,7 @@ tests:
         isKind:
           of: PersistentVolumeClaim
       - documentIndex: *PersistentVolumeClaimDocument
-        isNull:
+        notExists:
           path: metadata.annotations
       - documentIndex: *PersistentVolumeClaimDocument
         equal:

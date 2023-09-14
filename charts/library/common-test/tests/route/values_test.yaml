@@ -1,3 +1,5 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
 suite: route values
 templates:
   - common.yaml
@@ -51,8 +53,8 @@ tests:
               namespace: parentNamespace
           rules:
             - backendRefs:
-              - name: test
-                namespace: test
+                - name: test
+                  namespace: test
               matches:
                 - path:
                     type: PathPrefix
@@ -65,8 +67,8 @@ tests:
               namespace: parentNamespace
           rules:
             - backendRefs:
-              - name: test
-                namespace: test
+                - name: test
+                  namespace: test
               matches:
                 - path:
                     type: PathPrefix
@@ -79,8 +81,8 @@ tests:
               namespace: parentNamespace
           rules:
             - backendRefs:
-              - name: test
-                namespace: test
+                - name: test
+                  namespace: test
               matches:
                 - path:
                     type: PathPrefix
@@ -93,8 +95,8 @@ tests:
               namespace: parentNamespace
           rules:
             - backendRefs:
-              - name: test
-                namespace: test
+                - name: test
+                  namespace: test
               matches:
                 - path:
                     type: PathPrefix
@@ -107,8 +109,8 @@ tests:
               namespace: parentNamespace
           rules:
             - backendRefs:
-              - name: test
-                namespace: test
+                - name: test
+                  namespace: test
               matches:
                 - path:
                     type: PathPrefix
@@ -118,7 +120,7 @@ tests:
         isKind:
           of: GRPCRoute
       - documentIndex: &HTTPRouteDocument 2
-        isNull:
+        notExists:
           path: spec.rules[0].matches
       - documentIndex: &HTTPRouteDocument 3
         isKind:
@@ -134,19 +136,19 @@ tests:
         isKind:
           of: TCPRoute
       - documentIndex: &HTTPRouteDocument 4
-        isNull:
+        notExists:
           path: spec.rules[0].matches
       - documentIndex: &HTTPRouteDocument 5
         isKind:
           of: TLSRoute
       - documentIndex: &HTTPRouteDocument 5
-        isNull:
+        notExists:
           path: spec.rules[0].matches
       - documentIndex: &HTTPRouteDocument 6
         isKind:
           of: UDPRoute
       - documentIndex: &HTTPRouteDocument 6
-        isNull:
+        notExists:
           path: spec.rules[0].matches
 
   - it: hostnames shouldn't be used for TCPRoutes and UDPRoutes
@@ -173,13 +175,13 @@ tests:
         isKind:
           of: TCPRoute
       - documentIndex: &HTTPRouteDocument 2
-        isNull:
+        notExists:
           path: spec.hostnames
       - documentIndex: &HTTPRouteDocument 3
         isKind:
           of: UDPRoute
       - documentIndex: &HTTPRouteDocument 3
-        isNull:
+        notExists:
           path: spec.hostnames
 
   - it: sectionName in parentRefs should be optional
@@ -201,7 +203,7 @@ tests:
         isKind:
           of: HTTPRoute
       - documentIndex: &HTTPRouteDocument 2
-        isNull:
+        notExists:
           path: spec.parentRefs[0].sectionName
       - documentIndex: &HTTPRouteDocument 3
         isKind:

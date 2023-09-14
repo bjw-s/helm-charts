@@ -1,4 +1,6 @@
-suite: pod network
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod dnsPolicy
 templates:
   - common.yaml
 tests:
@@ -7,27 +9,6 @@ tests:
       - documentIndex: 0
         isKind:
           of: Deployment
-      - documentIndex: 0
-        equal:
-          path: spec.template.spec.hostNetwork
-          value: false
-      - documentIndex: 0
-        equal:
-          path: spec.template.spec.dnsPolicy
-          value: ClusterFirst
-
-  - it: hostNetwork disabled should pass
-    set:
-      defaultPodOptions:
-        hostNetwork: false
-    asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
-          path: spec.template.spec.hostNetwork
-          value: false
       - documentIndex: 0
         equal:
           path: spec.template.spec.dnsPolicy
@@ -41,10 +22,6 @@ tests:
       - documentIndex: 0
         isKind:
           of: Deployment
-      - documentIndex: 0
-        equal:
-          path: spec.template.spec.hostNetwork
-          value: true
       - documentIndex: 0
         equal:
           path: spec.template.spec.dnsPolicy

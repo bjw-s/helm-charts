@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod nodeSelector
+templates:
+  - common.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        notExists:
+          path: spec.template.spec.nodeSelector
+
+  - it: defaultPodOption should pass
+    set:
+      defaultPodOptions:
+        nodeSelector:
+          disktype: ssd
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            disktype: ssd
+
+  - it: defaultPodOption with pod override should pass
+    set:
+      defaultPodOptions:
+        nodeSelector:
+          disktype: ssd
+      controllers:
+        main:
+          pod:
+            nodeSelector:
+              disktype: hdd
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.nodeSelector
+          value:
+            disktype: hdd

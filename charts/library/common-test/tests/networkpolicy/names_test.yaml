@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: networkPolicy names
+templates:
+  - common.yaml
+tests:
+  - it: default should pass
+    set:
+      networkpolicies:
+        main:
+          enabled: true
+    asserts:
+      - hasDocuments:
+          count: 3
+      - documentIndex: &NetworkPolicyDocument 2
+        isKind:
+          of: NetworkPolicy
+      - documentIndex: *NetworkPolicyDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME
+
+  - it: custom name suffix should pass
+    set:
+      networkpolicies:
+        main:
+          enabled: true
+          nameOverride: block-ingress
+    asserts:
+      - documentIndex: &NetworkPolicyDocument 2
+        isKind:
+          of: NetworkPolicy
+      - documentIndex: *NetworkPolicyDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-block-ingress

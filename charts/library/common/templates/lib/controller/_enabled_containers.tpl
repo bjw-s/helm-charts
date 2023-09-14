@@ -15,7 +15,7 @@ Return the enabled containers for a controller.
       {{- end -}}
 
       {{- if $containerEnabled -}}
-        {{- $_ := set $enabledContainers $name . -}}
+        {{- $_ := set $enabledContainers $name $container -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}

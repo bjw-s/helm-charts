@@ -1,6 +1,6 @@
 # common
 
-![Version: 2.0.0](https://img.shields.io/badge/Version-2.0.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 2.0.0-beta.2](https://img.shields.io/badge/Version-2.0.0--beta.2-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -29,7 +29,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
 - name: common
-  version: 2.0.0
+  version: 2.0.0-beta.2
   repository: https://bjw-s.github.io/helm-charts/
 ```
 
@@ -64,6 +64,7 @@ N/A
 | controllers.main.containers.main.image.tag | string | `nil` | image tag |
 | controllers.main.containers.main.lifecycle | object | `{}` | Configure the lifecycle for the container |
 | controllers.main.containers.main.nameOverride | string | `nil` | Override the container name |
+| controllers.main.containers.main.order | int | 99 | Override the default container order Containers get sorted alphanumerically by the `<order>-<identifier>` combination. |
 | controllers.main.containers.main.probes | object | See below | [[ref]](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
 | controllers.main.containers.main.probes.liveness | object | See below | Liveness probe configuration |
 | controllers.main.containers.main.probes.liveness.custom | bool | `false` | Set this to `true` if you wish to specify your own livenessProbe |
@@ -93,7 +94,7 @@ N/A
 | controllers.main.cronjob.successfulJobsHistory | int | `1` | The number of succesful Jobs to keep |
 | controllers.main.cronjob.ttlSecondsAfterFinished | string | `nil` | If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to be automatically deleted. |
 | controllers.main.enabled | bool | `true` | enable the controller. |
-| controllers.main.initContainers | object | `{}` | Specify any initContainers here as dictionary items. Each initContainer should have its own key. The dictionary item key will determine the order. Helm templates can be used. |
+| controllers.main.initContainers | object | `{}` | Specify any initContainers here as dictionary items. Each initContainer should have its own key initContainers get sorted alphanumerically by the `<order>-<identifier>` combination. |
 | controllers.main.labels | object | `{}` | Set labels on the deployment/statefulset/daemonset/cronjob |
 | controllers.main.replicas | int | `1` | Number of desired pods. When using a HorizontalPodAutoscaler, set this to `null`. |
 | controllers.main.revisionHistoryLimit | int | `3` | ReplicaSet revision history limit |

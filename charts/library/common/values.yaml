@@ -176,6 +176,11 @@ controllers:
         # -- Override the container name
         nameOverride:
 
+        # -- Override the default container order
+        # Containers get sorted alphanumerically by the `<order>-<identifier>` combination.
+        # @default -- 99
+        order: 1
+
         image:
           # -- image repository
           repository:
@@ -309,8 +314,8 @@ controllers:
         terminationMessagePolicy:
 
     # -- Specify any initContainers here as dictionary items.
-    # Each initContainer should have its own key. The dictionary item key will determine the order.
-    # Helm templates can be used.
+    # Each initContainer should have its own key
+    # initContainers get sorted alphanumerically by the `<order>-<identifier>` combination.
     initContainers: {}
 
 serviceAccount:
@@ -626,3 +631,32 @@ persistence:
     #         readOnly: false
     #         subPath: config.yaml
     advancedMounts: {}
+
+# -- Configure the networkPolicies for the chart here.
+# Additional networkPolicies can be added by adding a dictionary key similar to the 'main' networkPolicy.
+# @default -- See below
+networkpolicies:
+  main:
+    # -- Enables or disables the networkPolicy item. Defaults to true
+    enabled: false
+
+    # -- Configure which controller this networkPolicy should target
+    controller: main
+
+    # -- Define a custom podSelector for the networkPolicy. This takes precedence over targeting a controller.
+    # podSelector: {}
+
+    # -- The policyTypes for this networkPolicy
+    policyTypes:
+      - Ingress
+      - Egress
+
+    # -- The rulesets for this networkPolicy
+    # [[ref]](https://kubernetes.io/docs/concepts/services-networking/network-policies/#networkpolicy-resource)
+    rules:
+      # -- The ingress rules for this networkPolicy. Allows all ingress traffic by default.
+      ingress:
+        - {}
+      # -- The egress rules for this networkPolicy. Allows all egress traffic by default.
+      egress:
+        - {}

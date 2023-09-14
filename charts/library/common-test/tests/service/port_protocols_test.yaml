@@ -1,3 +1,5 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
 suite: service protocols
 templates:
   - common.yaml
@@ -50,7 +52,7 @@ tests:
           path: spec.ports[0].protocol
           value: TCP
       - documentIndex: *ServiceDocument
-        isNull:
+        notExists:
           path: metadata.annotations
 
   - it: explicit HTTPS should pass

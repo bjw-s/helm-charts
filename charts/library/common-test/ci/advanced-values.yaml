@@ -2,6 +2,7 @@ controllers:
   main:
     containers:
       main:
+        order: 1
         image:
           repository: ghcr.io/mendhak/http-https-echo
           tag: 30
@@ -19,7 +20,7 @@ controllers:
           startup:
             enabled: true
 
-      second-container:
+      a-container:
         image:
           repository: ghcr.io/mendhak/http-https-echo
           tag: 30
