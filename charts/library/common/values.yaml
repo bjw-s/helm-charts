@@ -654,7 +654,9 @@ networkpolicies:
     # -- The rulesets for this networkPolicy
     # [[ref]](https://kubernetes.io/docs/concepts/services-networking/network-policies/#networkpolicy-resource)
     rules:
-      # -- The ingress rules for this networkPolicy
-      ingress: []
-      # -- The egress rules for this networkPolicy
-      egress: []
+      # -- The ingress rules for this networkPolicy. Allows all ingress traffic by default.
+      ingress:
+        - {}
+      # -- The egress rules for this networkPolicy. Allows all egress traffic by default.
+      egress:
+        - {}

@@ -40,7 +40,10 @@ spec:
   {{- with $networkPolicyObject.policyTypes }}
   policyTypes: {{- toYaml . | nindent 4 -}}
   {{- end }}
-  {{- with $networkPolicyObject.rules }}
-    {{- tpl (toYaml .) $rootContext | nindent 2 }}
+  {{- with $networkPolicyObject.rules.ingress }}
+  ingress: {{- tpl (toYaml .) $rootContext | nindent 4 -}}
+  {{- end }}
+  {{- with $networkPolicyObject.rules.egress }}
+  egress: {{- tpl (toYaml .) $rootContext | nindent 4 -}}
   {{- end }}
 {{- end -}}
