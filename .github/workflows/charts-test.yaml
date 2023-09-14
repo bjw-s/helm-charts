@@ -30,7 +30,15 @@ jobs:
       matrix:
         chart: ${{ fromJSON(inputs.chartsToTest) }}
         k8s_version:
-          ["v1.22.17", "v1.23.17", "v1.24.13", "v1.25.9", "v1.26.4", "v1.27.1"]
+          [
+            "v1.22.17",
+            "v1.23.17",
+            "v1.24.17",
+            "v1.25.13",
+            "v1.26.8",
+            "v1.27.5",
+            "v1.28.1",
+          ]
       fail-fast: false
     steps:
       - name: Checkout
