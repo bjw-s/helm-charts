@@ -17,6 +17,8 @@ annotations:
   artifacthub.io/changes: |-
     - kind: changed
       description: Many things :P
+    - kind: removed
+      description: **BREAKING CHANGE** Removed support for add-ons. These can be configured through other means nowadays.
     - kind: added
       description: Added support for ordering (init)Containers within a controller.
     - kind: added
