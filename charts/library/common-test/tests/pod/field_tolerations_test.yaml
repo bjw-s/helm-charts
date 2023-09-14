@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod tolerations
+templates:
+  - common.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        notExists:
+          path: spec.template.spec.tolerations
+
+  - it: defaultPodOption should pass
+    set:
+      defaultPodOptions:
+        tolerations:
+          - key: "key1"
+            operator: "Equal"
+            value: "value1"
+            effect: "NoSchedule"
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: "key1"
+              operator: "Equal"
+              value: "value1"
+              effect: "NoSchedule"
+
+  - it: defaultPodOption with pod override should pass
+    set:
+      defaultPodOptions:
+        tolerations:
+          - key: "key1"
+            operator: "Equal"
+            value: "value1"
+            effect: "NoSchedule"
+      controllers:
+        main:
+          pod:
+            tolerations:
+              - key: "master"
+                operator: "Equal"
+                value: "value1"
+                effect: "NoSchedule"
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.tolerations
+          value:
+            - key: "master"
+              operator: "Equal"
+              value: "value1"
+              effect: "NoSchedule"

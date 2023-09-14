@@ -19,7 +19,7 @@ runtimeClassName: {{ . | trim }}
 schedulerName: {{ . | trim }}
   {{- end -}}
   {{- with ($controllerObject.pod.securityContext) }}
-securityContext: {{ . | trim | nindent 2 }}
+securityContext: {{ . | toYaml | nindent 2 }}
   {{- end -}}
   {{- with ($controllerObject.pod.hostname) }}
 hostname: {{ . | trim }}
@@ -29,13 +29,13 @@ hostNetwork: {{ $controllerObject.pod.hostNetwork }}
 hostPID: {{ $controllerObject.pod.hostPID }}
 dnsPolicy: {{ include "bjw-s.common.lib.pod.field.dnsPolicy" (dict "ctx" $ctx) | trim }}
   {{- with $controllerObject.pod.dnsConfig }}
-dnsConfig: {{ . | trim | nindent 2 }}
+dnsConfig: {{ . | toYaml | nindent 2 }}
   {{- end -}}
   {{- with $controllerObject.pod.hostAliases }}
-hostAliases: {{ . | trim | nindent 2 }}
+hostAliases: {{ . | toYaml | nindent 2 }}
   {{- end -}}
   {{- with $controllerObject.pod.imagePullSecrets }}
-imagePullSecrets: {{ . | trim | nindent 2 }}
+imagePullSecrets: {{ . | toYaml | nindent 2 }}
   {{- end -}}
   {{- with $controllerObject.pod.terminationGracePeriodSeconds }}
 terminationGracePeriodSeconds: {{ . | trim }}
@@ -44,16 +44,16 @@ terminationGracePeriodSeconds: {{ . | trim }}
 restartPolicy: {{ . | trim }}
   {{- end -}}
   {{- with $controllerObject.pod.nodeSelector }}
-nodeSelector: {{ . | trim | nindent 2 }}
+nodeSelector: {{ . | toYaml | nindent 2 }}
   {{- end -}}
   {{- with $controllerObject.pod.affinity }}
-affinity: {{ . | trim | nindent 2 }}
+affinity: {{ . | toYaml | nindent 2 }}
   {{- end -}}
   {{- with $controllerObject.pod.topologySpreadConstraints }}
-topologySpreadConstraints: {{ . | trim | nindent 2 }}
+topologySpreadConstraints: {{ . | toYaml | nindent 2 }}
   {{- end -}}
   {{- with $controllerObject.pod.tolerations }}
-tolerations: {{ . | trim | nindent 2 }}
+tolerations: {{ . | toYaml | nindent 2 }}
   {{- end }}
   {{- with (include "bjw-s.common.lib.pod.field.initContainers" (dict "ctx" $ctx) | trim) }}
 initContainers: {{ . | nindent 2 }}
