@@ -30,10 +30,11 @@ volumeMounts used by the container.
       {{- /* Process configured mounts */ -}}
       {{- if or .globalMounts .advancedMounts -}}
         {{- $mounts := list -}}
-        {{- if hasKey . "globalMounts" -}}
-          {{- $mounts = .globalMounts -}}
-        {{- else if hasKey . "advancedMounts" -}}
-          {{- $mounts = dig $controllerObject.identifier $containerObject.identifier list .advancedMounts -}}
+
+        {{- if not (empty (dig "advancedMounts" "" $persistenceValues)) -}}
+          {{- $mounts = dig $controllerObject.identifier $containerObject.identifier list $persistenceValues.advancedMounts -}}
+        {{- else if not (empty (dig "globalMounts" "" $persistenceValues)) -}}
+          {{- $mounts = $persistenceValues.globalMounts -}}
         {{- end -}}
 
         {{- range $mounts -}}
