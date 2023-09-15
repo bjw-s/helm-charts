@@ -43,6 +43,8 @@ tests:
         data:
           type: configMap
           name: myConfigMap
+          globalMounts:
+            - path: /globalTest
           advancedMounts:
             main:
               main:
@@ -62,11 +64,23 @@ tests:
           path: spec.template.spec.containers[0].volumeMounts[0]
           value:
             name: data
+            mountPath: /globalTest
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts[1]
+          value:
+            name: data
             mountPath: /data/config.yaml
             subPath: config.yaml
       - documentIndex: *DeploymentDoc
         equal:
           path: spec.template.spec.containers[1].volumeMounts[0]
+          value:
+            name: data
+            mountPath: /globalTest
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[1].volumeMounts[1]
           value:
             name: data
             mountPath: /appdata/config

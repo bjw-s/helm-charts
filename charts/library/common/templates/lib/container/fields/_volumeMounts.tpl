@@ -32,8 +32,13 @@ volumeMounts used by the container.
         {{- $mounts := list -}}
         {{- if hasKey . "globalMounts" -}}
           {{- $mounts = .globalMounts -}}
-        {{- else if hasKey . "advancedMounts" -}}
-          {{- $mounts = dig $controllerObject.identifier $containerObject.identifier list .advancedMounts -}}
+        {{- end -}}
+
+        {{- if hasKey . "advancedMounts" -}}
+          {{- $advancedMounts := dig $controllerObject.identifier $containerObject.identifier list .advancedMounts -}}
+          {{- range $advancedMounts -}}
+            {{- $mounts = append $mounts . -}}
+          {{- end -}}
         {{- end -}}
 
         {{- range $mounts -}}

@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 2.0.0-beta.2
+version: 2.0.0-beta.3
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -15,11 +15,12 @@ maintainers:
 annotations:
   # TODO: Update this before releasing
   artifacthub.io/changes: |-
-    - kind: changed
-      description: Many things :P
     - kind: removed
       description: |-
         **BREAKING CHANGE** Removed support for add-ons. These can be configured through other means nowadays.
+    - kind: added
+      description: |-
+        **BREAKING CHANGE** Added support for managing multiple controllers / containers. This has introduced a number of breaking changes. Please see updated values.yaml
     - kind: added
       description: Added support for ordering (init)Containers within a controller.
     - kind: added
