@@ -25,5 +25,5 @@ annotations:
       description: Added support for ordering (init)Containers within a controller.
     - kind: added
       description: Added support for creating Network Policies.
-    - kind: feat
-      description: Detect `gateway.networking.k8s.io` API version
+    - kind: changed
+      description: Automatically detect `gateway.networking.k8s.io` API version
