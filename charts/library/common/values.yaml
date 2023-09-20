@@ -521,7 +521,7 @@ ingress:
 
 # -- Configure the gateway routes for the chart here.
 # Additional routes can be added by adding a dictionary key similar to the 'main' route.
-# [[ref]](https://gateway-api.sigs.k8s.io/references/spec/#gateway.networking.k8s.io%2fv1alpha2)
+# [[ref]](https://gateway-api.sigs.k8s.io/references/spec/)
 # @default -- See below
 route:
   main:
