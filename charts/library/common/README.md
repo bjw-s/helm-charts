@@ -1,6 +1,6 @@
 # common
 
-![Version: 2.0.0-beta.2](https://img.shields.io/badge/Version-2.0.0--beta.2-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 2.0.0-beta.4](https://img.shields.io/badge/Version-2.0.0--beta.4-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -29,7 +29,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
 - name: common
-  version: 2.0.0-beta.2
+  version: 2.0.0-beta.4
   repository: https://bjw-s.github.io/helm-charts/
 ```
 
@@ -145,6 +145,13 @@ N/A
 | ingress.main.nameOverride | string | `nil` | Override the name suffix that is used for this ingress. |
 | ingress.main.primary | bool | `true` | Make this the primary ingress (used in probes, notes, etc...). If there is more than 1 ingress, make sure that only 1 ingress is marked as primary. |
 | ingress.main.tls | list | `[]` | Configure TLS for the ingress. Both secretName and hosts can process a Helm template. |
+| networkpolicies | object | See below | Configure the networkPolicies for the chart here. Additional networkPolicies can be added by adding a dictionary key similar to the 'main' networkPolicy. |
+| networkpolicies.main.controller | string | `"main"` | Configure which controller this networkPolicy should target |
+| networkpolicies.main.enabled | bool | `false` | Enables or disables the networkPolicy item. Defaults to true |
+| networkpolicies.main.policyTypes | list | `["Ingress","Egress"]` | The policyTypes for this networkPolicy |
+| networkpolicies.main.rules | object | `{"egress":[{}],"ingress":[{}]}` | The rulesets for this networkPolicy [[ref]](https://kubernetes.io/docs/concepts/services-networking/network-policies/#networkpolicy-resource) |
+| networkpolicies.main.rules.egress | list | `[{}]` | The egress rules for this networkPolicy. Allows all egress traffic by default. |
+| networkpolicies.main.rules.ingress | list | `[{}]` | The ingress rules for this networkPolicy. Allows all ingress traffic by default. |
 | persistence | object | See below | Configure persistence for the chart here. Additional items can be added by adding a dictionary key similar to the 'config' key. [[ref]](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-storage) |
 | persistence.config.accessMode | string | `"ReadWriteOnce"` | AccessMode for the persistent volume. Make sure to select an access mode that is supported by your storage provider! [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) |
 | persistence.config.advancedMounts | object | `{}` | Explicitly configure mounts for specific controllers and containers. Example: advancedMounts:   main: # the controller with whe "main" identifier     main: # the container with whe "main" identifier       - path: /data/config.yaml         readOnly: true         subPath: config.yaml     second-container: # the container with whe "second-container" identifier       - path: /appdata/config         readOnly: true   second-controller: # the controller with whe "second-controller" identifier     main: # the container with whe "main" identifier       - path: /data/config.yaml         readOnly: false         subPath: config.yaml |
@@ -155,7 +162,7 @@ N/A
 | persistence.config.size | string | `"1Gi"` | The amount of storage that is requested for the persistent volume. |
 | persistence.config.storageClass | string | `nil` | Storage Class for the config volume. If set to `-`, dynamic provisioning is disabled. If set to something else, the given storageClass is used. If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner. |
 | persistence.config.type | string | `"persistentVolumeClaim"` | Sets the persistence type Valid options are persistentVolumeClaim, emptyDir, hostPath, secret, configMap or custom |
-| route | object | See below | Configure the gateway routes for the chart here. Additional routes can be added by adding a dictionary key similar to the 'main' route. [[ref]](https://gateway-api.sigs.k8s.io/references/spec/#gateway.networking.k8s.io%2fv1alpha2) |
+| route | object | See below | Configure the gateway routes for the chart here. Additional routes can be added by adding a dictionary key similar to the 'main' route. [[ref]](https://gateway-api.sigs.k8s.io/references/spec/) |
 | route.main.annotations | object | `{}` | Provide additional annotations which may be required. |
 | route.main.enabled | bool | `false` | Enables or disables the route |
 | route.main.hostnames | list | `[]` | Host addresses |

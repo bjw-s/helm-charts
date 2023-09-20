@@ -7,6 +7,10 @@ within the common library.
   {{- $routeObject := .object -}}
 
   {{- $routeKind := $routeObject.kind | default "HTTPRoute" -}}
+  {{- $apiVersion := "gateway.networking.k8s.io/v1alpha2" -}}
+  {{- if $rootContext.Capabilities.APIVersions.Has (printf "gateway.networking.k8s.io/v1beta1/%s" $routeKind) }}
+    {{- $apiVersion = "gateway.networking.k8s.io/v1beta1" -}}
+  {{- end -}}
   {{- $labels := merge
     ($routeObject.labels | default dict)
     (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
@@ -16,7 +20,7 @@ within the common library.
     (include "bjw-s.common.lib.metadata.globalAnnotations" $rootContext | fromYaml)
   -}}
 ---
-apiVersion: gateway.networking.k8s.io/v1alpha2
+apiVersion: {{ $apiVersion }}
 {{- if and (ne $routeKind "GRPCRoute") (ne $routeKind "HTTPRoute") (ne $routeKind "TCPRoute") (ne $routeKind "TLSRoute") (ne $routeKind "UDPRoute") }}
   {{- fail (printf "Not a valid route kind (%s)" $routeKind) }}
 {{- end }}
