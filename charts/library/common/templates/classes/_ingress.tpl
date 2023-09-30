@@ -54,13 +54,27 @@ spec:
             backend:
               service:
                 {{ $service := include "bjw-s.common.lib.service.getByIdentifier" (dict "rootContext" $rootContext "id" .service.name) | fromYaml -}}
-                {{ $servicePrimaryPort := dict -}}
-                {{ if $service -}}
-                  {{ $servicePrimaryPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "serviceObject" $service) | fromYaml -}}
+                {{ $servicePort := 0 -}}
+
+                {{ if eq (dig "port" nil .service) nil -}}
+                  {{ if $service -}}
+                    {{ $defaultServicePort := include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "serviceObject" $service) | fromYaml -}}
+                    {{ if $defaultServicePort -}}
+                      {{ $servicePort = $defaultServicePort.port -}}
+                    {{ end -}}
+                  {{ end -}}
+                {{ else -}}
+                  {{ if kindIs "float64" .service.port -}}
+                      {{ $servicePort = .service.port -}}
+                  {{ else if kindIs "string" .service.port -}}
+                    {{ if $service -}}
+                      {{ $servicePort = dig "ports" .service.port "port" 0 $service -}}
+                    {{ end -}}
+                  {{ end -}}
                 {{ end -}}
                 name: {{ default .service.name $service.name }}
                 port:
-                  number: {{ default .service.port $servicePrimaryPort.port }}
+                  number: {{ $servicePort }}
           {{- end }}
   {{- end }}
 {{- end }}
