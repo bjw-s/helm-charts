@@ -482,7 +482,7 @@ ingress:
 
     # -- Make this the primary ingress (used in probes, notes, etc...).
     # If there is more than 1 ingress, make sure that only 1 ingress is marked as primary.
-    primary: false
+    # primary: false
 
     # -- Override the name suffix that is used for this ingress.
     nameOverride:
