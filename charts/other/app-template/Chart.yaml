@@ -17,5 +17,7 @@ annotations:
       description: |
         Updated library version to 2.0.0.
       links:
+        - name: Upgrade instructions
+          url: https://github.com/bjw-s/helm-charts/tree/main/charts/other/app-template#from-1xx-to-20x
         - name: Common library chart definition
           url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml

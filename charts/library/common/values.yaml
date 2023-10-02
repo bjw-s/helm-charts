@@ -10,7 +10,7 @@ global:
   annotations: {}
 
 # -- Set default options for all controllers / pods here
-# Each of these options can be overridden on a Pod level
+# Each of these options can be overridden on a Controller level
 defaultPodOptions:
   # -- Defines affinity constraint rules.
   # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
@@ -170,6 +170,9 @@ controllers:
       #   accessMode: "ReadWriteOnce"
       #   size: 2Gi
       #   storageClass: cheap-storage-class
+
+    # Controller-specific overrides for `defaultPodOptions` keys
+    pod: {}
 
     containers:
       main:

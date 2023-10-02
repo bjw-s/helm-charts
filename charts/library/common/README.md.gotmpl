@@ -1,67 +1,5 @@
-{{- define "custom.repository.organization" -}}
-bjw-s
-{{- end -}}
-
-{{- define "custom.repository.url" -}}
-https://github.com/bjw-s/helm-charts
-{{- end -}}
-
 {{- define "custom.helm.url" -}}
 https://bjw-s.github.io/helm-charts/
-{{- end -}}
-
-{{- define "custom.helm.path" -}}
-{{ template "custom.repository.organization" . }}/{{ template "chart.name" . }}
-{{- end -}}
-
-{{- define "custom.notes" -}}
-{{- end -}}
-
-{{- define "custom.requirements" -}}
-## Requirements
-
-{{ template "chart.kubeVersionLine" . }}
-{{- end -}}
-
-{{- define "custom.dependencies" -}}
-## Dependencies
-
-{{ template "chart.requirementsTable" . }}
-{{- end -}}
-
-{{- define "custom.install" -}}
-## Installing the Chart
-
-This is a [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm).
-
-**WARNING: THIS CHART IS NOT MEANT TO BE INSTALLED DIRECTLY**
-{{- end -}}
-
-{{- define "custom.usage" -}}
-{{- end -}}
-
-{{- define "custom.configuration.header" -}}
-## Configuration
-{{- end -}}
-
-{{- define "custom.configuration.readValues" -}}
-Read through the [values.yaml](./values.yaml) file. It has several commented out suggested values.
-{{- end -}}
-
-{{- define "custom.valuesSection" -}}
-## Values
-
-**Important**: When deploying an application Helm chart you can add more values from our common library chart [here](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common)
-
-{{ template "chart.valuesTable" . }}
-{{- end -}}
-
-{{- define "custom.support" -}}
-## Support
-
-- See the [Docs](http://bjw-s.github.io/helm-charts/docs/)
-- Open an [issue](https://github.com/bjw-s/helm-charts/issues/new/choose)
-- Join the k8s-at-home [Discord](https://discord.gg/sTMX7Vh) community
 {{- end -}}
 
 {{ template "chart.header" . }}
@@ -70,26 +8,57 @@ Read through the [values.yaml](./values.yaml) file. It has several commented out
 
 {{ template "chart.description" . }}
 
-{{ template "custom.notes" . }}
-
 {{ template "chart.sourcesSection" . }}
 
-{{ template "custom.requirements" . }}
+## Requirements
 
-{{ template "custom.dependencies" . }}
+{{ template "chart.kubeVersionLine" . }}
 
-{{ template "custom.install" . }}
+## Dependencies
 
-{{ template "custom.usage" . }}
+{{ template "chart.requirementsTable" . }}
 
-{{ template "custom.configuration.header" . }}
+## Installing the Chart
 
-{{ template "custom.configuration.readValues" . }}
+This is a [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm).
 
-{{ template "custom.custom.configuration" . }}
+**🚨 WARNING: THIS CHART IS NOT MEANT TO BE INSTALLED DIRECTLY**
 
-{{ template "custom.valuesSection" . }}
+## Using this library
 
-{{ template "custom.support" . }}
+Include this chart as a dependency in your `Chart.yaml` e.g.
+
+```yaml
+# Chart.yaml
+dependencies:
+  - name: common
+    version: {{template "chart.version" .}}
+    repository: {{template "custom.helm.url"}}
+```
+
+For more information, take a look at the [Docs](http://bjw-s.github.io/helm-charts/docs/common-library/introduction/).
+
+## Configuration
+
+Read through the [values.yaml](./values.yaml) file. It has several commented out suggested values.
+
+## Values
+
+**Important**: When deploying an application Helm chart you can add more values from the common library chart [here](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common)
+
+The following table contains an overview of available values and their descriptions / default values.
+
+<details>
+<summary>Expand</summary>
+
+{{ template "chart.valuesTable" . }}
+
+</details>
+
+## Support
+
+- See the [Docs](http://bjw-s.github.io/helm-charts/docs/)
+- Open an [issue](https://github.com/bjw-s/helm-charts/issues/new/choose)
+- Join the k8s-at-home [Discord](https://discord.gg/sTMX7Vh) community
 
 {{ template "helm-docs.versionFooter" . }}

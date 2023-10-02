@@ -13,7 +13,6 @@ maintainers:
   - name: bjw-s
     email: me@bjw-s.dev
 annotations:
-  # TODO: Update this before releasing
   artifacthub.io/changes: |-
     - kind: removed
       description: |-

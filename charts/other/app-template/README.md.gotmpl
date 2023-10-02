@@ -1,0 +1,152 @@
+{{- define "custom.helm.url" -}}
+https://bjw-s.github.io/helm-charts/
+{{- end -}}
+
+{{ template "chart.header" . }}
+
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+## Requirements
+
+{{ template "chart.kubeVersionLine" . }}
+
+## Dependencies
+
+{{ template "chart.requirementsTable" . }}
+
+## Installing the Chart
+
+```bash
+# Add the repository
+helm repo add bjw-s {{template "custom.helm.url"}}
+
+# Install the chart
+helm install bjw-s app-template -f values.yaml
+```
+
+## Configuration
+
+Read through the [values.yaml](../../library/common/values.yaml) file of the [common library](../../library/common/) chart. It has several commented out suggested values.
+The [CI tests](../../library/common-test/ci) contain a number of scenarios that may prove useful as well.
+
+## Upgrade instructions
+
+### From 1.x.x to 2.0.x
+
+Given the following real-life example values.yaml for app-template v1:
+
+<details>
+<summary>Expand</summary>
+
+```yaml
+image:
+  repository: ghcr.io/onedr0p/sabnzbd
+  tag: latest
+  pullPolicy: IfNotPresent
+
+podSecurityContext:
+  runAsUser: 568
+  runAsGroup: 568
+  fsGroup: 568
+  fsGroupChangePolicy: "OnRootMismatch"
+  supplementalGroups:
+    - 65539
+
+service:
+  main:
+    ports:
+      http:
+        port: 8080
+
+ingress:
+  main:
+    enabled: true
+    ingressClassName: "ingress-nginx"
+
+persistence:
+  media:
+    enabled: true
+    existingClaim: nas-media
+    mountPath: /data/nas-media
+
+probes:
+  liveness:
+    enabled: false
+  readiness:
+    enabled: false
+  startup:
+    enabled: false
+```
+
+</details>
+
+The values for app-template v2.x would become this:
+
+```yaml
+defaultPodOptions:
+  securityContext:
+    runAsUser: 568
+    runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: "OnRootMismatch"
+    supplementalGroups:
+      - 65539
+
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: ghcr.io/onedr0p/sabnzbd
+          tag: latest
+          pullPolicy: IfNotPresent
+
+        probes:
+          liveness:
+            enabled: false
+          readiness:
+            enabled: false
+          startup:
+            enabled: false
+
+service:
+  main:
+    ports:
+      http:
+        port: 8080
+
+ingress:
+  main:
+    enabled: true
+    className: "ingress-nginx"
+
+persistence:
+  media:
+    existingClaim: nas-media
+    globalMounts:
+      - path: /data/nas-media
+```
+
+#### Changes in this example
+
+This is not meant as an exhaustive list of changes, but rather a "most common" example.
+
+- `podSecurityContext` has been moved to `defaultPodOptions.securityContext`. It is also possible to configure this on a controller-specific basis by moving it to `controllers.main.pod.securityContext` instead.
+- `image` has been moved to `controllers.main.containers.main.image` so that multiple containers can be configured.
+- `ingress.main.ingressClassName` has been renamed to `ingress.main.className`.
+- `ingress.main.enabled` can be removed, since items are considered enabled by default (they can still be disabled by adding `enabled: false`).
+- `persistence.media.mountPath` has been moved to `persistence.media.globalMounts.*.path` to allow multiple mountPaths for the same persistence item.
+- `persistence.media.enabled` can be removed, since items are considered enabled by default (they can still be disabled by adding `enabled: false`).
+- `probes` has been moved to `controllers.main.containers.main.probes` so that multiple containers can be configured.
+
+## Support
+
+- See the [Docs](http://bjw-s.github.io/helm-charts/docs/)
+- Open an [issue](https://github.com/bjw-s/helm-charts/issues/new/choose)
+- Join the k8s-at-home [Discord](https://discord.gg/sTMX7Vh) community
+
+{{ template "helm-docs.versionFooter" . }}
