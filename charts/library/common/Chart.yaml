@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 2.0.0-beta.3
+version: 2.0.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -13,7 +13,6 @@ maintainers:
   - name: bjw-s
     email: me@bjw-s.dev
 annotations:
-  # TODO: Update this before releasing
   artifacthub.io/changes: |-
     - kind: removed
       description: |-
@@ -25,3 +24,5 @@ annotations:
       description: Added support for ordering (init)Containers within a controller.
     - kind: added
       description: Added support for creating Network Policies.
+    - kind: changed
+      description: Automatically detect `gateway.networking.k8s.io` API version

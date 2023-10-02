@@ -22,3 +22,8 @@ ingress:
 persistence:
   config:
     enabled: true
+  media:
+    enabled: true
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 1Gi

@@ -64,16 +64,16 @@ persistence:
     name: |-
       {{- (include "bjw-s.common.lib.chart.names.fullname" $) -}}-config
     advancedMounts:
-      main: # the controller with whe "main" identifier
-        main: # the container with whe "main" identifier
+      main: # the controller with the "main" identifier
+        main: # the container with the "main" identifier
           - path: /data/config.yaml
             readOnly: false
             subPath: config.yaml
-        second-container: # the container with whe "second-container" identifier
+        second-container: # the container with the "second-container" identifier
           - path: /appdata/config
             readOnly: true
-      second-controller: # the controller with whe "second-controller" identifier
-        main: # the container with whe "main" identifier
+      second-controller: # the controller with the "second-controller" identifier
+        main: # the container with the "main" identifier
           - path: /data/config.yaml
             readOnly: false
             subPath: config.yaml

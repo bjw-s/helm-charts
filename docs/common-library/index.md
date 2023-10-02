@@ -1,11 +1,16 @@
-# Common library
+---
+hide:
+  - toc
+---
 
-```admonish note
-The Common library chart is not meant to be installed directly, application
-charts use the Common library as a dependency.
-See the [app template](../app-template/introduction.md ) for an example how to
-deploy it.
-```
+# Common Library
+
+!!! note
+
+    The Common library chart is not meant to be installed directly, application
+    charts use the Common library as a dependency.
+    See the [app template](../app-template/index.md) for an example how to
+    deploy it.
 
 ## Background
 
@@ -20,17 +25,17 @@ In Helm 3, their team introduced the concept of a
 The common library was created because I saw many charts requiring only a
 few select configuration options in their Helm charts.
 
-```admonish note
-Take one of the many applications like `sonarr` or `nzbget`. Each of these
-charts only require setting `service`, `port`, `persistence`, `ingress`
-and `image` since state and app configuration is handled by the application
-itself.
-```
+!!! note
+
+    Take one of the many applications like `sonarr` or `nzbget`. Each of these
+    charts only require setting `service`, `port`, `persistence`, `ingress`
+    and `image` since state and app configuration is handled by the application
+    itself.
 
 In order to stay somewhat DRY (Don't Repeat Yourself) and keeping with Helm 3
 usage for a Library chart, I saw this pattern and decided it was worth it to
 create a library. This means each one of these app charts has a
-dependency on what we call the `common` library.
+dependency on what I call the `common` library.
 
 ## Source code
 

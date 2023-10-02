@@ -10,7 +10,7 @@ global:
   annotations: {}
 
 # -- Set default options for all controllers / pods here
-# Each of these options can be overridden on a Pod level
+# Each of these options can be overridden on a Controller level
 defaultPodOptions:
   # -- Defines affinity constraint rules.
   # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
@@ -170,6 +170,9 @@ controllers:
       #   accessMode: "ReadWriteOnce"
       #   size: 2Gi
       #   storageClass: cheap-storage-class
+
+    # Controller-specific overrides for `defaultPodOptions` keys
+    pod: {}
 
     containers:
       main:
@@ -521,7 +524,7 @@ ingress:
 
 # -- Configure the gateway routes for the chart here.
 # Additional routes can be added by adding a dictionary key similar to the 'main' route.
-# [[ref]](https://gateway-api.sigs.k8s.io/references/spec/#gateway.networking.k8s.io%2fv1alpha2)
+# [[ref]](https://gateway-api.sigs.k8s.io/references/spec/)
 # @default -- See below
 route:
   main:
@@ -583,7 +586,7 @@ persistence:
     enabled: false
 
     # -- Sets the persistence type
-    # Valid options are persistentVolumeClaim, emptyDir, hostPath, secret, configMap or custom
+    # Valid options are persistentVolumeClaim, emptyDir, nfs, hostPath, secret, configMap or custom
     type: persistentVolumeClaim
 
     # -- Storage Class for the config volume.
@@ -617,16 +620,16 @@ persistence:
     # -- Explicitly configure mounts for specific controllers and containers.
     # Example:
     # advancedMounts:
-    #   main: # the controller with whe "main" identifier
-    #     main: # the container with whe "main" identifier
+    #   main: # the controller with the "main" identifier
+    #     main: # the container with the "main" identifier
     #       - path: /data/config.yaml
     #         readOnly: true
     #         subPath: config.yaml
-    #     second-container: # the container with whe "second-container" identifier
+    #     second-container: # the container with the "second-container" identifier
     #       - path: /appdata/config
     #         readOnly: true
-    #   second-controller: # the controller with whe "second-controller" identifier
-    #     main: # the container with whe "main" identifier
+    #   second-controller: # the controller with the "second-controller" identifier
+    #     main: # the container with the "main" identifier
     #       - path: /data/config.yaml
     #         readOnly: false
     #         subPath: config.yaml

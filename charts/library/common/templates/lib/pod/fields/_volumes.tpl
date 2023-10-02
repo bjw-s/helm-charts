@@ -93,7 +93,7 @@ Returns the value for volumes
         {{- $_ := set $volume.hostPath "type" . -}}
       {{- end -}}
 
-    {{- /* hostPath persistence type */ -}}
+    {{- /* nfs persistence type */ -}}
     {{- else if eq $persistenceValues.type "nfs" -}}
       {{- $_ := set $volume "nfs" dict -}}
       {{- $_ := set $volume.nfs "server" (required "server not set" $persistenceValues.server) -}}
