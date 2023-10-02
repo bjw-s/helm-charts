@@ -1,3 +1,8 @@
+---
+hide:
+  - toc
+---
+
 # Helm templates
 
 Some fields in the common library `values.yaml` allow the use of Helm templates for their values.
@@ -5,7 +10,7 @@ This is often indicated by a remark similar to `Helm template enabled` in the fi
 
 This feature allows you to set the value of that key to the output of the given Helm template.
 
-## Example:
+## Example
 
 Given the following `values.yaml`
 

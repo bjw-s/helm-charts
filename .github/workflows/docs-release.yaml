@@ -7,7 +7,11 @@ on:
       - main
     paths:
       - ".github/workflows/docs-release.yaml"
+      - ".ci/mkdocs/mkdocs.yml"
       - "docs/**"
+
+permissions:
+  contents: write
 
 jobs:
   release-docs:
@@ -24,22 +28,27 @@ jobs:
           private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
 
       - name: Checkout main branch
-        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
+        uses: actions/checkout@v4
         with:
           token: ${{ steps.get-app-token.outputs.token }}
           fetch-depth: 0
 
-      - name: Build docs
-        uses: docker://ghcr.io/bjw-s/mdbook:0.4.35@sha256:ce016bc119d7501dd59e8f5f2491b0ccd6cbbb328f18ca4d6a0365ef4926e8d6
+      - uses: actions/setup-python@v4
         with:
-          args: bash -c "cd docs && mdbook build"
+          python-version: 3.x
+
+      - name: Install requirements
+        run: pip install -r docs/requirements.txt
+
+      - name: Build and publish docs
+        run: mkdocs build -f .ci/mkdocs/mkdocs.yml
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3.9.3
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ steps.get-app-token.outputs.token }}
-          publish_dir: ./docs/book/html
+          publish_dir: ./site
           destination_dir: docs
-          user_name: 'bjw-s-bot[bot]'
-          user_email: 'bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>'
+          user_name: "bjw-s-bot[bot]"
+          user_email: "bjw-s-bot <87358111+bjw-s-bot[bot]@users.noreply.github.com>"

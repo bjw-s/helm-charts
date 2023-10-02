@@ -1,0 +1,79 @@
+---
+# Project information
+site_name: bjw-s Helm Charts
+site_url: https://bjw-s.github.io/helm-charts/
+site_author: bjw-s
+
+# Repository
+repo_name: bjw-s/helm-charts
+repo_url: https://github.com/bjw-s/helm-charts
+
+# Configuration
+docs_dir: ../../docs
+site_dir: ../../site
+
+theme:
+  name: material
+  features:
+    - content.code.annotate
+    - content.code.copy
+    - navigation.expand
+    - navigation.indexes
+    - navigation.path
+    - navigation.sections
+    - navigation.tabs
+    - navigation.top
+    - search.suggest
+  palette:
+    scheme: slate
+    primary: black
+    accent: indigo
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    logo: material/kubernetes
+
+# Plugins
+plugins:
+  - search:
+      separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - minify:
+      minify_html: true
+
+# Extensions
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+
+# Page tree
+nav:
+  - index.md
+  - Common Library:
+      - common-library/index.md
+      - Storage:
+          - Permissions: common-library/storage/permissions.md
+          - Global options: common-library/storage/globalOptions.md
+          - Types-specific options:
+              - configMap: common-library/storage/types/configmap.md
+              - Custom: common-library/storage/types/custom.md
+              - emptyDir: common-library/storage/types/emptyDir.md
+              - hostPath: common-library/storage/types/hostPath.md
+              - NFS share: common-library/storage/types/nfs-share.md
+              - persistentVolumeClaim: common-library/storage/types/persistentVolumeClaim.md
+              - Secret: common-library/storage/types/secret.md
+      - How To...:
+          - common-library/howto/index.md
+          - Helm templates: common-library/howto/helm-templates.md
+          - Multiple subPaths for 1 volume: common-library/howto/multiple-subpath.md
+  - App-Template:
+      - app-template/index.md
