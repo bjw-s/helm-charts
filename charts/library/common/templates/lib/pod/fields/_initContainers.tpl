@@ -25,7 +25,7 @@ Returns the value for initContainers
       {{- include "bjw-s.common.lib.container.validate" (dict "rootContext" $ "object" $containerObject) -}}
 
       {{- /* Generate the Container spec */ -}}
-      {{- $renderedContainer := include "bjw-s.common.lib.container.spec" (dict "rootContext" $rootContext "containerObject" $containerObject) | fromYaml -}}
+      {{- $renderedContainer := include "bjw-s.common.lib.container.spec" (dict "rootContext" $rootContext "controllerObject" $controllerObject "containerObject" $containerObject) | fromYaml -}}
 
       {{- $containerOrder := (dig "order" 99 $containerValues) -}}
       {{- $_ := set $orderedContainers (printf "%v-%s" $containerOrder $key) $renderedContainer -}}
