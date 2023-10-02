@@ -30,6 +30,10 @@ examples/helm/values.yaml
 --8<--
 ```
 
+## Upgrade instructions
+
+--8<-- "charts/other/app-template/README.md:34:141"
+
 ## Source code
 
 The source code for the app template chart can be found
