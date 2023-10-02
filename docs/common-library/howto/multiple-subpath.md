@@ -17,19 +17,19 @@ persistence:
     type: configMap
     name: my-configMap
     advancedMounts:
-      main: # (1)
-        main: # (2)
+      main: # (1)!
+        main: # (2)!
           - path: /data/config.yaml
             readOnly: false
             subPath: config.yaml
           - path: /data/secondConfigFile.yaml
             readOnly: false
             subPath: secondConfigFile.yaml
-        second-container: # (3)
+        second-container: # (3)!
           - path: /appdata/config
             readOnly: true
-      second-controller: # (4)
-        main: # (5)
+      second-controller: # (4)!
+        main: # (5)!
           - path: /data/config.yaml
             readOnly: false
             subPath: config.yaml
