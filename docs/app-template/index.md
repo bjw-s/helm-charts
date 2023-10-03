@@ -32,7 +32,7 @@ examples/helm/values.yaml
 
 ## Upgrade instructions
 
---8<-- "charts/other/app-template/README.md:34:141"
+--8<-- "charts/other/app-template/README.md:34:155"
 
 ## Source code
 

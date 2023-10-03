@@ -46,6 +46,7 @@ plugins:
 # Extensions
 markdown_extensions:
   - admonition
+  - pymdownx.emoji
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
