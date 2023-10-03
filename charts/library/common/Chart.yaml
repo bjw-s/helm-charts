@@ -16,7 +16,10 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        Mounting of volumeClaimTemplates was not implemented.
+        Mounting of volumeClaimTemplates was not implemented properly.
     - kind: fixed
       description: |-
-        advancedMounts for initContainers resulted in an error.
+        Using advancedMounts for initContainers resulted in an error.
+    - kind: fixed
+      description: |-
+        Validations for container images have been improved.
