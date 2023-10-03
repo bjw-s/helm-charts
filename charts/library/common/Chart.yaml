@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 2.0.1
+version: 2.0.2
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,10 +16,4 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        Mounting of volumeClaimTemplates was not implemented properly.
-    - kind: fixed
-      description: |-
-        Using advancedMounts for initContainers resulted in an error.
-    - kind: fixed
-      description: |-
-        Validations for container images have been improved.
+        ServiceAccount could not be referenced without creating
