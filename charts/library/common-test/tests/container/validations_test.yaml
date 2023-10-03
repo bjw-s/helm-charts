@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: Container validations
+templates:
+  - common.yaml
+tests:
+  - it: image required to be a dictionary
+    set:
+      controllers:
+        main:
+          containers:
+            test:
+              image: "test:latest"
+    asserts:
+      - failedTemplate:
+          errorMessage: "Image required to be a dictionary with repository and tag fields. (controller main, container test)"
+
+  - it: image repository is required
+    set:
+      controllers:
+        main:
+          containers:
+            test:
+              image:
+                repository: ""
+                tag: "test"
+    asserts:
+      - failedTemplate:
+          errorMessage: "No image repository specified for container. (controller main, container test)"
+
+  - it: image tag is required
+    set:
+      controllers:
+        main:
+          containers:
+            test:
+              image:
+                repository: test
+                tag: ""
+    asserts:
+      - failedTemplate:
+          errorMessage: "No image tag specified for container. (controller main, container test)"

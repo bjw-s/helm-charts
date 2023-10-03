@@ -22,7 +22,7 @@ Returns the value for initContainers
       {{- $containerObject := (include "bjw-s.common.lib.container.valuesToObject" (dict "rootContext" $ "id" $key "values" $containerValues)) | fromYaml -}}
 
       {{- /* Perform validations on the Container before rendering */ -}}
-      {{- include "bjw-s.common.lib.container.validate" (dict "rootContext" $ "object" $containerObject) -}}
+      {{- include "bjw-s.common.lib.container.validate" (dict "rootContext" $ "controllerObject" $controllerObject "containerObject" $containerObject) -}}
 
       {{- /* Generate the Container spec */ -}}
       {{- $renderedContainer := include "bjw-s.common.lib.container.spec" (dict "rootContext" $rootContext "controllerObject" $controllerObject "containerObject" $containerObject) | fromYaml -}}
