@@ -4,38 +4,14 @@ suite: persistence volumeclaimtemplates
 templates:
   - common.yaml
 tests:
-  - it: volumeClaimTemplates should pass
+  - it: default should pass
     set:
       controllers.main:
         type: statefulset
-        statefulset:
-          volumeClaimTemplates:
-            - name: "storage"
-              accessMode: "ReadWriteOnce"
-              size: "10Gi"
-              storageClass: "storage"
-              labels:
-                test: "label"
-              annotations:
-                test: "annotation"
     asserts:
-      - documentIndex: 0
+      - documentIndex: &StatefulSetDoc 0
         isKind:
           of: StatefulSet
-      - documentIndex: 0
-        equal:
-          path: spec.volumeClaimTemplates[0]
-          value:
-            metadata:
-              name: storage
-              labels:
-                test: "label"
-              annotations:
-                test: "annotation"
-            spec:
-              accessModes:
-                - ReadWriteOnce
-              resources:
-                requests:
-                  storage: 10Gi
-              storageClassName: storage
+      - documentIndex: *StatefulSetDoc
+        notExists:
+          path: spec.volumeClaimTemplates

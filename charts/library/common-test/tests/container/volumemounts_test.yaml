@@ -183,3 +183,93 @@ tests:
             name: config
             mountPath: /dev
             subPath: mySubPath
+
+  - it: volumeClaimTemplates with default mounts should pass
+    set:
+      controllers.main:
+        type: statefulset
+        statefulset:
+          volumeClaimTemplates:
+            - name: "storage"
+              accessMode: "ReadWriteOnce"
+              size: "10Gi"
+              storageClass: "storage"
+    asserts:
+      - documentIndex: &StatefulSetDoc 0
+        isKind:
+          of: StatefulSet
+      - documentIndex: *StatefulSetDoc
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: storage
+            mountPath: /storage
+
+  - it: volumeClaimTemplates with globalMounts should pass
+    set:
+      controllers.main:
+        type: statefulset
+        statefulset:
+          volumeClaimTemplates:
+            - name: "storage"
+              accessMode: "ReadWriteOnce"
+              size: "10Gi"
+              storageClass: "storage"
+              globalMounts:
+                - path: /tmp/storage
+                - path: /tmp/secondMountPoint
+    asserts:
+      - documentIndex: &StatefulSetDoc 0
+        isKind:
+          of: StatefulSet
+      - documentIndex: *StatefulSetDoc
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: storage
+            mountPath: /tmp/storage
+      - documentIndex: *StatefulSetDoc
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts[1]
+          value:
+            name: storage
+            mountPath: /tmp/secondMountPoint
+
+  - it: volumeClaimTemplates with advancedMounts should pass
+    set:
+      controllers.main:
+        type: statefulset
+        statefulset:
+          volumeClaimTemplates:
+            - name: "storage"
+              accessMode: "ReadWriteOnce"
+              size: "10Gi"
+              storageClass: "storage"
+              advancedMounts:
+                second-container:
+                  - path: /tmp/storage
+                  - path: /tmp/secondMountPoint
+        containers:
+          second-container:
+            image:
+              repository: ghcr.io/mendhak/http-https-echo
+              tag: 30
+    asserts:
+      - documentIndex: &StatefulSetDoc 0
+        isKind:
+          of: StatefulSet
+      - documentIndex: *StatefulSetDoc
+        notExists:
+          path: spec.template.spec.containers[0].volumeMounts
+      - documentIndex: *StatefulSetDoc
+        equal:
+          path: spec.template.spec.containers[1].volumeMounts[0]
+          value:
+            name: storage
+            mountPath: /tmp/storage
+      - documentIndex: *StatefulSetDoc
+        equal:
+          path: spec.template.spec.containers[1].volumeMounts[1]
+          value:
+            name: storage
+            mountPath: /tmp/secondMountPoint
