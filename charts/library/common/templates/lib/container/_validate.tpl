@@ -3,9 +3,18 @@ Validate container values
 */}}
 {{- define "bjw-s.common.lib.container.validate" -}}
   {{- $rootContext := .rootContext -}}
-  {{- $containerValues := .object -}}
+  {{- $controllerObject := .controllerObject -}}
+  {{- $containerObject := .containerObject -}}
 
-  {{- if eq (dig "image" "repository" "" $containerValues) ""  -}}
-    {{- fail (printf "No image repository specified for container. (controller: %s, container: %s)" $containerValues.controller $containerValues.identifier) }}
+  {{- if not (kindIs "map" $containerObject.image)  -}}
+    {{- fail (printf "Image required to be a dictionary with repository and tag fields. (controller %s, container %s)" $controllerObject.identifier $containerObject.identifier) }}
+  {{- end -}}
+
+  {{- if eq (dig "image" "repository" "" $containerObject) ""  -}}
+    {{- fail (printf "No image repository specified for container. (controller %s, container %s)" $controllerObject.identifier $containerObject.identifier) }}
+  {{- end -}}
+
+  {{- if eq (dig "image" "tag" "" $containerObject) ""  -}}
+    {{- fail (printf "No image tag specified for container. (controller %s, container %s)" $controllerObject.identifier $containerObject.identifier) }}
   {{- end -}}
 {{- end -}}

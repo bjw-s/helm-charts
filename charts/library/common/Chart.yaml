@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 2.0.0
+version: 2.0.1
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -14,15 +14,12 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: removed
+    - kind: fixed
       description: |-
-        **BREAKING CHANGE** Removed support for add-ons. These can be configured through other means nowadays.
-    - kind: added
+        Mounting of volumeClaimTemplates was not implemented properly.
+    - kind: fixed
       description: |-
-        **BREAKING CHANGE** Added support for managing multiple controllers / containers. This has introduced a number of breaking changes. Please see updated values.yaml
-    - kind: added
-      description: Added support for ordering (init)Containers within a controller.
-    - kind: added
-      description: Added support for creating Network Policies.
-    - kind: changed
-      description: Automatically detect `gateway.networking.k8s.io` API version
+        Using advancedMounts for initContainers resulted in an error.
+    - kind: fixed
+      description: |-
+        Validations for container images have been improved.

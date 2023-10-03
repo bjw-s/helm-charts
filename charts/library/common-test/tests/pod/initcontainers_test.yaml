@@ -10,6 +10,7 @@ tests:
         init1:
           image:
             repository: ghcr.io/mendhak/http-https-echo
+            tag: latest
           env:
             int: 1
             float: 1.5
@@ -66,10 +67,12 @@ tests:
           order: 2
           image:
             repository: ghcr.io/mendhak/http-https-echo
+            tag: latest
         init2:
           order: 1
           image:
             repository: ghcr.io/mendhak/http-https-echo
+            tag: latest
     asserts:
       - documentIndex: &DeploymentDocument 0
         isKind:
