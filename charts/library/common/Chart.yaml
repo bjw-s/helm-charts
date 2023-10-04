@@ -17,3 +17,6 @@ annotations:
     - kind: fixed
       description: |-
         ServiceAccount could not be referenced without creating
+    - kind: fixed
+      description: |-
+        Controllers without a type did not default to Deployment

@@ -6,13 +6,88 @@ templates:
 tests:
   - it: default should pass
     asserts:
-      - documentIndex: &ControllerDoc 0
+      - documentIndex: &deploymentDoc 0
         isKind:
           of: Deployment
-      - documentIndex: *ControllerDoc
+      - documentIndex: *deploymentDoc
         equal:
           path: metadata.name
           value: RELEASE-NAME
+      - documentIndex: *deploymentDoc
+        equal:
+          path: metadata.labels['app.kubernetes.io/component']
+          value: main
+
+  - it: additional controllers should pass
+    set:
+      controllers:
+        second:
+          containers:
+            main:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 30
+    asserts:
+      - hasDocuments:
+          count: 3
+      - documentIndex: &firstDeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *firstDeploymentDoc
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME
+      - documentIndex: *firstDeploymentDoc
+        equal:
+          path: metadata.labels['app.kubernetes.io/component']
+          value: main
+      - documentIndex: &secondDeploymentDoc 1
+        isKind:
+          of: Deployment
+      - documentIndex: *secondDeploymentDoc
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-second
+      - documentIndex: *secondDeploymentDoc
+        equal:
+          path: metadata.labels['app.kubernetes.io/component']
+          value: second
+
+  - it: additional controllers with nameOverride should pass
+    set:
+      controllers:
+        second:
+          nameOverride: testOverride
+          containers:
+            main:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 30
+    asserts:
+      - hasDocuments:
+          count: 3
+      - documentIndex: &firstDeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *firstDeploymentDoc
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME
+      - documentIndex: *firstDeploymentDoc
+        equal:
+          path: metadata.labels['app.kubernetes.io/component']
+          value: main
+      - documentIndex: &secondDeploymentDoc 1
+        isKind:
+          of: Deployment
+      - documentIndex: *secondDeploymentDoc
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-testOverride
+      - documentIndex: *secondDeploymentDoc
+        equal:
+          path: metadata.labels['app.kubernetes.io/component']
+          value: second
 
   - it: daemonset should pass
     set:

@@ -6,6 +6,11 @@ Convert controller values to an object
   {{- $identifier := .id -}}
   {{- $objectValues := .values -}}
 
+  {{- /* Default the controller type to Deployment */ -}}
+  {{- if eq (dig "type" "" $objectValues) ""  -}}
+    {{- $_ := set $objectValues "type" "deployment" -}}
+  {{- end -}}
+
   {{- /* Determine and inject the controller name */ -}}
   {{- $objectName := (include "bjw-s.common.lib.chart.names.fullname" $rootContext) -}}
 
