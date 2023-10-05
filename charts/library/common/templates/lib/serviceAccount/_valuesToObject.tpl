@@ -1,5 +1,5 @@
 {{/*
-Convert Secret values to an object
+Convert ServiceAccount values to an object
 */}}
 {{- define "bjw-s.common.lib.serviceAccount.valuesToObject" -}}
   {{- $rootContext := .rootContext -}}
@@ -7,12 +7,15 @@ Convert Secret values to an object
   {{- $objectValues := .values -}}
 
   {{- /* Determine and inject the serviceAccount name */ -}}
-  {{- $objectName := (include "bjw-s.common.lib.chart.names.fullname" $rootContext) -}}
-
-  {{- if $objectValues.name -}}
-    {{- $objectName = $objectValues.name -}}
+  {{- $serviceAccountName := "" -}}
+  {{- $defaultServiceAccountName := "default" -}}
+  {{- if $objectValues.create -}}
+    {{- $defaultServiceAccountName = (include "bjw-s.common.lib.chart.names.fullname" $rootContext) -}}
   {{- end -}}
-  {{- $_ := set $objectValues "name" $objectName -}}
+
+  {{- $serviceAccountName = default $defaultServiceAccountName $objectValues.name -}}
+
+  {{- $_ := set $objectValues "name" $serviceAccountName -}}
   {{- $_ := set $objectValues "identifier" $identifier -}}
 
   {{- /* Return the serviceAccount object */ -}}
