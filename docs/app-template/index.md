@@ -1,8 +1,3 @@
----
-hide:
-  - navigation
----
-
 # App Template
 
 ## Background
