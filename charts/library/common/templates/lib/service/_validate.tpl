@@ -6,7 +6,7 @@ Validate Service values
   {{- $serviceObject := .object -}}
 
   {{- if empty (get $serviceObject "controller") -}}
-    {{- fail (printf "controller is required for Service. (service: %s)" $serviceObject.identifier) -}}
+    {{- fail (printf "controller field is required for Service. (service: %s)" $serviceObject.identifier) -}}
   {{- end -}}
 
   {{- /* Validate Service type */ -}}
