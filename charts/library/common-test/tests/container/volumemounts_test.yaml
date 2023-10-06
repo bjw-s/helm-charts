@@ -38,6 +38,12 @@ tests:
               image:
                 repository: ghcr.io/mendhak/http-https-echo
                 tag: 30
+        second:
+          containers:
+            first-container:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 30
 
       persistence:
         data:
@@ -54,37 +60,46 @@ tests:
               second-container:
                 - path: /appdata/config
                   readOnly: true
+            second:
+              first-container:
+                - path: /second-pod/config.yaml
+                  readOnly: false
+                  subPath: config.yaml
 
     asserts:
-      - documentIndex: &DeploymentDoc 0
+      - documentIndex: &FirstDeploymentDoc 0
         isKind:
           of: Deployment
-      - documentIndex: *DeploymentDoc
+      - documentIndex: *FirstDeploymentDoc
         equal:
-          path: spec.template.spec.containers[0].volumeMounts[0]
+          path: spec.template.spec.containers[0].volumeMounts
           value:
-            name: data
-            mountPath: /globalTest
-      - documentIndex: *DeploymentDoc
+            - mountPath: /globalTest
+              name: data
+            - mountPath: /data/config.yaml
+              name: data
+              subPath: config.yaml
+      - documentIndex: *FirstDeploymentDoc
         equal:
-          path: spec.template.spec.containers[0].volumeMounts[1]
+          path: spec.template.spec.containers[1].volumeMounts
           value:
-            name: data
-            mountPath: /data/config.yaml
-            subPath: config.yaml
-      - documentIndex: *DeploymentDoc
+            - mountPath: /globalTest
+              name: data
+            - mountPath: /appdata/config
+              name: data
+              readOnly: true
+      - documentIndex: &SecondDeploymentDoc 1
+        isKind:
+          of: Deployment
+      - documentIndex: *SecondDeploymentDoc
         equal:
-          path: spec.template.spec.containers[1].volumeMounts[0]
+          path: spec.template.spec.containers[0].volumeMounts
           value:
-            name: data
-            mountPath: /globalTest
-      - documentIndex: *DeploymentDoc
-        equal:
-          path: spec.template.spec.containers[1].volumeMounts[1]
-          value:
-            name: data
-            mountPath: /appdata/config
-            readOnly: true
+            - mountPath: /globalTest
+              name: data
+            - mountPath: /second-pod/config.yaml
+              name: data
+              subPath: config.yaml
 
   - it: emptyDir should pass
     set:
