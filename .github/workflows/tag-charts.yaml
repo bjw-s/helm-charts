@@ -1,4 +1,4 @@
-name: "Charts: Release to GHCR OCI"
+name: "Charts: Create git tag"
 
 on:
   workflow_call:
@@ -10,37 +10,34 @@ on:
         default: "[]"
         required: false
         type: string
+    secrets:
+      BJWS_APP_ID:
+        required: true
+      BJWS_APP_PRIVATE_KEY:
+        required: true
 
 env:
-  HELM_VERSION: 3.11.2
   CHARTS_SRC_DIR: "charts"
-  TARGET_REGISTRY: ghcr.io
 
 jobs:
   release-charts:
     name: Release charts
     runs-on: ubuntu-22.04
     steps:
+      - name: Get GitHub API token
+        id: get-app-token
+        uses: getsentry/action-github-app-token@v2
+        with:
+          app_id: ${{ secrets.BJWS_APP_ID }}
+          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
+
       - name: Checkout chart sources
         uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
         with:
+          token: ${{ steps.get-app-token.outputs.token }}
           fetch-depth: 0
 
-      - name: Install Kubernetes tools
-        uses: yokawasa/action-setup-kube-tools@v0.9.3
-        with:
-          setup-tools: |
-            helmv3
-          helm: "${{ env.HELM_VERSION }}"
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.TARGET_REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Package & Push Helm Charts
+      - name: Create git tag for charts
         shell: bash
         run: |
           CHARTS=( $(yq --null-input e '${{ inputs.charts }}[]' ) )
@@ -51,6 +48,7 @@ jobs:
             CHART_NAME=${CHART_PATH_PARTS[1]}
             CHART_VERSION=$(yq e '.version' ${{ env.CHARTS_SRC_DIR }}/${CHART}/Chart.yaml)
 
-            helm package "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}/${CHART_NAME}" --dependency-update --destination "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}" --version "${CHART_VERSION}"
-            helm push "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}/${CHART_NAME}-${CHART_VERSION}.tgz" oci://${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm
+            git tag --force "${CHART_NAME}-${CHART_VERSION}"
           done
+
+          git push --tags --force

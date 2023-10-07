@@ -50,6 +50,16 @@ jobs:
       charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
     secrets: inherit
 
+  tag-library-charts:
+    name: Create git tags for library charts
+    uses: ./.github/workflows/tag-charts.yaml
+    needs:
+      - prepare
+      - release-library-charts
+    with:
+      charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
+    secrets: inherit
+
   release-application-charts:
     name: Release Application charts to GitHub pages
     uses: ./.github/workflows/charts-release-ghpages.yaml
@@ -58,6 +68,16 @@ jobs:
       - release-library-charts
     with:
       charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
+    secrets: inherit
+
+  tag-application-charts:
+    name: Create git tags for application charts
+    uses: ./.github/workflows/tag-charts.yaml
+    needs:
+      - prepare
+      - release-application-charts
+    with:
+      charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
     secrets: inherit
 
   release-github-oci:
