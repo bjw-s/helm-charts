@@ -1,6 +1,6 @@
 # common
 
-![Version: 2.0.2](https://img.shields.io/badge/Version-2.0.2-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 2.0.3](https://img.shields.io/badge/Version-2.0.3-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -27,7 +27,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
   - name: common
-    version: 2.0.2
+    version: 2.0.3
     repository: https://bjw-s.github.io/helm-charts/
 ```
 
@@ -61,7 +61,7 @@ The following table contains an overview of available values and their descripti
 | controllers.main.containers.main.image.pullPolicy | string | `nil` | image pull policy |
 | controllers.main.containers.main.image.repository | string | `nil` | image repository |
 | controllers.main.containers.main.image.tag | string | `nil` | image tag |
-| controllers.main.containers.main.lifecycle | object | `{}` | Configure the lifecycle for the container |
+| controllers.main.containers.main.lifecycle | object | `{}` | [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)] |
 | controllers.main.containers.main.nameOverride | string | `nil` | Override the container name |
 | controllers.main.containers.main.order | int | 99 | Override the default container order Containers get sorted alphanumerically by the `<order>-<identifier>` combination. |
 | controllers.main.containers.main.probes | object | See below | [[ref]](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/) |
