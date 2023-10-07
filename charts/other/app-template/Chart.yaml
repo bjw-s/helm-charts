@@ -2,7 +2,7 @@
 apiVersion: v2
 description: A common powered chart template. This can be useful for small projects that don't have their own chart.
 name: app-template
-version: 2.0.2
+version: 2.0.3
 kubeVersion: ">=1.22.0-0"
 maintainers:
   - name: bjw-s
@@ -10,12 +10,12 @@ maintainers:
 dependencies:
   - name: common
     repository: https://bjw-s.github.io/helm-charts
-    version: 2.0.2
+    version: 2.0.3
 annotations:
   artifacthub.io/changes: |-
     - kind: changed
       description: |
-        Updated library version to 2.0.2.
+        Updated library version to 2.0.3.
       links:
         - name: Upgrade instructions from v1.x
           url: https://github.com/bjw-s/helm-charts/tree/main/charts/other/app-template#from-1xx-to-20x
