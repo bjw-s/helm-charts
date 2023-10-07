@@ -304,7 +304,8 @@ controllers:
         # -- Configure the Security Context for the container
         securityContext: {}
 
-        # -- Configure the lifecycle for the container
+        # -- Configure the lifecycle event hooks for the container
+        # -- [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)]
         lifecycle: {}
 
         # -- Configure the path at which the file to which the containers termination message will be written.
