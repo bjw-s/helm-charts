@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 2.0.2
+version: 2.0.3
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,7 +16,4 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        ServiceAccount could not be referenced without creating
-    - kind: fixed
-      description: |-
-        Controllers without a type did not default to Deployment
+        Volumes did not render correctly across multiple controllers

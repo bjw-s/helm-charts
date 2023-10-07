@@ -10,11 +10,6 @@ on:
         default: "[]"
         required: false
         type: string
-    secrets:
-      BJWS_APP_ID:
-        required: true
-      BJWS_APP_PRIVATE_KEY:
-        required: true
 
 env:
   HELM_VERSION: 3.11.2

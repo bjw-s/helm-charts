@@ -26,8 +26,8 @@ jobs:
     name: Prepare data required for release
     runs-on: ubuntu-22.04
     outputs:
-      libraryChartsToRelease: ${{ steps.collect-charts.outputs.chartsLibrary }}
-      applicationChartsToRelease: ${{ steps.collect-charts.outputs.chartsApplication }}
+      libraryChartsToRelease: ${{ steps.collect-charts.outputs.chartsLibraryToRelease }}
+      applicationChartsToRelease: ${{ steps.collect-charts.outputs.chartsApplicationToRelease }}
     steps:
       - name: Checkout
         uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
@@ -40,6 +40,7 @@ jobs:
         with:
           repoConfigFile: ./.ci/repo-config.yaml
           overrideCharts: "[${{ inputs.charts }}]"
+          requireHeadAheadOfBase: false
 
   release-library-charts:
     name: Release Library charts to GitHub pages
@@ -50,12 +51,32 @@ jobs:
       charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
     secrets: inherit
 
+  tag-library-charts:
+    name: Create git tags for library charts
+    uses: ./.github/workflows/tag-charts.yaml
+    needs:
+      - prepare
+      - release-library-charts
+    with:
+      charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
+    secrets: inherit
+
   release-application-charts:
     name: Release Application charts to GitHub pages
     uses: ./.github/workflows/charts-release-ghpages.yaml
     needs:
       - prepare
       - release-library-charts
+    with:
+      charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
+    secrets: inherit
+
+  tag-application-charts:
+    name: Create git tags for application charts
+    uses: ./.github/workflows/tag-charts.yaml
+    needs:
+      - prepare
+      - release-application-charts
     with:
       charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
     secrets: inherit

@@ -18,10 +18,17 @@ Returns the value for volumes
     {{- end -}}
 
     {{- if $persistenceEnabled -}}
+      {{- $hasglobalMounts := not (empty $persistenceValues.globalMounts) -}}
+      {{- $globalMounts := dig "globalMounts" list $persistenceValues -}}
+
+      {{- $hasAdvancedMounts := not (empty $persistenceValues.advancedMounts) -}}
       {{- $advancedMounts := dig "advancedMounts" $controllerObject.identifier list $persistenceValues -}}
-      {{- if $advancedMounts -}}
-        {{- $_ := set $persistenceItemsToProcess $identifier $persistenceValues -}}
-      {{- else -}}
+
+      {{ if or
+        ($hasglobalMounts)
+        (and ($hasAdvancedMounts) (not (empty $advancedMounts)))
+        (and (not $hasglobalMounts) (not $hasAdvancedMounts))
+      -}}
         {{- $_ := set $persistenceItemsToProcess $identifier $persistenceValues -}}
       {{- end -}}
     {{- end -}}

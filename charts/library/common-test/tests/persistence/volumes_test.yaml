@@ -1,0 +1,109 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: persistence volumes
+templates:
+  - common.yaml
+tests:
+  - it: no persistence should pass
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        notExists:
+          path: spec.template.spec.volumes
+
+  - it: default should pass
+    set:
+      persistence:
+        config:
+          enabled: true
+    asserts:
+      - documentIndex: &DeploymentDoc 1
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.volumes
+          value:
+            - name: config
+              persistentVolumeClaim:
+                claimName: RELEASE-NAME-config
+
+  - it: advanced mount config should pass
+    set:
+      controllers:
+        main:
+          containers:
+            second-container:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 30
+        second:
+          containers:
+            first-container:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 30
+
+      persistence:
+        config:
+          enabled: true
+          existingClaim: test
+          advancedMounts:
+            main:
+              main:
+                - path: /config
+                  readOnly: false
+        data:
+          type: configMap
+          name: myConfigMap
+          globalMounts:
+            - path: /globalTest
+          advancedMounts:
+            main:
+              main:
+                - path: /data/config.yaml
+                  readOnly: false
+                  subPath: config.yaml
+              second-container:
+                - path: /appdata/config
+                  readOnly: true
+            second:
+              first-container:
+                - path: /second-pod/config.yaml
+                  readOnly: false
+                  subPath: config.yaml
+        no-mounts:
+          existingClaim: test
+
+    asserts:
+      - documentIndex: &FirstDeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *FirstDeploymentDoc
+        equal:
+          path: spec.template.spec.volumes
+          value:
+            - name: config
+              persistentVolumeClaim:
+                claimName: test
+            - configMap:
+                name: myConfigMap
+              name: data
+            - name: no-mounts
+              persistentVolumeClaim:
+                claimName: test
+      - documentIndex: &SecondDeploymentDoc 1
+        isKind:
+          of: Deployment
+      - documentIndex: *SecondDeploymentDoc
+        equal:
+          path: spec.template.spec.volumes
+          value:
+            - configMap:
+                name: myConfigMap
+              name: data
+            - name: no-mounts
+              persistentVolumeClaim:
+                claimName: test
