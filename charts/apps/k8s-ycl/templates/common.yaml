@@ -4,6 +4,45 @@
 
 {{/* Append the hardcoded settings */}}
 {{- define "k8s-ycl.hardcodedValues" -}}
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          tag: {{ default .Chart.AppVersion .Values.controllers.main.containers.main.image.tag }}
+        probes:
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /healthz
+                port: probe
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /readyz
+                port: probe
+              initialDelaySeconds: 0
+              periodSeconds: 10
+              timeoutSeconds: 1
+              failureThreshold: 3
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /healthz
+                port: probe
+              failureThreshold: 30
+              periodSeconds: 10
+
 service:
   main:
     enabled: true
@@ -27,43 +66,12 @@ persistence:
     enabled: true
     type: secret
     name: {{ include "k8s-ycl.servingCertificate" . }}
-    mountPath: /tls
-
-probes:
-  liveness:
-    enabled: true
-    custom: true
-    spec:
-      httpGet:
-        path: /healthz
-        port: probe
-      initialDelaySeconds: 0
-      periodSeconds: 10
-      timeoutSeconds: 1
-      failureThreshold: 3
-  readiness:
-    enabled: true
-    custom: true
-    spec:
-      httpGet:
-        path: /readyz
-        port: probe
-      initialDelaySeconds: 0
-      periodSeconds: 10
-      timeoutSeconds: 1
-      failureThreshold: 3
-  startup:
-    enabled: true
-    custom: true
-    spec:
-      httpGet:
-        path: /healthz
-        port: probe
-      failureThreshold: 30
-      periodSeconds: 10
+    globalMounts:
+      - path: /tls
 {{- end -}}
 
 {{/* Render the templates */}}
 {{- $ctx := deepCopy . -}}
 {{- $_ := include "k8s-ycl.hardcodedValues" . | fromYaml | merge $ctx.Values -}}
+
 {{- include "bjw-s.common.loader.all" $ctx }}

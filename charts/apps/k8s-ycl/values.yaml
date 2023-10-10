@@ -1,11 +1,11 @@
 ---
-controller:
-  replicas: 1
-  strategy: RollingUpdate
-
-image:
-  repository: ghcr.io/bjw-s/k8s-ycl
-  pullPolicy: Always
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: ghcr.io/bjw-s/k8s-ycl
+          pullPolicy: Always
 
 webhook:
   path: /mutate--v1-pod
