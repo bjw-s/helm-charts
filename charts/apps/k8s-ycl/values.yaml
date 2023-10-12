@@ -3,6 +3,7 @@ controllers:
   main:
     containers:
       main:
+        strategy: RollingUpdate
         image:
           repository: ghcr.io/bjw-s/k8s-ycl
           pullPolicy: Always
