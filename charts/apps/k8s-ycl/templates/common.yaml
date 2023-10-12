@@ -17,7 +17,7 @@ controllers:
             spec:
               httpGet:
                 path: /healthz
-                port: probe
+                port: 8081
               initialDelaySeconds: 0
               periodSeconds: 10
               timeoutSeconds: 1
@@ -28,7 +28,7 @@ controllers:
             spec:
               httpGet:
                 path: /readyz
-                port: probe
+                port: 8081
               initialDelaySeconds: 0
               periodSeconds: 10
               timeoutSeconds: 1
@@ -39,7 +39,7 @@ controllers:
             spec:
               httpGet:
                 path: /healthz
-                port: probe
+                port: 8081
               failureThreshold: 30
               periodSeconds: 10
 
