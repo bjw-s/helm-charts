@@ -61,7 +61,7 @@ jobs:
           python-version: "3.11"
 
       - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2.6.0
+        uses: helm/chart-testing-action@v2.6.1
 
       - name: Create k3d cluster
         uses: nolar/setup-k3d-k3s@v1
