@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 2.0.3
+version: 2.0.4
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,4 +16,4 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        Volumes did not render correctly across multiple controllers
+        Support v1 of Gateway APIs Route types

@@ -11,6 +11,9 @@ within the common library.
   {{- if $rootContext.Capabilities.APIVersions.Has (printf "gateway.networking.k8s.io/v1beta1/%s" $routeKind) }}
     {{- $apiVersion = "gateway.networking.k8s.io/v1beta1" -}}
   {{- end -}}
+  {{- if $rootContext.Capabilities.APIVersions.Has (printf "gateway.networking.k8s.io/v1/%s" $routeKind) }}
+    {{- $apiVersion = "gateway.networking.k8s.io/v1" -}}
+  {{- end -}}
   {{- $labels := merge
     ($routeObject.labels | default dict)
     (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
