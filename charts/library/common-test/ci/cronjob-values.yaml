@@ -1,6 +1,8 @@
 controllers:
   main:
     type: cronjob
+    cronjob:
+      timeZone: UTC
     containers:
       main:
         image:

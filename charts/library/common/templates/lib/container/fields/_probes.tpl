@@ -58,7 +58,11 @@ Probes used by the container.
           {{- end -}}
 
           {{- if $probeValues.port -}}
-            {{- $_ := set (index $probeDefinition $probeHeader) "port" (tpl ( $probeValues.port | toString ) $rootContext) -}}
+            {{- if kindIs "float64" $probeValues.port -}}
+              {{- $_ := set (index $probeDefinition $probeHeader) "port" $probeValues.port -}}
+            {{- else if kindIs "string" $probeValues.port -}}
+              {{- $_ := set (index $probeDefinition $probeHeader) "port" (tpl ( $probeValues.port | toString ) $rootContext) -}}
+            {{- end -}}
           {{- else if $primaryServiceDefaultPort.targetPort -}}
             {{- $_ := set (index $probeDefinition $probeHeader) "port" $primaryServiceDefaultPort.targetPort -}}
           {{- else -}}

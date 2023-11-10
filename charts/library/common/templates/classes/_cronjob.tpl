@@ -6,6 +6,11 @@ using the common library.
   {{- $rootContext := .rootContext -}}
   {{- $cronjobObject := .object -}}
 
+  {{- $timeZone := "" -}}
+  {{- if ge (int $rootContext.Capabilities.KubeVersion.Minor) 27 }}
+    {{- $timeZone = dig "cronjob" "timeZone" "" $cronjobObject -}}
+  {{- end -}}
+
   {{- $labels := merge
     (dict "app.kubernetes.io/component" $cronjobObject.identifier)
     ($cronjobObject.labels | default dict)
@@ -29,6 +34,9 @@ metadata:
 spec:
   concurrencyPolicy: "{{ $cronjobObject.cronjob.concurrencyPolicy }}"
   startingDeadlineSeconds: {{ $cronjobObject.cronjob.startingDeadlineSeconds }}
+  {{- with $timeZone }}
+  timeZone: "{{ . }}"
+  {{- end }}
   schedule: "{{ $cronjobObject.cronjob.schedule }}"
   successfulJobsHistoryLimit: {{ $cronjobObject.cronjob.successfulJobsHistory }}
   failedJobsHistoryLimit: {{ $cronjobObject.cronjob.failedJobsHistory }}

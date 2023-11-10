@@ -43,6 +43,9 @@ spec:
       {{- end }}
     {{- end }}
   {{- end }}
+  {{- if $ingressObject.defaultBackend }}
+  defaultBackend: {{ $ingressObject.defaultBackend }}
+  {{- else }}
   rules:
   {{- range $ingressObject.hosts }}
     - host: {{ tpl .host $rootContext | quote }}
@@ -56,7 +59,7 @@ spec:
                 {{ $service := include "bjw-s.common.lib.service.getByIdentifier" (dict "rootContext" $rootContext "id" .service.name) | fromYaml -}}
                 {{ $servicePort := 0 -}}
 
-                {{ if eq (dig "port" nil .service) nil -}}
+                {{ if empty (dig "port" nil .service) -}}
                   {{/* Default to the Service primary port if no port has been specified */ -}}
                   {{ if $service -}}
                     {{ $defaultServicePort := include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "serviceObject" $service) | fromYaml -}}
@@ -77,5 +80,6 @@ spec:
                 port:
                   number: {{ $servicePort }}
           {{- end }}
+  {{- end }}
   {{- end }}
 {{- end }}

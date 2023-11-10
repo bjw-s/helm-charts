@@ -1,6 +1,6 @@
 # common
 
-![Version: 2.0.3](https://img.shields.io/badge/Version-2.0.3-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 2.1.0](https://img.shields.io/badge/Version-2.1.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -27,7 +27,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
   - name: common
-    version: 2.0.3
+    version: 2.1.0
     repository: https://bjw-s.github.io/helm-charts/
 ```
 
@@ -56,7 +56,7 @@ The following table contains an overview of available values and their descripti
 | controllers.main.annotations | object | `{}` | Set annotations on the deployment/statefulset/daemonset/cronjob |
 | controllers.main.containers.main.args | list | `[]` | Override the args for the default container |
 | controllers.main.containers.main.command | list | `[]` | Override the command(s) for the default container |
-| controllers.main.containers.main.env | string | `nil` | Environment variables. Template enabled. Syntax options: A) TZ: UTC B) PASSWD: '{{ .Release.Name }}' C) PASSWD:      configMapKeyRef:        name: config-map-name        key: key-name D) PASSWD:      valueFrom:        secretKeyRef:          name: secret-name          key: key-name      ... E) - name: TZ      value: UTC F) - name: TZ      value: '{{ .Release.Name }}' |
+| controllers.main.containers.main.env | string | `nil` | Environment variables. Template enabled. Syntax options: A) TZ: UTC B) PASSWD: '{{ .Release.Name }}' B) TZ:      value: UTC      dependsOn: otherVar D) PASSWD:      configMapKeyRef:        name: config-map-name        key: key-name E) PASSWD:      dependsOn:        - otherVar1        - otherVar2      valueFrom:        secretKeyRef:          name: secret-name          key: key-name      ... F) - name: TZ      value: UTC G) - name: TZ      value: '{{ .Release.Name }}' |
 | controllers.main.containers.main.envFrom | list | `[]` | Secrets and/or ConfigMaps that will be loaded as environment variables. [[ref]](https://unofficial-kubernetes.readthedocs.io/en/latest/tasks/configure-pod-container/configmap/#use-case-consume-configmap-in-environment-variables) |
 | controllers.main.containers.main.image.pullPolicy | string | `nil` | image pull policy |
 | controllers.main.containers.main.image.repository | string | `nil` | image repository |
@@ -91,6 +91,7 @@ The following table contains an overview of available values and their descripti
 | controllers.main.cronjob.schedule | string | `"*/20 * * * *"` | Sets the CronJob time when to execute your jobs |
 | controllers.main.cronjob.startingDeadlineSeconds | int | `30` | The deadline in seconds for starting the job if it misses its scheduled time for any reason |
 | controllers.main.cronjob.successfulJobsHistory | int | `1` | The number of succesful Jobs to keep |
+| controllers.main.cronjob.timeZone | string | `nil` | Sets the CronJob timezone (only works in Kubernetes >= 1.27) |
 | controllers.main.cronjob.ttlSecondsAfterFinished | string | `nil` | If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to be automatically deleted. |
 | controllers.main.enabled | bool | `true` | enable the controller. |
 | controllers.main.initContainers | object | `{}` | Specify any initContainers here as dictionary items. Each initContainer should have its own key initContainers get sorted alphanumerically by the `<order>-<identifier>` combination. |
@@ -136,6 +137,7 @@ The following table contains an overview of available values and their descripti
 | ingress | object | See below | Configure the ingresses for the chart here. Additional ingresses can be added by adding a dictionary key similar to the 'main' ingress. |
 | ingress.main.annotations | object | `{}` | Provide additional annotations which may be required. |
 | ingress.main.className | string | `nil` | Set the ingressClass that is used for this ingress. |
+| ingress.main.defaultBackend | string | `nil` | Configure the defaultBackend for this ingress. This will disable any other rules for the ingress. |
 | ingress.main.enabled | bool | `false` | Enables or disables the ingress |
 | ingress.main.hosts[0].host | string | `"chart-example.local"` | Host address. Helm template can be passed. |
 | ingress.main.hosts[0].paths[0].path | string | `"/"` | Path.  Helm template can be passed. |
@@ -165,7 +167,7 @@ The following table contains an overview of available values and their descripti
 | route | object | See below | Configure the gateway routes for the chart here. Additional routes can be added by adding a dictionary key similar to the 'main' route. [[ref]](https://gateway-api.sigs.k8s.io/references/spec/) |
 | route.main.annotations | object | `{}` | Provide additional annotations which may be required. |
 | route.main.enabled | bool | `false` | Enables or disables the route |
-| route.main.hostnames | list | `[]` | Host addresses |
+| route.main.hostnames | list | `[]` | Host addresses. Helm template can be passed. |
 | route.main.kind | string | `"HTTPRoute"` | Set the route kind Valid options are GRPCRoute, HTTPRoute, TCPRoute, TLSRoute, UDPRoute |
 | route.main.labels | object | `{}` | Provide additional labels which may be required. |
 | route.main.nameOverride | string | `nil` | Override the name suffix that is used for this route. |

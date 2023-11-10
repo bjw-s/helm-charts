@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 2.0.3
+version: 2.1.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -14,6 +14,29 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: added
+      description: |-
+        Support v1 of Gateway APIs Route types
+    - kind: added
+      description: |-
+        Support setting CronJob timezones in Kubernetes versions >= 1.27
+    - kind: added
+      description: |-
+        Support setting a defaultBackend per ingress
+    - kind: added
+      description: |-
+        Support using templates in Route hostnames
+    - kind: added
+      description: |-
+        Added support for dependsOn in environment variables
+      links:
+        - name: GitHub repo
+          url: https://github.com/dastrobu/helm-charts/tree/main/environment-variables
+        - name: Related blogpost
+          url: https://dastrobu.medium.com/an-advanced-api-for-environment-variables-in-helm-charts-e0bb1e0aa58a
     - kind: fixed
       description: |-
-        Volumes did not render correctly across multiple controllers
+        Improved "isEmpty" checks to be compatible with more Helm versions
+    - kind: fixed
+      description: |-
+        No longer quote numeric ports in probes

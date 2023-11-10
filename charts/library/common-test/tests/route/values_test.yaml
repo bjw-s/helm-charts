@@ -42,6 +42,24 @@ tests:
           path: spec.hostnames[0]
           value: chart-test.local
 
+  - it: custom host with template
+    set:
+      route.main:
+        enabled: true
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        hostnames:
+          - "{{ .Release.Name }}.local"
+    asserts:
+      - documentIndex: &HTTPRouteDocument 2
+        isKind:
+          of: HTTPRoute
+      - documentIndex: *HTTPRouteDocument
+        equal:
+          path: spec.hostnames[0]
+          value: RELEASE-NAME.local
+
   - it: path matches should only be used for HTTPRoutes
     set:
       route:

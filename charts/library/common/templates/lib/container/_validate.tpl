@@ -10,11 +10,11 @@ Validate container values
     {{- fail (printf "Image required to be a dictionary with repository and tag fields. (controller %s, container %s)" $controllerObject.identifier $containerObject.identifier) }}
   {{- end -}}
 
-  {{- if eq (dig "image" "repository" "" $containerObject) ""  -}}
+  {{- if empty (dig "image" "repository" nil $containerObject) -}}
     {{- fail (printf "No image repository specified for container. (controller %s, container %s)" $controllerObject.identifier $containerObject.identifier) }}
   {{- end -}}
 
-  {{- if eq (dig "image" "tag" "" $containerObject) ""  -}}
+  {{- if empty (dig "image" "tag" nil $containerObject) -}}
     {{- fail (printf "No image tag specified for container. (controller %s, container %s)" $controllerObject.identifier $containerObject.identifier) }}
   {{- end -}}
 {{- end -}}

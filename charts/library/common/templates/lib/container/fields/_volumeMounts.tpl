@@ -25,7 +25,7 @@ volumeMounts used by the container.
   {{- end -}}
 
   {{- /* Collect volumeClaimTemplates */ -}}
-  {{- if not (eq (dig "statefulset" "volumeClaimTemplates" nil $controllerObject) nil) -}}
+  {{- if not (empty (dig "statefulset" "volumeClaimTemplates" nil $controllerObject)) -}}
     {{- range $persistenceValues := $controllerObject.statefulset.volumeClaimTemplates -}}
       {{- /* Enable persistence item by default, but allow override */ -}}
       {{- $persistenceEnabled := true -}}
@@ -35,10 +35,10 @@ volumeMounts used by the container.
 
       {{- if $persistenceEnabled -}}
         {{- $mountValues := dict -}}
-        {{- if not (eq (dig "globalMounts" nil $persistenceValues) nil) -}}
+        {{- if not (empty (dig "globalMounts" nil $persistenceValues)) -}}
           {{- $_ := set $mountValues "globalMounts" $persistenceValues.globalMounts -}}
         {{- end -}}
-        {{- if not (eq (dig "advancedMounts" nil $persistenceValues) nil) -}}
+        {{- if not (empty (dig "advancedMounts" nil $persistenceValues)) -}}
           {{- $_ := set $mountValues "advancedMounts" (dict $controllerObject.identifier $persistenceValues.advancedMounts) -}}
         {{- end -}}
         {{- $_ := set $persistenceItemsToProcess $persistenceValues.name $mountValues -}}
