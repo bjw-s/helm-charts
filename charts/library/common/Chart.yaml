@@ -17,3 +17,6 @@ annotations:
     - kind: added
       description: |-
         Support v1 of Gateway APIs Route types
+    - kind: added
+      description: |-
+        Support setting CronJob timezones in Kubernetes versions >= 1.27

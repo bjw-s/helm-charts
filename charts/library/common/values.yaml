@@ -135,6 +135,8 @@ controllers:
       # -- Specifies how to treat concurrent executions of a job that is created by this cron job
       # valid values are Allow, Forbid or Replace
       concurrencyPolicy: Forbid
+      # -- Sets the CronJob timezone (only works in Kubernetes >= 1.27)
+      timeZone:
       # -- Sets the CronJob time when to execute your jobs
       schedule: "*/20 * * * *"
       # -- The deadline in seconds for starting the job if it misses its scheduled time for any reason
