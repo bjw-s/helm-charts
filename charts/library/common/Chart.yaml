@@ -26,3 +26,6 @@ annotations:
     - kind: added
       description: |-
         Support using templates in Route hostnames
+    - kind: fixed
+      description: |-
+        Improved "isEmpty" checks to be compatible with more Helm versions

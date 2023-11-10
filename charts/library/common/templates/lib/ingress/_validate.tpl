@@ -7,7 +7,7 @@ Validate Ingress values
 
   {{- range $ingressValues.hosts -}}
     {{- range .paths -}}
-      {{- if or (eq (dig "service" "name" "" .) "") (not .service.name) -}}
+      {{- if empty (dig "service" "name" nil .) -}}
         {{- fail (printf "No service name configured. (ingress: %s, path: %s)" $ingressValues.identifier .path) -}}
       {{- end -}}
     {{- end -}}

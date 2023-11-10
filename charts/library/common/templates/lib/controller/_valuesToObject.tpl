@@ -7,7 +7,7 @@ Convert controller values to an object
   {{- $objectValues := .values -}}
 
   {{- /* Default the controller type to Deployment */ -}}
-  {{- if eq (dig "type" "" $objectValues) ""  -}}
+  {{- if empty (dig "type" nil $objectValues) -}}
     {{- $_ := set $objectValues "type" "deployment" -}}
   {{- end -}}
 
