@@ -1,6 +1,6 @@
 # common
 
-![Version: 2.1.1](https://img.shields.io/badge/Version-2.1.1-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 2.2.0](https://img.shields.io/badge/Version-2.2.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -27,7 +27,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
   - name: common
-    version: 2.1.1
+    version: 2.2.0
     repository: https://bjw-s.github.io/helm-charts/
 ```
 
@@ -56,6 +56,7 @@ The following table contains an overview of available values and their descripti
 | controllers.main.annotations | object | `{}` | Set annotations on the deployment/statefulset/daemonset/cronjob |
 | controllers.main.containers.main.args | list | `[]` | Override the args for the default container |
 | controllers.main.containers.main.command | list | `[]` | Override the command(s) for the default container |
+| controllers.main.containers.main.dependsOn | list | `[]` | Specify if this container depends on any other containers This is used to determine the order in which the containers are rendered. The use of "dependsOn" completely disables the "order" field within the controller. |
 | controllers.main.containers.main.env | string | `nil` | Environment variables. Template enabled. Syntax options: A) TZ: UTC B) PASSWD: '{{ .Release.Name }}' B) TZ:      value: UTC      dependsOn: otherVar D) PASSWD:      configMapKeyRef:        name: config-map-name        key: key-name E) PASSWD:      dependsOn:        - otherVar1        - otherVar2      valueFrom:        secretKeyRef:          name: secret-name          key: key-name      ... F) - name: TZ      value: UTC G) - name: TZ      value: '{{ .Release.Name }}' |
 | controllers.main.containers.main.envFrom | list | `[]` | Secrets and/or ConfigMaps that will be loaded as environment variables. [[ref]](https://unofficial-kubernetes.readthedocs.io/en/latest/tasks/configure-pod-container/configmap/#use-case-consume-configmap-in-environment-variables) |
 | controllers.main.containers.main.image.pullPolicy | string | `nil` | image pull policy |
@@ -94,7 +95,7 @@ The following table contains an overview of available values and their descripti
 | controllers.main.cronjob.timeZone | string | `nil` | Sets the CronJob timezone (only works in Kubernetes >= 1.27) |
 | controllers.main.cronjob.ttlSecondsAfterFinished | string | `nil` | If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to be automatically deleted. |
 | controllers.main.enabled | bool | `true` | enable the controller. |
-| controllers.main.initContainers | object | `{}` | Specify any initContainers here as dictionary items. Each initContainer should have its own key initContainers get sorted alphanumerically by the `<order>-<identifier>` combination. |
+| controllers.main.initContainers | object | `{}` | Specify any initContainers here as dictionary items. Each initContainer should have its own key initContainers get sorted alphanumerically by the `<order>-<identifier>` combination if no order or dependsOn has been configured for them. |
 | controllers.main.labels | object | `{}` | Set labels on the deployment/statefulset/daemonset/cronjob |
 | controllers.main.pod | object | `{}` |  |
 | controllers.main.replicas | int | `1` | Number of desired pods. When using a HorizontalPodAutoscaler, set this to `null`. |

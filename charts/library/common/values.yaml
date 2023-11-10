@@ -186,6 +186,11 @@ controllers:
         # @default -- 99
         order: 1
 
+        # -- Specify if this container depends on any other containers
+        # This is used to determine the order in which the containers are rendered.
+        # The use of "dependsOn" completely disables the "order" field within the controller.
+        dependsOn: []
+
         image:
           # -- image repository
           repository:
@@ -327,7 +332,8 @@ controllers:
 
     # -- Specify any initContainers here as dictionary items.
     # Each initContainer should have its own key
-    # initContainers get sorted alphanumerically by the `<order>-<identifier>` combination.
+    # initContainers get sorted alphanumerically by the `<order>-<identifier>` combination
+    # if no order or dependsOn has been configured for them.
     initContainers: {}
 
 serviceAccount:

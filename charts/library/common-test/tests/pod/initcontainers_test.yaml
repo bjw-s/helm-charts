@@ -60,6 +60,7 @@ tests:
         notExists:
           path: spec.template.spec.initContainers
 
+  # TODO: Remove this test case after "order" removal in v3
   - it: custom order should pass
     set:
       controllers.main.initContainers:
@@ -70,6 +71,35 @@ tests:
             tag: latest
         init2:
           order: 1
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+            tag: latest
+    asserts:
+      - documentIndex: &DeploymentDocument 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDocument
+        lengthEqual:
+          path: spec.template.spec.initContainers
+          count: 2
+      - documentIndex: *DeploymentDocument
+        equal:
+          path: spec.template.spec.initContainers[0].name
+          value: init2
+      - documentIndex: *DeploymentDocument
+        equal:
+          path: spec.template.spec.initContainers[1].name
+          value: init1
+
+  - it: with dependsOn
+    set:
+      controllers.main.initContainers:
+        init1:
+          dependsOn: init2
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+            tag: latest
+        init2:
           image:
             repository: ghcr.io/mendhak/http-https-echo
             tag: latest

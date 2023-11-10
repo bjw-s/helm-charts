@@ -2,7 +2,6 @@ controllers:
   main:
     containers:
       main:
-        order: 1
         image:
           repository: ghcr.io/mendhak/http-https-echo
           tag: 30
@@ -21,6 +20,9 @@ controllers:
             enabled: true
 
       a-container:
+        dependsOn:
+          - main
+          - third-container
         image:
           repository: ghcr.io/mendhak/http-https-echo
           tag: 30
@@ -29,6 +31,7 @@ controllers:
           HTTPS_PORT: 9998
 
       third-container:
+        dependsOn: main
         image:
           repository: ghcr.io/mendhak/http-https-echo
           tag: 30
