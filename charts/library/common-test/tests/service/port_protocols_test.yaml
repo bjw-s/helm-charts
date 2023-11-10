@@ -66,3 +66,15 @@ tests:
         equal:
           path: spec.ports[0].protocol
           value: TCP
+
+  - it: explicit appProtocol should pass
+    set:
+      service.main.ports.http.appProtocol: kubernetes.io/h2c
+    asserts:
+      - documentIndex: &ServiceDocument 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument
+        equal:
+          path: spec.ports[0].appProtocol
+          value: kubernetes.io/h2c
