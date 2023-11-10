@@ -14,6 +14,6 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: fixed
+    - kind: added
       description: |-
         Support v1 of Gateway APIs Route types
