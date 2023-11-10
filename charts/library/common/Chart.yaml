@@ -29,3 +29,6 @@ annotations:
     - kind: fixed
       description: |-
         Improved "isEmpty" checks to be compatible with more Helm versions
+    - kind: fixed
+      description: |-
+        No longer quote numeric ports in probes
