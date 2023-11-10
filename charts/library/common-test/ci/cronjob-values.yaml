@@ -2,7 +2,7 @@ controllers:
   main:
     type: cronjob
     cronjob:
-      timeZone: Etc/UTC
+      timeZone: UTC
     containers:
       main:
         image:
