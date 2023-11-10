@@ -24,20 +24,18 @@ Env field used by the container.
       {{- $graph := dict -}}
 
       {{- range $name, $var := $containerObject.env -}}
-        {{- if $var -}}
-          {{- if kindIs "map" $var -}}
-            {{- /* Value is a map so ordering can be specified */ -}}
-            {{- if empty (dig "dependsOn" nil $var) -}}
-              {{- $_ := set $graph $name ( list ) -}}
-            {{- else if kindIs "string" $var.dependsOn -}}
-              {{- $_ := set $graph $name ( list $var.dependsOn ) -}}
-            {{- else if kindIs "slice" $var.dependsOn -}}
-              {{- $_ := set $graph $name $var.dependsOn -}}
-            {{- end -}}
-          {{- else -}}
-            {{- /* Value is not a map so no ordering can be specified */ -}}
+        {{- if kindIs "map" $var -}}
+          {{- /* Value is a map so ordering can be specified */ -}}
+          {{- if empty (dig "dependsOn" nil $var) -}}
             {{- $_ := set $graph $name ( list ) -}}
+          {{- else if kindIs "string" $var.dependsOn -}}
+            {{- $_ := set $graph $name ( list $var.dependsOn ) -}}
+          {{- else if kindIs "slice" $var.dependsOn -}}
+            {{- $_ := set $graph $name $var.dependsOn -}}
           {{- end -}}
+        {{- else -}}
+          {{- /* Value is not a map so no ordering can be specified */ -}}
+          {{- $_ := set $graph $name ( list ) -}}
         {{- end -}}
       {{- end -}}
 
