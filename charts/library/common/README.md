@@ -167,7 +167,7 @@ The following table contains an overview of available values and their descripti
 | route | object | See below | Configure the gateway routes for the chart here. Additional routes can be added by adding a dictionary key similar to the 'main' route. [[ref]](https://gateway-api.sigs.k8s.io/references/spec/) |
 | route.main.annotations | object | `{}` | Provide additional annotations which may be required. |
 | route.main.enabled | bool | `false` | Enables or disables the route |
-| route.main.hostnames | list | `[]` | Host addresses |
+| route.main.hostnames | list | `[]` | Host addresses. Helm template can be passed. |
 | route.main.kind | string | `"HTTPRoute"` | Set the route kind Valid options are GRPCRoute, HTTPRoute, TCPRoute, TLSRoute, UDPRoute |
 | route.main.labels | object | `{}` | Provide additional labels which may be required. |
 | route.main.nameOverride | string | `nil` | Override the name suffix that is used for this route. |

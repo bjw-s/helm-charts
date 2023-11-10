@@ -49,9 +49,9 @@ spec:
   {{- end }}
   {{- if and (ne $routeKind "TCPRoute") (ne $routeKind "UDPRoute") $routeObject.hostnames }}
   hostnames:
-  {{- with $routeObject.hostnames }}
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- range $routeObject.hostnames }}
+    - {{ tpl . $rootContext | quote }}
+    {{- end }}
   {{- end }}
   rules:
   {{- range $routeObject.rules }}

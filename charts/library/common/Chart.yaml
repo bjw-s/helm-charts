@@ -23,3 +23,6 @@ annotations:
     - kind: added
       description: |-
         Support setting a defaultBackend per ingress
+    - kind: added
+      description: |-
+        Support using templates in Route hostnames

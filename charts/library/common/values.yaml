@@ -563,7 +563,7 @@ route:
         # Name of the section within the target resource.
         sectionName:
 
-    # -- Host addresses
+    # -- Host addresses. Helm template can be passed.
     hostnames: []
 
     # -- Configure rules for routing. Defaults to the primary service.
