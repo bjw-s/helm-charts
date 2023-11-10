@@ -26,6 +26,14 @@ annotations:
     - kind: added
       description: |-
         Support using templates in Route hostnames
+    - kind: added
+      description: |-
+        Added support for dependsOn in environment variables
+      links:
+        - name: GitHub repo
+          url: https://github.com/dastrobu/helm-charts/tree/main/environment-variables
+        - name: Related blogpost
+          url: https://dastrobu.medium.com/an-advanced-api-for-environment-variables-in-helm-charts-e0bb1e0aa58a
     - kind: fixed
       description: |-
         Improved "isEmpty" checks to be compatible with more Helm versions

@@ -154,3 +154,51 @@ tests:
           value:
             name: STATIC_ENV
             value: static
+
+  - it: Env vars with dependsOn should pass
+    set:
+      controllers.main.containers.main.env:
+        STATIC_ENV: 1
+        DYNAMIC_ENV:
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+          dependsOn: STATIC_ENV
+        ORDERED_ENV:
+          value: true
+          dependsOn: STATIC_ENV
+        DEPENDENT_ENV:
+          value: moo_two
+          dependsOn:
+            - DYNAMIC_ENV
+            - ORDERED_ENV
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].env[0]
+          value:
+            name: STATIC_ENV
+            value: "1"
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].env[1]
+          value:
+            name: DYNAMIC_ENV
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].env[2]
+          value:
+            name: ORDERED_ENV
+            value: "true"
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].env[3]
+          value:
+            name: DEPENDENT_ENV
+            value: moo_two

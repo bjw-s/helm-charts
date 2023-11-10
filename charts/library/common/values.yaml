@@ -203,19 +203,25 @@ controllers:
         # Syntax options:
         # A) TZ: UTC
         # B) PASSWD: '{{ .Release.Name }}'
-        # C) PASSWD:
+        # B) TZ:
+        #      value: UTC
+        #      dependsOn: otherVar
+        # D) PASSWD:
         #      configMapKeyRef:
         #        name: config-map-name
         #        key: key-name
-        # D) PASSWD:
+        # E) PASSWD:
+        #      dependsOn:
+        #        - otherVar1
+        #        - otherVar2
         #      valueFrom:
         #        secretKeyRef:
         #          name: secret-name
         #          key: key-name
         #      ...
-        # E) - name: TZ
-        #      value: UTC
         # F) - name: TZ
+        #      value: UTC
+        # G) - name: TZ
         #      value: '{{ .Release.Name }}'
         env:
 
