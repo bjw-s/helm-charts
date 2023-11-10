@@ -137,6 +137,7 @@ The following table contains an overview of available values and their descripti
 | ingress | object | See below | Configure the ingresses for the chart here. Additional ingresses can be added by adding a dictionary key similar to the 'main' ingress. |
 | ingress.main.annotations | object | `{}` | Provide additional annotations which may be required. |
 | ingress.main.className | string | `nil` | Set the ingressClass that is used for this ingress. |
+| ingress.main.defaultBackend | string | `nil` | Configure the defaultBackend for this ingress. This will disable any other rules for the ingress. |
 | ingress.main.enabled | bool | `false` | Enables or disables the ingress |
 | ingress.main.hosts[0].host | string | `"chart-example.local"` | Host address. Helm template can be passed. |
 | ingress.main.hosts[0].paths[0].path | string | `"/"` | Path.  Helm template can be passed. |

@@ -20,3 +20,6 @@ annotations:
     - kind: added
       description: |-
         Support setting CronJob timezones in Kubernetes versions >= 1.27
+    - kind: added
+      description: |-
+        Support setting a defaultBackend per ingress

@@ -43,6 +43,9 @@ spec:
       {{- end }}
     {{- end }}
   {{- end }}
+  {{- if $ingressObject.defaultBackend }}
+  defaultBackend: {{ $ingressObject.defaultBackend }}
+  {{- else }}
   rules:
   {{- range $ingressObject.hosts }}
     - host: {{ tpl .host $rootContext | quote }}
@@ -77,5 +80,6 @@ spec:
                 port:
                   number: {{ $servicePort }}
           {{- end }}
+  {{- end }}
   {{- end }}
 {{- end }}

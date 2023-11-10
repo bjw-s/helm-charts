@@ -77,3 +77,20 @@ tests:
         equal:
           path: spec.rules[0].http.paths[0].path
           value: "/RELEASE-NAME.path"
+
+  - it: with defaultBackend should pass
+    set:
+      ingress.main:
+        enabled: true
+        defaultBackend: test
+    asserts:
+      - documentIndex: &IngressDocument 2
+        isKind:
+          of: Ingress
+      - documentIndex: *IngressDocument
+        equal:
+          path: spec.defaultBackend
+          value: test
+      - documentIndex: *IngressDocument
+        notExists:
+          path: spec.rules
