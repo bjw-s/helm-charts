@@ -60,7 +60,7 @@ tests:
           path: spec.hostnames[0]
           value: RELEASE-NAME.local
 
-  - it: path matches should only be used for HTTPRoutes
+  - it: path matches should only be used for HTTPRoutes and GRPCRoutes
     set:
       route:
         main:
@@ -77,6 +77,12 @@ tests:
                 - path:
                     type: PathPrefix
                     value: /test
+              filters:
+                - type: URLRewrite
+                  urlRewrite:
+                    path:
+                      type: ReplacePrefixMatch
+                      replacePrefixMatch: ""
         grpc:
           enabled: true
           kind: GRPCRoute
@@ -91,6 +97,12 @@ tests:
                 - path:
                     type: PathPrefix
                     value: /test
+              filters:
+                - type: URLRewrite
+                  urlRewrite:
+                    path:
+                      type: ReplacePrefixMatch
+                      replacePrefixMatch: ""
         tcp:
           enabled: true
           kind: TCPRoute
@@ -105,6 +117,12 @@ tests:
                 - path:
                     type: PathPrefix
                     value: /test
+              filters:
+                - type: URLRewrite
+                  urlRewrite:
+                    path:
+                      type: ReplacePrefixMatch
+                      replacePrefixMatch: ""
         tls:
           enabled: true
           kind: TLSRoute
@@ -119,6 +137,12 @@ tests:
                 - path:
                     type: PathPrefix
                     value: /test
+              filters:
+                - type: URLRewrite
+                  urlRewrite:
+                    path:
+                      type: ReplacePrefixMatch
+                      replacePrefixMatch: ""
         udp:
           enabled: true
           kind: UDPRoute
@@ -133,13 +157,32 @@ tests:
                 - path:
                     type: PathPrefix
                     value: /test
+              filters:
+                - type: URLRewrite
+                  urlRewrite:
+                    path:
+                      type: ReplacePrefixMatch
+                      replacePrefixMatch: ""
     asserts:
       - documentIndex: &HTTPRouteDocument 2
         isKind:
           of: GRPCRoute
       - documentIndex: &HTTPRouteDocument 2
-        notExists:
+        equal:
           path: spec.rules[0].matches
+          value:
+            - path:
+                type: PathPrefix
+                value: /test
+      - documentIndex: &HTTPRouteDocument 2
+        equal:
+          path: spec.rules[0].filters
+          value:
+            - type: URLRewrite
+              urlRewrite:
+                path:
+                  type: ReplacePrefixMatch
+                  replacePrefixMatch: ""
       - documentIndex: &HTTPRouteDocument 3
         isKind:
           of: HTTPRoute
@@ -150,24 +193,42 @@ tests:
             - path:
                 type: PathPrefix
                 value: /test
+      - documentIndex: &HTTPRouteDocument 3
+        equal:
+          path: spec.rules[0].filters
+          value:
+            - type: URLRewrite
+              urlRewrite:
+                path:
+                  type: ReplacePrefixMatch
+                  replacePrefixMatch: ""
       - documentIndex: &HTTPRouteDocument 4
         isKind:
           of: TCPRoute
       - documentIndex: &HTTPRouteDocument 4
         notExists:
           path: spec.rules[0].matches
+      - documentIndex: &HTTPRouteDocument 4
+        notExists:
+          path: spec.rules[0].filters
       - documentIndex: &HTTPRouteDocument 5
         isKind:
           of: TLSRoute
       - documentIndex: &HTTPRouteDocument 5
         notExists:
           path: spec.rules[0].matches
+      - documentIndex: &HTTPRouteDocument 5
+        notExists:
+          path: spec.rules[0].filters
       - documentIndex: &HTTPRouteDocument 6
         isKind:
           of: UDPRoute
       - documentIndex: &HTTPRouteDocument 6
         notExists:
           path: spec.rules[0].matches
+      - documentIndex: &HTTPRouteDocument 6
+        notExists:
+          path: spec.rules[0].filters
 
   - it: hostnames shouldn't be used for TCPRoutes and UDPRoutes
     set:

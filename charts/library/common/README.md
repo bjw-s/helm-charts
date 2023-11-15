@@ -173,7 +173,7 @@ The following table contains an overview of available values and their descripti
 | route.main.labels | object | `{}` | Provide additional labels which may be required. |
 | route.main.nameOverride | string | `nil` | Override the name suffix that is used for this route. |
 | route.main.parentRefs | list | `[{"group":"gateway.networking.k8s.io","kind":"Gateway","name":null,"namespace":null,"sectionName":null}]` | Configure the resource the route attaches to. |
-| route.main.rules | list | `[{"backendRefs":[{"group":"","kind":"Service","name":"main","namespace":null,"port":null,"weight":1}],"matches":[{"path":{"type":"PathPrefix","value":"/"}}]}]` | Configure rules for routing. Defaults to the primary service. |
+| route.main.rules | list | `[{"backendRefs":[{"group":"","kind":"Service","name":"main","namespace":null,"port":null,"weight":1}],"matches":[{"path":{"type":"PathPrefix","value":"/"}}],"filters":[]}]` | Configure rules for routing. Defaults to the primary service. |
 | route.main.rules[0].backendRefs | list | `[{"group":"","kind":"Service","name":"main","namespace":null,"port":null,"weight":1}]` | Configure backends where matching requests should be sent. |
 | secrets | object | See below | Use this to populate secrets with the values you specify. Be aware that these values are not encrypted by default, and could therefore visible to anybody with access to the values.yaml file. Additional Secrets can be added by adding a dictionary key similar to the 'secret' object. |
 | secrets.secret.annotations | object | `{}` | Annotations to add to the Secret |
