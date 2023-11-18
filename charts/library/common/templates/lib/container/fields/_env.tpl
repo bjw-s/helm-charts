@@ -71,7 +71,8 @@ Env field used by the container.
           {{- $output = append $output (dict "name" .name "value" .value) -}}
         {{- end -}}
       {{- else if hasKey . "valueFrom" -}}
-        {{- $output = append $output (dict "name" .name "valueFrom" .valueFrom) -}}
+        {{- $parsedValue := (tpl (.valueFrom | toYaml) $rootContext) | fromYaml -}}
+        {{- $output = append $output (dict "name" .name "valueFrom" $parsedValue) -}}
       {{- else -}}
         {{- $output = append $output (dict "name" .name "valueFrom" (omit . "name")) -}}
       {{- end -}}

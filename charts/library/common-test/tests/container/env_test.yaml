@@ -117,6 +117,11 @@ tests:
     set:
       controllers.main.containers.main.env:
         DYNAMIC_ENV: "{{ .Release.Name }}-admin"
+        TEMPLATE_ENV:
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Release.Name }}-secret"
+              key: "{{ .Release.Name }}-key"
     asserts:
       - documentIndex: &DeploymentDoc 0
         isKind:
@@ -127,6 +132,15 @@ tests:
           value:
             name: DYNAMIC_ENV
             value: RELEASE-NAME-admin
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].env[1]
+          value:
+            name: TEMPLATE_ENV
+            valueFrom:
+              secretKeyRef:
+                key: "RELEASE-NAME-key"
+                name: "RELEASE-NAME-secret"
 
   - it: Combined KeyValue with Explicit ValueFrom should pass
     set:
