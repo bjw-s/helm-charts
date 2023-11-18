@@ -16,10 +16,13 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        Add support for `appProtocol` in kubernetes services.
+        Add support for `appProtocol` in Kubernetes services.
     - kind: added
       description: |-
         Add support for route filters for HTTPRoute and GRPCRoute
+    - kind: added
+      description: |-
+        Add support `dataSource` field in StatefulSet volumeClaimTemplates
     - kind: fixed
       description: |-
         GRPCRoute support for matches was not supported.

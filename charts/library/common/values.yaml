@@ -163,6 +163,10 @@ controllers:
       #   annotations: {}
       #   mountPath: /data
       #   accessMode: "ReadWriteOnce"
+      #   dataSource:
+      #     apiGroup: snapshot.storage.k8s.io
+      #     kind: VolumeSnapshot
+      #     name: MySnapshot
       #   size: 1Gi
       # - name: backup
       #   labels: {}

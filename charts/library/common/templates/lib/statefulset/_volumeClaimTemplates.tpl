@@ -22,6 +22,12 @@ spec:
   {{- if $values.storageClass }}
   storageClassName: {{ if (eq "-" $values.storageClass) }}""{{- else }}{{ $values.storageClass | quote }}{{- end }}
   {{- end }}
+  {{- with $values.dataSource }}
+  dataSource:
+    apiGroup: {{ .apiGroup }}
+    kind: {{ .kind }}
+    name: {{ tpl .name $rootContext }}
+  {{- end }}
 {{- end -}}
 
 {{/*
