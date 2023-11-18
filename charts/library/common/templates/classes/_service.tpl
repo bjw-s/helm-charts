@@ -90,6 +90,9 @@ spec:
         {{- if (and (eq $svcType "NodePort") (not (empty $port.nodePort))) }}
       nodePort: {{ $port.nodePort }}
         {{ end }}
+        {{- if (not (empty $port.appProtocol)) }}
+      appProtocol: {{ $port.appProtocol }}
+        {{ end }}
       {{- end -}}
   {{- with (merge
     ($serviceObject.extraSelectorLabels | default dict)

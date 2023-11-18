@@ -16,4 +16,4 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        <tbd>
+        Add support for `appProtocol` in kubernetes services.
