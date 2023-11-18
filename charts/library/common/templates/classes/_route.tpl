@@ -69,9 +69,13 @@ spec:
       port: {{ default .port $servicePrimaryPort.port }}
       weight: {{ default 1 .weight }}
     {{- end }}
-    {{- if (eq $routeKind "HTTPRoute") }}
+    {{- if or (eq $routeKind "HTTPRoute") (eq $routeKind "GRPCRoute") }}
       {{- with .matches }}
     matches:
+        {{- toYaml . | nindent 6 }}
+      {{- end }}
+        {{- with .filters }}
+    filters:
         {{- toYaml . | nindent 6 }}
       {{- end }}
     {{- end }}

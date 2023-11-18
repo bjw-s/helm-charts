@@ -17,3 +17,9 @@ annotations:
     - kind: added
       description: |-
         Add support for `appProtocol` in kubernetes services.
+    - kind: added
+      description: |-
+        Add support for route filters for HTTPRoute and GRPCRoute
+    - kind: fixed
+      description: |-
+        GRPCRoute support for matches was not supported.

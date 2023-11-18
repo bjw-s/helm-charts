@@ -597,6 +597,8 @@ route:
           - path:
               type: PathPrefix
               value: /
+        ## Request filters that are applied to the rules.
+        filters: []
 
 # -- Configure persistence for the chart here.
 # Additional items can be added by adding a dictionary key similar to the 'config' key.
