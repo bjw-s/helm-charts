@@ -1,6 +1,6 @@
 # common
 
-![Version: 2.2.0](https://img.shields.io/badge/Version-2.2.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 2.3.0](https://img.shields.io/badge/Version-2.3.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -27,7 +27,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
   - name: common
-    version: 2.2.0
+    version: 2.3.0
     repository: https://bjw-s.github.io/helm-charts/
 ```
 
@@ -158,6 +158,8 @@ The following table contains an overview of available values and their descripti
 | persistence | object | See below | Configure persistence for the chart here. Additional items can be added by adding a dictionary key similar to the 'config' key. [[ref]](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-storage) |
 | persistence.config.accessMode | string | `"ReadWriteOnce"` | AccessMode for the persistent volume. Make sure to select an access mode that is supported by your storage provider! [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes) |
 | persistence.config.advancedMounts | object | `{}` | Explicitly configure mounts for specific controllers and containers. Example: advancedMounts:   main: # the controller with the "main" identifier     main: # the container with the "main" identifier       - path: /data/config.yaml         readOnly: true         subPath: config.yaml     second-container: # the container with the "second-container" identifier       - path: /appdata/config         readOnly: true   second-controller: # the controller with the "second-controller" identifier     main: # the container with the "main" identifier       - path: /data/config.yaml         readOnly: false         subPath: config.yaml |
+| persistence.config.dataSource | object | `{}` | The optional data source for the persistentVolumeClaim. [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-populators-and-data-sources) |
+| persistence.config.dataSourceRef | object | `{}` | The optional volume populator for the persistentVolumeClaim. [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-populators-and-data-sources) |
 | persistence.config.enabled | bool | `false` | Enables or disables the persistence item. Defaults to true |
 | persistence.config.existingClaim | string | `nil` | If you want to reuse an existing claim, the name of the existing PVC can be passed here. |
 | persistence.config.globalMounts | list | `[]` | Configure mounts to all controllers and containers. By default the persistence item will be mounted to `/<name_of_the_peristence_item>`. Example: globalMounts:   - path: /config     readOnly: false |
@@ -173,7 +175,7 @@ The following table contains an overview of available values and their descripti
 | route.main.labels | object | `{}` | Provide additional labels which may be required. |
 | route.main.nameOverride | string | `nil` | Override the name suffix that is used for this route. |
 | route.main.parentRefs | list | `[{"group":"gateway.networking.k8s.io","kind":"Gateway","name":null,"namespace":null,"sectionName":null}]` | Configure the resource the route attaches to. |
-| route.main.rules | list | `[{"backendRefs":[{"group":"","kind":"Service","name":"main","namespace":null,"port":null,"weight":1}],"matches":[{"path":{"type":"PathPrefix","value":"/"}}]}]` | Configure rules for routing. Defaults to the primary service. |
+| route.main.rules | list | `[{"backendRefs":[{"group":"","kind":"Service","name":"main","namespace":null,"port":null,"weight":1}],"filters":[],"matches":[{"path":{"type":"PathPrefix","value":"/"}}]}]` | Configure rules for routing. Defaults to the primary service. |
 | route.main.rules[0].backendRefs | list | `[{"group":"","kind":"Service","name":"main","namespace":null,"port":null,"weight":1}]` | Configure backends where matching requests should be sent. |
 | secrets | object | See below | Use this to populate secrets with the values you specify. Be aware that these values are not encrypted by default, and could therefore visible to anybody with access to the values.yaml file. Additional Secrets can be added by adding a dictionary key similar to the 'secret' object. |
 | secrets.secret.annotations | object | `{}` | Annotations to add to the Secret |
@@ -191,6 +193,7 @@ The following table contains an overview of available values and their descripti
 | service.main.labels | object | `{}` | Provide additional labels which may be required. |
 | service.main.nameOverride | string | `nil` | Override the name suffix that is used for this service |
 | service.main.ports | object | See below | Configure the Service port information here. Additional ports can be added by adding a dictionary key similar to the 'http' service. |
+| service.main.ports.http.appProtocol | string | `nil` | Specify the appProtocol value for the Service. [[ref]](https://kubernetes.io/docs/concepts/services-networking/service/#application-protocol) |
 | service.main.ports.http.enabled | bool | `true` | Enables or disables the port |
 | service.main.ports.http.nodePort | string | `nil` | Specify the nodePort value for the LoadBalancer and NodePort service types. [[ref]](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport) |
 | service.main.ports.http.port | string | `nil` | The port number |

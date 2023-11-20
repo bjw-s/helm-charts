@@ -21,7 +21,7 @@ application. For more deployment examples, check out the [`examples` folder](htt
 
 ```yaml linenums="1"
 --8<--
-examples/helm/values.yaml
+examples/helm/vaultwarden/values.yaml
 --8<--
 ```
 

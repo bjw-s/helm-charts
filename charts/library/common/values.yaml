@@ -163,6 +163,10 @@ controllers:
       #   annotations: {}
       #   mountPath: /data
       #   accessMode: "ReadWriteOnce"
+      #   dataSourceRef:
+      #     apiGroup: snapshot.storage.k8s.io
+      #     kind: VolumeSnapshot
+      #     name: MySnapshot
       #   size: 1Gi
       # - name: backup
       #   labels: {}
@@ -453,6 +457,10 @@ service:
         # [[ref]](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport)
         nodePort:
 
+        # -- Specify the appProtocol value for the Service.
+        # [[ref]](https://kubernetes.io/docs/concepts/services-networking/service/#application-protocol)
+        appProtocol:
+
 # -- Configure the ServiceMonitors for the chart here.
 # Additional ServiceMonitors can be added by adding a dictionary key similar to the 'main' ServiceMonitors.
 # @default -- See below
@@ -593,6 +601,8 @@ route:
           - path:
               type: PathPrefix
               value: /
+        ## Request filters that are applied to the rules.
+        filters: []
 
 # -- Configure persistence for the chart here.
 # Additional items can be added by adding a dictionary key similar to the 'config' key.
@@ -615,6 +625,14 @@ persistence:
 
     # -- If you want to reuse an existing claim, the name of the existing PVC can be passed here.
     existingClaim: # your-claim
+
+    # -- The optional data source for the persistentVolumeClaim.
+    # [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-populators-and-data-sources)
+    dataSource: {}
+
+    # -- The optional volume populator for the persistentVolumeClaim.
+    # [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-populators-and-data-sources)
+    dataSourceRef: {}
 
     # -- AccessMode for the persistent volume.
     # Make sure to select an access mode that is supported by your storage provider!
