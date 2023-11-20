@@ -19,7 +19,7 @@ maintainers:
 dependencies:
   - name: common
     repository: https://bjw-s.github.io/helm-charts
-    version: 2.0.3
+    version: 2.3.0
 annotations:
   artifacthub.io/changes: |-
     - kind: fixed
