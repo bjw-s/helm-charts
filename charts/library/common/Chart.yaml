@@ -22,7 +22,10 @@ annotations:
         Add support for route filters for HTTPRoute and GRPCRoute.
     - kind: added
       description: |-
-        Add support `dataSource` field in StatefulSet volumeClaimTemplates.
+        Add support `dataSource` and `dataSourceRef` fields in StatefulSet volumeClaimTemplates.
+    - kind: added
+      description: |-
+        Add support `dataSource` and `dataSourceRef` fields in persistentVolumeClaim persistence items.
     - kind: fixed
       description: |-
         GRPCRoute support for matches was not supported.

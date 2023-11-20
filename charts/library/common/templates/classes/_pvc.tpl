@@ -44,4 +44,10 @@ spec:
   {{- if $pvcObject.volumeName }}
   volumeName: {{ $pvcObject.volumeName | quote }}
   {{- end }}
+  {{- with $pvcObject.dataSource }}
+  dataSource: {{- tpl (toYaml .) $rootContext | nindent 10 }}
+  {{- end }}
+  {{- with $pvcObject.dataSourceRef }}
+  dataSourceRef: {{- tpl (toYaml .) $rootContext | nindent 10 }}
+  {{- end }}
 {{- end -}}

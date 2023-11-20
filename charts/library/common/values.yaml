@@ -163,7 +163,7 @@ controllers:
       #   annotations: {}
       #   mountPath: /data
       #   accessMode: "ReadWriteOnce"
-      #   dataSource:
+      #   dataSourceRef:
       #     apiGroup: snapshot.storage.k8s.io
       #     kind: VolumeSnapshot
       #     name: MySnapshot
@@ -625,6 +625,14 @@ persistence:
 
     # -- If you want to reuse an existing claim, the name of the existing PVC can be passed here.
     existingClaim: # your-claim
+
+    # -- The optional data source for the persistentVolumeClaim.
+    # [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-populators-and-data-sources)
+    dataSource: {}
+
+    # -- The optional volume populator for the persistentVolumeClaim.
+    # [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-populators-and-data-sources)
+    dataSourceRef: {}
 
     # -- AccessMode for the persistent volume.
     # Make sure to select an access mode that is supported by your storage provider!
