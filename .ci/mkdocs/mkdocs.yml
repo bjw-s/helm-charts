@@ -82,3 +82,7 @@ nav:
           - Helm templates: app-template/howto/helm-templates.md
           - Multiple subPaths for 1 volume: app-template/howto/multiple-subpath.md
           - Multiple services with 1 or more controllers: app-template/howto/multiple-services.md
+      - Examples:
+          - app-template/examples/index.md
+          - Home-Assistant with code-server: app-template/examples/home-assistant-codeserver.md
+          - qBittorrent with Gluetun: app-template/examples/qbittorrent-gluetun.md
