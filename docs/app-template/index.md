@@ -7,6 +7,10 @@ installed directly I have created a companion chart for the [common library](../
 
 ## Usage
 
+This Helm chart can be used to deploy any application. Knowing the specifics of the application you want to deploy
+like the image, ports, env vars, args, and/or any config volumes will be required. You can also use [Kubesearch](https://kubesearch.dev/)
+to search for applications people have deployed with this Helm chart.
+
 In order to use this template chart, you would deploy it as you would any other Helm chart.
 By setting the desired values, the common library chart will render the desired resources.
 
