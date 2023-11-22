@@ -2,7 +2,7 @@
 apiVersion: v2
 description: Kubernetes admission controller to remove CPU limits from Pods.
 name: k8s-ycl
-version: 1.0.2
+version: 1.1.0
 appVersion: v0.1.0
 kubeVersion: ">=1.22.0-0"
 sources:
@@ -22,9 +22,9 @@ dependencies:
     version: 2.3.0
 annotations:
   artifacthub.io/changes: |-
-    - kind: fixed
+    - kind: changed
       description: |
-        Probes should point to numbered ports
+        Update to most recent library dependency
   artifacthub.io/links: |
     - name: "source"
       url: "https://github.com/bjw-s/k8s-ycl"
