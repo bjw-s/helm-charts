@@ -24,9 +24,6 @@ within the common library.
   -}}
 ---
 apiVersion: {{ $apiVersion }}
-{{- if and (ne $routeKind "GRPCRoute") (ne $routeKind "HTTPRoute") (ne $routeKind "TCPRoute") (ne $routeKind "TLSRoute") (ne $routeKind "UDPRoute") }}
-  {{- fail (printf "Not a valid route kind (%s)" $routeKind) }}
-{{- end }}
 kind: {{ $routeKind }}
 metadata:
   name: {{ $routeObject.name }}
