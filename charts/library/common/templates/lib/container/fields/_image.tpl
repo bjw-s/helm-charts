@@ -7,7 +7,7 @@ Image used by the container.
   {{- $containerObject := $ctx.containerObject -}}
 
   {{- $imageRepo := $containerObject.image.repository -}}
-  {{- $imageTag := default $rootContext.Chart.AppVersion $containerObject.image.tag -}}
+  {{- $imageTag := $containerObject.image.tag -}}
 
   {{- if and $imageRepo $imageTag -}}
     {{- printf "%s:%s" $imageRepo $imageTag -}}

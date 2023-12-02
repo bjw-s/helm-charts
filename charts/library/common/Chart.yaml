@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 2.3.0
+version: 2.3.1
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -14,21 +14,6 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: added
-      description: |-
-        Add support for `appProtocol` in Kubernetes services.
-    - kind: added
-      description: |-
-        Add support for route filters for HTTPRoute and GRPCRoute.
-    - kind: added
-      description: |-
-        Add support `dataSource` and `dataSourceRef` fields in StatefulSet volumeClaimTemplates.
-    - kind: added
-      description: |-
-        Add support `dataSource` and `dataSourceRef` fields in persistentVolumeClaim persistence items.
     - kind: fixed
       description: |-
-        GRPCRoute support for matches was not supported.
-    - kind: fixed
-      description: |-
-        `valuefrom`-style environment variables can now use Helm templating again.
+        Defaulting image tags to chart.Appversion was removed without a proper alternative
