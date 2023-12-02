@@ -14,7 +14,7 @@ Validate Route values
   {{/* Route Rules */}}
 
   {{- range $routeObject.rules }}
-  {{- if and (.backendRefs) (.filters) }}
+  {{- if and (.filters) (.backendRefs) }}
     {{- range .filters }}
       {{- if eq .type "RequestRedirect" }}
         {{- fail (printf "backend refs and request redirect filters cannot co-exist.")}}

@@ -11,6 +11,14 @@ tests:
         parentRefs:
           - name: parentName
             namespace: parentNamespace
+        rules:
+          - backendRefs:
+              - group: ""
+                kind: Service
+                name: RELEASE-NAME
+                namespace: NAMESPACE
+                port: 8080
+                weight: 1
     asserts:
       - documentIndex: &HTTPRouteDocument 2
         isKind:
@@ -103,3 +111,6 @@ tests:
             requestRedirect:
               scheme: https
               statusCode: 301
+      - documentIndex: *HTTPRouteDocument
+        notExists:
+          path: spec.rules[0].backendRefs[0]

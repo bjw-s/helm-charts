@@ -73,6 +73,8 @@ tests:
             - backendRefs:
                 - name: test
                   namespace: test
+                  kind: Service
+                  weight: 1
               matches:
                 - path:
                     type: PathPrefix
@@ -93,6 +95,8 @@ tests:
             - backendRefs:
                 - name: test
                   namespace: test
+                  kind: Service
+                  weight: 1
               matches:
                 - path:
                     type: PathPrefix
@@ -113,6 +117,8 @@ tests:
             - backendRefs:
                 - name: test
                   namespace: test
+                  kind: Service
+                  weight: 1
               matches:
                 - path:
                     type: PathPrefix
@@ -133,6 +139,8 @@ tests:
             - backendRefs:
                 - name: test
                   namespace: test
+                  kind: Service
+                  weight: 1
               matches:
                 - path:
                     type: PathPrefix
@@ -153,6 +161,8 @@ tests:
             - backendRefs:
                 - name: test
                   namespace: test
+                  kind: Service
+                  weight: 1
               matches:
                 - path:
                     type: PathPrefix
