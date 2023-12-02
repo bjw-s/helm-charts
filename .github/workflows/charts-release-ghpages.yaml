@@ -24,24 +24,24 @@ jobs:
     name: Release charts
     runs-on: ubuntu-22.04
     steps:
-      - name: Get GitHub API token
-        id: get-app-token
-        uses: getsentry/action-github-app-token@v2
+      - name: "Generate Short Lived OAuth App Token (ghs_*)"
+        uses: actions/create-github-app-token@v1.6.1
+        id: app-token
         with:
-          app_id: ${{ secrets.BJWS_APP_ID }}
-          private_key: ${{ secrets.BJWS_APP_PRIVATE_KEY }}
+          app-id: "${{ secrets.BJWS_APP_ID }}"
+          private-key: "${{ secrets.BJWS_APP_PRIVATE_KEY }}"
 
       - name: Checkout charts branch
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
-          token: ${{ steps.get-app-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
           path: "src"
           fetch-depth: 0
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
-          token: ${{ steps.get-app-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
           path: "dest"
           ref: "gh-pages"
           fetch-depth: 0
@@ -91,6 +91,6 @@ jobs:
         if: ${{ steps.auto-commit.outputs.changes_detected }}
         id: wait-for-deploy
         with:
-          token: ${{ steps.get-app-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
           ref: ${{ steps.auto-commit.outputs.commit_hash }}
           checkName: deploy
