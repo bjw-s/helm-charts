@@ -31,3 +31,17 @@ tests:
         equal:
           path: spec.template.spec.containers[0].image
           value: ghcr.io/mendhak/http-https-echo:1.23
+
+  - it: template tag should pass
+    set:
+      controllers.main.containers.main.image:
+        repository: ghcr.io/mendhak/http-https-echo
+        tag: "{{.Chart.Version}}"
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].image
+          value: ghcr.io/mendhak/http-https-echo:1.0.0

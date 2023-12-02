@@ -16,4 +16,4 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        `valuefrom`-style environment variables can now use Helm templating again.
+        Defaulting image tags to chart.Appversion was removed without a proper alternative
