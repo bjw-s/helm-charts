@@ -18,6 +18,9 @@ command: {{ . | trim | nindent 2 }}
   {{- with (include "bjw-s.common.lib.container.field.args" (dict "ctx" $ctx) | trim) }}
 args: {{ . | trim | nindent 2 }}
   {{- end -}}
+  {{- with $containerObject.resources }}
+workingDir: {{ . | trim }}
+  {{- end -}}
   {{- with $containerObject.securityContext }}
 securityContext: {{ toYaml . | trim | nindent 2 }}
   {{- end -}}
