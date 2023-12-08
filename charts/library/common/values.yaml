@@ -210,7 +210,7 @@ controllers:
         # -- Override the args for the default container
         args: []
         # -- Override the working directory for the default container
-        workingDir: 
+        workingDir:
 
         # -- Environment variables. Template enabled.
         # Syntax options:
