@@ -591,13 +591,7 @@ route:
     # -- Configure rules for routing. Defaults to the primary service.
     rules:
       - # -- Configure backends where matching requests should be sent.
-        backendRefs:
-          - group: ""
-            kind: Service
-            name: main
-            namespace:
-            port:
-            weight: 1
+        backendRefs: []
         ## Configure conditions used for matching incoming requests. Only for HTTPRoutes
         matches:
           - path:
