@@ -161,7 +161,8 @@ controllers:
       # - name: data
       #   labels: {}
       #   annotations: {}
-      #   mountPath: /data
+      #   globalMounts:
+      #     - path: /data
       #   accessMode: "ReadWriteOnce"
       #   dataSourceRef:
       #     apiGroup: snapshot.storage.k8s.io
@@ -171,8 +172,9 @@ controllers:
       # - name: backup
       #   labels: {}
       #   annotations: {}
-      #   mountPath: /backup
-      #   subPath: theSubPath
+      #   globalMounts:
+      #     - path: /backup
+      #       subPath: theSubPath
       #   accessMode: "ReadWriteOnce"
       #   size: 2Gi
       #   storageClass: cheap-storage-class
