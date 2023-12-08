@@ -209,6 +209,8 @@ controllers:
         command: []
         # -- Override the args for the default container
         args: []
+        # -- Override the working directory for the default container
+        workingDir:
 
         # -- Environment variables. Template enabled.
         # Syntax options:
