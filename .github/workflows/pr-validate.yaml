@@ -2,9 +2,6 @@ name: "Pull Request: Validate"
 
 on:
   pull_request:
-    branches:
-      - main
-      - development
     types:
       - opened
       - edited
