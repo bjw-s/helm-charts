@@ -18,7 +18,7 @@ command: {{ . | trim | nindent 2 }}
   {{- with (include "bjw-s.common.lib.container.field.args" (dict "ctx" $ctx) | trim) }}
 args: {{ . | trim | nindent 2 }}
   {{- end -}}
-  {{- with $containerObject.resources }}
+  {{- with $containerObject.workingDir }}
 workingDir: {{ . | trim }}
   {{- end -}}
   {{- with $containerObject.securityContext }}
