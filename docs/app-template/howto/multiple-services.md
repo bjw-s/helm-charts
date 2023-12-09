@@ -13,7 +13,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/mendhak/http-https-echo
-          tag: 30
+          tag: 31
           pullPolicy: IfNotPresent
 
 service:
@@ -46,14 +46,14 @@ controllers:
       main:
         image:
           repository: ghcr.io/mendhak/http-https-echo
-          tag: 30
+          tag: 31
           pullPolicy: IfNotPresent
   second:
     containers:
       main:
         image:
           repository: ghcr.io/mendhak/http-https-echo
-          tag: 30
+          tag: 31
           pullPolicy: IfNotPresent
 
 service:

@@ -4,7 +4,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/mendhak/http-https-echo
-          tag: 30
+          tag: 31
           pullPolicy: IfNotPresent
 
         env:
@@ -25,7 +25,7 @@ controllers:
           - third-container
         image:
           repository: ghcr.io/mendhak/http-https-echo
-          tag: 30
+          tag: 31
         env:
           HTTP_PORT: 8888
           HTTPS_PORT: 9998
@@ -34,7 +34,7 @@ controllers:
         dependsOn: main
         image:
           repository: ghcr.io/mendhak/http-https-echo
-          tag: 30
+          tag: 31
 
   second-controller:
     type: deployment
@@ -42,7 +42,7 @@ controllers:
       main:
         image:
           repository: ghcr.io/mendhak/http-https-echo
-          tag: 30
+          tag: 31
           pullPolicy: IfNotPresent
         env:
           HTTP_PORT: 8889
