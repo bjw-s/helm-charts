@@ -29,10 +29,10 @@ metadata:
 spec:
   revisionHistoryLimit: {{ $statefulsetObject.revisionHistoryLimit }}
   replicas: {{ $statefulsetObject.replicas }}
-  podManagementPolicy: {{ default "OrderedReady" $statefulsetObject.statefulset.podManagementPolicy }}
+  podManagementPolicy: {{ dig "statefulset" "podManagementPolicy" "OrderedReady" $statefulsetObject }}
   updateStrategy:
     type: {{ $statefulsetObject.strategy }}
-    {{- if and (eq $statefulsetObject.strategy "RollingUpdate") $statefulsetObject.rollingUpdate.partition }}
+    {{- if and (eq $statefulsetObject.strategy "RollingUpdate") (dig "rollingUpdate" "partition" nil $statefulsetObject) }}
     rollingUpdate:
       partition: {{ $statefulsetObject.rollingUpdate.partition }}
     {{- end }}
