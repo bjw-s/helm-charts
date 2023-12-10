@@ -499,6 +499,10 @@ serviceMonitor:
         interval: 1m
         scrapeTimeout: 10s
 
+    # -- Configures custom targetLabels for the serviceMonitor. (All collected
+    # meterics will have these labels, taking the value from the target service)
+    targetLabels: []
+
 # -- Configure the ingresses for the chart here.
 # Additional ingresses can be added by adding a dictionary key similar to the 'main' ingress.
 # @default -- See below

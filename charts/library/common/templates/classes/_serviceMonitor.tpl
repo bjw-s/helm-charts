@@ -30,4 +30,8 @@ spec:
       {{- include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | nindent 6 }}
     {{- end }}
   endpoints: {{- toYaml $serviceMonitorObject.endpoints | nindent 4 }}
+  {{- if not (empty $serviceMonitorObject.targetLabels )}}
+  targetLabels:
+    {{- toYaml $serviceMonitorObject.targetLabels | nindent 4 }}
+  {{- end }}
 {{- end }}
