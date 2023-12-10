@@ -16,6 +16,9 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
+        Add support for `timeouts` in HTTPRoute.
+    - kind: added
+      description: |-
         Add support for `workingDir` for containers.
     - kind: fixed
       description: |-

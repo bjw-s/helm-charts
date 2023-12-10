@@ -601,6 +601,8 @@ route:
               value: /
         ## Request filters that are applied to the rules.
         filters: []
+        ## Request timeout that are applied to the rules.
+        timeouts: {}
 
 # -- Configure persistence for the chart here.
 # Additional items can be added by adding a dictionary key similar to the 'config' key.

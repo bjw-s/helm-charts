@@ -85,6 +85,8 @@ tests:
                     path:
                       type: ReplacePrefixMatch
                       replacePrefixMatch: ""
+              timeouts:
+                backendRequest: 30s
         grpc:
           enabled: true
           kind: GRPCRoute
@@ -239,6 +241,9 @@ tests:
       - documentIndex: &HTTPRouteDocument 6
         notExists:
           path: spec.rules[0].filters
+      - documentIndex: &HTTPRouteDocument 6
+        notExists:
+          path: spec.rules[0].timeouts
 
   - it: hostnames shouldn't be used for TCPRoutes and UDPRoutes
     set:
@@ -301,3 +306,49 @@ tests:
         equal:
           path: spec.parentRefs[0].sectionName
           value: parentSection
+
+  - it: timeouts should only be used for HTTPRoutes
+    set:
+      route:
+        main:
+          enabled: true
+          kind: HTTPRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+                - name: test
+                  namespace: test
+              timeouts:
+                backendRequest: 30s
+        grpc:
+          enabled: true
+          kind: GRPCRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+                - name: test
+                  namespace: test
+              matches:
+                - path:
+                    type: PathPrefix
+                    value: /test
+              timeouts:
+                backendRequest: 10s
+    asserts:
+      - documentIndex: &HTTPRouteDocument 2
+        isKind:
+          of: GRPCRoute
+      - documentIndex: &HTTPRouteDocument 2
+        notExists:
+          path: spec.rules[0].timeouts.backendRequest
+      - documentIndex: &HTTPRouteDocument 3
+        isKind:
+          of: HTTPRoute
+      - documentIndex: &HTTPRouteDocument 3
+        equal:
+          path: spec.rules[0].timeouts.backendRequest
+          value: 30s
