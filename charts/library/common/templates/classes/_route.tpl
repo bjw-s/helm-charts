@@ -79,5 +79,11 @@ spec:
         {{- toYaml . | nindent 6 }}
       {{- end }}
     {{- end }}
+    {{- if (eq $routeKind "HTTPRoute") }}
+      {{- with .timeouts }}
+    timeouts:
+        {{- toYaml . | nindent 6 }}
+      {{- end }}
+    {{- end }}
   {{- end }}
 {{- end }}
