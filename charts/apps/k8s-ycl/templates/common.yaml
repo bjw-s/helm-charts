@@ -8,8 +8,6 @@ controllers:
   main:
     containers:
       main:
-        image:
-          tag: {{ default .Chart.AppVersion .Values.controllers.main.containers.main.image.tag }}
         probes:
           liveness:
             enabled: true

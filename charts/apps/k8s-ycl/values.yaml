@@ -6,6 +6,7 @@ controllers:
         strategy: RollingUpdate
         image:
           repository: ghcr.io/bjw-s/k8s-ycl
+          tag: "{{ .Chart.AppVersion }}"
           pullPolicy: Always
 
 webhook:
