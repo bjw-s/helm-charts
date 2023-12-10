@@ -38,13 +38,13 @@ tests:
             second-container:
               image:
                 repository: ghcr.io/mendhak/http-https-echo
-                tag: 30
+                tag: 31
         second:
           containers:
             first-container:
               image:
                 repository: ghcr.io/mendhak/http-https-echo
-                tag: 30
+                tag: 31
 
       persistence:
         config:

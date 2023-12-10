@@ -81,7 +81,8 @@ persistence:
   media:
     enabled: true
     existingClaim: nas-media
-    mountPath: /data/nas-media
+    globalMounts:
+      - path: /data/nas-media
 
 probes:
   liveness:

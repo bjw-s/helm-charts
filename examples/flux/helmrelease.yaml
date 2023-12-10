@@ -2,7 +2,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: vaultwarden
+  name: &app vaultwarden
   namespace: default
 spec:
   interval: 15m
@@ -45,10 +45,10 @@ spec:
       main:
         ports:
           http:
-            port: 80
+            port: &port 80
           websocket:
             enabled: true
-            port: 3012
+            port: &websocket-port 3012
 
     ingress:
       # -- Enable and configure ingress settings for the chart under this key.
@@ -73,6 +73,48 @@ spec:
                   name: main
                   port: websocket
 
+  route:
+    # -- Enable and configure route settings for the chart under this key.
+    main:
+      enabled: true
+      parentRefs:
+        - name: gateway
+          namespace: gateway-namespace
+          sectionName: gateway-section
+      hostnames:
+        - chart-example.local
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - kind: Service
+              port: *port
+              name: *app
+              namespace: default
+              weight: 1
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /notifications/hub/negotiate
+          backendRefs:
+            - kind: Service
+              port: *port
+              name: *app
+              namespace: default
+              weight: 1
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /notifications/hub
+          backendRefs:
+            - kind: Service
+              port: *websocket-port
+              name: *app
+              namespace: default
+              weight: 1
+
     # -- Configure persistence settings for the chart under this key.
     persistence:
       config:
@@ -80,4 +122,5 @@ spec:
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 1Gi
-        mountPath: /config
+        globalMounts:
+          - path: /config

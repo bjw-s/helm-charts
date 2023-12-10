@@ -24,9 +24,6 @@ within the common library.
   -}}
 ---
 apiVersion: {{ $apiVersion }}
-{{- if and (ne $routeKind "GRPCRoute") (ne $routeKind "HTTPRoute") (ne $routeKind "TCPRoute") (ne $routeKind "TLSRoute") (ne $routeKind "UDPRoute") }}
-  {{- fail (printf "Not a valid route kind (%s)" $routeKind) }}
-{{- end }}
 kind: {{ $routeKind }}
 metadata:
   name: {{ $routeObject.name }}
@@ -76,6 +73,12 @@ spec:
       {{- end }}
         {{- with .filters }}
     filters:
+        {{- toYaml . | nindent 6 }}
+      {{- end }}
+    {{- end }}
+    {{- if (eq $routeKind "HTTPRoute") }}
+      {{- with .timeouts }}
+    timeouts:
         {{- toYaml . | nindent 6 }}
       {{- end }}
     {{- end }}
