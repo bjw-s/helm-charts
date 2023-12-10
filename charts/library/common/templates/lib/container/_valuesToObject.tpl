@@ -8,12 +8,18 @@ Convert container values to an object
 
   {{- $_ := set $objectValues "identifier" $identifier -}}
 
-  {{- /* Convert float64 image tags to string */ -}}
+  {{- /* Process image tags */ -}}
   {{- if kindIs "map" $objectValues.image -}}
     {{- $imageTag := dig "image" "tag" "" $objectValues -}}
+    {{- /* Convert float64 image tags to string */ -}}
     {{- if kindIs "float64" $imageTag -}}
-      {{- $_ := set $objectValues.image "tag" ($imageTag | toString) -}}
+      {{- $imageTag = $imageTag | toString -}}
     {{- end -}}
+
+    {{- /* Process any templates in the tag */ -}}
+    {{- $imageTag = tpl $imageTag $rootContext -}}
+
+    {{- $_ := set $objectValues.image "tag" $imageTag -}}
   {{- end -}}
 
   {{- /* Return the container object */ -}}

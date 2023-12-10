@@ -19,7 +19,7 @@ Returns the value for containers
 
   {{- range $key, $containerValues := $enabledContainers -}}
     {{- /* Create object from the container values */ -}}
-    {{- $containerObject := (include "bjw-s.common.lib.container.valuesToObject" (dict "rootContext" $ "id" $key "values" $containerValues)) | fromYaml -}}
+    {{- $containerObject := (include "bjw-s.common.lib.container.valuesToObject" (dict "rootContext" $rootContext "id" $key "values" $containerValues)) | fromYaml -}}
 
     {{- /* Perform validations on the Container before rendering */ -}}
     {{- include "bjw-s.common.lib.container.validate" (dict "rootContext" $ "controllerObject" $controllerObject "containerObject" $containerObject) -}}

@@ -161,7 +161,8 @@ controllers:
       # - name: data
       #   labels: {}
       #   annotations: {}
-      #   mountPath: /data
+      #   globalMounts:
+      #     - path: /data
       #   accessMode: "ReadWriteOnce"
       #   dataSourceRef:
       #     apiGroup: snapshot.storage.k8s.io
@@ -171,8 +172,9 @@ controllers:
       # - name: backup
       #   labels: {}
       #   annotations: {}
-      #   mountPath: /backup
-      #   subPath: theSubPath
+      #   globalMounts:
+      #     - path: /backup
+      #       subPath: theSubPath
       #   accessMode: "ReadWriteOnce"
       #   size: 2Gi
       #   storageClass: cheap-storage-class
@@ -207,6 +209,8 @@ controllers:
         command: []
         # -- Override the args for the default container
         args: []
+        # -- Override the working directory for the default container
+        workingDir:
 
         # -- Environment variables. Template enabled.
         # Syntax options:
@@ -589,13 +593,7 @@ route:
     # -- Configure rules for routing. Defaults to the primary service.
     rules:
       - # -- Configure backends where matching requests should be sent.
-        backendRefs:
-          - group: ""
-            kind: Service
-            name: main
-            namespace:
-            port:
-            weight: 1
+        backendRefs: []
         ## Configure conditions used for matching incoming requests. Only for HTTPRoutes
         matches:
           - path:
