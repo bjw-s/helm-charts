@@ -44,7 +44,7 @@ jobs:
           echo $PR_NUMBER > pr_number.txt
 
       - name: Store pr data in artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pr_metadata
           path: ./pr_number.txt
