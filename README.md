@@ -8,7 +8,7 @@
 
 <div align="center">
 
-<a href="https://discord.gg/k8s-at-home"><img src="https://img.shields.io/discord/673534664354430999?style=for-the-badge&label&logo=discord&logoColor=white&color=blue"></a>
+<a href="https://discord.gg/home-operations"><img src="https://img.shields.io/discord/673534664354430999?style=for-the-badge&label&logo=discord&logoColor=white&color=blue"></a>
 
 </div>
 
@@ -49,7 +49,7 @@ If you like this project, please consider supporting my work through my [GitHub 
 
 ### Discord
 
-Join the k8s-at-home [Discord](https://discord.gg/k8s-at-home) community on Discord.
+Join the k8s-at-home [Discord](https://discord.gg/home-operations) community on Discord.
 
 ### Repository topics
 
