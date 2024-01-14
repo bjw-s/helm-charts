@@ -14,6 +14,9 @@ tests:
         isKind:
           of: CronJob
       - documentIndex: *ControllerDoc
+        notExists:
+          path: spec.suspend
+      - documentIndex: *ControllerDoc
         equal:
           path: spec.schedule
           value: "*/20 * * * *"
@@ -45,6 +48,7 @@ tests:
           pod:
             restartPolicy: OnFailure
           cronjob:
+            suspend: &CronJobSuspended true
             schedule: &CronJobSchedule "0 3 * * *"
             concurrencyPolicy: &CronJobConcurrencyPolicy "Test"
             failedJobsHistory: &CronJobFailedJobsHistory 2
@@ -54,6 +58,10 @@ tests:
       - documentIndex: &ControllerDoc 0
         isKind:
           of: CronJob
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.suspend
+          value: *CronJobSuspended
       - documentIndex: *ControllerDoc
         equal:
           path: spec.schedule
