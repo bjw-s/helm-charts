@@ -669,6 +669,7 @@ persistence:
     #     main: # the container with the "main" identifier
     #       - path: /data/config.yaml
     #         readOnly: true
+    #         mountPropagation: None
     #         subPath: config.yaml
     #     second-container: # the container with the "second-container" identifier
     #       - path: /appdata/config

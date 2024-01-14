@@ -23,3 +23,6 @@ annotations:
     - kind: added
       description: |-
         Add support for targetLabels in ServiceMonitor
+    - kind: added
+      description: |-
+        Re-add support for setting mountPropagation on volumemounts
