@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 2.4.0
+version: 2.5.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,30 +16,7 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        Add support for `timeouts` in HTTPRoute.
-    - kind: added
-      description: |-
-        Add support for `workingDir` for containers.
+        Support suspending CronJobs
     - kind: fixed
       description: |-
-        Defaulting image tags to chart.Appversion was removed without a proper alternative
-    - kind: fixed
-      description: |-
-        Using RequestRedirect is not allowed with BackendRefs in Routes.
-    - kind: fixed
-      description: |-
-        StatefulSet objects would not always fall back to proper defaults and error out
-    - kind: changed
-      description: |-
-        routes will no longer auto target its service.
-        It will need to be explicitly defined as below
-
-        ```yaml
-        - backendRefs:
-            - group: ""
-              kind: Service
-              name: foo
-              namespace: foo-namespace
-              port: 8080
-              weight: 1
-        ```
+        PersistentVolumeClaims now properly created based on `persistence.x.enabled` value

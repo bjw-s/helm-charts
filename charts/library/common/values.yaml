@@ -132,6 +132,10 @@ controllers:
     # -- CronJob configuration. Required only when using `controller.type: cronjob`.
     # @default -- See below
     cronjob:
+      # -- Suspends the CronJob
+      # [[ref]](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension)
+      # @default -- false
+      suspend:
       # -- Specifies how to treat concurrent executions of a job that is created by this cron job
       # valid values are Allow, Forbid or Replace
       concurrencyPolicy: Forbid
@@ -145,7 +149,7 @@ controllers:
       successfulJobsHistory: 1
       # -- The number of failed Jobs to keep
       failedJobsHistory: 1
-      # --  If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to
+      # -- If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to
       # be automatically deleted.
       ttlSecondsAfterFinished:
       # -- Limits the number of times a failed job will be retried

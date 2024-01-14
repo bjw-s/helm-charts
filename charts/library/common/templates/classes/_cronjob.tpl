@@ -32,6 +32,9 @@ metadata:
   annotations: {{- toYaml . | nindent 4 -}}
   {{- end }}
 spec:
+  {{- with $cronjobObject.cronjob.suspend }}
+  suspend: {{ ternary "true" "false" . }}
+  {{- end }}
   concurrencyPolicy: "{{ $cronjobObject.cronjob.concurrencyPolicy }}"
   startingDeadlineSeconds: {{ $cronjobObject.cronjob.startingDeadlineSeconds }}
   {{- with $timeZone }}
