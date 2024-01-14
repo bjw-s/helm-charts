@@ -1,6 +1,6 @@
 # common
 
-![Version: 2.3.0](https://img.shields.io/badge/Version-2.3.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 2.5.0](https://img.shields.io/badge/Version-2.5.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -27,7 +27,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
   - name: common
-    version: 2.3.0
+    version: 2.5.0
     repository: https://bjw-s.github.io/helm-charts/
 ```
 
@@ -85,6 +85,7 @@ The following table contains an overview of available values and their descripti
 | controllers.main.containers.main.securityContext | object | `{}` | Configure the Security Context for the container |
 | controllers.main.containers.main.terminationMessagePath | string | `nil` | [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |
 | controllers.main.containers.main.terminationMessagePolicy | string | `nil` | [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)] |
+| controllers.main.containers.main.workingDir | string | `nil` | Override the working directory for the default container |
 | controllers.main.cronjob | object | See below | CronJob configuration. Required only when using `controller.type: cronjob`. |
 | controllers.main.cronjob.backoffLimit | int | `6` | Limits the number of times a failed job will be retried |
 | controllers.main.cronjob.concurrencyPolicy | string | `"Forbid"` | Specifies how to treat concurrent executions of a job that is created by this cron job valid values are Allow, Forbid or Replace |
@@ -92,6 +93,7 @@ The following table contains an overview of available values and their descripti
 | controllers.main.cronjob.schedule | string | `"*/20 * * * *"` | Sets the CronJob time when to execute your jobs |
 | controllers.main.cronjob.startingDeadlineSeconds | int | `30` | The deadline in seconds for starting the job if it misses its scheduled time for any reason |
 | controllers.main.cronjob.successfulJobsHistory | int | `1` | The number of succesful Jobs to keep |
+| controllers.main.cronjob.suspend | string | false | Suspends the CronJob [[ref]](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension) |
 | controllers.main.cronjob.timeZone | string | `nil` | Sets the CronJob timezone (only works in Kubernetes >= 1.27) |
 | controllers.main.cronjob.ttlSecondsAfterFinished | string | `nil` | If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to be automatically deleted. |
 | controllers.main.enabled | bool | `true` | enable the controller. |
@@ -175,8 +177,8 @@ The following table contains an overview of available values and their descripti
 | route.main.labels | object | `{}` | Provide additional labels which may be required. |
 | route.main.nameOverride | string | `nil` | Override the name suffix that is used for this route. |
 | route.main.parentRefs | list | `[{"group":"gateway.networking.k8s.io","kind":"Gateway","name":null,"namespace":null,"sectionName":null}]` | Configure the resource the route attaches to. |
-| route.main.rules | list | `[{"backendRefs":[{"group":"","kind":"Service","name":"main","namespace":null,"port":null,"weight":1}],"timeouts":{}"filters":[],"matches":[{"path":{"type":"PathPrefix","value":"/"}}]}]` | Configure rules for routing. Defaults to the primary service. |
-| route.main.rules[0].backendRefs | list | `[{"group":"","kind":"Service","name":"main","namespace":null,"port":null,"weight":1}]` | Configure backends where matching requests should be sent. |
+| route.main.rules | list | `[{"backendRefs":[],"filters":[],"matches":[{"path":{"type":"PathPrefix","value":"/"}}],"timeouts":{}}]` | Configure rules for routing. Defaults to the primary service. |
+| route.main.rules[0].backendRefs | list | `[]` | Configure backends where matching requests should be sent. |
 | secrets | object | See below | Use this to populate secrets with the values you specify. Be aware that these values are not encrypted by default, and could therefore visible to anybody with access to the values.yaml file. Additional Secrets can be added by adding a dictionary key similar to the 'secret' object. |
 | secrets.secret.annotations | object | `{}` | Annotations to add to the Secret |
 | secrets.secret.enabled | bool | `false` | Enables or disables the Secret |
@@ -214,6 +216,7 @@ The following table contains an overview of available values and their descripti
 | serviceMonitor.main.nameOverride | string | `nil` | Override the name suffix that is used for this serviceMonitor. |
 | serviceMonitor.main.selector | object | `{}` | Configures a custom selector for the serviceMonitor, this takes precedence over specifying a service name. Helm templates can be used. |
 | serviceMonitor.main.serviceName | string | `"{{ include \"bjw-s.common.lib.chart.names.fullname\" $ }}"` | Configures the target Service for the serviceMonitor. Helm templates can be used. |
+| serviceMonitor.main.targetLabels | list | `[]` | Configures custom targetLabels for the serviceMonitor. (All collected meterics will have these labels, taking the value from the target service) [[ref]](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#servicemonitorspec/) |
 
 </details>
 
@@ -224,4 +227,4 @@ The following table contains an overview of available values and their descripti
 - Join the k8s-at-home [Discord](https://discord.gg/k8s-at-home) community
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.11.0](https://github.com/norwoodj/helm-docs/releases/v1.11.0)
+Autogenerated from chart metadata using [helm-docs v1.11.3](https://github.com/norwoodj/helm-docs/releases/v1.11.3)

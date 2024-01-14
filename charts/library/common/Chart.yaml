@@ -14,9 +14,12 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: added
-      description: |-
-        Support suspending CronJobs
     - kind: fixed
       description: |-
         PersistentVolumeClaims now properly created based on `persistence.x.enabled` value
+    - kind: added
+      description: |-
+        Support suspending CronJobs
+    - kind: added
+      description: |-
+        Add support for targetLabels in ServiceMonitor
