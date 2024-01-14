@@ -16,4 +16,7 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        Support suspending CronJob
+        Support suspending CronJobs
+    - kind: fixed
+      description: |-
+        PersistentVolumeClaims now properly created based on `persistence.x.enabled` value
