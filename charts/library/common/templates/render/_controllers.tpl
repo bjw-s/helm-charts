@@ -35,6 +35,10 @@ Renders the controller objects required by the chart.
         {{- $statefulsetObject := (include "bjw-s.common.lib.statefulset.valuesToObject" (dict "rootContext" $ "id" $key "values" $controllerObject)) | fromYaml -}}
         {{- include "bjw-s.common.lib.statefulset.validate" (dict "rootContext" $ "object" $statefulsetObject) -}}
         {{- include "bjw-s.common.class.statefulset" (dict "rootContext" $ "object" $statefulsetObject) | nindent 0 -}}
+      {{- else if eq $controllerObject.type "job"  -}}
+        {{- $jobObject := (include "bjw-s.common.lib.job.valuesToObject" (dict "rootContext" $ "id" $key "values" $controllerObject)) | fromYaml -}}
+        {{- include "bjw-s.common.lib.job.validate" (dict "rootContext" $ "object" $jobObject) -}}
+        {{- include "bjw-s.common.class.job" (dict "rootContext" $ "object" $jobObject) | nindent 0 -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}

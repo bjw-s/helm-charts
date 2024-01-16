@@ -29,3 +29,6 @@ annotations:
     - kind: added
       description: |-
         Support `envFrom` identifiers and name templates for Secrets and ConfigMaps
+    - kind: added
+      description: |-
+        Support the `job` controller type to generate one-off jobs.
