@@ -53,7 +53,7 @@ The following table contains an overview of available values and their descripti
 | configMaps.config.data | object | `{}` | configMap data content. Helm template enabled. |
 | configMaps.config.enabled | bool | `false` | Enables or disables the configMap |
 | configMaps.config.labels | object | `{}` | Labels to add to the configMap |
-| controllers.main.annotations | object | `{}` | Set annotations on the deployment/statefulset/daemonset/cronjob |
+| controllers.main.annotations | object | `{}` | Set annotations on the deployment/statefulset/daemonset/cronjob/job |
 | controllers.main.containers.main.args | list | `[]` | Override the args for the default container |
 | controllers.main.containers.main.command | list | `[]` | Override the command(s) for the default container |
 | controllers.main.containers.main.dependsOn | list | `[]` | Specify if this container depends on any other containers This is used to determine the order in which the containers are rendered. The use of "dependsOn" completely disables the "order" field within the controller. |
@@ -98,7 +98,11 @@ The following table contains an overview of available values and their descripti
 | controllers.main.cronjob.ttlSecondsAfterFinished | string | `nil` | If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to be automatically deleted. |
 | controllers.main.enabled | bool | `true` | enable the controller. |
 | controllers.main.initContainers | object | `{}` | Specify any initContainers here as dictionary items. Each initContainer should have its own key initContainers get sorted alphanumerically by the `<order>-<identifier>` combination if no order or dependsOn has been configured for them. |
-| controllers.main.labels | object | `{}` | Set labels on the deployment/statefulset/daemonset/cronjob |
+| controllers.main.job | object | See below | Job configuration. Required only when using `controller.type: job`. |
+| controllers.main.job.backoffLimit | int | `6` | Limits the number of times a failed job will be retried |
+| controllers.main.job.suspend | string | false | Suspends the Job [[ref]](https://kubernetes.io/docs/concepts/workloads/controllers/job/#suspending-a-job) |
+| controllers.main.job.ttlSecondsAfterFinished | string | `nil` | If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to be automatically deleted. |
+| controllers.main.labels | object | `{}` | Set labels on the deployment/statefulset/daemonset/cronjob/job |
 | controllers.main.pod | object | `{}` |  |
 | controllers.main.replicas | int | `1` | Number of desired pods. When using a HorizontalPodAutoscaler, set this to `null`. |
 | controllers.main.revisionHistoryLimit | int | `3` | ReplicaSet revision history limit |
@@ -108,8 +112,8 @@ The following table contains an overview of available values and their descripti
 | controllers.main.statefulset | object | `{"podManagementPolicy":null,"volumeClaimTemplates":[]}` | StatefulSet configuration. Required only when using `controller.type: statefulset`. |
 | controllers.main.statefulset.podManagementPolicy | string | `nil` | Set podManagementPolicy, valid values are Parallel and OrderedReady (default). |
 | controllers.main.statefulset.volumeClaimTemplates | list | `[]` | Used to create individual disks for each instance. |
-| controllers.main.strategy | string | `nil` | Set the controller upgrade strategy For Deployments, valid values are Recreate (default) and RollingUpdate. For StatefulSets, valid values are OnDelete and RollingUpdate (default). DaemonSets/CronJobs ignore this. |
-| controllers.main.type | string | `"deployment"` | Set the controller type. Valid options are deployment, daemonset, statefulset or cronjob |
+| controllers.main.strategy | string | `nil` | Set the controller upgrade strategy For Deployments, valid values are Recreate (default) and RollingUpdate. For StatefulSets, valid values are OnDelete and RollingUpdate (default). DaemonSets/CronJobs/Jobs ignore this. |
+| controllers.main.type | string | `"deployment"` | Set the controller type. Valid options are deployment, daemonset, statefulset, cronjob or job |
 | defaultPodOptions | object | `{"affinity":{},"annotations":{},"automountServiceAccountToken":true,"dnsConfig":{},"dnsPolicy":null,"enableServiceLinks":true,"hostAliases":[],"hostIPC":false,"hostNetwork":false,"hostPID":false,"hostname":null,"imagePullSecrets":[],"labels":{},"nodeSelector":{},"priorityClassName":null,"restartPolicy":null,"runtimeClassName":null,"schedulerName":null,"securityContext":{},"terminationGracePeriodSeconds":null,"tolerations":[],"topologySpreadConstraints":[]}` | Set default options for all controllers / pods here Each of these options can be overridden on a Controller level |
 | defaultPodOptions.affinity | object | `{}` | Defines affinity constraint rules. [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity) |
 | defaultPodOptions.annotations | object | `{}` | Set annotations on the Pod. Pod-specific values will be merged with this. |
