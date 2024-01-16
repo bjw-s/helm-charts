@@ -74,15 +74,22 @@ jobs:
       - name: Run chart-testing (lint)
         run: ct lint --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
 
-  # Summarize matrix https://github.community/t/status-check-for-a-matrix-jobs/127354/7
   lint_success:
     needs:
       - lint-chart
     if: |
       always()
     name: Lint successful
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
-      - name: Check lint matrix status
-        if: ${{ (inputs.chartsToLint != '' && inputs.chartsToLint != '[]') && (needs.lint-chart.result != 'success') }}
+      - name: Check matrix status
+        if: >-
+          ${{
+              (
+                inputs.chartsToLint != '' && inputs.chartsToLint != '[]'
+              ) &&
+              (
+                contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+              )
+          }}
         run: exit 1

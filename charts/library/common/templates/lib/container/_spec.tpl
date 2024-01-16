@@ -36,8 +36,8 @@ terminationMessagePolicy: {{ . | trim }}
   {{- with (include "bjw-s.common.lib.container.field.env" (dict "ctx" $ctx) | trim) }}
 env: {{ . | trim | nindent 2 }}
   {{- end -}}
-{{- with $containerObject.envFrom }}
-envFrom: {{ toYaml . | trim | nindent 2 }}
+  {{- with (include "bjw-s.common.lib.container.field.envFrom" (dict "ctx" $ctx) | trim) }}
+envFrom: {{ . | trim | nindent 2 }}
   {{- end -}}
   {{- with $containerObject.ports }}
 ports: {{ toYaml . | trim | nindent 2 }}

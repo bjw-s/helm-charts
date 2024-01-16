@@ -4,7 +4,13 @@ Renders the Persistent Volume Claim objects required by the chart.
 {{- define "bjw-s.common.render.pvcs" -}}
   {{- /* Generate pvc as required */ -}}
   {{- range $key, $pvc := .Values.persistence -}}
-    {{- if and $pvc.enabled (eq (default "persistentVolumeClaim" $pvc.type) "persistentVolumeClaim") (not $pvc.existingClaim) -}}
+    {{- /* Enable PVC by default, but allow override */ -}}
+    {{- $pvcEnabled := true -}}
+    {{- if hasKey $pvc "enabled" -}}
+      {{- $pvcEnabled = $pvc.enabled -}}
+    {{- end -}}
+
+    {{- if and $pvcEnabled (eq (default "persistentVolumeClaim" $pvc.type) "persistentVolumeClaim") (not $pvc.existingClaim) -}}
       {{- $pvcValues := (mustDeepCopy $pvc) -}}
 
       {{- /* Create object from the raw PVC values */ -}}

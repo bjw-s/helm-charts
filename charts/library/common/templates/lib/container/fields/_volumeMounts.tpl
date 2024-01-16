@@ -91,6 +91,12 @@ volumeMounts used by the container.
           {{- $_ := set $volumeMount "readOnly" $readOnly -}}
         {{- end -}}
 
+        {{- /* Use the specified mountPropagation setting if provided */ -}}
+        {{- with .mountPropagation -}}
+          {{- $mountPropagation := . -}}
+          {{- $_ := set $volumeMount "mountPropagation" $mountPropagation -}}
+        {{- end -}}
+
         {{- $enabledVolumeMounts = append $enabledVolumeMounts $volumeMount -}}
       {{- end -}}
 

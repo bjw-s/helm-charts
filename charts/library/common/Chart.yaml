@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 2.4.0
+version: 2.5.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -14,32 +14,21 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: fixed
+      description: |-
+        PersistentVolumeClaims now properly created based on `persistence.x.enabled` value
     - kind: added
       description: |-
-        Add support for `timeouts` in HTTPRoute.
+        Support suspending CronJobs
     - kind: added
       description: |-
-        Add support for `workingDir` for containers.
-    - kind: fixed
+        Add support for targetLabels in ServiceMonitor
+    - kind: added
       description: |-
-        Defaulting image tags to chart.Appversion was removed without a proper alternative
-    - kind: fixed
+        Re-add support for setting mountPropagation on volumemounts
+    - kind: added
       description: |-
-        Using RequestRedirect is not allowed with BackendRefs in Routes.
-    - kind: fixed
+        Support `envFrom` identifiers and name templates for Secrets and ConfigMaps
+    - kind: added
       description: |-
-        StatefulSet objects would not always fall back to proper defaults and error out
-    - kind: changed
-      description: |-
-        routes will no longer auto target its service.
-        It will need to be explicitly defined as below
-
-        ```yaml
-        - backendRefs:
-            - group: ""
-              kind: Service
-              name: foo
-              namespace: foo-namespace
-              port: 8080
-              weight: 1
-        ```
+        Support the `job` controller type to generate one-off jobs.

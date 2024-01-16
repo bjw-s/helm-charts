@@ -56,6 +56,7 @@ tests:
               main:
                 - path: /data/config.yaml
                   readOnly: false
+                  mountPropagation: HostToContainer
                   subPath: config.yaml
               second-container:
                 - path: /appdata/config
@@ -79,6 +80,7 @@ tests:
             - mountPath: /data/config.yaml
               name: data
               subPath: config.yaml
+              mountPropagation: HostToContainer
       - documentIndex: *FirstDeploymentDoc
         equal:
           path: spec.template.spec.containers[1].volumeMounts
