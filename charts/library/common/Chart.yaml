@@ -26,3 +26,6 @@ annotations:
     - kind: added
       description: |-
         Re-add support for setting mountPropagation on volumemounts
+    - kind: added
+      description: |-
+        Support `envFrom` identifiers and name templates for Secrets and ConfigMaps

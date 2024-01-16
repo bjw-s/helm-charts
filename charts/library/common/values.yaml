@@ -243,12 +243,28 @@ controllers:
         env:
 
         # -- Secrets and/or ConfigMaps that will be loaded as environment variables.
-        # [[ref]](https://unofficial-kubernetes.readthedocs.io/en/latest/tasks/configure-pod-container/configmap/#use-case-consume-configmap-in-environment-variables)
+        # Syntax options:
+        # A) Pass an app-template configMap identifier:
+        #    - config: config
+        # B) Pass any configMap name that is not also an identifier (Template enabled):
+        #    - config: random-configmap-name
+        # C) Pass an app-template configMap identifier, explicit syntax:
+        #    - configMapRef:
+        #        identifier: config
+        # D) Pass any configMap name, explicit syntax (Template enabled):
+        #    - configMapRef:
+        #        name: "{{ .Release.Name }}-config"
+        # E) Pass an app-template secret identifier:
+        #    - secret: secret
+        # F) Pass any secret name that is not also an identifier (Template enabled):
+        #    - secret: random-secret-name
+        # G) Pass an app-template secret identifier, explicit syntax:
+        #    - secretRef:
+        #        identifier: secret
+        # H) Pass any secret name, explicit syntax (Template enabled):
+        #    - secretRef:
+        #        name: "{{ .Release.Name }}-secret"
         envFrom: []
-        # - configMapRef:
-        #     name: config-map-name
-        # - secretRef:
-        #     name: secret-name
 
         # -- Probe configuration
         # -- [[ref]](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)

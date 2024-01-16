@@ -18,6 +18,9 @@ tests:
       controllers.main.containers.main.envFrom:
         - secretRef:
             name: myCustomSecret
+          prefix: test
+        - configMapRef:
+            name: myCustomConfig
     asserts:
       - documentIndex: &DeploymentDoc 0
         isKind:
@@ -28,3 +31,100 @@ tests:
           value:
             secretRef:
               name: myCustomSecret
+            prefix: test
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[1]
+          value:
+            configMapRef:
+              name: myCustomConfig
+
+  - it: envFrom configmap identifier reference should pass
+    set:
+      controllers.main.containers.main.envFrom:
+        - configMap: config
+          prefix: test
+        - configMapRef:
+            identifier: config
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[0]
+          value:
+            configMapRef:
+              name: RELEASE-NAME-config
+            prefix: test
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[1]
+          value:
+            configMapRef:
+              name: RELEASE-NAME-config
+
+  - it: envFrom Secret identifier reference should pass
+    set:
+      controllers.main.containers.main.envFrom:
+        - secret: secret
+          prefix: test
+        - secretRef:
+            identifier: secret
+          prefix: test
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[0]
+          value:
+            secretRef:
+              name: RELEASE-NAME-secret
+            prefix: test
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[1]
+          value:
+            secretRef:
+              name: RELEASE-NAME-secret
+            prefix: test
+
+  - it: envFrom with templated name reference should pass
+    set:
+      controllers.main.containers.main.envFrom:
+        - configMap: "{{ .Release.Name }}-config"
+        - configMapRef:
+            name: "{{ .Release.Name }}-config2"
+        - secret: "{{ .Release.Name }}-secret"
+        - secretRef:
+            name: "{{ .Release.Name }}-secret2"
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[0]
+          value:
+            configMapRef:
+              name: RELEASE-NAME-config
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[1]
+          value:
+            configMapRef:
+              name: RELEASE-NAME-config2
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[2]
+          value:
+            secretRef:
+              name: RELEASE-NAME-secret
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[3]
+          value:
+            secretRef:
+              name: RELEASE-NAME-secret2
