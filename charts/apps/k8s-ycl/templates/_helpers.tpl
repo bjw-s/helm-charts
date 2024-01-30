@@ -1,3 +1,10 @@
+{{- define "k8s-ycl.init" -}}
+  {{/* Make sure all variables are set properly */}}
+  {{- include "bjw-s.common.loader.init" . }}
+
+  {{- $_ := include "k8s-ycl.hardcodedValues" . | fromYaml | merge .Values -}}
+{{- end -}}
+
 {{- define "k8s-ycl.webhookPort" -}}
 9443
 {{- end -}}

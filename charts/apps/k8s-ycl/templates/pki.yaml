@@ -1,4 +1,5 @@
-{{- include "bjw-s.common.loader.init" . -}}
+{{/* Make sure all variables are set properly */}}
+{{- include "k8s-ycl.init" . -}}
 ---
 # Create a selfsigned Issuer, in order to create a root CA certificate for
 # signing webhook serving certificates
@@ -11,9 +12,7 @@ metadata:
     {{- include "bjw-s.common.lib.metadata.allLabels" . | nindent 4 }}
 spec:
   selfSigned: {}
-
 ---
-
 # Generate a CA Certificate used to sign certificates for the webhook
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -30,9 +29,7 @@ spec:
     kind: Issuer
   commonName: "ca.k8s-ycl.cert-manager"
   isCA: true
-
 ---
-
 # Create an Issuer that uses the above generated CA certificate to issue certs
 apiVersion: cert-manager.io/v1
 kind: Issuer
@@ -44,9 +41,7 @@ metadata:
 spec:
   ca:
     secretName: {{ include "k8s-ycl.rootCACertificate" . }}
-
 ---
-
 # Finally, generate a serving certificate for the webhook to use
 apiVersion: cert-manager.io/v1
 kind: Certificate

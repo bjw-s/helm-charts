@@ -1,4 +1,5 @@
-{{- include "bjw-s.common.loader.init" . -}}
+{{/* Make sure all variables are set properly */}}
+{{- include "k8s-ycl.init" . -}}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: MutatingWebhookConfiguration
