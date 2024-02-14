@@ -35,6 +35,7 @@ tests:
             suspend: &JobSuspended true
             ttlSecondsAfterFinished: &ttlSecondsAfterFinished 3600
             backoffLimit: 3
+            parallelism: &JobParallelism 3
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:
@@ -55,3 +56,7 @@ tests:
         equal:
           path: spec.backoffLimit
           value: 3
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.parallelism
+          value: *JobParallelism

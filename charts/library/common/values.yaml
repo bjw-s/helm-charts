@@ -154,6 +154,8 @@ controllers:
       ttlSecondsAfterFinished:
       # -- Limits the number of times a failed job will be retried
       backoffLimit: 6
+      # -- Specify the number of parallel jobs
+      parallelism:
 
     # -- Job configuration. Required only when using `controller.type: job`.
     # @default -- See below
@@ -167,6 +169,12 @@ controllers:
       ttlSecondsAfterFinished:
       # -- Limits the number of times a failed job will be retried
       backoffLimit: 6
+      # -- Specify the number of parallel jobs
+      parallelism:
+      # -- Specify the number of completions for the job
+      completions:
+      # -- Specify the completionMode for the job
+      completionMode:
 
     # -- StatefulSet configuration. Required only when using `controller.type: statefulset`.
     statefulset:
