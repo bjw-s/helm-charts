@@ -33,6 +33,15 @@ spec:
   {{- with $jobObject.job.ttlSecondsAfterFinished }}
   ttlSecondsAfterFinished: {{ . }}
   {{- end }}
+  {{- with $jobObject.job.parallelism }}
+  parallelism: {{ . }}
+  {{- end }}
+  {{- with $jobObject.job.completions }}
+  completions: {{ . }}
+  {{- end }}
+  {{- with $jobObject.job.completionMode }}
+  completionMode: {{ . }}
+  {{- end }}
   backoffLimit: {{ $jobObject.job.backoffLimit }}
   template:
     metadata:

@@ -54,6 +54,7 @@ tests:
             failedJobsHistory: &CronJobFailedJobsHistory 2
             successfulJobsHistory: &CronJobSuccessfulJobsHistory 3
             ttlSecondsAfterFinished: &ttlSecondsAfterFinished 3600
+            parallelism: &CronJobParallelism 3
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:
@@ -86,3 +87,7 @@ tests:
         equal:
           path: spec.jobTemplate.spec.template.spec.restartPolicy
           value: OnFailure
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.jobTemplate.spec.parallelism
+          value: *CronJobParallelism

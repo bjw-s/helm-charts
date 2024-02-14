@@ -48,6 +48,9 @@ spec:
       {{- with $cronjobObject.cronjob.ttlSecondsAfterFinished }}
       ttlSecondsAfterFinished: {{ . }}
       {{- end }}
+      {{- with $cronjobObject.cronjob.parallelism }}
+      parallelism: {{ . }}
+      {{- end }}
       backoffLimit: {{ $cronjobObject.cronjob.backoffLimit }}
       template:
         metadata:

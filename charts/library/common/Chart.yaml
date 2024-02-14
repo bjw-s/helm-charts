@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 2.5.0
+version: 2.6.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,19 +16,7 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        PersistentVolumeClaims now properly created based on `persistence.x.enabled` value
+        ConfigMap and Secret checksums take enabled state in to account again
     - kind: added
       description: |-
-        Support suspending CronJobs
-    - kind: added
-      description: |-
-        Add support for targetLabels in ServiceMonitor
-    - kind: added
-      description: |-
-        Re-add support for setting mountPropagation on volumemounts
-    - kind: added
-      description: |-
-        Support `envFrom` identifiers and name templates for Secrets and ConfigMaps
-    - kind: added
-      description: |-
-        Support the `job` controller type to generate one-off jobs.
+        Add support for specifying parallelism in CronJobs and Jobs
