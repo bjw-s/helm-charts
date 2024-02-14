@@ -69,7 +69,7 @@ jobs:
           fetch-depth: 0
 
       - name: Collect changed files
-        uses: dorny/paths-filter@v2
+        uses: dorny/paths-filter@v3
         id: changed-files
         with:
           list-files: json
