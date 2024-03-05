@@ -3,10 +3,12 @@
 suite: ingress values
 templates:
   - common.yaml
+
+values:
+  - ../_values/ingress_main_default_hosts.yaml
+
 tests:
   - it: default should pass
-    set:
-      ingress.main.enabled: true
     asserts:
       - documentIndex: &IngressDocument 2
         isKind:
@@ -23,7 +25,6 @@ tests:
   - it: custom host and path should pass
     set:
       ingress.main:
-        enabled: true
         hosts:
           - host: chart-test.local
             paths:
@@ -46,10 +47,13 @@ tests:
   - it: host with template should pass
     set:
       ingress.main:
-        enabled: true
         hosts:
           - host: "{{ .Release.Name }}.hostname"
-
+            paths:
+              - path: /
+                service:
+                  name: main
+                  port: http
     asserts:
       - documentIndex: &IngressDocument 2
         isKind:
@@ -62,7 +66,6 @@ tests:
   - it: path with template should pass
     set:
       ingress.main:
-        enabled: true
         hosts:
           - host: chart-test.local
             paths:
@@ -81,7 +84,6 @@ tests:
   - it: with defaultBackend should pass
     set:
       ingress.main:
-        enabled: true
         defaultBackend: test
     asserts:
       - documentIndex: &IngressDocument 2

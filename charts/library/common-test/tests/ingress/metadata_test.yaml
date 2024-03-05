@@ -3,10 +3,12 @@
 suite: ingress metadata
 templates:
   - common.yaml
+
+values:
+  - ../_values/ingress_main_default_hosts.yaml
+
 tests:
   - it: default metadata should pass
-    set:
-      ingress.main.enabled: true
     asserts:
       - documentIndex: &IngressDocument 2
         isKind:
@@ -26,7 +28,6 @@ tests:
   - it: custom metadata should pass
     set:
       ingress.main:
-        enabled: true
         annotations:
           test_annotation: test
         labels:
@@ -58,7 +59,6 @@ tests:
         annotations:
           global_annotation: test
       ingress.main:
-        enabled: true
         annotations:
           test_annotation: test
         labels:

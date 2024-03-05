@@ -32,7 +32,6 @@ service:
 ingress:
   # -- Enable and configure ingress settings for the chart under this key.
   main:
-    enabled: true
     hosts:
       - host: chart-example.local
         paths:

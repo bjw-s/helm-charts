@@ -1,11 +1,185 @@
 {
   "type": "object",
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": false,
-  "properties": {
-    "ingress": {
-      "$ref": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.0/charts/library/common/schema/_ingress.schema.json#/bjw-s.common.class.ingress"
+  "additionalProperties": true,
+
+  "definitions": {
+    "bjw-s.common": {
+      "annotations": {
+        "type": ["object", "null"],
+        "description": "Provide additional annotations which may be required.",
+        "additionalProperties": {
+          "type": ["string"]
+        }
+      },
+
+      "labels": {
+        "type": ["object", "null"],
+        "description": "Provide additional labels which may be required.",
+        "additionalProperties": {
+          "type": ["string"]
+        }
+      },
+
+      "ingress": {
+        "class": {
+          "description": "ingress class definition",
+          "type": "object",
+          "additionalProperties": false,
+
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Enables or disables the ingress",
+              "default": true
+            },
+
+            "annotations": {
+              "$ref": "#/definitions/bjw-s.common/annotations"
+            },
+
+            "className": {
+              "type": "string",
+              "description": "Set the ingressClass that is used for this ingress."
+            },
+
+            "defaultBackend": {
+              "type": "string",
+              "description": "Configure the defaultBackend for this ingress. This will disable any other rules for the ingress."
+            },
+
+            "hosts": {
+              "type": "array",
+              "description": "## Configure the hosts for the ingress",
+              "items": {
+                "$ref": "#/definitions/bjw-s.common/ingress/hostEntry"
+              }
+            },
+
+            "labels": {
+              "$ref": "#/definitions/bjw-s.common/labels"
+            },
+
+            "nameOverride": {
+              "type": "string",
+              "description": "Override the name suffix that is used for this ingress."
+            },
+
+            "primary": {
+              "type": "boolean",
+              "description": "Make this the primary ingress (used in probes, notes, etc...).\nIf there is more than 1 ingress, make sure that only 1 ingress is marked as primary.",
+              "default": false
+            },
+
+            "tls": {
+              "type": "array",
+              "description": "Configure TLS for the ingress. Both secretName and hosts can process a Helm template.",
+              "items": {
+                "$ref": "#/definitions/bjw-s.common/ingress/tlsEntry"
+              }
+            }
+          },
+
+          "if": {
+            "oneOf": [
+              {
+                "properties": {
+                  "enabled": {"const": true}
+                },
+                "required": ["enabled"]
+              },
+              {
+                "properties": {
+                  "enabled": {"const": null}
+                }
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "hosts": {
+                "minItems": 1
+              }
+            },
+            "required": ["hosts"]
+          }
+        },
+
+        "hostEntry": {
+          "additionalProperties": false,
+          "properties": {
+            "host": {
+              "type": "string",
+              "description": "Host address. Helm template can be passed."
+            },
+            "paths": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "description": "Path. Helm template can be passed."
+                  },
+                  "pathType": {
+                    "type": "string",
+                    "default": "Prefix"
+                  },
+
+                  "service": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "name": {
+                        "description": "Overrides the service name reference for this path. This can be an actual service name, or reference a service identifier from the service definitions",
+                        "type": "string"
+                      },
+                      "port": {
+                        "type": ["string", "integer"],
+                        "description": "Overrides the service port number reference for this path"
+                      }
+                    },
+                    "required": ["name"]
+                  }
+                },
+                "required": ["path", "service"]
+              },
+              "description": "## Configure the paths for the host",
+              "title": "paths",
+              "type": "array"
+            }
+          },
+          "required": ["host", "paths"]
+        },
+
+        "tlsEntry": {
+          "additionalProperties": false,
+          "properties": {
+            "hosts": {
+              "type": "array",
+              "description": "Host addresses. Helm template can be passed.",
+              "items": {
+                "type": ["string"]
+              }
+            },
+            "secretName": {
+              "type": "string",
+              "description": "Secret containing the TLS secret. Helm template can be passed."
+            }
+          },
+          "required": ["hosts"]
+        }
+      }
     }
   },
-  "required": ["ingress"]
+
+  "properties": {
+    "ingress": {
+      "patternProperties": {
+        "^.*$": {
+          "$ref": "#/definitions/bjw-s.common/ingress/class"
+        }
+      }
+    }
+  },
+  "required": []
 }

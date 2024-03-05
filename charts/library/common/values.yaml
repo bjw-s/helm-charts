@@ -545,59 +545,6 @@ serviceMonitor:
     # [[ref]](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#servicemonitorspec/)
     targetLabels: []
 
-# -- Configure the ingresses for the chart here.
-# Additional ingresses can be added by adding a dictionary key similar to the 'main' ingress.
-# @default -- See below
-ingress:
-  main:
-    # -- Enables or disables the ingress
-    enabled: false
-
-    # -- Make this the primary ingress (used in probes, notes, etc...).
-    # If there is more than 1 ingress, make sure that only 1 ingress is marked as primary.
-    primary: true
-
-    # -- Override the name suffix that is used for this ingress.
-    nameOverride:
-
-    # -- Provide additional annotations which may be required.
-    annotations:
-      {}
-      # kubernetes.io/ingress.class: nginx
-      # kubernetes.io/tls-acme: "true"
-
-    # -- Provide additional labels which may be required.
-    labels: {}
-
-    # -- Set the ingressClass that is used for this ingress.
-    className: # "nginx"
-
-    # -- Configure the defaultBackend for this ingress. This will disable any other rules for the ingress.
-    defaultBackend:
-
-    ## Configure the hosts for the ingress
-    hosts:
-      - # -- Host address. Helm template can be passed.
-        host: chart-example.local
-        ## Configure the paths for the host
-        paths:
-          - # -- Path.  Helm template can be passed.
-            path: /
-            pathType: Prefix
-            service:
-              # -- Overrides the service name reference for this path
-              # This can be an actual service name, or reference a service identifier
-              # from this values.yaml
-              name: main
-              # -- Overrides the service port number reference for this path
-              port:
-
-    # -- Configure TLS for the ingress. Both secretName and hosts can process a Helm template.
-    tls: []
-    #  - secretName: chart-example-tls
-    #    hosts:
-    #      - chart-example.local
-
 # -- Configure the gateway routes for the chart here.
 # Additional routes can be added by adding a dictionary key similar to the 'main' route.
 # [[ref]](https://gateway-api.sigs.k8s.io/references/spec/)
