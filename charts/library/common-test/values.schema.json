@@ -1,1 +1,4 @@
-../common/values.schema.json
+{
+  "$id": "file://../common/",
+  "$ref": "values.schema.json"
+}

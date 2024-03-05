@@ -11,93 +11,93 @@ global:
 
 # -- Set default options for all controllers / pods here
 # Each of these options can be overridden on a Controller level
-defaultPodOptions:
-  # -- Defines affinity constraint rules.
-  # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
-  affinity: {}
+# defaultPodOptions:
+#   # -- Defines affinity constraint rules.
+#   # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
+#   affinity: {}
 
-  # -- Set annotations on the Pod. Pod-specific values will be merged with this.
-  annotations: {}
+#   # -- Set annotations on the Pod. Pod-specific values will be merged with this.
+#   annotations: {}
 
-  # -- Specifies whether a service account token should be automatically mounted.
-  automountServiceAccountToken: true
+#   # -- Specifies whether a service account token should be automatically mounted.
+#   automountServiceAccountToken: true
 
-  # -- Configuring the ndots option may resolve nslookup issues on some Kubernetes setups.
-  dnsConfig:
-    {}
-    # options:
-    #   - name: ndots
-    #     value: "1"
+#   # -- Configuring the ndots option may resolve nslookup issues on some Kubernetes setups.
+#   dnsConfig:
+#     {}
+#     # options:
+#     #   - name: ndots
+#     #     value: "1"
 
-  # -- Defaults to "ClusterFirst" if hostNetwork is false
-  # and "ClusterFirstWithHostNet" if hostNetwork is true.
-  dnsPolicy: # ClusterFirst
+#   # -- Defaults to "ClusterFirst" if hostNetwork is false
+#   # and "ClusterFirstWithHostNet" if hostNetwork is true.
+#   dnsPolicy: # ClusterFirst
 
-  # -- Enable/disable the generation of environment variables for services.
-  # [[ref]](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service)
-  enableServiceLinks: false
+#   # -- Enable/disable the generation of environment variables for services.
+#   # [[ref]](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service)
+#   enableServiceLinks: false
 
-  # -- Allows specifying explicit hostname setting
-  hostname:
+#   # -- Allows specifying explicit hostname setting
+#   hostname:
 
-  # -- Use hostAliases to add custom entries to /etc/hosts - mapping IP addresses to hostnames.
-  # [[ref]](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/)
-  hostAliases: []
-  # - ip: "192.168.1.100"
-  #   hostnames:
-  #   - "example.com"
-  #   - "www.example.com"
+#   # -- Use hostAliases to add custom entries to /etc/hosts - mapping IP addresses to hostnames.
+#   # [[ref]](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/)
+#   hostAliases: []
+#   # - ip: "192.168.1.100"
+#   #   hostnames:
+#   #   - "example.com"
+#   #   - "www.example.com"
 
-  # -- Use the host's ipc namespace
-  hostIPC: false
+#   # -- Use the host's ipc namespace
+#   hostIPC: false
 
-  # -- When using hostNetwork make sure you set dnsPolicy to `ClusterFirstWithHostNet`
-  hostNetwork: false
+#   # -- When using hostNetwork make sure you set dnsPolicy to `ClusterFirstWithHostNet`
+#   hostNetwork: false
 
-  # -- Use the host's pid namespace
-  hostPID: false
+#   # -- Use the host's pid namespace
+#   hostPID: false
 
-  # -- Set image pull secrets
-  imagePullSecrets: []
+#   # -- Set image pull secrets
+#   imagePullSecrets: []
 
-  # -- Set labels on the Pod. Pod-specific values will be merged with this.
-  labels: {}
+#   # -- Set labels on the Pod. Pod-specific values will be merged with this.
+#   labels: {}
 
-  # -- Node selection constraint
-  # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
-  nodeSelector: {}
+#   # -- Node selection constraint
+#   # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+#   nodeSelector: {}
 
-  # -- Custom priority class for different treatment by the scheduler
-  priorityClassName: # system-node-critical
+#   # -- Custom priority class for different treatment by the scheduler
+#   priorityClassName: # system-node-critical
 
-  # -- Set Container restart policy.
-  # @default -- `Always`. When `controller.type` is `cronjob` it defaults to `Never`.
-  restartPolicy:
+#   # -- Set Container restart policy.
+#   # @default -- `Always`. When `controller.type` is `cronjob` it defaults to `Never`.
+#   restartPolicy:
 
-  # -- Allow specifying a runtimeClassName other than the default one (ie: nvidia)
-  runtimeClassName: # nvidia
+#   # -- Allow specifying a runtimeClassName other than the default one (ie: nvidia)
+#   runtimeClassName: # nvidia
 
-  # -- Allows specifying a custom scheduler name
-  schedulerName: # awkward-dangerous-scheduler
+#   # -- Allows specifying a custom scheduler name
+#   schedulerName: # awkward-dangerous-scheduler
 
-  # -- Configure the Security Context for the Pod
-  securityContext: {}
+#   # -- Configure the Security Context for the Pod
+#   securityContext: {}
 
-  # -- Duration in seconds the pod needs to terminate gracefully
-  # -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle)]
-  terminationGracePeriodSeconds:
+#   # -- Duration in seconds the pod needs to terminate gracefully
+#   # -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle)]
+#   terminationGracePeriodSeconds:
 
-  # -- Specify taint tolerations
-  # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
-  tolerations: []
+#   # -- Specify taint tolerations
+#   # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+#   tolerations: []
 
-  # -- Defines topologySpreadConstraint rules.
-  # [[ref]](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/)
-  topologySpreadConstraints: []
-  # - maxSkew: <integer>
-  #   topologyKey: <string>
-  #   whenUnsatisfiable: <string>
-  #   labelSelector: <object>
+#   # -- Defines topologySpreadConstraint rules.
+#   # [[ref]](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/)
+#   topologySpreadConstraints: []
+#   # - maxSkew: <integer>
+#   #   topologyKey: <string>
+#   #   whenUnsatisfiable: <string>
+#   #   labelSelector: <object>
 
 controllers:
   main:
