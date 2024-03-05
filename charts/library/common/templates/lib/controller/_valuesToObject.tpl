@@ -25,7 +25,7 @@ Convert controller values to an object
   {{- $_ := set $objectValues "identifier" $identifier -}}
 
   {{- /* Set the default Pod options for the controller */ -}}
-  {{- range $index, $key := keys $rootContext.Values.defaultPodOptions -}}
+  {{- range $index, $key := keys (default dict $rootContext.Values.defaultPodOptions) -}}
     {{- if not (hasKey $objectValues "pod") -}}
       {{- $_ := set $objectValues "pod" dict -}}
     {{- end -}}

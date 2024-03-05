@@ -17,7 +17,7 @@ Returns the value for labels
   {{- end -}}
 
   {{- /* Set to the default if it is set */ -}}
-  {{- $defaultOption := get $rootContext.Values.defaultPodOptions "labels" -}}
+  {{- $defaultOption := get (default dict $rootContext.Values.defaultPodOptions) "labels" -}}
   {{- if not (empty $defaultOption) -}}
     {{- $labels = merge $defaultOption $labels -}}
   {{- end -}}
