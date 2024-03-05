@@ -10,7 +10,7 @@ Returns the value for dnsPolicy
 
   {{- /* Get hostNetwork value "" */ -}}
   {{- $hostNetwork:= include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "hostNetwork") -}}
-  {{- if $hostNetwork -}}
+  {{- if (eq $hostNetwork "true") -}}
     {{- $dnsPolicy = "ClusterFirstWithHostNet" -}}
   {{- end -}}
 

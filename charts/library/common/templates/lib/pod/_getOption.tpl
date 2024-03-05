@@ -5,7 +5,7 @@ Returns the value for the specified field
   {{- $rootContext := .ctx.rootContext -}}
   {{- $controllerObject := .ctx.controllerObject -}}
   {{- $option := .option -}}
-  {{- $default := .default -}}
+  {{- $default := default "" .default -}}
 
   {{- $value := $default -}}
 

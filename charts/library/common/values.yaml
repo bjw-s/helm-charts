@@ -9,6 +9,83 @@ global:
   # -- Set additional global annotations. Helm templates can be used.
   annotations: {}
 
+# -- Set default options for all controllers / pods here
+# Each of these options can be overridden on a Controller level
+defaultPodOptions:
+  # -- Defines affinity constraint rules.
+  # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
+  affinity: {}
+
+  # -- Set annotations on the Pod. Pod-specific values will be merged with this.
+  annotations: {}
+
+  # -- Specifies whether a service account token should be automatically mounted.
+  automountServiceAccountToken: true
+
+  # -- Configuring the ndots option may resolve nslookup issues on some Kubernetes setups.
+  dnsConfig: {}
+
+  # -- Defaults to "ClusterFirst" if hostNetwork is false and "ClusterFirstWithHostNet" if hostNetwork is true.
+  dnsPolicy: ""
+
+  # -- Enable/disable the generation of environment variables for services.
+  # [[ref]](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service)
+  enableServiceLinks: false
+
+  # -- Allows specifying explicit hostname setting
+  hostname: ""
+
+  # -- Use hostAliases to add custom entries to /etc/hosts - mapping IP addresses to hostnames.
+  # [[ref]](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/)
+  hostAliases: []
+
+  # -- Use the host's ipc namespace
+  hostIPC: false
+
+  # -- When using hostNetwork make sure you set dnsPolicy to `ClusterFirstWithHostNet`
+  hostNetwork: false
+
+  # -- Use the host's pid namespace
+  hostPID: false
+
+  # -- Set image pull secrets
+  imagePullSecrets: []
+
+  # -- Set labels on the Pod. Pod-specific values will be merged with this.
+  labels: {}
+
+  # -- Node selection constraint
+  # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+  nodeSelector: {}
+
+  # -- Custom priority class for different treatment by the scheduler
+  priorityClassName: ""
+
+  # -- Set Container restart policy.
+  # @default -- `Always`. When `controller.type` is `cronjob` it defaults to `Never`.
+  restartPolicy: ""
+
+  # -- Allow specifying a runtimeClassName other than the default one (ie: nvidia)
+  runtimeClassName: ""
+
+  # -- Allows specifying a custom scheduler name
+  schedulerName: ""
+
+  # -- Configure the Security Context for the Pod
+  securityContext: {}
+
+  # -- Duration in seconds the pod needs to terminate gracefully
+  # -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle)]
+  terminationGracePeriodSeconds:
+
+  # -- Specify taint tolerations
+  # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+  tolerations: []
+
+  # -- Defines topologySpreadConstraint rules.
+  # [[ref]](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/)
+  topologySpreadConstraints: []
+
 controllers:
   main:
     # -- enable the controller.
@@ -415,6 +492,52 @@ service:
         # -- Specify the appProtocol value for the Service.
         # [[ref]](https://kubernetes.io/docs/concepts/services-networking/service/#application-protocol)
         appProtocol:
+
+# -- Configure the ingresses for the chart here.
+ingress:
+  {}
+
+  # -- An example is shown below
+  # main:
+  #   # -- Enables or disables the ingress
+  #   enabled: true
+
+  #   # -- Override the name suffix that is used for this ingress.
+  #   nameOverride:
+
+  #   # -- Provide additional annotations which may be required.
+  #   annotations: {}
+
+  #   # -- Provide additional labels which may be required.
+  #   labels: {}
+
+  #   # -- Set the ingressClass that is used for this ingress.
+  #   className:
+
+  #   # -- Configure the defaultBackend for this ingress. This will disable any other rules for the ingress.
+  #   defaultBackend:
+
+  #   ## Configure the hosts for the ingress
+  #   hosts:
+  #     - # -- Host address. Helm template can be passed.
+  #       host: chart-example.local
+  #       ## Configure the paths for the host
+  #       paths:
+  #         - # -- Path.  Helm template can be passed.
+  #           path: /
+  #           pathType: Prefix
+  #           service:
+  #             # -- Overrides the service name reference for this path
+  #             # This can be an actual service name, or reference a service identifier from this values.yaml
+  #             name: main
+  #             # -- Overrides the service port number reference for this path
+  #             port:
+
+  #   # -- Configure TLS for the ingress. Both secretName and hosts can process a Helm template.
+  #   tls: []
+  #   #  - secretName: chart-example-tls
+  #   #    hosts:
+  #   #      - chart-example.local
 
 # -- Configure the ServiceMonitors for the chart here.
 # Additional ServiceMonitors can be added by adding a dictionary key similar to the 'main' ServiceMonitors.

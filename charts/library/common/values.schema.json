@@ -1,20 +1,40 @@
 {
-  "type": "object",
-  "$id": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.0/charts/library/common/",
   "$schema": "http://json-schema.org/draft-07/schema",
-  "additionalProperties": true,
+  "$id": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.0/charts/library/common/",
 
+  "type": "object",
+  "additionalProperties": true,
   "properties": {
+    "global": {
+      "type": "object",
+      "description": "Global options",
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "$ref": "schemas/definitions.json#/annotations"
+        },
+        "nameOverride": {
+          "type": "string",
+          "description": "Set an override for the prefix of the fullname"
+        },
+        "fullnameOverride": {
+          "type": "string",
+          "description": "Set the entire name definition"
+        },
+        "labels": {
+          "$ref": "schemas/definitions.json#/labels"
+        }
+      }
+    },
+
     "defaultPodOptions": {
       "description": "Set default options for all controllers / pods here. Each of these options can be overridden on a Controller level",
       "$ref": "schemas/pod.json#/options"
     },
 
     "ingress": {
-      "patternProperties": {
-        "^.*$": {
-          "$ref": "schemas/ingress.json#/instance"
-        }
+      "additionalProperties": {
+        "$ref": "schemas/ingress.json#/instance"
       }
     }
   },

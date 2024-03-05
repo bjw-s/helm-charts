@@ -1,13 +1,11 @@
 {
   "instance": {
-    "description": "ingress instance definition",
     "type": "object",
     "additionalProperties": false,
 
     "properties": {
       "enabled": {
         "type": "boolean",
-        "description": "Enables or disables the ingress",
         "default": true
       },
 
@@ -16,18 +14,15 @@
       },
 
       "className": {
-        "type": "string",
-        "description": "Set the ingressClass that is used for this ingress."
+        "type": "string"
       },
 
       "defaultBackend": {
-        "type": "string",
-        "description": "Configure the defaultBackend for this ingress. This will disable any other rules for the ingress."
+        "type": "string"
       },
 
       "hosts": {
         "type": "array",
-        "description": "## Configure the hosts for the ingress",
         "items": {
           "$ref": "#/hostEntry"
         }
@@ -38,19 +33,16 @@
       },
 
       "nameOverride": {
-        "type": "string",
-        "description": "Override the name suffix that is used for this ingress."
+        "type": "string"
       },
 
       "primary": {
         "type": "boolean",
-        "description": "Make this the primary ingress (used in probes, notes, etc...).\nIf there is more than 1 ingress, make sure that only 1 ingress is marked as primary.",
         "default": false
       },
 
       "tls": {
         "type": "array",
-        "description": "Configure TLS for the ingress. Both secretName and hosts can process a Helm template.",
         "items": {
           "$ref": "#/tlsEntry"
         }
@@ -58,17 +50,14 @@
     },
 
     "if": {
-      "description": "ingress is enabled",
       "oneOf": [
         {
-          "description": "ingress is enabled explicitly",
           "properties": {
             "enabled": {"const": true}
           },
           "required": ["enabled"]
         },
         {
-          "description": "ingress is enabled implicitly",
           "properties": {
             "enabled": {"const": null}
           }
@@ -76,7 +65,6 @@
       ]
     },
     "then": {
-      "description": "hosts are required",
       "properties": {
         "hosts": {
           "minItems": 1
@@ -90,16 +78,14 @@
     "additionalProperties": false,
     "properties": {
       "host": {
-        "type": "string",
-        "description": "Host address. Helm template can be passed."
+        "type": "string"
       },
       "paths": {
         "items": {
           "additionalProperties": false,
           "properties": {
             "path": {
-              "type": "string",
-              "description": "Path. Helm template can be passed."
+              "type": "string"
             },
             "pathType": {
               "type": "string",
@@ -111,12 +97,10 @@
               "additionalProperties": false,
               "properties": {
                 "name": {
-                  "description": "Overrides the service name reference for this path. This can be an actual service name, or reference a service identifier from the service definitions",
                   "type": "string"
                 },
                 "port": {
-                  "type": ["string", "integer"],
-                  "description": "Overrides the service port number reference for this path"
+                  "type": ["string", "integer"]
                 }
               },
               "required": ["name"]
@@ -124,7 +108,6 @@
           },
           "required": ["path", "service"]
         },
-        "description": "## Configure the paths for the host",
         "title": "paths",
         "type": "array"
       }
@@ -137,14 +120,12 @@
     "properties": {
       "hosts": {
         "type": "array",
-        "description": "Host addresses. Helm template can be passed.",
         "items": {
           "type": ["string"]
         }
       },
       "secretName": {
-        "type": "string",
-        "description": "Secret containing the TLS secret. Helm template can be passed."
+        "type": "string"
       }
     },
     "required": ["hosts"]

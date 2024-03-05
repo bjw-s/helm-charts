@@ -81,8 +81,9 @@ jobs:
 
       - name: Run chart-testing (install)
         working-directory: "charts/${{ matrix.chart }}"
+        # TODO: Awaiting https://github.com/actions/checkout/issues/1607
         run: |
-          ct install --config ${{env.GITHUB_WORKSPACE}}/.ci/ct/ct.yaml --charts .
+          ct install --config "$GITHUB_WORKSPACE/.ci/ct/ct.yaml" --charts .
 
   install_success:
     needs:
