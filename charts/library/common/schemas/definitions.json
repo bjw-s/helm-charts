@@ -1,13 +1,4 @@
 {
-  "pod": {
-    "options": {
-      "type": "object",
-      "description": "Pod options",
-      "additionalProperties": false,
-      "properties": {}
-    }
-  },
-
   "annotations": {
     "type": ["object", "null"],
     "description": "Provide additional annotations which may be required.",

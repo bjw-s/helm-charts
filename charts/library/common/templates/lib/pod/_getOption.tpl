@@ -5,11 +5,12 @@ Returns the value for the specified field
   {{- $rootContext := .ctx.rootContext -}}
   {{- $controllerObject := .ctx.controllerObject -}}
   {{- $option := .option -}}
+  {{- $default := .default -}}
 
-  {{- $value := "" -}}
+  {{- $value := $default -}}
 
   {{- /* Set to the default if it is set */ -}}
-  {{- $defaultOption := get $rootContext.Values.defaultPodOptions $option -}}
+  {{- $defaultOption := dig $option nil (default dict $rootContext.Values.defaultPodOptions) -}}
   {{- if kindIs "bool" $defaultOption -}}
     {{- $value = $defaultOption -}}
   {{- else if not (empty $defaultOption) -}}
@@ -17,13 +18,11 @@ Returns the value for the specified field
   {{- end -}}
 
   {{- /* See if a pod-specific override is needed */ -}}
-  {{- if hasKey $controllerObject "pod" -}}
-    {{- $podOption := get $controllerObject.pod $option -}}
-    {{- if kindIs "bool" $podOption -}}
-      {{- $value = $podOption -}}
-    {{- else if not (empty $podOption) -}}
-      {{- $value = $podOption -}}
-    {{- end -}}
+  {{- $podOption := dig $option nil (default dict $controllerObject.pod) -}}
+  {{- if kindIs "bool" $podOption -}}
+    {{- $value = $podOption -}}
+  {{- else if not (empty $podOption) -}}
+    {{- $value = $podOption -}}
   {{- end -}}
 
   {{- if kindIs "bool" $value -}}

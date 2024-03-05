@@ -1,0 +1,120 @@
+{
+  "options": {
+    "type": "object",
+    "description": "Pod options",
+    "additionalProperties": false,
+    "properties": {
+      "affinity": {
+        "type": "object",
+        "description": "Defines affinity constraint rules. [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)",
+        "$ref": "k8s-api.json#/core.v1.Affinity"
+      },
+      "annotations": {
+        "description": "Set annotations on the Pod. Pod-specific values will be merged with this.",
+        "$ref": "definitions.json#/annotations"
+      },
+      "automountServiceAccountToken": {
+        "type": "boolean",
+        "description": "Specifies whether a service account token should be automatically mounted.",
+        "default": true
+      },
+      "dnsConfig": {
+        "type": "object",
+        "description": "Configuring the ndots option may resolve nslookup issues on some Kubernetes setups.",
+        "$ref": "k8s-api.json#/core.v1.PodDNSConfig"
+      },
+      "dnsPolicy": {
+        "type": "string",
+        "description": "Specify a custom dnsPolicy",
+        "default": "Defaults to `ClusterFirst` if hostNetwork is false and `ClusterFirstWithHostNet` if hostNetwork is true."
+      },
+      "enableServiceLinks": {
+        "type": "boolean",
+        "description": "Enable/disable the generation of environment variables for services. [[ref]](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service)",
+        "default": "false"
+      },
+      "hostAliases": {
+        "type": "array",
+        "description": "Use hostAliases to add custom entries to /etc/hosts - mapping IP addresses to hostnames.[[ref]](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/)",
+        "items": {
+          "$ref": "k8s-api.json#/core.v1.HostAlias"
+        }
+      },
+      "hostIPC": {
+        "type": "boolean",
+        "description": "Use the host's ipc namespace",
+        "default": false
+      },
+      "hostNetwork": {
+        "type": "boolean",
+        "description": "When using hostNetwork make sure you set dnsPolicy to `ClusterFirstWithHostNet`",
+        "default": "false"
+      },
+      "hostPID": {
+        "type": "boolean",
+        "description": "Use the host's pid namespace",
+        "default": false
+      },
+      "hostname": {
+        "type": "string",
+        "description": "Allows specifying explicit hostname setting"
+      },
+      "imagePullSecrets": {
+        "description": "Set image pull secrets",
+        "type": "array",
+        "items": {}
+      },
+      "labels": {
+        "description": "Set labels on the Pod. Pod-specific values will be merged with this.",
+        "$ref": "definitions.json#/annotations"
+      },
+      "nodeSelector": {
+        "type": "object",
+        "description": "Node selection constraint [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)",
+        "additionalProperties": {
+          "type": ["string"]
+        }
+      },
+      "priorityClassName": {
+        "type": "string",
+        "description": "Custom priority class for different treatment by the scheduler"
+      },
+      "restartPolicy": {
+        "type": "string",
+        "description": "Set Container restart policy.",
+        "default": "`Always`. When `controller.type` is `cronjob` it defaults to `Never`."
+      },
+      "runtimeClassName": {
+        "type": "string",
+        "description": "Allow specifying a runtimeClassName other than the default one (ie: nvidia)"
+      },
+      "schedulerName": {
+        "type": "string",
+        "description": "Allows specifying a custom scheduler name"
+      },
+      "securityContext": {
+        "type": "object",
+        "description": "Configure the Security Context for the Pod",
+        "$ref": "k8s-api.json#/core.v1.PodSecurityContext"
+      },
+      "terminationGracePeriodSeconds": {
+        "type": "integer",
+        "description": "Duration in seconds the pod needs to terminate gracefully [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle)]"
+      },
+      "tolerations": {
+        "type": "array",
+        "description": "Specify taint tolerations [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)",
+        "items": {
+          "$ref": "k8s-api.json#/core.v1.Toleration"
+        }
+      },
+      "topologySpreadConstraints": {
+        "type": "array",
+        "description": "Defines topologySpreadConstraint rules.\n[[ref]](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/)",
+        "items": {
+          "$ref": "k8s-api.json#/core.v1.TopologySpreadConstraint"
+        }
+      }
+    }
+  }
+}

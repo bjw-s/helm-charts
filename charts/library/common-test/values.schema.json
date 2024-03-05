@@ -1,4 +1,3 @@
 {
-  "$id": "file://../common/",
-  "$ref": "values.schema.json"
+  "$ref": "file://../common/values.schema.json"
 }

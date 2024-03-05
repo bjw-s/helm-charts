@@ -7,7 +7,7 @@
   "properties": {
     "defaultPodOptions": {
       "description": "Set default options for all controllers / pods here. Each of these options can be overridden on a Controller level",
-      "$ref": "schemas/definitions.json#/pod/options"
+      "$ref": "schemas/pod.json#/options"
     },
 
     "ingress": {
