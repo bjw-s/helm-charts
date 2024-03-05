@@ -6,7 +6,7 @@ The pod definition included in the controller.
   {{- $controllerObject := .controllerObject -}}
   {{- $ctx := dict "rootContext" $rootContext "controllerObject" $controllerObject -}}
 
-enableServiceLinks: {{ $controllerObject.pod.enableServiceLinks }}
+enableServiceLinks: {{ default false $controllerObject.pod.enableServiceLinks }}
 serviceAccountName: {{ include "bjw-s.common.lib.pod.field.serviceAccountName" (dict "ctx" $ctx) | trim }}
 automountServiceAccountToken: {{ $controllerObject.pod.automountServiceAccountToken }}
   {{- with ($controllerObject.pod.priorityClassName) }}

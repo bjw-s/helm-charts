@@ -1,6 +1,6 @@
 # common
 
-![Version: 2.6.0](https://img.shields.io/badge/Version-2.6.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 3.0.0](https://img.shields.io/badge/Version-3.0.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -27,7 +27,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
   - name: common
-    version: 2.6.0
+    version: 3.0.0
     repository: https://bjw-s.github.io/helm-charts/
 ```
 
@@ -118,13 +118,13 @@ The following table contains an overview of available values and their descripti
 | controllers.main.statefulset.volumeClaimTemplates | list | `[]` | Used to create individual disks for each instance. |
 | controllers.main.strategy | string | `nil` | Set the controller upgrade strategy For Deployments, valid values are Recreate (default) and RollingUpdate. For StatefulSets, valid values are OnDelete and RollingUpdate (default). DaemonSets/CronJobs/Jobs ignore this. |
 | controllers.main.type | string | `"deployment"` | Set the controller type. Valid options are deployment, daemonset, statefulset, cronjob or job |
-| defaultPodOptions | object | `{"affinity":{},"annotations":{},"automountServiceAccountToken":true,"dnsConfig":{},"dnsPolicy":null,"enableServiceLinks":true,"hostAliases":[],"hostIPC":false,"hostNetwork":false,"hostPID":false,"hostname":null,"imagePullSecrets":[],"labels":{},"nodeSelector":{},"priorityClassName":null,"restartPolicy":null,"runtimeClassName":null,"schedulerName":null,"securityContext":{},"terminationGracePeriodSeconds":null,"tolerations":[],"topologySpreadConstraints":[]}` | Set default options for all controllers / pods here Each of these options can be overridden on a Controller level |
+| defaultPodOptions | object | `{"affinity":{},"annotations":{},"automountServiceAccountToken":true,"dnsConfig":{},"dnsPolicy":null,"enableServiceLinks":false,"hostAliases":[],"hostIPC":false,"hostNetwork":false,"hostPID":false,"hostname":null,"imagePullSecrets":[],"labels":{},"nodeSelector":{},"priorityClassName":null,"restartPolicy":null,"runtimeClassName":null,"schedulerName":null,"securityContext":{},"terminationGracePeriodSeconds":null,"tolerations":[],"topologySpreadConstraints":[]}` | Set default options for all controllers / pods here Each of these options can be overridden on a Controller level |
 | defaultPodOptions.affinity | object | `{}` | Defines affinity constraint rules. [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity) |
 | defaultPodOptions.annotations | object | `{}` | Set annotations on the Pod. Pod-specific values will be merged with this. |
 | defaultPodOptions.automountServiceAccountToken | bool | `true` | Specifies whether a service account token should be automatically mounted. |
 | defaultPodOptions.dnsConfig | object | `{}` | Configuring the ndots option may resolve nslookup issues on some Kubernetes setups. |
 | defaultPodOptions.dnsPolicy | string | `nil` | Defaults to "ClusterFirst" if hostNetwork is false and "ClusterFirstWithHostNet" if hostNetwork is true. |
-| defaultPodOptions.enableServiceLinks | bool | `true` | Enable/disable the generation of environment variables for services. [[ref]](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service) |
+| defaultPodOptions.enableServiceLinks | bool | `false` | Enable/disable the generation of environment variables for services. [[ref]](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service) |
 | defaultPodOptions.hostAliases | list | `[]` | Use hostAliases to add custom entries to /etc/hosts - mapping IP addresses to hostnames. [[ref]](https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/) |
 | defaultPodOptions.hostIPC | bool | `false` | Use the host's ipc namespace |
 | defaultPodOptions.hostNetwork | bool | `false` | When using hostNetwork make sure you set dnsPolicy to `ClusterFirstWithHostNet` |

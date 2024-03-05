@@ -35,7 +35,7 @@ defaultPodOptions:
 
   # -- Enable/disable the generation of environment variables for services.
   # [[ref]](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service)
-  enableServiceLinks: true
+  enableServiceLinks: false
 
   # -- Allows specifying explicit hostname setting
   hostname:
