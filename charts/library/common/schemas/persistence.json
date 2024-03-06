@@ -1,0 +1,87 @@
+{
+  "volumeClaimTemplate": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "accessMode": {
+        "type": "string"
+      },
+      "advancedMounts": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "persistence.json#/advancedMount"
+        }
+      },
+      "annotations": {
+        "$ref": "definitions.json#/annotations"
+      },
+      "dataSource": {
+        "$ref": "#/dataSourceReference"
+      },
+      "dataSourceRef": {
+        "$ref": "#/dataSourceReference"
+      },
+      "globalMounts": {
+        "type": "array",
+        "items": {
+          "$ref": "#/globalMount"
+        }
+      },
+      "labels": {
+        "$ref": "definitions.json#/labels"
+      },
+      "size": {
+        "type": "string"
+      },
+      "storageClass": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "persistentVolumeClaim",
+          "emptyDir",
+          "nfs",
+          "hostPath",
+          "secret",
+          "configMap",
+          "custom"
+        ]
+      }
+    }
+  },
+
+  "dataSourceReference": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "apiGroup": {
+        "type": "string"
+      },
+      "kind": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      }
+    },
+    "required": ["kind", "name"]
+  },
+
+  "globalMount": {
+    "additionalProperties": false,
+    "properties": {
+      "path": {
+        "type": "string"
+      }
+    },
+    "required": ["path"]
+  },
+
+  "advancedMount": {}
+}

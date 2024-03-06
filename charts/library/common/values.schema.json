@@ -7,36 +7,35 @@
   "properties": {
     "global": {
       "type": "object",
-      "description": "Global options",
       "additionalProperties": false,
       "properties": {
         "annotations": {
           "$ref": "schemas/definitions.json#/annotations"
         },
         "nameOverride": {
-          "type": "string",
-          "description": "Set an override for the prefix of the fullname"
+          "type": ["string", "null"]
         },
         "fullnameOverride": {
-          "type": "string",
-          "description": "Set the entire name definition"
+          "type": ["string", "null"]
         },
         "labels": {
           "$ref": "schemas/definitions.json#/labels"
         }
       }
     },
-
     "defaultPodOptions": {
-      "description": "Set default options for all controllers / pods here. Each of these options can be overridden on a Controller level",
       "$ref": "schemas/pod.json#/options"
     },
-
+    "controllers": {
+      "additionalProperties": {
+        "$ref": "schemas/controllers.json#/instance"
+      }
+    },
     "ingress": {
       "additionalProperties": {
         "$ref": "schemas/ingress.json#/instance"
       }
     }
   },
-  "required": []
+  "required": ["controllers"]
 }

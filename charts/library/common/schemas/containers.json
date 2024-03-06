@@ -1,0 +1,394 @@
+{
+  "container": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "args": {
+        "oneOf": [
+          {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          {"type": "string"}
+        ]
+      },
+      "command": {
+        "oneOf": [
+          {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          {"type": "string"}
+        ]
+      },
+      "dependsOn": {
+        "oneOf": [
+          {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          {"type": "string"}
+        ]
+      },
+      "env": {
+        "anyOf": [
+          {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {"$ref": "#/envValueWithName"},
+                {"$ref": "#/envValueFromWithName"},
+                {"$ref": "#/envImplicitValueFromWithName"}
+              ]
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {"type": ["string", "number", "boolean"]},
+                {"$ref": "#/envValue"},
+                {"$ref": "#/envValueFrom"},
+                {"$ref": "#/envImplicitValueFrom"}
+              ]
+            }
+          }
+        ]
+      },
+      "envFrom": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "configMap": {
+              "type": "string"
+            },
+            "configMapRef": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": {"type": "string"},
+                "identifier": {"type": "string"},
+                "optional": {"type": "boolean"}
+              },
+              "oneOf": [{"required": ["name"]}, {"required": ["identifier"]}]
+            },
+            "prefix": {
+              "type": ["string", "null"]
+            },
+            "secret": {
+              "type": "string"
+            },
+            "secretRef": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": {"type": "string"},
+                "identifier": {"type": "string"},
+                "optional": {"type": "boolean"}
+              },
+              "oneOf": [{"required": ["name"]}, {"required": ["identifier"]}]
+            }
+          }
+        }
+      },
+      "image": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "pullPolicy": {
+            "type": "string",
+            "enum": ["Always", "IfNotPresent"]
+          },
+          "repository": {
+            "type": "string"
+          },
+          "tag": {
+            "type": ["string", "number"]
+          }
+        },
+        "required": ["repository", "tag"]
+      },
+      "lifecycle": {
+        "$ref": "k8s-api.json#/core.v1.Lifecycle"
+      },
+      "nameOverride": {
+        "type": "string"
+      },
+      "ports": {
+        "type": "array",
+        "items": {
+          "$ref": "k8s-api.json#/core.v1.ContainerPort"
+        }
+      },
+      "probes": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "liveness": {
+            "$ref": "#/probe"
+          },
+          "readiness": {
+            "$ref": "#/probe"
+          },
+          "startup": {
+            "$ref": "#/probe"
+          }
+        }
+      },
+      "resources": {
+        "$ref": "k8s-api.json#/core.v1.ResourceRequirements"
+      },
+      "securityContext": {
+        "$ref": "k8s-api.json#/core.v1.ContainerSecurityContext"
+      },
+      "terminationMessagePath": {
+        "type": "string"
+      },
+      "terminationMessagePolicy": {
+        "type": "string",
+        "enum": ["File", "FallbackToLogsOnError"]
+      },
+      "workingDir": {
+        "type": "string"
+      }
+    }
+  },
+
+  "envValueWithName": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "value": {
+        "type": ["string", "number", "boolean"]
+      }
+    },
+    "required": ["name", "value"]
+  },
+
+  "envValue": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "value": {
+        "type": ["string", "number", "boolean"]
+      },
+      "dependsOn": {"$ref": "#/envDependsOn"}
+    },
+    "required": ["value"]
+  },
+
+  "envValueFromWithName": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "valueFrom": {
+        "oneOf": [
+          {"$ref": "#/envValueFrom.fieldRef"},
+          {"$ref": "#/envValueFrom.secretKeyRef"}
+        ]
+      },
+      "dependsOn": {"$ref": "#/envDependsOn"}
+    },
+    "required": ["name", "valueFrom"]
+  },
+
+  "envValueFrom": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "valueFrom": {
+        "oneOf": [
+          {"$ref": "#/envValueFrom.fieldRef"},
+          {"$ref": "#/envValueFrom.secretKeyRef"}
+        ]
+      },
+      "dependsOn": {"$ref": "#/envDependsOn"}
+    },
+    "required": ["valueFrom"]
+  },
+
+  "envImplicitValueFromWithName": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "fieldRef": {"$ref": "#/envValueFrom.fieldPath"},
+      "secretKeyRef": {"$ref": "#/envValueFrom.secretKeyRef"},
+      "configMapKeyRef": {"$ref": "#/envValueFrom.configMapKeyRef"}
+    },
+    "required": ["name"],
+    "dependentSchemas": {
+      "fieldRef": {
+        "allOf": [
+          {"not": {"required": ["secretKeyRef"]}},
+          {"not": {"required": ["configMapKeyRef"]}}
+        ]
+      },
+      "secretKeyRef": {
+        "allOf": [
+          {"not": {"required": ["fieldRef"]}},
+          {"not": {"required": ["configMapKeyRef"]}}
+        ]
+      },
+      "configMapKeyRef": {
+        "allOf": [
+          {"not": {"required": ["secretKeyRef"]}},
+          {"not": {"required": ["configMapKeyRef"]}}
+        ]
+      }
+    }
+  },
+
+  "envImplicitValueFrom": {
+    "type": "object",
+    "oneOf": [
+      {"$ref": "#/envValueFrom.fieldRef"},
+      {"$ref": "#/envValueFrom.secretKeyRef"},
+      {"$ref": "#/envValueFrom.configMapKeyRef"}
+    ]
+  },
+
+  "envDependsOn": {
+    "oneOf": [
+      {"type": "string"},
+      {"type": "array", "items": {"type": "string"}}
+    ]
+  },
+
+  "envValueFrom.secretKeyRef": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "secretKeyRef": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "key"]
+      }
+    },
+    "required": ["secretKeyRef"]
+  },
+
+  "envValueFrom.configMapKeyRef": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "configMapKeyRef": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "key"]
+      }
+    },
+    "required": ["secretKeyRef"]
+  },
+
+  "envValueFrom.fieldRef": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "fieldRef": {
+        "$ref": "#/envValueFrom.fieldPath"
+      }
+    },
+    "required": ["fieldRef"]
+  },
+
+  "envValueFrom.fieldPath": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "fieldPath": {
+        "type": "string"
+      }
+    },
+    "required": ["fieldPath"]
+  },
+
+  "probe": {
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": false
+      },
+      "custom": {
+        "type": "boolean",
+        "default": false
+      },
+      "path": {
+        "type": "string"
+      },
+      "port": {
+        "type": ["number", "string"]
+      },
+      "spec": {
+        "allOf": [
+          {
+            "if": {},
+            "then": {"$ref": "k8s-api.json#/core.v1.Probe"},
+            "else": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "failureThreshold": {
+                  "type": "integer",
+                  "default": 3
+                },
+                "initialDelaySeconds": {
+                  "type": "integer",
+                  "default": 0
+                },
+                "periodSeconds": {
+                  "type": "integer",
+                  "default": 10
+                },
+                "timeoutSeconds": {
+                  "type": "integer",
+                  "default": 1
+                }
+              },
+              "required": [
+                "initialDelaySeconds",
+                "periodSeconds",
+                "timeoutSeconds",
+                "failureThreshold"
+              ]
+            }
+          }
+        ]
+      },
+      "type": {
+        "type": "string",
+        "enum": ["TCP", "HTTP", "HTTPS", "AUTO"]
+      }
+    }
+  }
+}

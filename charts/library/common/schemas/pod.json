@@ -77,7 +77,7 @@
         "$ref": "k8s-api.json#/core.v1.PodSecurityContext"
       },
       "terminationGracePeriodSeconds": {
-        "type": "integer"
+        "type": ["integer", "null"]
       },
       "tolerations": {
         "type": "array",

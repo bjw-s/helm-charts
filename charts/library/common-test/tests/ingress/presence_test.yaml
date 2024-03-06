@@ -18,6 +18,8 @@ tests:
           of: Ingress
 
   - it: explicitly disabled should pass
+    values:
+      - ../_values/ingress_main_default_hosts.yaml
     set:
       ingress.main.enabled: false
     asserts:

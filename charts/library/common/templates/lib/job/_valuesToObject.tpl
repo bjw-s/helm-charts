@@ -6,6 +6,10 @@ Convert job values to an object
   {{- $identifier := .id -}}
   {{- $objectValues := .values -}}
 
+  {{- if not (hasKey $objectValues "pod") -}}
+    {{- $_ := set $objectValues "pod" dict -}}
+  {{- end -}}
+
   {{- $restartPolicy := default "Never" $objectValues.pod.restartPolicy -}}
   {{- $_ := set $objectValues.pod "restartPolicy" $restartPolicy -}}
 

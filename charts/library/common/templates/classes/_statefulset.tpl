@@ -27,7 +27,7 @@ metadata:
   annotations: {{- toYaml . | nindent 4 -}}
   {{- end }}
 spec:
-  revisionHistoryLimit: {{ $statefulsetObject.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ default 3 $statefulsetObject.revisionHistoryLimit }}
   replicas: {{ $statefulsetObject.replicas }}
   podManagementPolicy: {{ dig "statefulset" "podManagementPolicy" "OrderedReady" $statefulsetObject }}
   updateStrategy:

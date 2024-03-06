@@ -9,7 +9,6 @@ tests:
       controllers.main.containers:
         main:
           nameOverride: template-test
-          controller: main
           image:
             repository: ghcr.io/mendhak/http-https-echo
     asserts:
@@ -25,7 +24,6 @@ tests:
     set:
       controllers.main.containers:
         main:
-          controller: main
           image:
             repository: ghcr.io/mendhak/http-https-echo
     asserts:
@@ -42,7 +40,6 @@ tests:
       controllers.main.containers:
         main:
           nameOverride: "{{ .Release.Name }}-container"
-          controller: main
           image:
             repository: ghcr.io/mendhak/http-https-echo
     asserts:

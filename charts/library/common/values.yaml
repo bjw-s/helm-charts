@@ -86,291 +86,282 @@ defaultPodOptions:
   # [[ref]](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/)
   topologySpreadConstraints: []
 
-controllers:
-  main:
-    # -- enable the controller.
-    enabled: true
+controllers: {}
+#   main:
+#     # -- enable the controller.
+#     enabled: true
 
-    # -- Set the controller type.
-    # Valid options are deployment, daemonset, statefulset, cronjob or job
-    type: deployment
-    # -- Set annotations on the deployment/statefulset/daemonset/cronjob/job
-    annotations: {}
-    # -- Set labels on the deployment/statefulset/daemonset/cronjob/job
-    labels: {}
-    # -- Number of desired pods. When using a HorizontalPodAutoscaler, set this to `null`.
-    replicas: 1
-    # -- Set the controller upgrade strategy
-    # For Deployments, valid values are Recreate (default) and RollingUpdate.
-    # For StatefulSets, valid values are OnDelete and RollingUpdate (default).
-    # DaemonSets/CronJobs/Jobs ignore this.
-    strategy:
+#     # -- Set the controller type.
+#     # Valid options are deployment, daemonset, statefulset, cronjob or job
+#     type: deployment
+#     # -- Set annotations on the deployment/statefulset/daemonset/cronjob/job
+#     annotations: {}
+#     # -- Set labels on the deployment/statefulset/daemonset/cronjob/job
+#     labels: {}
+#     # -- Number of desired pods. When using a HorizontalPodAutoscaler, set this to `null`.
+#     replicas: 1
+#     # -- Set the controller upgrade strategy
+#     # For Deployments, valid values are Recreate (default) and RollingUpdate.
+#     # For StatefulSets, valid values are OnDelete and RollingUpdate (default).
+#     # DaemonSets/CronJobs/Jobs ignore this.
+#     strategy:
 
-    rollingUpdate:
-      # -- Set deployment RollingUpdate max unavailable
-      unavailable:
-      # -- Set deployment RollingUpdate max surge
-      surge:
-      # -- Set statefulset RollingUpdate partition
-      partition:
-    # -- ReplicaSet revision history limit
-    revisionHistoryLimit: 3
+#     rollingUpdate:
+#       # -- Set deployment RollingUpdate max unavailable
+#       unavailable:
+#       # -- Set deployment RollingUpdate max surge
+#       surge:
+#       # -- Set statefulset RollingUpdate partition
+#       partition:
+#     # -- ReplicaSet revision history limit
+#     revisionHistoryLimit: 3
 
-    # -- CronJob configuration. Required only when using `controller.type: cronjob`.
-    # @default -- See below
-    cronjob:
-      # -- Suspends the CronJob
-      # [[ref]](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension)
-      # @default -- false
-      suspend:
-      # -- Specifies how to treat concurrent executions of a job that is created by this cron job
-      # valid values are Allow, Forbid or Replace
-      concurrencyPolicy: Forbid
-      # -- Sets the CronJob timezone (only works in Kubernetes >= 1.27)
-      timeZone:
-      # -- Sets the CronJob time when to execute your jobs
-      schedule: "*/20 * * * *"
-      # -- The deadline in seconds for starting the job if it misses its scheduled time for any reason
-      startingDeadlineSeconds: 30
-      # -- The number of succesful Jobs to keep
-      successfulJobsHistory: 1
-      # -- The number of failed Jobs to keep
-      failedJobsHistory: 1
-      # -- If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to
-      # be automatically deleted.
-      ttlSecondsAfterFinished:
-      # -- Limits the number of times a failed job will be retried
-      backoffLimit: 6
-      # -- Specify the number of parallel jobs
-      parallelism:
+#     # -- CronJob configuration. Required only when using `controller.type: cronjob`.
+#     # @default -- See below
+#     cronjob:
+#       # -- Suspends the CronJob
+#       # [[ref]](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension)
+#       # @default -- false
+#       suspend:
+#       # -- Specifies how to treat concurrent executions of a job that is created by this cron job
+#       # valid values are Allow, Forbid or Replace
+#       concurrencyPolicy: Forbid
+#       # -- Sets the CronJob timezone (only works in Kubernetes >= 1.27)
+#       timeZone:
+#       # -- Sets the CronJob time when to execute your jobs
+#       schedule: "*/20 * * * *"
+#       # -- The deadline in seconds for starting the job if it misses its scheduled time for any reason
+#       startingDeadlineSeconds: 30
+#       # -- The number of succesful Jobs to keep
+#       successfulJobsHistory: 1
+#       # -- The number of failed Jobs to keep
+#       failedJobsHistory: 1
+#       # -- If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to
+#       # be automatically deleted.
+#       ttlSecondsAfterFinished:
+#       # -- Limits the number of times a failed job will be retried
+#       backoffLimit: 6
+#       # -- Specify the number of parallel jobs
+#       parallelism:
 
-    # -- Job configuration. Required only when using `controller.type: job`.
-    # @default -- See below
-    job:
-      # -- Suspends the Job
-      # [[ref]](https://kubernetes.io/docs/concepts/workloads/controllers/job/#suspending-a-job)
-      # @default -- false
-      suspend:
-      # -- If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to
-      # be automatically deleted.
-      ttlSecondsAfterFinished:
-      # -- Limits the number of times a failed job will be retried
-      backoffLimit: 6
-      # -- Specify the number of parallel jobs
-      parallelism:
-      # -- Specify the number of completions for the job
-      completions:
-      # -- Specify the completionMode for the job
-      completionMode:
+#     # -- Job configuration. Required only when using `controller.type: job`.
+#     # @default -- See below
+#     job:
+#       # -- Suspends the Job
+#       # [[ref]](https://kubernetes.io/docs/concepts/workloads/controllers/job/#suspending-a-job)
+#       # @default -- false
+#       suspend:
+#       # -- If this field is set, ttlSecondsAfterFinished after the Job finishes, it is eligible to
+#       # be automatically deleted.
+#       ttlSecondsAfterFinished:
+#       # -- Limits the number of times a failed job will be retried
+#       backoffLimit: 6
+#       # -- Specify the number of parallel jobs
+#       parallelism:
+#       # -- Specify the number of completions for the job
+#       completions:
+#       # -- Specify the completionMode for the job
+#       completionMode:
 
-    # -- StatefulSet configuration. Required only when using `controller.type: statefulset`.
-    statefulset:
-      # -- Set podManagementPolicy, valid values are Parallel and OrderedReady (default).
-      podManagementPolicy:
+#     # -- StatefulSet configuration. Required only when using `controller.type: statefulset`.
+#     statefulset:
+#       # -- Set podManagementPolicy, valid values are Parallel and OrderedReady (default).
+#       podManagementPolicy:
 
-      # -- Used to create individual disks for each instance.
-      volumeClaimTemplates: []
-      # - name: data
-      #   labels: {}
-      #   annotations: {}
-      #   globalMounts:
-      #     - path: /data
-      #   accessMode: "ReadWriteOnce"
-      #   dataSourceRef:
-      #     apiGroup: snapshot.storage.k8s.io
-      #     kind: VolumeSnapshot
-      #     name: MySnapshot
-      #   size: 1Gi
-      # - name: backup
-      #   labels: {}
-      #   annotations: {}
-      #   globalMounts:
-      #     - path: /backup
-      #       subPath: theSubPath
-      #   accessMode: "ReadWriteOnce"
-      #   size: 2Gi
-      #   storageClass: cheap-storage-class
+#       # -- Used to create individual disks for each instance.
+#       volumeClaimTemplates: []
+#       # - name: data
+#       #   labels: {}
+#       #   annotations: {}
+#       #   globalMounts:
+#       #     - path: /data
+#       #   accessMode: "ReadWriteOnce"
+#       #   dataSourceRef:
+#       #     apiGroup: snapshot.storage.k8s.io
+#       #     kind: VolumeSnapshot
+#       #     name: MySnapshot
+#       #   size: 1Gi
+#       # - name: backup
+#       #   labels: {}
+#       #   annotations: {}
+#       #   globalMounts:
+#       #     - path: /backup
+#       #       subPath: theSubPath
+#       #   accessMode: "ReadWriteOnce"
+#       #   size: 2Gi
+#       #   storageClass: cheap-storage-class
 
-    # Controller-specific overrides for `defaultPodOptions` keys
-    pod: {}
+#     # Controller-specific overrides for `defaultPodOptions` keys
+#     pod: {}
 
-    containers:
-      main:
-        # -- Override the container name
-        nameOverride:
+#     containers:
+#       main:
+#         # -- Override the container name
+#         nameOverride:
 
-        # -- Override the default container order
-        # Containers get sorted alphanumerically by the `<order>-<identifier>` combination.
-        # @default -- 99
-        order: 1
+#         # -- Specify if this container depends on any other containers
+#         # This is used to determine the order in which the containers are rendered.
+#         dependsOn: []
 
-        # -- Specify if this container depends on any other containers
-        # This is used to determine the order in which the containers are rendered.
-        # The use of "dependsOn" completely disables the "order" field within the controller.
-        dependsOn: []
+#         image:
+#           # -- image repository
+#           repository:
+#           # -- image tag
+#           tag:
+#           # -- image pull policy
+#           pullPolicy:
 
-        image:
-          # -- image repository
-          repository:
-          # -- image tag
-          tag:
-          # -- image pull policy
-          pullPolicy:
+#         # -- Override the command(s) for the default container
+#         command: []
+#         # -- Override the args for the default container
+#         args: []
+#         # -- Override the working directory for the default container
+#         workingDir:
 
-        # -- Override the command(s) for the default container
-        command: []
-        # -- Override the args for the default container
-        args: []
-        # -- Override the working directory for the default container
-        workingDir:
+#         # -- Environment variables. Template enabled.
+#         # Syntax options:
+#         # A) TZ: UTC
+#         # B) PASSWD: '{{ .Release.Name }}'
+#         # B) TZ:
+#         #      value: UTC
+#         #      dependsOn: otherVar
+#         # D) PASSWD:
+#         #      configMapKeyRef:
+#         #        name: config-map-name
+#         #        key: key-name
+#         # E) PASSWD:
+#         #      dependsOn:
+#         #        - otherVar1
+#         #        - otherVar2
+#         #      valueFrom:
+#         #        secretKeyRef:
+#         #          name: secret-name
+#         #          key: key-name
+#         #      ...
+#         # F) - name: TZ
+#         #      value: UTC
+#         # G) - name: TZ
+#         #      value: '{{ .Release.Name }}'
+#         env:
 
-        # -- Environment variables. Template enabled.
-        # Syntax options:
-        # A) TZ: UTC
-        # B) PASSWD: '{{ .Release.Name }}'
-        # B) TZ:
-        #      value: UTC
-        #      dependsOn: otherVar
-        # D) PASSWD:
-        #      configMapKeyRef:
-        #        name: config-map-name
-        #        key: key-name
-        # E) PASSWD:
-        #      dependsOn:
-        #        - otherVar1
-        #        - otherVar2
-        #      valueFrom:
-        #        secretKeyRef:
-        #          name: secret-name
-        #          key: key-name
-        #      ...
-        # F) - name: TZ
-        #      value: UTC
-        # G) - name: TZ
-        #      value: '{{ .Release.Name }}'
-        env:
+#         # -- Secrets and/or ConfigMaps that will be loaded as environment variables.
+#         # Syntax options:
+#         # A) Pass an app-template configMap identifier:
+#         #    - config: config
+#         # B) Pass any configMap name that is not also an identifier (Template enabled):
+#         #    - config: random-configmap-name
+#         # C) Pass an app-template configMap identifier, explicit syntax:
+#         #    - configMapRef:
+#         #        identifier: config
+#         # D) Pass any configMap name, explicit syntax (Template enabled):
+#         #    - configMapRef:
+#         #        name: "{{ .Release.Name }}-config"
+#         # E) Pass an app-template secret identifier:
+#         #    - secret: secret
+#         # F) Pass any secret name that is not also an identifier (Template enabled):
+#         #    - secret: random-secret-name
+#         # G) Pass an app-template secret identifier, explicit syntax:
+#         #    - secretRef:
+#         #        identifier: secret
+#         # H) Pass any secret name, explicit syntax (Template enabled):
+#         #    - secretRef:
+#         #        name: "{{ .Release.Name }}-secret"
+#         envFrom: []
 
-        # -- Secrets and/or ConfigMaps that will be loaded as environment variables.
-        # Syntax options:
-        # A) Pass an app-template configMap identifier:
-        #    - config: config
-        # B) Pass any configMap name that is not also an identifier (Template enabled):
-        #    - config: random-configmap-name
-        # C) Pass an app-template configMap identifier, explicit syntax:
-        #    - configMapRef:
-        #        identifier: config
-        # D) Pass any configMap name, explicit syntax (Template enabled):
-        #    - configMapRef:
-        #        name: "{{ .Release.Name }}-config"
-        # E) Pass an app-template secret identifier:
-        #    - secret: secret
-        # F) Pass any secret name that is not also an identifier (Template enabled):
-        #    - secret: random-secret-name
-        # G) Pass an app-template secret identifier, explicit syntax:
-        #    - secretRef:
-        #        identifier: secret
-        # H) Pass any secret name, explicit syntax (Template enabled):
-        #    - secretRef:
-        #        name: "{{ .Release.Name }}-secret"
-        envFrom: []
+#         # -- Probe configuration
+#         # -- [[ref]](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+#         probes:
+#           # -- Liveness probe configuration
+#           # @default -- See below
+#           liveness:
+#             # -- Enable the liveness probe
+#             enabled: true
+#             # -- Set this to `true` if you wish to specify your own livenessProbe
+#             custom: false
+#             # -- sets the probe type when not using a custom probe
+#             # @default -- "TCP"
+#             type: TCP
+#             # -- The spec field contains the values for the default livenessProbe.
+#             # If you selected `custom: true`, this field holds the definition of the livenessProbe.
+#             # @default -- See below
+#             spec:
+#               initialDelaySeconds: 0
+#               periodSeconds: 10
+#               timeoutSeconds: 1
+#               failureThreshold: 3
 
-        # -- Probe configuration
-        # -- [[ref]](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
-        # @default -- See below
-        probes:
-          # -- Liveness probe configuration
-          # @default -- See below
-          liveness:
-            # -- Enable the liveness probe
-            enabled: true
-            # -- Set this to `true` if you wish to specify your own livenessProbe
-            custom: false
-            # -- sets the probe type when not using a custom probe
-            # @default -- "TCP"
-            type: TCP
-            # -- The spec field contains the values for the default livenessProbe.
-            # If you selected `custom: true`, this field holds the definition of the livenessProbe.
-            # @default -- See below
-            spec:
-              initialDelaySeconds: 0
-              periodSeconds: 10
-              timeoutSeconds: 1
-              failureThreshold: 3
+#           # -- Readiness probe configuration
+#           readiness:
+#             # -- Enable the readiness probe
+#             enabled: true
+#             # -- Set this to `true` if you wish to specify your own readinessProbe
+#             custom: false
+#             # -- sets the probe type when not using a custom probe
+#             # @default -- "TCP"
+#             type: TCP
+#             # -- The spec field contains the values for the default readinessProbe.
+#             # If you selected `custom: true`, this field holds the definition of the readinessProbe.
+#             # @default -- See below
+#             spec:
+#               initialDelaySeconds: 0
+#               periodSeconds: 10
+#               timeoutSeconds: 1
+#               failureThreshold: 3
 
-          # -- Redainess probe configuration
-          # @default -- See below
-          readiness:
-            # -- Enable the readiness probe
-            enabled: true
-            # -- Set this to `true` if you wish to specify your own readinessProbe
-            custom: false
-            # -- sets the probe type when not using a custom probe
-            # @default -- "TCP"
-            type: TCP
-            # -- The spec field contains the values for the default readinessProbe.
-            # If you selected `custom: true`, this field holds the definition of the readinessProbe.
-            # @default -- See below
-            spec:
-              initialDelaySeconds: 0
-              periodSeconds: 10
-              timeoutSeconds: 1
-              failureThreshold: 3
+#           # -- Startup probe configuration
+#           startup:
+#             # -- Enable the startup probe
+#             enabled: true
+#             # -- Set this to `true` if you wish to specify your own startupProbe
+#             custom: false
+#             # -- sets the probe type when not using a custom probe
+#             # @default -- "TCP"
+#             type: TCP
+#             # -- The spec field contains the values for the default startupProbe.
+#             # If you selected `custom: true`, this field holds the definition of the startupProbe.
+#             # @default -- See below
+#             spec:
+#               initialDelaySeconds: 0
+#               timeoutSeconds: 1
+#               ## This means it has a maximum of 5*30=150 seconds to start up before it fails
+#               periodSeconds: 5
+#               failureThreshold: 30
 
-          # -- Startup probe configuration
-          # @default -- See below
-          startup:
-            # -- Enable the startup probe
-            enabled: true
-            # -- Set this to `true` if you wish to specify your own startupProbe
-            custom: false
-            # -- sets the probe type when not using a custom probe
-            # @default -- "TCP"
-            type: TCP
-            # -- The spec field contains the values for the default startupProbe.
-            # If you selected `custom: true`, this field holds the definition of the startupProbe.
-            # @default -- See below
-            spec:
-              initialDelaySeconds: 0
-              timeoutSeconds: 1
-              ## This means it has a maximum of 5*30=150 seconds to start up before it fails
-              periodSeconds: 5
-              failureThreshold: 30
+#         # -- Set the resource requests / limits for the container.
+#         resources:
+#           {}
+#           ## We usually recommend not to specify default resources and to leave this as a conscious
+#           ## choice for the user. This also increases chances charts run on environments with little
+#           ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+#           ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+#           # limits:
+#           #   cpu: 100m
+#           #   memory: 128Mi
+#           # requests:
+#           #   cpu: 100m
+#           #   memory: 128Mi
 
-        # -- Set the resource requests / limits for the container.
-        resources:
-          {}
-          ## We usually recommend not to specify default resources and to leave this as a conscious
-          ## choice for the user. This also increases chances charts run on environments with little
-          ## resources, such as Minikube. If you do want to specify resources, uncomment the following
-          ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-          # limits:
-          #   cpu: 100m
-          #   memory: 128Mi
-          # requests:
-          #   cpu: 100m
-          #   memory: 128Mi
+#         # -- Configure the Security Context for the container
+#         securityContext: {}
 
-        # -- Configure the Security Context for the container
-        securityContext: {}
+#         # -- Configure the lifecycle event hooks for the container
+#         # -- [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)]
+#         lifecycle: {}
 
-        # -- Configure the lifecycle event hooks for the container
-        # -- [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/)]
-        lifecycle: {}
+#         # -- Configure the path at which the file to which the containers termination message will be written.
+#         # -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)]
+#         terminationMessagePath:
 
-        # -- Configure the path at which the file to which the containers termination message will be written.
-        # -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)]
-        terminationMessagePath:
+#         # -- Indicate how the containers termination message should be populated.
+#         # Valid options are `File` and `FallbackToLogsOnError`.
+#         # -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)]
+#         terminationMessagePolicy:
 
-        # -- Indicate how the containers termination message should be populated.
-        # Valid options are `File` and `FallbackToLogsOnError`.
-        # -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle-1)]
-        terminationMessagePolicy:
-
-    # -- Specify any initContainers here as dictionary items.
-    # Each initContainer should have its own key
-    # initContainers get sorted alphanumerically by the `<order>-<identifier>` combination
-    # if no order or dependsOn has been configured for them.
-    initContainers: {}
+#     # -- Specify any initContainers here as dictionary items.
+#     # Each initContainer should have its own key
+#     # initContainers get sorted alphanumerically by the `<order>-<identifier>` combination
+#     # if no order or dependsOn has been configured for them.
+#     initContainers: {}
 
 serviceAccount:
   # -- Specifies whether a service account should be created

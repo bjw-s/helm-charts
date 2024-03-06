@@ -94,6 +94,25 @@ tests:
               fieldRef:
                 fieldPath: spec.nodeName
 
+  - it: Implicit ValueFrom in list should pass
+    set:
+      controllers.main.containers.main.env:
+        - name: DYNAMIC_ENV_FROM_LIST
+          fieldRef:
+            fieldPath: spec.nodeName
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].env[0]
+          value:
+            name: DYNAMIC_ENV_FROM_LIST
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+
   - it: Implicit ValueFrom should pass
     set:
       controllers.main.containers.main.env:

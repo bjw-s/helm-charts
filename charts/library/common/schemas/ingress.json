@@ -48,30 +48,7 @@
         }
       }
     },
-
-    "if": {
-      "oneOf": [
-        {
-          "properties": {
-            "enabled": {"const": true}
-          },
-          "required": ["enabled"]
-        },
-        {
-          "properties": {
-            "enabled": {"const": null}
-          }
-        }
-      ]
-    },
-    "then": {
-      "properties": {
-        "hosts": {
-          "minItems": 1
-        }
-      },
-      "required": ["hosts"]
-    }
+    "required": ["hosts"]
   },
 
   "hostEntry": {
