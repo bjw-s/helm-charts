@@ -20,6 +20,8 @@ using the common library.
     ($cronjobObject.annotations | default dict)
     (include "bjw-s.common.lib.metadata.globalAnnotations" $rootContext | fromYaml)
   -}}
+
+  {{- $cronJobSettings := dig "cronjob" dict $cronjobObject -}}
 ---
 apiVersion: batch/v1
 kind: CronJob
@@ -32,26 +34,24 @@ metadata:
   annotations: {{- toYaml . | nindent 4 -}}
   {{- end }}
 spec:
-  {{- with $cronjobObject.cronjob.suspend }}
-  suspend: {{ ternary "true" "false" . }}
-  {{- end }}
-  concurrencyPolicy: "{{ $cronjobObject.cronjob.concurrencyPolicy }}"
-  startingDeadlineSeconds: {{ $cronjobObject.cronjob.startingDeadlineSeconds }}
+  suspend: {{ default false $cronJobSettings.suspend }}
+  concurrencyPolicy: {{ default "Forbid" $cronJobSettings.concurrencyPolicy }}
+  startingDeadlineSeconds: {{ default 30 $cronJobSettings.startingDeadlineSeconds }}
   {{- with $timeZone }}
-  timeZone: "{{ . }}"
+  timeZone: {{ . }}
   {{- end }}
-  schedule: "{{ $cronjobObject.cronjob.schedule }}"
-  successfulJobsHistoryLimit: {{ $cronjobObject.cronjob.successfulJobsHistory }}
-  failedJobsHistoryLimit: {{ $cronjobObject.cronjob.failedJobsHistory }}
+  schedule: {{ $cronJobSettings.schedule | quote }}
+  successfulJobsHistoryLimit: {{ default 1 $cronJobSettings.successfulJobsHistory }}
+  failedJobsHistoryLimit: {{ default 1 $cronJobSettings.failedJobsHistory }}
   jobTemplate:
     spec:
-      {{- with $cronjobObject.cronjob.ttlSecondsAfterFinished }}
+      {{- with $cronJobSettings.ttlSecondsAfterFinished }}
       ttlSecondsAfterFinished: {{ . }}
       {{- end }}
-      {{- with $cronjobObject.cronjob.parallelism }}
+      {{- with $cronJobSettings.parallelism }}
       parallelism: {{ . }}
       {{- end }}
-      backoffLimit: {{ $cronjobObject.cronjob.backoffLimit }}
+      backoffLimit: {{ default 6 $cronJobSettings.backoffLimit }}
       template:
         metadata:
           {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "controllerObject" $cronjobObject)) }}

@@ -42,7 +42,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ inputs.checkoutCommit }}
@@ -80,7 +80,10 @@ jobs:
           overrides: ${{ inputs.overrideDeps }}
 
       - name: Run chart-testing (install)
-        run: ct install --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
+        working-directory: "charts/${{ matrix.chart }}"
+        # TODO: Awaiting https://github.com/actions/checkout/issues/1607
+        run: |
+          ct install --config "$GITHUB_WORKSPACE/.ci/ct/ct.yaml" --charts .
 
   install_success:
     needs:
@@ -112,7 +115,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ inputs.checkoutCommit }}
@@ -132,10 +135,11 @@ jobs:
           overrides: ${{ inputs.overrideDeps }}
 
       - name: Run tests
+        working-directory: "charts/${{ matrix.chart }}"
         run: |
           helm plugin install https://github.com/helm-unittest/helm-unittest.git
-          helm dep update "charts/${{ matrix.chart }}"
-          helm unittest -f "tests/**/*_test.yaml" "charts/${{ matrix.chart }}"
+          helm dep update
+          helm unittest -f "tests/**/*_test.yaml" .
 
   unittest_success:
     needs:

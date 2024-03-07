@@ -3,6 +3,10 @@
 suite: controller metadata cronjob
 templates:
   - common.yaml
+
+set:
+  controllers.main.cronjob.schedule: "*/20 * * * *"
+
 tests:
   - it: default metadata should pass
     set:

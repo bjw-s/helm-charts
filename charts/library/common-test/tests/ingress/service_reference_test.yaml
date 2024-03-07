@@ -3,10 +3,12 @@
 suite: ingress service reference
 templates:
   - common.yaml
+
+values:
+  - ../_values/ingress_main_default_hosts.yaml
+
 tests:
   - it: default should pass
-    set:
-      ingress.main.enabled: true
     asserts:
       - documentIndex: &IngressDocument 2
         isKind:
@@ -23,7 +25,6 @@ tests:
   - it: custom service reference should pass
     set:
       ingress.main:
-        enabled: true
         hosts:
           - host: chart-test.local
             paths:
@@ -56,7 +57,6 @@ tests:
               port: &http2Port 1880
       ingress:
         main:
-          enabled: true
           className: "nginx"
           hosts:
             - host: http.chart-test.local

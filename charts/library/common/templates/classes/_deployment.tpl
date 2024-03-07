@@ -27,9 +27,13 @@ metadata:
   annotations: {{- toYaml . | nindent 4 -}}
   {{- end }}
 spec:
-  revisionHistoryLimit: {{ $deploymentObject.revisionHistoryLimit }}
-  {{- if not (eq $deploymentObject.replicas nil) }}
+  revisionHistoryLimit: {{ default 3 $deploymentObject.revisionHistoryLimit }}
+  {{- if hasKey $deploymentObject "replicas" }}
+    {{- if not (eq $deploymentObject.replicas nil) }}
   replicas: {{ $deploymentObject.replicas }}
+    {{- end }}
+  {{- else }}
+  replicas: 1
   {{- end }}
   strategy:
     type: {{ $deploymentObject.strategy }}

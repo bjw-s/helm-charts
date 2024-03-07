@@ -50,7 +50,16 @@ controllers:
 
 ingress:
   main:
-    enabled: true
+    hosts:
+      - host: "test.local"
+        paths:
+          - path: /
+            service:
+              name: main
+              port: http
+    tls:
+      - hosts:
+          - "test.local"
 
 configMaps:
   config:
@@ -59,9 +68,6 @@ configMaps:
       test: value 1
 
 persistence:
-  config:
-    enabled: true
-
   data:
     type: configMap
     name: |-

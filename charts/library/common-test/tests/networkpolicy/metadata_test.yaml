@@ -1,14 +1,19 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
 suite: networkPolicy metadata
+
+set:
+  networkpolicies.main:
+    controller: main
+    policyTypes:
+      - Ingress
+      - Egress
+    rules: {}
+
 templates:
   - common.yaml
 tests:
   - it: default metadata should pass
-    set:
-      networkpolicies:
-        main:
-          enabled: true
     asserts:
       - documentIndex: &NetworkPolicyDocument 2
         isKind:
@@ -29,7 +34,6 @@ tests:
     set:
       networkpolicies:
         main:
-          enabled: true
           annotations:
             test_annotation: test
           labels:
@@ -62,7 +66,6 @@ tests:
           global_annotation: test
       networkpolicies:
         main:
-          enabled: true
           annotations:
             test_annotation: test
           labels:

@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 2.6.0
+version: 3.0.0-beta1
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -14,9 +14,15 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: fixed
+    - kind: changed
       description: |-
-        ConfigMap and Secret checksums take enabled state in to account again
+        Default objects (they used to be called main) have been commented out and will therefore no longer provide any (both expected and unexpected) default values.
+    - kind: changed
+      description: |-
+        enableServiceLinks is disabled by default
     - kind: added
       description: |-
-        Add support for specifying parallelism in CronJobs and Jobs
+        Added support for restartPolicy field on container level
+    - kind: added
+      description: |-
+        Added json-schema to the chart

@@ -22,6 +22,8 @@ tests:
       configMaps:
         config:
           enabled: false
+          data:
+            test: test
     asserts:
       - hasDocuments:
           count: 2
@@ -38,11 +40,11 @@ tests:
     set:
       configMaps:
         config:
-          enabled: true
           data:
             foo: bar
         secondary:
-          enabled: true
+          data:
+            test: test
     asserts:
       - hasDocuments:
           count: 4
@@ -63,7 +65,8 @@ tests:
     set:
       configMaps:
         config:
-          enabled: true
+          data:
+            test: test
     asserts:
       - hasDocuments:
           count: 3
@@ -79,7 +82,8 @@ tests:
     set:
       configMaps:
         config:
-          enabled: true
+          data:
+            test: test
           nameOverride: http
     asserts:
       - hasDocuments:

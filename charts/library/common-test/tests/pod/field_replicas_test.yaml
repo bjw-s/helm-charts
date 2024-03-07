@@ -14,6 +14,17 @@ tests:
           path: spec.replicas
           value: 1
 
+  - it: nil should pass
+    set:
+      controllers.main.replicas: null
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        notExists:
+          path: spec.replicas
+
   - it: custom replicas should pass
     set:
       controllers.main.replicas: 3

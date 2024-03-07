@@ -3,6 +3,12 @@
 suite: container probes
 templates:
   - common.yaml
+
+set:
+  controllers.main.containers.main.probes.liveness.enabled: true
+  controllers.main.containers.main.probes.readiness.enabled: true
+  controllers.main.containers.main.probes.startup.enabled: true
+
 tests:
   - it: default should pass
     set:
@@ -40,9 +46,9 @@ tests:
         equal:
           path: spec.template.spec.containers[0].startupProbe
           value:
-            failureThreshold: 30
+            failureThreshold: 3
             initialDelaySeconds: 0
-            periodSeconds: 5
+            periodSeconds: 10
             tcpSocket:
               port: *port
             timeoutSeconds: 1
@@ -87,9 +93,9 @@ tests:
         equal:
           path: spec.template.spec.containers[0].startupProbe
           value:
-            failureThreshold: 30
+            failureThreshold: 3
             initialDelaySeconds: 0
-            periodSeconds: 5
+            periodSeconds: 10
             tcpSocket:
               port: *port
             timeoutSeconds: 1
@@ -130,9 +136,9 @@ tests:
         equal:
           path: spec.template.spec.containers[0].startupProbe
           value:
-            failureThreshold: 30
+            failureThreshold: 3
             initialDelaySeconds: 0
-            periodSeconds: 5
+            periodSeconds: 10
             tcpSocket:
               port: 80
             timeoutSeconds: 1
@@ -162,6 +168,7 @@ tests:
         main:
           ports:
             http:
+              protocol: HTTP
               port: &port 80
 
       controllers.main.containers.main.probes:
@@ -462,9 +469,9 @@ tests:
         equal:
           path: spec.template.spec.containers[0].startupProbe
           value:
-            failureThreshold: 30
+            failureThreshold: 3
             initialDelaySeconds: 0
-            periodSeconds: 5
+            periodSeconds: 10
             tcpSocket:
               port: *port
             timeoutSeconds: 1

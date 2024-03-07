@@ -1,0 +1,9 @@
+ingress:
+  main:
+    hosts:
+      - host: "chart-example.local"
+        paths:
+          - path: /
+            service:
+              name: main
+              port: http

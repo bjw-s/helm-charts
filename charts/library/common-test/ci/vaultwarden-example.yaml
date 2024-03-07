@@ -32,7 +32,6 @@ service:
 ingress:
   # -- Enable and configure ingress settings for the chart under this key.
   main:
-    enabled: true
     hosts:
       - host: chart-example.local
         paths:
@@ -55,7 +54,6 @@ ingress:
 # -- Configure persistence settings for the chart under this key.
 persistence:
   config:
-    enabled: true
     type: persistentVolumeClaim
     accessMode: ReadWriteOnce
     size: 1Gi

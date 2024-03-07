@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: pod sidecar containers
+suite: pod with multiple containers
 templates:
   - common.yaml
 tests:
@@ -9,6 +9,7 @@ tests:
       controllers.main.containers:
         additional1:
           nameOverride: template-test
+          dependsOn: main
           image:
             repository: test
             tag: test
@@ -25,6 +26,7 @@ tests:
     set:
       controllers.main.containers:
         additional1:
+          dependsOn: main
           image:
             repository: test
             tag: test
@@ -42,6 +44,7 @@ tests:
       controllers.main.containers:
         additional1:
           nameOverride: "{{ .Release.Name }}-container"
+          dependsOn: main
           image:
             repository: test
             tag: test
@@ -61,6 +64,7 @@ tests:
           env:
             main_env: value
         additional1:
+          dependsOn: main
           image:
             repository: test
             tag: test

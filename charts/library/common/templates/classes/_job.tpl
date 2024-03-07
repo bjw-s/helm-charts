@@ -15,6 +15,8 @@ within the common library.
     ($jobObject.annotations | default dict)
     (include "bjw-s.common.lib.metadata.globalAnnotations" $rootContext | fromYaml)
   -}}
+
+  {{- $jobSettings := dig "job" dict $jobObject -}}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -27,22 +29,20 @@ metadata:
   annotations: {{- toYaml . | nindent 4 -}}
   {{- end }}
 spec:
-  {{- with $jobObject.job.suspend }}
-  suspend: {{ ternary "true" "false" . }}
-  {{- end }}
-  {{- with $jobObject.job.ttlSecondsAfterFinished }}
+  suspend: {{ default false $jobSettings.suspend }}
+  {{- with $jobSettings.ttlSecondsAfterFinished }}
   ttlSecondsAfterFinished: {{ . }}
   {{- end }}
-  {{- with $jobObject.job.parallelism }}
+  {{- with $jobSettings.parallelism }}
   parallelism: {{ . }}
   {{- end }}
-  {{- with $jobObject.job.completions }}
+  {{- with $jobSettings.completions }}
   completions: {{ . }}
   {{- end }}
-  {{- with $jobObject.job.completionMode }}
+  {{- with $jobSettings.completionMode }}
   completionMode: {{ . }}
   {{- end }}
-  backoffLimit: {{ $jobObject.job.backoffLimit }}
+  backoffLimit: {{ default 6 $jobSettings.backoffLimit }}
   template:
     metadata:
       {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "controllerObject" $jobObject)) }}

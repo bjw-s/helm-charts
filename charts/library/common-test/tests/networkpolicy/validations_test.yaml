@@ -8,8 +8,8 @@ tests:
     set:
       networkpolicies:
         main:
-          enabled: true
           controller: ""
+          rules: {}
     asserts:
       - failedTemplate:
           errorMessage: "controller reference or podSelector is required for NetworkPolicy. (NetworkPolicy main)"
@@ -18,8 +18,9 @@ tests:
     set:
       networkpolicies:
         main:
-          enabled: true
+          controller: main
           policyTypes: []
+          rules: {}
     asserts:
       - failedTemplate:
           errorMessage: "policyTypes is required for NetworkPolicy. (NetworkPolicy main)"
@@ -28,9 +29,10 @@ tests:
     set:
       networkpolicies:
         main:
-          enabled: true
+          controller: main
           policyTypes:
             - test
+          rules: {}
     asserts:
       - failedTemplate:
           errorMessage: "Not a valid policyType for NetworkPolicy. (NetworkPolicy main, value test)"

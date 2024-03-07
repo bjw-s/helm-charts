@@ -27,7 +27,7 @@ metadata:
   annotations: {{- toYaml . | nindent 4 -}}
   {{- end }}
 spec:
-  revisionHistoryLimit: {{ $daemonsetObject.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ default 3 $daemonsetObject.revisionHistoryLimit }}
   selector:
     matchLabels:
       app.kubernetes.io/component: {{ $daemonsetObject.identifier }}

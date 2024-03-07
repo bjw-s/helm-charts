@@ -17,13 +17,19 @@ controllers:
 
 ingress:
   main:
-    enabled: true
+    hosts:
+      - host: "test.local"
+        paths:
+          - path: /
+            service:
+              name: main
+              port: http
+    tls:
+      - hosts:
+          - "test.local"
 
 persistence:
-  config:
-    enabled: true
   media:
-    enabled: true
     type: persistentVolumeClaim
     accessMode: ReadWriteOnce
     size: 1Gi

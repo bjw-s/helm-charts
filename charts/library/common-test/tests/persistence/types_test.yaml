@@ -16,10 +16,6 @@ tests:
                 - path: "labels"
                   fieldRef:
                     fieldPath: metadata.labels
-          mounts:
-            - controllers:
-                - main
-              mountPath: "/data"
     asserts:
       - documentIndex: 0
         isKind:
@@ -42,10 +38,6 @@ tests:
           enabled: true
           type: configMap
           name: mySettings
-          mounts:
-            - controllers:
-                - main
-              mountPath: "/data"
     asserts:
       - documentIndex: 0
         isKind:
@@ -65,10 +57,6 @@ tests:
           enabled: true
           type: configMap
           name: '{{ include "bjw-s.common.lib.chart.names.fullname" $ }}-config'
-          mounts:
-            - controllers:
-                - main
-              mountPath: "/data"
     asserts:
       - documentIndex: 0
         isKind:
@@ -88,10 +76,6 @@ tests:
           enabled: true
           type: secret
           name: mySettings
-          mounts:
-            - controllers:
-                - main
-              mountPath: "/data"
     asserts:
       - documentIndex: 0
         isKind:
@@ -111,10 +95,6 @@ tests:
           enabled: true
           type: secret
           name: "{{ .Release.Name }}-config"
-          mounts:
-            - controllers:
-                - main
-              mountPath: "/data"
     asserts:
       - documentIndex: 0
         isKind:
@@ -135,10 +115,6 @@ tests:
           type: nfs
           server: 10.10.0.8
           path: /tank/nas/library
-          mounts:
-            - controllers:
-                - main
-              mountPath: "/data"
     asserts:
       - documentIndex: 0
         isKind:

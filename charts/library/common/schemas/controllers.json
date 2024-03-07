@@ -1,0 +1,262 @@
+{
+  "instance": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "type": {
+        "type": "string",
+        "enum": ["deployment", "statefulset", "daemonset", "cronjob", "job"],
+        "default": "deployment"
+      },
+      "annotations": {
+        "$ref": "definitions.json#/annotations"
+      },
+      "labels": {
+        "$ref": "definitions.json#/labels"
+      },
+      "nameOverride": {
+        "type": "string"
+      },
+      "pod": {
+        "$ref": "pod.json#/options"
+      },
+      "replicas": {
+        "type": ["integer", "null"],
+        "default": 1
+      },
+      "revisionHistoryLimit": {
+        "type": "integer"
+      },
+      "rollingUpdate": {
+        "type": "object"
+      },
+      "strategy": {
+        "type": "string"
+      },
+      "cronjob": {
+        "$ref": "#/cronjob"
+      },
+      "job": {
+        "$ref": "#/job"
+      },
+      "statefulset": {
+        "$ref": "#/statefulset"
+      },
+      "initContainers": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "containers.json#/container"
+        }
+      },
+      "containers": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "containers.json#/container"
+        }
+      }
+    },
+
+    "allOf": [
+      {
+        "if": {
+          "properties": {
+            "type": {"const": "deployment"}
+          }
+        },
+        "then": {
+          "not": {
+            "anyOf": [
+              {"required": ["statefulset"]},
+              {"required": ["cronjob"]},
+              {"required": ["job"]},
+              {"required": ["daemonset"]}
+            ]
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "type": {"const": "statefulset"}
+          },
+          "required": ["type"]
+        },
+        "then": {
+          "not": {
+            "anyOf": [
+              {"required": ["cronjob"]},
+              {"required": ["job"]},
+              {"required": ["daemonset"]}
+            ]
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "type": {"const": "cronjob"}
+          },
+          "required": ["type"]
+        },
+        "then": {
+          "allOf": [
+            {
+              "not": {
+                "anyOf": [
+                  {"required": ["statefulset"]},
+                  {"required": ["job"]},
+                  {"required": ["daemonset"]}
+                ]
+              }
+            },
+            {"required": ["cronjob"]}
+          ]
+        }
+      },
+      {
+        "if": {
+          "properties": {
+            "type": {"const": "job"}
+          },
+          "required": ["type"]
+        },
+        "then": {
+          "not": {
+            "anyOf": [
+              {"required": ["statefulset"]},
+              {"required": ["cronjob"]},
+              {"required": ["daemonset"]}
+            ]
+          }
+        }
+      }
+    ]
+  },
+
+  "statefulset": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "podManagementPolicy": {
+        "type": "string"
+      },
+      "volumeClaimTemplates": {
+        "type": "array",
+        "items": {
+          "$ref": "#/statefulset.volumeClaimTemplate"
+        }
+      }
+    }
+  },
+
+  "statefulset.volumeClaimTemplate": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "accessMode": {
+        "type": "string"
+      },
+      "advancedMounts": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "persistence.json#/mountPathCollection"
+        }
+      },
+      "annotations": {"$ref": "definitions.json#/annotations"},
+      "dataSource": {"$ref": "persistence.json#/dataSourceReference"},
+      "dataSourceRef": {"$ref": "persistence.json#/dataSourceReference"},
+      "globalMounts": {"$ref": "persistence.json#/globalMounts"},
+      "labels": {"$ref": "definitions.json#/labels"},
+      "name": {
+        "type": "string"
+      },
+      "size": {
+        "type": "string"
+      },
+      "storageClass": {
+        "type": "string"
+      }
+    },
+    "required": ["name", "size"]
+  },
+
+  "cronjob": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "backoffLimit": {
+        "type": "integer",
+        "default": 6
+      },
+      "concurrencyPolicy": {
+        "type": "string",
+        "default": "Forbid"
+      },
+      "failedJobsHistory": {
+        "type": "integer",
+        "default": 1
+      },
+      "parallelism": {
+        "type": "integer"
+      },
+      "schedule": {
+        "type": "string"
+      },
+      "startingDeadlineSeconds": {
+        "type": "integer",
+        "default": 30
+      },
+      "successfulJobsHistory": {
+        "type": "integer",
+        "default": 1
+      },
+      "suspend": {
+        "type": "boolean",
+        "default": false
+      },
+      "timeZone": {
+        "type": "string"
+      },
+      "ttlSecondsAfterFinished": {
+        "type": "integer"
+      }
+    },
+    "required": ["schedule"]
+  },
+
+  "job": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "backoffLimit": {
+        "type": "integer",
+        "default": 6
+      },
+      "completions": {},
+      "completionMode": {},
+      "parallelism": {
+        "type": "integer"
+      },
+      "suspend": {
+        "type": "boolean",
+        "default": false
+      },
+      "ttlSecondsAfterFinished": {
+        "type": "integer"
+      }
+    }
+  }
+}

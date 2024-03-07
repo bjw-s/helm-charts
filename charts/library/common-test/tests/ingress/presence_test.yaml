@@ -18,6 +18,8 @@ tests:
           of: Ingress
 
   - it: explicitly disabled should pass
+    values:
+      - ../_values/ingress_main_default_hosts.yaml
     set:
       ingress.main.enabled: false
     asserts:
@@ -33,6 +35,8 @@ tests:
           of: Ingress
 
   - it: explicitly enabled should pass
+    values:
+      - ../_values/ingress_main_default_hosts.yaml
     set:
       ingress.main.enabled: true
     asserts:
@@ -50,33 +54,18 @@ tests:
         isKind:
           of: Ingress
 
-  - it: multiple enabled should pass
+  - it: multiple ingress should pass
+    values:
+      - ../_values/ingress_main_default_hosts.yaml
     set:
-      ingress.main.enabled: true
-      ingress.test.enabled: true
-    asserts:
-      - hasDocuments:
-          count: 4
-      - documentIndex: 0
-        not: true
-        isKind:
-          of: Ingress
-      - documentIndex: 1
-        not: true
-        isKind:
-          of: Ingress
-      - documentIndex: 2
-        isKind:
-          of: Ingress
-      - documentIndex: 3
-        isKind:
-          of: Ingress
-
-  - it: multiple with default enabled should pass
-    set:
-      ingress.main.enabled: true
-      ingress.test: {}
-
+      ingress.test:
+        hosts:
+          - host: "chart-example.local"
+            paths:
+              - path: /
+                service:
+                  name: main
+                  port: http
     asserts:
       - hasDocuments:
           count: 4
@@ -102,3 +91,35 @@ tests:
         equal:
           path: metadata.name
           value: RELEASE-NAME-test
+
+  - it: multiple ingress with explicit disabled should pass
+    values:
+      - ../_values/ingress_main_default_hosts.yaml
+    set:
+      ingress.test:
+        enabled: false
+        hosts:
+          - host: "chart-example.local"
+            paths:
+              - path: /
+                service:
+                  name: main
+                  port: http
+    asserts:
+      - hasDocuments:
+          count: 3
+      - documentIndex: 0
+        not: true
+        isKind:
+          of: Ingress
+      - documentIndex: 1
+        not: true
+        isKind:
+          of: Ingress
+      - documentIndex: &FirstIngressDocument 2
+        isKind:
+          of: Ingress
+      - documentIndex: *FirstIngressDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME

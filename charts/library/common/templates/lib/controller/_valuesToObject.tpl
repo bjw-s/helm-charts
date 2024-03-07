@@ -24,18 +24,6 @@ Convert controller values to an object
   {{- $_ := set $objectValues "name" $objectName -}}
   {{- $_ := set $objectValues "identifier" $identifier -}}
 
-  {{- /* Set the default Pod options for the controller */ -}}
-  {{- range $index, $key := keys $rootContext.Values.defaultPodOptions -}}
-    {{- if not (hasKey $objectValues "pod") -}}
-      {{- $_ := set $objectValues "pod" dict -}}
-    {{- end -}}
-
-    {{- $defaultValue := get $rootContext.Values.defaultPodOptions $key -}}
-    {{- if not (hasKey $objectValues.pod $key) -}}
-      {{- $_ := set $objectValues.pod $key $defaultValue -}}
-    {{- end -}}
-  {{- end -}}
-
   {{- /* Return the controller object */ -}}
   {{- $objectValues | toYaml -}}
 {{- end -}}

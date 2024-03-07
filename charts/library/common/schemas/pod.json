@@ -1,0 +1,96 @@
+{
+  "options": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "affinity": {
+        "type": "object",
+        "$ref": "k8s-api.json#/core.v1.Affinity"
+      },
+      "annotations": {
+        "$ref": "definitions.json#/annotations"
+      },
+      "automountServiceAccountToken": {
+        "type": "boolean",
+        "default": true
+      },
+      "dnsConfig": {
+        "type": "object",
+        "$ref": "k8s-api.json#/core.v1.PodDNSConfig"
+      },
+      "dnsPolicy": {
+        "type": "string"
+      },
+      "enableServiceLinks": {
+        "type": "boolean",
+        "default": false
+      },
+      "hostAliases": {
+        "type": "array",
+        "items": {
+          "$ref": "k8s-api.json#/core.v1.HostAlias"
+        }
+      },
+      "hostIPC": {
+        "type": "boolean",
+        "default": false
+      },
+      "hostNetwork": {
+        "type": "boolean",
+        "default": "false"
+      },
+      "hostPID": {
+        "type": "boolean",
+        "default": false
+      },
+      "hostname": {
+        "type": "string"
+      },
+      "imagePullSecrets": {
+        "type": "array",
+        "items": {
+          "$ref": "k8s-api.json#/core.v1.LocalObjectReference"
+        }
+      },
+      "labels": {
+        "$ref": "definitions.json#/annotations"
+      },
+      "nodeSelector": {
+        "type": "object",
+        "additionalProperties": {
+          "type": ["string"]
+        }
+      },
+      "priorityClassName": {
+        "type": "string"
+      },
+      "restartPolicy": {
+        "type": "string"
+      },
+      "runtimeClassName": {
+        "type": "string"
+      },
+      "schedulerName": {
+        "type": "string"
+      },
+      "securityContext": {
+        "$ref": "k8s-api.json#/core.v1.PodSecurityContext"
+      },
+      "terminationGracePeriodSeconds": {
+        "type": ["integer", "null"]
+      },
+      "tolerations": {
+        "type": "array",
+        "items": {
+          "$ref": "k8s-api.json#/core.v1.Toleration"
+        }
+      },
+      "topologySpreadConstraints": {
+        "type": "array",
+        "items": {
+          "$ref": "k8s-api.json#/core.v1.TopologySpreadConstraint"
+        }
+      }
+    }
+  }
+}

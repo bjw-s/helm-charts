@@ -1,0 +1,110 @@
+{
+  "instance": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "annotations": {
+        "$ref": "definitions.json#/annotations"
+      },
+      "labels": {
+        "$ref": "definitions.json#/labels"
+      },
+      "nameOverride": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "clusterIP": {
+        "type": "string"
+      },
+      "loadBalancerIP": {
+        "type": "string"
+      },
+      "loadBalancerSourceRanges": {
+        "type": "array",
+        "items": {"type": "string"}
+      },
+      "externalTrafficPolicy": {
+        "type": "string",
+        "enum": ["Cluster", "Local"]
+      },
+      "allocateLoadBalancerNodePorts": {
+        "type": "boolean"
+      },
+      "sessionAffinity": {
+        "type": "string",
+        "enum": ["None", "ClientIP"]
+      },
+      "sessionAffinityConfig": {
+        "type": "object"
+      },
+      "externalIPs": {
+        "type": "array",
+        "items": {"type": "string"}
+      },
+      "publishNotReadyAddresses": {
+        "type": "boolean"
+      },
+      "ipFamilyPolicy": {
+        "type": "string",
+        "enum": ["SingleStack", "PreferDualStack", "RequireDualStack"]
+      },
+      "ipFamilies": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": ["IPv4", "IPv6"]
+        }
+      },
+      "ports": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/servicePort"
+        }
+      },
+      "primary": {
+        "type": "boolean",
+        "default": false
+      },
+      "controller": {
+        "type": "string"
+      },
+      "extraSelectorLabels": {}
+    },
+    "required": ["controller"]
+  },
+
+  "servicePort": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "primary": {
+        "type": "boolean",
+        "default": false
+      },
+      "port": {
+        "type": ["string", "integer"]
+      },
+      "protocol": {
+        "type": "string",
+        "enum": ["HTTP", "HTTPS", "TCP", "UDP"]
+      },
+      "targetPort": {
+        "type": ["string", "integer"]
+      },
+      "appProtocol": {
+        "type": "string"
+      }
+    },
+    "required": ["port"]
+  }
+}

@@ -48,6 +48,9 @@ ports: {{ toYaml . | trim | nindent 2 }}
   {{- with $containerObject.resources }}
 resources: {{ toYaml . | trim | nindent 2 }}
   {{- end -}}
+  {{- with $containerObject.restartPolicy }}
+restartPolicy: {{ . | trim }}
+  {{- end -}}
   {{- with (include "bjw-s.common.lib.container.field.volumeMounts" (dict "ctx" $ctx) | trim) }}
 volumeMounts: {{ . | trim | nindent 2 }}
   {{- end -}}

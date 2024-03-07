@@ -6,7 +6,7 @@ within the common library.
   {{- $rootContext := .rootContext -}}
   {{- $serviceObject := .object -}}
 
-  {{- $svcType := $serviceObject.type | default "" -}}
+  {{- $svcType := default "ClusterIP" $serviceObject.type -}}
   {{- $enabledPorts := include "bjw-s.common.lib.service.enabledPorts" (dict "rootContext" $rootContext "serviceObject" $serviceObject) | fromYaml }}
   {{- $labels := merge
     (dict "app.kubernetes.io/service" $serviceObject.name)
@@ -29,7 +29,7 @@ metadata:
   annotations: {{- toYaml . | nindent 4 -}}
   {{- end }}
 spec:
-  {{- if (or (eq $svcType "ClusterIP") (empty $svcType)) }}
+  {{- if (eq $svcType "ClusterIP") }}
   type: ClusterIP
   {{- if $serviceObject.clusterIP }}
   clusterIP: {{ $serviceObject.clusterIP }}

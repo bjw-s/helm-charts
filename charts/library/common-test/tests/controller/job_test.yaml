@@ -14,8 +14,9 @@ tests:
         isKind:
           of: Job
       - documentIndex: *ControllerDoc
-        notExists:
+        equal:
           path: spec.suspend
+          value: false
       - documentIndex: *ControllerDoc
         notExists:
           path: spec.ttlSecondsAfterFinished

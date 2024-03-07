@@ -11,10 +11,6 @@ service:
   main:
     enabled: false
 
-ingress:
-  main:
-    enabled: false
-
 probes:
   liveness:
     enabled: false

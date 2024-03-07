@@ -1,0 +1,105 @@
+{
+  "instance": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+
+      "annotations": {
+        "$ref": "definitions.json#/annotations"
+      },
+
+      "className": {
+        "type": "string"
+      },
+
+      "defaultBackend": {
+        "type": "string"
+      },
+
+      "hosts": {
+        "type": "array",
+        "items": {
+          "$ref": "#/hostEntry"
+        }
+      },
+
+      "labels": {
+        "$ref": "definitions.json#/labels"
+      },
+
+      "nameOverride": {
+        "type": "string"
+      },
+
+      "tls": {
+        "type": "array",
+        "items": {
+          "$ref": "#/tlsEntry"
+        }
+      }
+    },
+    "required": ["hosts"]
+  },
+
+  "hostEntry": {
+    "additionalProperties": false,
+    "properties": {
+      "host": {
+        "type": "string"
+      },
+      "paths": {
+        "items": {
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "pathType": {
+              "type": "string",
+              "default": "Prefix"
+            },
+
+            "service": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "port": {
+                  "type": ["string", "integer"]
+                }
+              },
+              "required": ["name"]
+            }
+          },
+          "required": ["path", "service"]
+        },
+        "title": "paths",
+        "type": "array"
+      }
+    },
+    "required": ["host", "paths"]
+  },
+
+  "tlsEntry": {
+    "additionalProperties": false,
+    "properties": {
+      "hosts": {
+        "type": "array",
+        "items": {
+          "type": ["string"]
+        }
+      },
+      "secretName": {
+        "type": "string"
+      }
+    },
+    "required": ["hosts"]
+  }
+}

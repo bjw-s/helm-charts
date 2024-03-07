@@ -4,17 +4,6 @@ suite: Container validations
 templates:
   - common.yaml
 tests:
-  - it: image required to be a dictionary
-    set:
-      controllers:
-        main:
-          containers:
-            test:
-              image: "test:latest"
-    asserts:
-      - failedTemplate:
-          errorMessage: "Image required to be a dictionary with repository and tag fields. (controller main, container test)"
-
   - it: image repository is required
     set:
       controllers:

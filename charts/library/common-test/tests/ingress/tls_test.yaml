@@ -3,10 +3,12 @@
 suite: ingress tls
 templates:
   - common.yaml
+
+values:
+  - ../_values/ingress_main_default_hosts.yaml
+
 tests:
   - it: default should pass
-    set:
-      ingress.main.enabled: true
     asserts:
       - documentIndex: &IngressDocument 2
         isKind:
@@ -18,7 +20,6 @@ tests:
   - it: tls enabled should pass
     set:
       ingress.main:
-        enabled: true
         tls:
           - secretName: test
             hosts:
@@ -38,7 +39,6 @@ tests:
   - it: tls enabled without secret should pass
     set:
       ingress.main:
-        enabled: true
         tls:
           - hosts:
               - hostname
@@ -56,7 +56,6 @@ tests:
   - it: tls enabled with secret template should pass
     set:
       ingress.main:
-        enabled: true
         tls:
           - secretName: "{{ .Release.Name }}-secret"
             hosts:
@@ -76,7 +75,6 @@ tests:
   - it: tls enabled with secret template evaluate empty should pass
     set:
       ingress.main:
-        enabled: true
         tls:
           - secretName: '{{ "" }}'
             hosts:

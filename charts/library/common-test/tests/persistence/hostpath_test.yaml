@@ -11,10 +11,6 @@ tests:
           enabled: true
           type: hostPath
           hostPath: "/tmp1"
-          mounts:
-            - controllers:
-                - main
-              mountPath: "/data"
     asserts:
       - documentIndex: 0
         isKind:
@@ -35,10 +31,6 @@ tests:
           type: hostPath
           hostPath: "/tmp2"
           hostPathType: "Directory"
-          mounts:
-            - controllers:
-                - main
-              mountPath: "/data2"
     asserts:
       - documentIndex: 0
         isKind:

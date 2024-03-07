@@ -3,10 +3,14 @@
 suite: pvc metadata
 templates:
   - common.yaml
+
+set:
+  persistence.config:
+    accessMode: ReadWriteOnce
+    size: 1Gi
+
 tests:
   - it: default should pass
-    set:
-      persistence.config.enabled: true
     asserts:
       - documentIndex: &PersistentVolumeClaimDocument 0
         isKind:
@@ -26,7 +30,6 @@ tests:
   - it: retain enabled should pass
     set:
       persistence.config:
-        enabled: true
         retain: true
     asserts:
       - documentIndex: &PersistentVolumeClaimDocument 0
@@ -49,7 +52,6 @@ tests:
   - it: custom metadata should pass
     set:
       persistence.config:
-        enabled: true
         labels:
           test_label: test
         annotations:
@@ -81,7 +83,6 @@ tests:
         annotations:
           global_annotation: test
       persistence.config:
-        enabled: true
         labels:
           test_label: test
         annotations:

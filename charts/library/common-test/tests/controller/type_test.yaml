@@ -116,6 +116,7 @@ tests:
   - it: cronjob should pass
     set:
       controllers.main.type: cronjob
+      controllers.main.cronjob.schedule: "*/20 * * * *"
     asserts:
       - documentIndex: &ControllerDoc 0
         isKind:

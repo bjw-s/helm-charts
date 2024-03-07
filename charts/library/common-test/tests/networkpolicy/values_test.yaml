@@ -3,6 +3,7 @@
 suite: NetworkPolicy values
 templates:
   - common.yaml
+
 tests:
   - it: main networkpolicy is disabled by default
     asserts:
@@ -17,9 +18,12 @@ tests:
 
   - it: main networkpolicy can be enabled
     set:
-      networkpolicies:
-        main:
-          enabled: true
+      networkpolicies.main:
+        controller: main
+        policyTypes:
+          - Ingress
+          - Egress
+        rules: {}
     asserts:
       - hasDocuments:
           count: 3
@@ -37,8 +41,11 @@ tests:
     set:
       networkpolicies:
         main:
-          enabled: true
           controller: main
+          policyTypes:
+            - Ingress
+            - Egress
+          rules: {}
     asserts:
       - documentIndex: &NetworkPolicyDocument 2
         isKind:
@@ -56,9 +63,12 @@ tests:
     set:
       networkpolicies:
         main:
-          enabled: true
           controller: main
+          policyTypes:
+            - Ingress
+            - Egress
           podSelector: {}
+          rules: {}
     asserts:
       - documentIndex: &NetworkPolicyDocument 2
         isKind:
@@ -72,8 +82,10 @@ tests:
     set:
       networkpolicies:
         main:
-          enabled: true
           controller: main
+          policyTypes:
+            - Ingress
+            - Egress
           rules:
             ingress:
               - {}

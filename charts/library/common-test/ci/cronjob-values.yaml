@@ -3,6 +3,7 @@ controllers:
     type: cronjob
     cronjob:
       timeZone: UTC
+      schedule: "*/20 * * * *"
     containers:
       main:
         image:

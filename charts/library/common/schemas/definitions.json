@@ -1,0 +1,15 @@
+{
+  "annotations": {
+    "type": ["object", "null"],
+    "additionalProperties": {
+      "type": ["string"]
+    }
+  },
+
+  "labels": {
+    "type": ["object", "null"],
+    "additionalProperties": {
+      "type": ["string"]
+    }
+  }
+}

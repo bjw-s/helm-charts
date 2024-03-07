@@ -9,7 +9,7 @@ Returns the value for annotations
   {{- $annotations := dict -}}
 
   {{- /* Set to the default if it is set */ -}}
-  {{- $defaultOption := get $rootContext.Values.defaultPodOptions "annotations" -}}
+  {{- $defaultOption := get (default dict $rootContext.Values.defaultPodOptions) "annotations" -}}
   {{- if not (empty $defaultOption) -}}
     {{- $annotations = merge $defaultOption $annotations -}}
   {{- end -}}

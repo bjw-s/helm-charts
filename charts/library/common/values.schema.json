@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.0-beta1/charts/library/common/values.schema.json",
+
+  "type": "object",
+  "properties": {
+    "global": {
+      "type": "object",
+      "properties": {
+        "annotations": {
+          "$ref": "schemas/definitions.json#/annotations"
+        },
+        "nameOverride": {
+          "type": ["string", "null"]
+        },
+        "fullnameOverride": {
+          "type": ["string", "null"]
+        },
+        "labels": {
+          "$ref": "schemas/definitions.json#/labels"
+        }
+      }
+    },
+    "defaultPodOptions": {
+      "$ref": "schemas/pod.json#/options"
+    },
+    "controllers": {
+      "additionalProperties": {
+        "$ref": "schemas/controllers.json#/instance"
+      }
+    },
+    "serviceAccount": {
+      "$ref": "schemas/serviceAccount.json#/settings"
+    },
+    "configMaps": {
+      "additionalProperties": {
+        "$ref": "schemas/configmap.json#/instance"
+      }
+    },
+    "secrets": {
+      "additionalProperties": {
+        "$ref": "schemas/secret.json#/instance"
+      }
+    },
+    "ingress": {
+      "additionalProperties": {
+        "$ref": "schemas/ingress.json#/instance"
+      }
+    },
+    "route": {
+      "additionalProperties": {
+        "$ref": "schemas/route.json#/instance"
+      }
+    },
+    "service": {
+      "additionalProperties": {
+        "$ref": "schemas/service.json#/instance"
+      }
+    },
+    "serviceMonitor": {
+      "additionalProperties": {
+        "$ref": "schemas/serviceMonitor.json#/instance"
+      }
+    },
+    "networkpolicies": {
+      "additionalProperties": {
+        "$ref": "schemas/networkpolicy.json#/instance"
+      }
+    },
+    "persistence": {
+      "additionalProperties": {
+        "$ref": "schemas/persistence.json#/item"
+      }
+    }
+  }
+}

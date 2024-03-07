@@ -24,6 +24,8 @@ Probes used by the container.
         {{- $parsedProbeSpec := tpl ($probeValues.spec | toYaml) $rootContext -}}
         {{- $probeDefinition = $parsedProbeSpec | fromYaml -}}
       {{- else -}}
+        {{- $probeSpec := dig "spec" dict $probeValues -}}
+
         {{- $primaryService := include "bjw-s.common.lib.service.primaryForController" (dict "rootContext" $rootContext "controllerIdentifier" $controllerObject.identifier) | fromYaml -}}
         {{- $primaryServiceDefaultPort := dict -}}
         {{- if $primaryService -}}
@@ -37,10 +39,10 @@ Probes used by the container.
             {{- $probeType = $probeValues.type | default "TCP" -}}
           {{- end -}}
 
-          {{- $_ := set $probeDefinition "initialDelaySeconds" $probeValues.spec.initialDelaySeconds -}}
-          {{- $_ := set $probeDefinition "failureThreshold" $probeValues.spec.failureThreshold -}}
-          {{- $_ := set $probeDefinition "timeoutSeconds" $probeValues.spec.timeoutSeconds -}}
-          {{- $_ := set $probeDefinition "periodSeconds" $probeValues.spec.periodSeconds -}}
+          {{- $_ := set $probeDefinition "initialDelaySeconds" (default 0 $probeSpec.initialDelaySeconds) -}}
+          {{- $_ := set $probeDefinition "failureThreshold" (default 3 $probeSpec.failureThreshold) -}}
+          {{- $_ := set $probeDefinition "timeoutSeconds" (default 1 $probeSpec.timeoutSeconds) -}}
+          {{- $_ := set $probeDefinition "periodSeconds" (default 10 $probeSpec.periodSeconds) -}}
 
           {{- $probeHeader := "" -}}
           {{- if or ( eq $probeType "HTTPS" ) ( eq $probeType "HTTP" ) -}}

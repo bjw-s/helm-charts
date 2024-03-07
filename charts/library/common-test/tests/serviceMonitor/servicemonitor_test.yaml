@@ -3,6 +3,7 @@
 suite: serviceMonitor values
 templates:
   - common.yaml
+
 tests:
   - it: a serviceMonitor is not created by default
     asserts:
@@ -20,6 +21,7 @@ tests:
       serviceMonitor:
         main:
           enabled: false
+          serviceName: "{{ .Release.Name }}"
     asserts:
       - hasDocuments:
           count: 2
@@ -34,9 +36,9 @@ tests:
     set:
       serviceMonitor:
         main:
-          enabled: true
           labels:
             test.label: testvalue
+          serviceName: "{{ .Release.Name }}"
           endpoints:
             - port: http
               scheme: http
@@ -83,8 +85,14 @@ tests:
     set:
       serviceMonitor:
         main:
-          enabled: true
           nameOverride: test
+          serviceName: "{{ .Release.Name }}"
+          endpoints:
+            - port: http
+              scheme: http
+              path: /metrics
+              interval: 1m
+              scrapeTimeout: 10s
     asserts:
       - hasDocuments:
           count: 3
@@ -107,8 +115,13 @@ tests:
     set:
       serviceMonitor:
         main:
-          enabled: true
           serviceName: "{{ .Release.Name }}"
+          endpoints:
+            - port: http
+              scheme: http
+              path: /metrics
+              interval: 1m
+              scrapeTimeout: 10s
     asserts:
       - hasDocuments:
           count: 3
@@ -131,10 +144,15 @@ tests:
     set:
       serviceMonitor:
         main:
-          enabled: true
           selector:
-            mySelector:
+            matchExpressions:
               test: "true"
+          endpoints:
+            - port: http
+              scheme: http
+              path: /metrics
+              interval: 1m
+              scrapeTimeout: 10s
     asserts:
       - hasDocuments:
           count: 3
@@ -149,13 +167,15 @@ tests:
         equal:
           path: spec.selector
           value:
-            mySelector:
+            matchExpressions:
               test: "true"
+
   - it: a serviceMonitor is created with targetLabels
     set:
       serviceMonitor:
         main:
           enabled: true
+          serviceName: "{{ .Release.Name }}"
           endpoints:
             - port: http
               scheme: http
@@ -163,8 +183,8 @@ tests:
               interval: 1m
               scrapeTimeout: 10s
           targetLabels:
-          - testlabel1
-          - testlabel2
+            - testlabel1
+            - testlabel2
     asserts:
       - hasDocuments:
           count: 3
