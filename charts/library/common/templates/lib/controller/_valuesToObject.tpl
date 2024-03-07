@@ -17,7 +17,8 @@ Convert controller values to an object
   {{- if $objectValues.nameOverride -}}
     {{- $objectName = printf "%s-%s" $objectName $objectValues.nameOverride -}}
   {{- else -}}
-    {{- if ne $identifier "main" -}}
+    {{- $enabledControllers := (include "bjw-s.common.lib.controller.enabledControllers" (dict "rootContext" $rootContext) | fromYaml ) }}
+    {{- if gt (len $enabledControllers) 1 -}}
       {{- $objectName = printf "%s-%s" $objectName $identifier -}}
     {{- end -}}
   {{- end -}}

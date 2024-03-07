@@ -13,7 +13,7 @@ Convert Service values to an object
     {{- $objectName = printf "%s-%s" $objectName $objectValues.nameOverride -}}
   {{- else -}}
     {{- $enabledServices := (include "bjw-s.common.lib.service.enabledServices" (dict "rootContext" $rootContext) | fromYaml ) }}
-    {{- if and (not $objectValues.primary) (gt 1 (len $enabledServices)) -}}
+    {{- if and (not $objectValues.primary) (gt (len $enabledServices) 1) -}}
       {{- $objectName = printf "%s-%s" $objectName $identifier -}}
     {{- end -}}
   {{- end -}}

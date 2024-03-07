@@ -36,7 +36,7 @@ tests:
       - documentIndex: *firstDeploymentDoc
         equal:
           path: metadata.name
-          value: RELEASE-NAME
+          value: RELEASE-NAME-main
       - documentIndex: *firstDeploymentDoc
         equal:
           path: metadata.labels['app.kubernetes.io/component']
@@ -72,7 +72,7 @@ tests:
       - documentIndex: *firstDeploymentDoc
         equal:
           path: metadata.name
-          value: RELEASE-NAME
+          value: RELEASE-NAME-main
       - documentIndex: *firstDeploymentDoc
         equal:
           path: metadata.labels['app.kubernetes.io/component']

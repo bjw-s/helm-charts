@@ -83,7 +83,7 @@ tests:
       - documentIndex: *FirstIngressDocument
         equal:
           path: metadata.name
-          value: RELEASE-NAME
+          value: RELEASE-NAME-main
       - documentIndex: &SecondIngressDocument 3
         isKind:
           of: Ingress
