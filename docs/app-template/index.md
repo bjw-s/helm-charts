@@ -31,6 +31,12 @@ examples/helm/vaultwarden/values.yaml
 
 ## Upgrade instructions
 
+### From 2.x.x to 3.0.x
+
+!!! warning
+
+    These docs are still being written
+
 ### From 1.x.x to 2.0.x
 
 !!! warning
