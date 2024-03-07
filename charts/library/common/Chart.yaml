@@ -16,6 +16,9 @@ annotations:
   artifacthub.io/changes: |-
     - kind: changed
       description: |-
+        Default objects (they used to be called main) have been commented out and will therefore no longer provide any (both expected and unexpected) default values.
+      - kind: changed
+      description: |-
         enableServiceLinks is disabled by default
     - kind: added
       description: |-
