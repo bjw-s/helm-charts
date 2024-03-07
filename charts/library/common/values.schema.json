@@ -3,12 +3,9 @@
   "$id": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.0/charts/library/common/",
 
   "type": "object",
-  "additionalProperties": false,
   "properties": {
-    "common": {},
     "global": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "annotations": {
           "$ref": "schemas/definitions.json#/annotations"
@@ -63,6 +60,5 @@
         "$ref": "schemas/persistence.json#/item"
       }
     }
-  },
-  "required": ["controllers"]
+  }
 }
