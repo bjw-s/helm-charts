@@ -1,21 +1,31 @@
 {
-  "volumeClaimTemplate": {
+  "item": {
+    "oneOf": [
+      {"$ref": "#/persistentVolumeClaimItem"},
+      {"$ref": "#/persistentVolumeClaimWithExistingClaimItem"},
+      {"$ref": "#/configMapItem"},
+      {"$ref": "#/secretItem"},
+      {"$ref": "#/nfsItem"},
+      {"$ref": "#/emptyDirItem"},
+      {"$ref": "#/hostPathItem"},
+      {"$ref": "#/customItem"}
+    ]
+  },
+
+  "persistentVolumeClaimItem": {
     "type": "object",
     "additionalProperties": false,
 
     "properties": {
+      "type": {
+        "const": "persistentVolumeClaim"
+      },
       "enabled": {
         "type": "boolean",
         "default": true
       },
       "accessMode": {
         "type": "string"
-      },
-      "advancedMounts": {
-        "type": "object",
-        "additionalProperties": {
-          "$ref": "persistence.json#/advancedMount"
-        }
       },
       "annotations": {
         "$ref": "definitions.json#/annotations"
@@ -26,14 +36,14 @@
       "dataSourceRef": {
         "$ref": "#/dataSourceReference"
       },
-      "globalMounts": {
-        "type": "array",
-        "items": {
-          "$ref": "#/globalMount"
-        }
-      },
       "labels": {
         "$ref": "definitions.json#/labels"
+      },
+      "nameOverride": {
+        "type": "string"
+      },
+      "retain": {
+        "type": "boolean"
       },
       "size": {
         "type": "string"
@@ -41,19 +51,164 @@
       "storageClass": {
         "type": "string"
       },
+      "advancedMounts": {"$ref": "#/advancedMounts"},
+      "globalMounts": {"$ref": "#/globalMounts"}
+    },
+    "required": ["accessMode", "size"]
+  },
+
+  "persistentVolumeClaimWithExistingClaimItem": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
       "type": {
-        "type": "string",
-        "enum": [
-          "persistentVolumeClaim",
-          "emptyDir",
-          "nfs",
-          "hostPath",
-          "secret",
-          "configMap",
-          "custom"
-        ]
-      }
+        "const": "persistentVolumeClaim"
+      },
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "existingClaim": {
+        "type": "string"
+      },
+      "advancedMounts": {"$ref": "#/advancedMounts"},
+      "globalMounts": {"$ref": "#/globalMounts"}
+    },
+    "required": ["existingClaim"]
+  },
+
+  "configMapItem": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "type": {
+        "const": "configMap"
+      },
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "name": {
+        "type": "string"
+      },
+      "advancedMounts": {"$ref": "#/advancedMounts"},
+      "globalMounts": {"$ref": "#/globalMounts"}
+    },
+    "required": ["name"]
+  },
+
+  "secretItem": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "type": {
+        "const": "secret"
+      },
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "name": {
+        "type": "string"
+      },
+      "advancedMounts": {"$ref": "#/advancedMounts"},
+      "globalMounts": {"$ref": "#/globalMounts"}
+    },
+    "required": ["name"]
+  },
+
+  "nfsItem": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "type": {
+        "const": "nfs"
+      },
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "path": {
+        "type": "string"
+      },
+      "server": {
+        "type": "string"
+      },
+      "advancedMounts": {"$ref": "#/advancedMounts"},
+      "globalMounts": {"$ref": "#/globalMounts"}
+    },
+    "required": ["server", "path"]
+  },
+
+  "emptyDirItem": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "type": {
+        "const": "emptyDir"
+      },
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "medium": {
+        "type": "string"
+      },
+      "sizeLimit": {
+        "type": "string"
+      },
+      "advancedMounts": {"$ref": "#/advancedMounts"},
+      "globalMounts": {"$ref": "#/globalMounts"}
     }
+  },
+
+  "hostPathItem": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "type": {
+        "const": "hostPath"
+      },
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "hostPath": {
+        "type": "string"
+      },
+      "hostPathType": {
+        "type": "string"
+      },
+      "advancedMounts": {"$ref": "#/advancedMounts"},
+      "globalMounts": {"$ref": "#/globalMounts"}
+    }
+  },
+
+  "customItem": {
+    "type": "object",
+    "additionalProperties": false,
+
+    "properties": {
+      "type": {
+        "const": "custom"
+      },
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "volumeSpec": {
+        "type": "object"
+      },
+      "globalMounts": {"$ref": "#/globalMounts"},
+      "advancedMounts": {"$ref": "#/advancedMounts"}
+    },
+    "required": ["volumeSpec"]
   },
 
   "dataSourceReference": {
@@ -73,15 +228,42 @@
     "required": ["kind", "name"]
   },
 
-  "globalMount": {
+  "globalMounts": {
+    "type": "array",
+    "items": {
+      "$ref": "#/mountPath"
+    }
+  },
+
+  "advancedMounts": {
+    "additionalProperties": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/mountPathCollection"
+      }
+    }
+  },
+
+  "mountPathCollection": {
+    "type": "array",
+    "items": {"$ref": "#/mountPath"}
+  },
+
+  "mountPath": {
     "additionalProperties": false,
     "properties": {
       "path": {
         "type": "string"
+      },
+      "readOnly": {
+        "type": "boolean"
+      },
+      "subPath": {
+        "type": "string"
+      },
+      "mountPropagation": {
+        "type": "string"
       }
-    },
-    "required": ["path"]
-  },
-
-  "advancedMount": {}
+    }
+  }
 }

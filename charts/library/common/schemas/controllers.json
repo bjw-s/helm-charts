@@ -170,27 +170,14 @@
       "advancedMounts": {
         "type": "object",
         "additionalProperties": {
-          "$ref": "persistence.json#/advancedMount"
+          "$ref": "persistence.json#/mountPathCollection"
         }
       },
-      "annotations": {
-        "$ref": "definitions.json#/annotations"
-      },
-      "dataSource": {
-        "$ref": "persistence.json#/dataSourceReference"
-      },
-      "dataSourceRef": {
-        "$ref": "persistence.json#/dataSourceReference"
-      },
-      "globalMounts": {
-        "type": "array",
-        "items": {
-          "$ref": "persistence.json#/globalMount"
-        }
-      },
-      "labels": {
-        "$ref": "definitions.json#/labels"
-      },
+      "annotations": {"$ref": "definitions.json#/annotations"},
+      "dataSource": {"$ref": "persistence.json#/dataSourceReference"},
+      "dataSourceRef": {"$ref": "persistence.json#/dataSourceReference"},
+      "globalMounts": {"$ref": "persistence.json#/globalMounts"},
+      "labels": {"$ref": "definitions.json#/labels"},
       "name": {
         "type": "string"
       },

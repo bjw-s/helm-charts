@@ -3,10 +3,14 @@
 suite: pvc datasource
 templates:
   - common.yaml
+
+set:
+  persistence.config:
+    accessMode: ReadWriteOnce
+    size: 1Gi
+
 tests:
   - it: default should pass
-    set:
-      persistence.config.enabled: true
     asserts:
       - documentIndex: &PersistentVolumeClaimDocument 0
         isKind:
@@ -21,7 +25,6 @@ tests:
   - it: with dataSource should pass
     set:
       persistence.config:
-        enabled: true
         dataSource:
           apiGroup: snapshot.storage.k8s.io
           kind: VolumeSnapshot
@@ -44,7 +47,6 @@ tests:
   - it: templated dataSource name should pass
     set:
       persistence.config:
-        enabled: true
         dataSource:
           apiGroup: snapshot.storage.k8s.io
           kind: VolumeSnapshot
@@ -67,7 +69,6 @@ tests:
   - it: with dataSourceRef should pass
     set:
       persistence.config:
-        enabled: true
         dataSourceRef:
           apiGroup: snapshot.storage.k8s.io
           kind: VolumeSnapshot
@@ -90,7 +91,6 @@ tests:
   - it: templated dataSourceRef name should pass
     set:
       persistence.config:
-        enabled: true
         dataSourceRef:
           apiGroup: snapshot.storage.k8s.io
           kind: VolumeSnapshot

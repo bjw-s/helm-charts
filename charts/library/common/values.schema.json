@@ -58,7 +58,11 @@
     "service": {},
     "serviceMonitor": {},
     "networkpolicies": {},
-    "persistence": {}
+    "persistence": {
+      "additionalProperties": {
+        "$ref": "schemas/persistence.json#/item"
+      }
+    }
   },
   "required": ["controllers"]
 }

@@ -628,68 +628,69 @@ route:
 # [[ref]](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-storage)
 # @default -- See below
 persistence:
-  config:
-    # -- Enables or disables the persistence item. Defaults to true
-    enabled: false
+  {}
+  # config:
+  #   # -- Enables or disables the persistence item. Defaults to true
+  #   enabled: false
 
-    # -- Sets the persistence type
-    # Valid options are persistentVolumeClaim, emptyDir, nfs, hostPath, secret, configMap or custom
-    type: persistentVolumeClaim
+  #   # -- Sets the persistence type
+  #   # Valid options are persistentVolumeClaim, emptyDir, nfs, hostPath, secret, configMap or custom
+  #   type: persistentVolumeClaim
 
-    # -- Storage Class for the config volume.
-    # If set to `-`, dynamic provisioning is disabled.
-    # If set to something else, the given storageClass is used.
-    # If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner.
-    storageClass: # "-"
+  #   # -- Storage Class for the config volume.
+  #   # If set to `-`, dynamic provisioning is disabled.
+  #   # If set to something else, the given storageClass is used.
+  #   # If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner.
+  #   storageClass: # "-"
 
-    # -- If you want to reuse an existing claim, the name of the existing PVC can be passed here.
-    existingClaim: # your-claim
+  #   # -- If you want to reuse an existing claim, the name of the existing PVC can be passed here.
+  #   existingClaim: # your-claim
 
-    # -- The optional data source for the persistentVolumeClaim.
-    # [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-populators-and-data-sources)
-    dataSource: {}
+  #   # -- The optional data source for the persistentVolumeClaim.
+  #   # [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-populators-and-data-sources)
+  #   dataSource: {}
 
-    # -- The optional volume populator for the persistentVolumeClaim.
-    # [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-populators-and-data-sources)
-    dataSourceRef: {}
+  #   # -- The optional volume populator for the persistentVolumeClaim.
+  #   # [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#volume-populators-and-data-sources)
+  #   dataSourceRef: {}
 
-    # -- AccessMode for the persistent volume.
-    # Make sure to select an access mode that is supported by your storage provider!
-    # [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
-    accessMode: ReadWriteOnce
+  #   # -- AccessMode for the persistent volume.
+  #   # Make sure to select an access mode that is supported by your storage provider!
+  #   # [[ref]](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes)
+  #   accessMode: ReadWriteOnce
 
-    # -- The amount of storage that is requested for the persistent volume.
-    size: 1Gi
+  #   # -- The amount of storage that is requested for the persistent volume.
+  #   size: 1Gi
 
-    # -- Set to true to retain the PVC upon `helm uninstall`
-    retain: false
+  #   # -- Set to true to retain the PVC upon `helm uninstall`
+  #   retain: false
 
-    # -- Configure mounts to all controllers and containers. By default the persistence item
-    # will be mounted to `/<name_of_the_peristence_item>`.
-    # Example:
-    # globalMounts:
-    #   - path: /config
-    #     readOnly: false
-    globalMounts: []
+  #   # -- Configure mounts to all controllers and containers. By default the persistence item
+  #   # will be mounted to `/<name_of_the_peristence_item>`.
+  #   # Example:
+  #   # globalMounts:
+  #   #   - path: /config
+  #   #     readOnly: false
+  #   globalMounts: []
 
-    # -- Explicitly configure mounts for specific controllers and containers.
-    # Example:
-    # advancedMounts:
-    #   main: # the controller with the "main" identifier
-    #     main: # the container with the "main" identifier
-    #       - path: /data/config.yaml
-    #         readOnly: true
-    #         mountPropagation: None
-    #         subPath: config.yaml
-    #     second-container: # the container with the "second-container" identifier
-    #       - path: /appdata/config
-    #         readOnly: true
-    #   second-controller: # the controller with the "second-controller" identifier
-    #     main: # the container with the "main" identifier
-    #       - path: /data/config.yaml
-    #         readOnly: false
-    #         subPath: config.yaml
-    advancedMounts: {}
+  #   # -- Explicitly configure mounts for specific controllers and containers.
+  #   # Example:
+  #   # advancedMounts:
+  #   #   main: # the controller with the "main" identifier
+  #   #     main: # the container with the "main" identifier
+  #   #       - path: /data/config.yaml
+  #   #         readOnly: true
+  #   #         mountPropagation: None
+  #   #         subPath: config.yaml
+  #   #     second-container: # the container with the "second-container" identifier
+  #   #       - path: /appdata/config
+  #   #         readOnly: true
+  #   #   second-controller: # the controller with the "second-controller" identifier
+  #   #     main: # the container with the "main" identifier
+  #   #       - path: /data/config.yaml
+  #   #         readOnly: false
+  #   #         subPath: config.yaml
+  #   advancedMounts: {}
 
 # -- Configure the networkPolicies for the chart here.
 # Additional networkPolicies can be added by adding a dictionary key similar to the 'main' networkPolicy.
