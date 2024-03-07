@@ -235,7 +235,7 @@
       "configMapKeyRef": {"$ref": "#/envValueFrom.configMapKeyRef"}
     },
     "required": ["name"],
-    "dependentSchemas": {
+    "dependencies": {
       "fieldRef": {
         "allOf": [
           {"not": {"required": ["secretKeyRef"]}},

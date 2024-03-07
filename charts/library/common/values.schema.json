@@ -52,8 +52,16 @@
         "$ref": "schemas/route.json#/instance"
       }
     },
-    "service": {},
-    "serviceMonitor": {},
+    "service": {
+      "additionalProperties": {
+        "$ref": "schemas/service.json#/instance"
+      }
+    },
+    "serviceMonitor": {
+      "additionalProperties": {
+        "$ref": "schemas/serviceMonitor.json#/instance"
+      }
+    },
     "networkpolicies": {
       "additionalProperties": {
         "$ref": "schemas/networkpolicy.json#/instance"

@@ -1,6 +1,6 @@
 # common
 
-![Version: 3.0.0](https://img.shields.io/badge/Version-3.0.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 3.0.0-beta1](https://img.shields.io/badge/Version-3.0.0--beta1-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -27,7 +27,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
   - name: common
-    version: 3.0.0
+    version: 3.0.0-beta1
     repository: https://bjw-s.github.io/helm-charts/
 ```
 
@@ -79,48 +79,15 @@ The following table contains an overview of available values and their descripti
 | global.nameOverride | string | `nil` | Set an override for the prefix of the fullname |
 | ingress | object | `{}` | Configure the ingresses for the chart here. |
 | networkpolicies | object | See below | Configure the networkPolicies for the chart here. Additional networkPolicies can be added by adding a dictionary key similar to the 'main' networkPolicy. |
-| networkpolicies.main.controller | string | `"main"` | Configure which controller this networkPolicy should target |
-| networkpolicies.main.enabled | bool | `false` | Enables or disables the networkPolicy item. Defaults to true |
-| networkpolicies.main.policyTypes | list | `["Ingress","Egress"]` | The policyTypes for this networkPolicy |
-| networkpolicies.main.rules | object | `{"egress":[{}],"ingress":[{}]}` | The rulesets for this networkPolicy [[ref]](https://kubernetes.io/docs/concepts/services-networking/network-policies/#networkpolicy-resource) |
-| networkpolicies.main.rules.egress | list | `[{}]` | The egress rules for this networkPolicy. Allows all egress traffic by default. |
-| networkpolicies.main.rules.ingress | list | `[{}]` | The ingress rules for this networkPolicy. Allows all ingress traffic by default. |
 | persistence | object | See below | Configure persistence for the chart here. Additional items can be added by adding a dictionary key similar to the 'config' key. [[ref]](https://bjw-s.github.io/helm-charts/docs/common-library/common-library-storage) |
 | route | object | See below | Configure the gateway routes for the chart here. Additional routes can be added by adding a dictionary key similar to the 'main' route. [[ref]](https://gateway-api.sigs.k8s.io/references/spec/) |
 | secrets | object | See below | Use this to populate secrets with the values you specify. Be aware that these values are not encrypted by default, and could therefore visible to anybody with access to the values.yaml file. Additional Secrets can be added by adding a dictionary key similar to the 'secret' object. |
 | service | object | See below | Configure the services for the chart here. Additional services can be added by adding a dictionary key similar to the 'main' service. |
-| service.main.annotations | object | `{}` | Provide additional annotations which may be required. |
-| service.main.controller | string | `"main"` | Configure which controller this service should target |
-| service.main.enabled | bool | `true` | Enables or disables the service |
-| service.main.externalTrafficPolicy | string | `nil` | [[ref](https://kubernetes.io/docs/tutorials/services/source-ip/)] |
-| service.main.extraSelectorLabels | object | `{}` | Allow adding additional match labels |
-| service.main.ipFamilies | list | `[]` | The ip families that should be used. Options: IPv4, IPv6 |
-| service.main.ipFamilyPolicy | string | `nil` | Specify the ip policy. Options: SingleStack, PreferDualStack, RequireDualStack |
-| service.main.labels | object | `{}` | Provide additional labels which may be required. |
-| service.main.nameOverride | string | `nil` | Override the name suffix that is used for this service |
-| service.main.ports | object | See below | Configure the Service port information here. Additional ports can be added by adding a dictionary key similar to the 'http' service. |
-| service.main.ports.http.appProtocol | string | `nil` | Specify the appProtocol value for the Service. [[ref]](https://kubernetes.io/docs/concepts/services-networking/service/#application-protocol) |
-| service.main.ports.http.enabled | bool | `true` | Enables or disables the port |
-| service.main.ports.http.nodePort | string | `nil` | Specify the nodePort value for the LoadBalancer and NodePort service types. [[ref]](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport) |
-| service.main.ports.http.port | string | `nil` | The port number |
-| service.main.ports.http.primary | bool | `true` | Make this the primary port (used in probes, notes, etc...) If there is more than 1 service, make sure that only 1 port is marked as primary. |
-| service.main.ports.http.protocol | string | `"HTTP"` | Port protocol. Support values are `HTTP`, `HTTPS`, `TCP` and `UDP`. HTTP and HTTPS spawn a TCP service and get used for internal URL and name generation |
-| service.main.ports.http.targetPort | string | `nil` | Specify a service targetPort if you wish to differ the service port from the application port. If `targetPort` is specified, this port number is used in the container definition instead of the `port` value. Therefore named ports are not supported for this field. |
-| service.main.primary | bool | `true` | Make this the primary service for this controller (used in probes, notes, etc...). If there is more than 1 service targeting the controller, make sure that only 1 service is marked as primary. |
-| service.main.type | string | `"ClusterIP"` | Set the service type |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.create | bool | `false` | Specifies whether a service account should be created |
 | serviceAccount.labels | object | `{}` | Labels to add to the service account |
 | serviceAccount.name | string | `""` | The name of the service account to use. If not set and create is true, a name is generated using the fullname template |
 | serviceMonitor | object | See below | Configure the ServiceMonitors for the chart here. Additional ServiceMonitors can be added by adding a dictionary key similar to the 'main' ServiceMonitors. |
-| serviceMonitor.main.annotations | object | `{}` | Provide additional annotations which may be required. |
-| serviceMonitor.main.enabled | bool | `false` | Enables or disables the serviceMonitor. |
-| serviceMonitor.main.endpoints | list | See values.yaml | Configures the endpoints for the serviceMonitor. |
-| serviceMonitor.main.labels | object | `{}` | Provide additional labels which may be required. |
-| serviceMonitor.main.nameOverride | string | `nil` | Override the name suffix that is used for this serviceMonitor. |
-| serviceMonitor.main.selector | object | `{}` | Configures a custom selector for the serviceMonitor, this takes precedence over specifying a service name. Helm templates can be used. |
-| serviceMonitor.main.serviceName | string | `"{{ include \"bjw-s.common.lib.chart.names.fullname\" $ }}"` | Configures the target Service for the serviceMonitor. Helm templates can be used. |
-| serviceMonitor.main.targetLabels | list | `[]` | Configures custom targetLabels for the serviceMonitor. (All collected meterics will have these labels, taking the value from the target service) [[ref]](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#servicemonitorspec/) |
 
 </details>
 

@@ -1,0 +1,62 @@
+{
+  "instance": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "annotations": {
+        "$ref": "definitions.json#/annotations"
+      },
+      "labels": {
+        "$ref": "definitions.json#/labels"
+      },
+      "nameOverride": {
+        "type": "string"
+      },
+      "endpoints": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "selector": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "matchLabels": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "key": {"type": "string"},
+                "operator": {"type": "string"},
+                "values": {
+                  "type": "array",
+                  "items": {"type": "string"}
+                }
+              }
+            }
+          },
+          "matchExpressions": {
+            "type": "object"
+          }
+        }
+      },
+      "serviceName": {
+        "type": "string"
+      },
+      "targetLabels": {
+        "type": "array"
+      }
+    },
+    "oneOf": [{"required": ["serviceName"]}, {"required": ["selector"]}],
+    "dependencies": {
+      "selector": {"not": {"required": ["serviceName"]}},
+      "serviceName": {"not": {"required": ["selector"]}}
+    }
+  }
+}
