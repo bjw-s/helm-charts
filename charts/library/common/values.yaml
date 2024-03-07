@@ -696,27 +696,27 @@ persistence:
 # Additional networkPolicies can be added by adding a dictionary key similar to the 'main' networkPolicy.
 # @default -- See below
 networkpolicies:
-  main:
-    # -- Enables or disables the networkPolicy item. Defaults to true
-    enabled: false
+  # main:
+  #   # -- Enables or disables the networkPolicy item. Defaults to true
+  #   enabled: false
 
-    # -- Configure which controller this networkPolicy should target
-    controller: main
+  #   # -- Configure which controller this networkPolicy should target
+  #   controller: main
 
-    # -- Define a custom podSelector for the networkPolicy. This takes precedence over targeting a controller.
-    # podSelector: {}
+  #   # -- Define a custom podSelector for the networkPolicy. This takes precedence over targeting a controller.
+  #   # podSelector: {}
 
-    # -- The policyTypes for this networkPolicy
-    policyTypes:
-      - Ingress
-      - Egress
+  #   # -- The policyTypes for this networkPolicy
+  #   policyTypes:
+  #     - Ingress
+  #     - Egress
 
-    # -- The rulesets for this networkPolicy
-    # [[ref]](https://kubernetes.io/docs/concepts/services-networking/network-policies/#networkpolicy-resource)
-    rules:
-      # -- The ingress rules for this networkPolicy. Allows all ingress traffic by default.
-      ingress:
-        - {}
-      # -- The egress rules for this networkPolicy. Allows all egress traffic by default.
-      egress:
-        - {}
+  #   # -- The rulesets for this networkPolicy
+  #   # [[ref]](https://kubernetes.io/docs/concepts/services-networking/network-policies/#networkpolicy-resource)
+  #   rules:
+  #     # -- The ingress rules for this networkPolicy. Allows all ingress traffic by default.
+  #     ingress:
+  #       - {}
+  #     # -- The egress rules for this networkPolicy. Allows all egress traffic by default.
+  #     egress:
+  #       - {}

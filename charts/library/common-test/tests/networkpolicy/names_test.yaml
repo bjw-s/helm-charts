@@ -8,7 +8,11 @@ tests:
     set:
       networkpolicies:
         main:
-          enabled: true
+          controller: main
+          policyTypes:
+            - Ingress
+            - Egress
+          rules: {}
     asserts:
       - hasDocuments:
           count: 3
@@ -24,7 +28,11 @@ tests:
     set:
       networkpolicies:
         main:
-          enabled: true
+          controller: main
+          policyTypes:
+            - Ingress
+            - Egress
+          rules: {}
           nameOverride: block-ingress
     asserts:
       - documentIndex: &NetworkPolicyDocument 2

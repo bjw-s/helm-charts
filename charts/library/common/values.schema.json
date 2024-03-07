@@ -54,7 +54,11 @@
     },
     "service": {},
     "serviceMonitor": {},
-    "networkpolicies": {},
+    "networkpolicies": {
+      "additionalProperties": {
+        "$ref": "schemas/networkpolicy.json#/instance"
+      }
+    },
     "persistence": {
       "additionalProperties": {
         "$ref": "schemas/persistence.json#/item"
