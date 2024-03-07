@@ -76,6 +76,10 @@ tests:
         - secretRef:
             identifier: secret
           prefix: test
+      secrets:
+        secret:
+          stringData:
+            test: test
     asserts:
       - documentIndex: &DeploymentDoc 0
         isKind:

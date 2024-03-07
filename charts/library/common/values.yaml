@@ -383,17 +383,18 @@ serviceAccount:
 # Additional Secrets can be added by adding a dictionary key similar to the 'secret' object.
 # @default -- See below
 secrets:
-  secret:
-    # -- Enables or disables the Secret
-    enabled: false
-    # -- Labels to add to the Secret
-    labels: {}
-    # -- Annotations to add to the Secret
-    annotations: {}
-    # -- Secret stringData content. Helm template enabled.
-    stringData:
-      {}
-      # foo: bar
+  {}
+  # secret:
+  #   # -- Enables or disables the Secret
+  #   enabled: false
+  #   # -- Labels to add to the Secret
+  #   labels: {}
+  #   # -- Annotations to add to the Secret
+  #   annotations: {}
+  #   # -- Secret stringData content. Helm template enabled.
+  #   stringData:
+  #     {}
+  #     # foo: bar
 
 # -- Configure configMaps for the chart here.
 # Additional configMaps can be added by adding a dictionary key similar to the 'config' object.

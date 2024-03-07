@@ -40,7 +40,11 @@
         "$ref": "schemas/configmap.json#/instance"
       }
     },
-    "secrets": {},
+    "secrets": {
+      "additionalProperties": {
+        "$ref": "schemas/secret.json#/instance"
+      }
+    },
     "ingress": {
       "additionalProperties": {
         "$ref": "schemas/ingress.json#/instance"
