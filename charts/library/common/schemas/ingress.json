@@ -36,11 +36,6 @@
         "type": "string"
       },
 
-      "primary": {
-        "type": "boolean",
-        "default": false
-      },
-
       "tls": {
         "type": "array",
         "items": {

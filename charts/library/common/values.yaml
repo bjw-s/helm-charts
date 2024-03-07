@@ -575,52 +575,53 @@ serviceMonitor:
 # [[ref]](https://gateway-api.sigs.k8s.io/references/spec/)
 # @default -- See below
 route:
-  main:
-    # -- Enables or disables the route
-    enabled: false
+  {}
+  # main:
+  #   # -- Enables or disables the route
+  #   enabled: false
 
-    # -- Set the route kind
-    # Valid options are GRPCRoute, HTTPRoute, TCPRoute, TLSRoute, UDPRoute
-    kind: HTTPRoute
+  #   # -- Set the route kind
+  #   # Valid options are GRPCRoute, HTTPRoute, TCPRoute, TLSRoute, UDPRoute
+  #   kind: HTTPRoute
 
-    # -- Override the name suffix that is used for this route.
-    nameOverride:
+  #   # -- Override the name suffix that is used for this route.
+  #   nameOverride: ""
 
-    # -- Provide additional annotations which may be required.
-    annotations: {}
+  #   # -- Provide additional annotations which may be required.
+  #   annotations: {}
 
-    # -- Provide additional labels which may be required.
-    labels: {}
+  #   # -- Provide additional labels which may be required.
+  #   labels: {}
 
-    # -- Configure the resource the route attaches to.
-    parentRefs:
-      - # Group of the referent resource.
-        group: gateway.networking.k8s.io
-        # Kind of the referent resource.
-        kind: Gateway
-        # Name of the referent resource
-        name:
-        # Namespace of the referent resource
-        namespace:
-        # Name of the section within the target resource.
-        sectionName:
+  #   # -- Configure the resource the route attaches to.
+  #   parentRefs:
+  #     - # Group of the referent resource.
+  #       group: gateway.networking.k8s.io
+  #       # Kind of the referent resource.
+  #       kind: Gateway
+  #       # Name of the referent resource
+  #       name:
+  #       # Namespace of the referent resource
+  #       namespace:
+  #       # Name of the section within the target resource.
+  #       sectionName:
 
-    # -- Host addresses. Helm template can be passed.
-    hostnames: []
+  #   # -- Host addresses. Helm template can be passed.
+  #   hostnames: []
 
-    # -- Configure rules for routing. Defaults to the primary service.
-    rules:
-      - # -- Configure backends where matching requests should be sent.
-        backendRefs: []
-        ## Configure conditions used for matching incoming requests. Only for HTTPRoutes
-        matches:
-          - path:
-              type: PathPrefix
-              value: /
-        ## Request filters that are applied to the rules.
-        filters: []
-        ## Request timeout that are applied to the rules.
-        timeouts: {}
+  #   # -- Configure rules for routing. Defaults to the primary service.
+  #   rules:
+  #     - # -- Configure backends where matching requests should be sent.
+  #       backendRefs: []
+  #       ## Configure conditions used for matching incoming requests. Only for HTTPRoutes
+  #       matches:
+  #         - path:
+  #             type: PathPrefix
+  #             value: /
+  #       ## Request filters that are applied to the rules.
+  #       filters: []
+  #       ## Request timeout that are applied to the rules.
+  #       timeouts: {}
 
 # -- Configure persistence for the chart here.
 # Additional items can be added by adding a dictionary key similar to the 'config' key.

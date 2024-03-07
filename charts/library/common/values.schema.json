@@ -50,7 +50,11 @@
         "$ref": "schemas/ingress.json#/instance"
       }
     },
-    "route": {},
+    "route": {
+      "additionalProperties": {
+        "$ref": "schemas/route.json#/instance"
+      }
+    },
     "service": {},
     "serviceMonitor": {},
     "networkpolicies": {},
