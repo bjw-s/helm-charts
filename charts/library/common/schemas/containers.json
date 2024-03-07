@@ -353,44 +353,37 @@
         "type": ["number", "string"]
       },
       "spec": {
-        "allOf": [
-          {
-            "if": {},
-            "then": {"$ref": "k8s-api.json#/core.v1.Probe"},
-            "else": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "failureThreshold": {
-                  "type": "integer",
-                  "default": 3
-                },
-                "initialDelaySeconds": {
-                  "type": "integer",
-                  "default": 0
-                },
-                "periodSeconds": {
-                  "type": "integer",
-                  "default": 10
-                },
-                "timeoutSeconds": {
-                  "type": "integer",
-                  "default": 1
-                }
-              },
-              "required": [
-                "initialDelaySeconds",
-                "periodSeconds",
-                "timeoutSeconds",
-                "failureThreshold"
-              ]
-            }
-          }
+        "oneOf": [
+          {"$ref": "#/probeSpec"},
+          {"$ref": "k8s-api.json#/core.v1.Probe"}
         ]
       },
       "type": {
         "type": "string",
         "enum": ["TCP", "HTTP", "HTTPS", "AUTO"]
+      }
+    }
+  },
+
+  "probeSpec": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "failureThreshold": {
+        "type": "integer",
+        "default": 3
+      },
+      "initialDelaySeconds": {
+        "type": "integer",
+        "default": 0
+      },
+      "periodSeconds": {
+        "type": "integer",
+        "default": 10
+      },
+      "timeoutSeconds": {
+        "type": "integer",
+        "default": 1
       }
     }
   }
