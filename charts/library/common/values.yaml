@@ -399,17 +399,17 @@ secrets:
 # Additional configMaps can be added by adding a dictionary key similar to the 'config' object.
 # @default -- See below
 configMaps:
-  config:
-    # -- Enables or disables the configMap
-    enabled: false
-    # -- Labels to add to the configMap
-    labels: {}
-    # -- Annotations to add to the configMap
-    annotations: {}
-    # -- configMap data content. Helm template enabled.
-    data:
-      {}
-      # foo: bar
+  {}
+  # config:
+  #   # -- Enables or disables the configMap
+  #   enabled: true
+  #   # -- Labels to add to the configMap
+  #   labels: {}
+  #   # -- Annotations to add to the configMap
+  #   annotations: {}
+  #   # -- configMap data content. Helm template enabled.
+  #   data:
+  #     foo: bar
 
 # -- Configure the services for the chart here.
 # Additional services can be added by adding a dictionary key similar to the 'main' service.

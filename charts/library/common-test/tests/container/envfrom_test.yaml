@@ -46,6 +46,10 @@ tests:
           prefix: test
         - configMapRef:
             identifier: config
+      configMaps:
+        config:
+          data:
+            test: test
     asserts:
       - documentIndex: &DeploymentDoc 0
         isKind:

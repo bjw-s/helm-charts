@@ -8,7 +8,8 @@ tests:
     set:
       configMaps:
         config:
-          enabled: true
+          data:
+            test: test
     asserts:
       - hasDocuments:
           count: 3
@@ -31,7 +32,8 @@ tests:
     set:
       configMaps:
         config:
-          enabled: true
+          data:
+            test: test
           annotations:
             test_annotation: test
           labels:
@@ -66,7 +68,8 @@ tests:
           global_annotation: test
       configMaps:
         config:
-          enabled: true
+          data:
+            test: test
           annotations:
             test_annotation: test
           labels:
