@@ -17,3 +17,6 @@ annotations:
     - kind: changed
       description: |-
         enableServiceLinks is disabled by default
+    - kind: added
+      description: |-
+        Added support for restartPolicy field on container level

@@ -89,3 +89,28 @@ tests:
         equal:
           path: spec.template.spec.initContainers[1].name
           value: init1
+
+  - it: with custom restartPolicy (sidecar)
+    set:
+      controllers.main.initContainers:
+        test:
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+            tag: latest
+          restartPolicy: Always
+    asserts:
+      - documentIndex: &DeploymentDocument 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDocument
+        lengthEqual:
+          path: spec.template.spec.initContainers
+          count: 1
+      - documentIndex: *DeploymentDocument
+        equal:
+          path: spec.template.spec.initContainers[0].name
+          value: test
+      - documentIndex: *DeploymentDocument
+        equal:
+          path: spec.template.spec.initContainers[0].restartPolicy
+          value: Always
