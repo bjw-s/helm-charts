@@ -3,8 +3,9 @@
   "$id": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.0/charts/library/common/",
 
   "type": "object",
-  "additionalProperties": true,
+  "additionalProperties": false,
   "properties": {
+    "common": {},
     "global": {
       "type": "object",
       "additionalProperties": false,
@@ -31,11 +32,21 @@
         "$ref": "schemas/controllers.json#/instance"
       }
     },
+    "serviceAccount": {
+      "$ref": "schemas/serviceAccount.json#/settings"
+    },
+    "configMaps": {},
+    "secrets": {},
     "ingress": {
       "additionalProperties": {
         "$ref": "schemas/ingress.json#/instance"
       }
-    }
+    },
+    "route": {},
+    "service": {},
+    "serviceMonitor": {},
+    "networkpolicies": {},
+    "persistence": {}
   },
   "required": ["controllers"]
 }
