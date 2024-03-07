@@ -68,12 +68,6 @@ configMaps:
       test: value 1
 
 persistence:
-  config:
-    enabled: true
-    type: persistentVolumeClaim
-    accessMode: ReadWriteOnce
-    size: 1Gi
-
   data:
     type: configMap
     name: |-
