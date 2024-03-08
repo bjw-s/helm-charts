@@ -10,7 +10,7 @@ values:
 tests:
   - it: default should pass
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -25,7 +25,7 @@ tests:
             hosts:
               - hostname
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -43,7 +43,7 @@ tests:
           - hosts:
               - hostname
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -61,7 +61,7 @@ tests:
             hosts:
               - hostname
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -80,7 +80,7 @@ tests:
             hosts:
               - hostname
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument

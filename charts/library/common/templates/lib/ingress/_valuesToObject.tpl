@@ -12,7 +12,8 @@ Convert ingress values to an object
   {{- if $objectValues.nameOverride -}}
     {{- $objectName = printf "%s-%s" $objectName $objectValues.nameOverride -}}
   {{- else -}}
-    {{- if ne $identifier "main" -}}
+    {{- $enabledIngresses := (include "bjw-s.common.lib.ingress.enabledIngresses" (dict "rootContext" $rootContext) | fromYaml ) }}
+    {{- if gt (len $enabledIngresses) 1 -}}
       {{- $objectName = printf "%s-%s" $objectName $identifier -}}
     {{- end -}}
   {{- end -}}

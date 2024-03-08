@@ -9,6 +9,13 @@ values:
 
 tests:
   - it: default should pass
+    set:
+      service:
+        main:
+          controller: main
+          ports:
+            http:
+              port: &httpPort 8081
     asserts:
       - documentIndex: &IngressDocument 2
         isKind:
@@ -20,7 +27,7 @@ tests:
             service:
               name: RELEASE-NAME
               port:
-                number: 8080
+                number: *httpPort
 
   - it: custom service reference should pass
     set:
@@ -33,7 +40,7 @@ tests:
                   name: pathService
                   port: 1234
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -49,6 +56,7 @@ tests:
     set:
       service:
         main:
+          controller: main
           ports:
             http:
               port: &httpPort 8081

@@ -47,6 +47,7 @@ controllers:
 service:
   # Configure a service for the main application
   main:
+    controller: main
     type: ClusterIP
     ports:
       http:

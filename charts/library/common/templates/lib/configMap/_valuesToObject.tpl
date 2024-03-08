@@ -12,9 +12,7 @@ Convert configMap values to an object
   {{- if $objectValues.nameOverride -}}
     {{- $objectName = printf "%s-%s" $objectName $objectValues.nameOverride -}}
   {{- else -}}
-    {{- if ne $identifier "main" -}}
-      {{- $objectName = printf "%s-%s" $objectName $identifier -}}
-    {{- end -}}
+    {{- $objectName = printf "%s-%s" $objectName $identifier -}}
   {{- end -}}
   {{- $_ := set $objectValues "name" $objectName -}}
   {{- $_ := set $objectValues "identifier" $identifier -}}

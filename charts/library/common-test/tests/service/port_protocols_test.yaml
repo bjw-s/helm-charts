@@ -5,6 +5,8 @@ templates:
   - common.yaml
 tests:
   - it: default should pass
+    values:
+      - ../_values/service_main_default.yaml
     asserts:
       - hasDocuments:
           count: 2
@@ -17,6 +19,8 @@ tests:
           value: TCP
 
   - it: explicit TCP should pass
+    values:
+      - ../_values/service_main_default.yaml
     set:
       service.main.ports.http.protocol: TCP
     asserts:
@@ -29,6 +33,8 @@ tests:
           value: TCP
 
   - it: explicit UDP should pass
+    values:
+      - ../_values/service_main_default.yaml
     set:
       service.main.ports.http.protocol: UDP
     asserts:
@@ -41,6 +47,8 @@ tests:
           value: UDP
 
   - it: explicit HTTP should pass
+    values:
+      - ../_values/service_main_default.yaml
     set:
       service.main.ports.http.protocol: HTTP
     asserts:
@@ -56,6 +64,8 @@ tests:
           path: metadata.annotations
 
   - it: explicit HTTPS should pass
+    values:
+      - ../_values/service_main_default.yaml
     set:
       service.main.ports.http.protocol: HTTPS
     asserts:
@@ -68,6 +78,8 @@ tests:
           value: TCP
 
   - it: explicit appProtocol should pass
+    values:
+      - ../_values/service_main_default.yaml
     set:
       service.main.ports.http.appProtocol: kubernetes.io/h2c
     asserts:

@@ -7,12 +7,11 @@ tests:
   - it: default metadata should pass
     set:
       route.main:
-        enabled: true
         parentRefs:
           - name: test
             namespace: test
     asserts:
-      - documentIndex: &routeDocument 2
+      - documentIndex: &routeDocument 1
         isKind:
           of: HTTPRoute
       - documentIndex: *routeDocument
@@ -30,7 +29,6 @@ tests:
   - it: custom metadata should pass
     set:
       route.main:
-        enabled: true
         annotations:
           test_annotation: test
         labels:
@@ -39,7 +37,7 @@ tests:
           - name: test
             namespace: test
     asserts:
-      - documentIndex: &routeDocument 2
+      - documentIndex: &routeDocument 1
         isKind:
           of: HTTPRoute
       - documentIndex: *routeDocument
@@ -65,7 +63,6 @@ tests:
         annotations:
           global_annotation: test
       route.main:
-        enabled: true
         annotations:
           test_annotation: test
         labels:
@@ -74,7 +71,7 @@ tests:
           - name: test
             namespace: test
     asserts:
-      - documentIndex: &routeDocument 2
+      - documentIndex: &routeDocument 1
         isKind:
           of: HTTPRoute
       - documentIndex: *routeDocument

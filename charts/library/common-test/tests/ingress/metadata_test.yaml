@@ -10,7 +10,7 @@ values:
 tests:
   - it: default metadata should pass
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -33,7 +33,7 @@ tests:
         labels:
           test_label: test
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -64,7 +64,7 @@ tests:
         labels:
           test_label: test
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument

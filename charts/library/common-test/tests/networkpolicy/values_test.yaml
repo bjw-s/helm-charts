@@ -8,13 +8,11 @@ tests:
   - it: main networkpolicy is disabled by default
     asserts:
       - hasDocuments:
-          count: 2
+          count: 1
       - documentIndex: 0
+        not: true
         isKind:
-          of: Deployment
-      - documentIndex: 1
-        isKind:
-          of: Service
+          of: NetworkPolicy
 
   - it: main networkpolicy can be enabled
     set:
@@ -26,14 +24,11 @@ tests:
         rules: {}
     asserts:
       - hasDocuments:
-          count: 3
+          count: 2
       - documentIndex: 0
         isKind:
           of: Deployment
       - documentIndex: 1
-        isKind:
-          of: Service
-      - documentIndex: 2
         isKind:
           of: NetworkPolicy
 
@@ -47,7 +42,7 @@ tests:
             - Egress
           rules: {}
     asserts:
-      - documentIndex: &NetworkPolicyDocument 2
+      - documentIndex: &NetworkPolicyDocument 1
         isKind:
           of: NetworkPolicy
       - documentIndex: *NetworkPolicyDocument
@@ -70,7 +65,7 @@ tests:
           podSelector: {}
           rules: {}
     asserts:
-      - documentIndex: &NetworkPolicyDocument 2
+      - documentIndex: &NetworkPolicyDocument 1
         isKind:
           of: NetworkPolicy
       - documentIndex: *NetworkPolicyDocument
@@ -92,7 +87,7 @@ tests:
             egress:
               - {}
     asserts:
-      - documentIndex: &NetworkPolicyDocument 2
+      - documentIndex: &NetworkPolicyDocument 1
         isKind:
           of: NetworkPolicy
       - documentIndex: *NetworkPolicyDocument

@@ -12,7 +12,8 @@ Convert ServiceMonitor values to an object
   {{- if $objectValues.nameOverride -}}
     {{- $objectName = printf "%s-%s" $objectName $objectValues.nameOverride -}}
   {{- else -}}
-    {{- if ne $identifier "main" -}}
+    {{- $enabledServiceMonitors := (include "bjw-s.common.lib.serviceMonitor.enabledServiceMonitors" (dict "rootContext" $rootContext) | fromYaml ) }}
+    {{- if gt (len $enabledServiceMonitors) 1 -}}
       {{- $objectName = printf "%s-%s" $objectName $identifier -}}
     {{- end -}}
   {{- end -}}

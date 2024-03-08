@@ -15,11 +15,8 @@ tests:
               port: 80
     asserts:
       - hasDocuments:
-          count: 3
+          count: 2
       - documentIndex: &FirstServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: &SecondServiceDocument 2
         isKind:
           of: Service
       - documentIndex: *FirstServiceDocument
@@ -27,6 +24,8 @@ tests:
           path: spec.allocateLoadBalancerNodePorts
 
   - it: services can be disabled
+    values:
+      - ../_values/service_main_default.yaml
     set:
       service:
         main:
@@ -39,6 +38,8 @@ tests:
           of: Deployment
 
   - it: externalTrafficPolicy should pass for NodePort service
+    values:
+      - ../_values/service_main_default.yaml
     set:
       service:
         main:
@@ -54,6 +55,8 @@ tests:
           value: Local
 
   - it: externalTrafficPolicy should pass for LoadBalancer service
+    values:
+      - ../_values/service_main_default.yaml
     set:
       service:
         main:
@@ -69,6 +72,8 @@ tests:
           value: Local
 
   - it: allocateLoadBalancerNodePorts can be set to true
+    values:
+      - ../_values/service_main_default.yaml
     set:
       service:
         main:
@@ -84,6 +89,8 @@ tests:
           value: true
 
   - it: allocateLoadBalancerNodePorts can be set to false
+    values:
+      - ../_values/service_main_default.yaml
     set:
       service:
         main:

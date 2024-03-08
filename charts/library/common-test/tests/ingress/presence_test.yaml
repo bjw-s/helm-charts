@@ -7,12 +7,8 @@ tests:
   - it: default should pass
     asserts:
       - hasDocuments:
-          count: 2
+          count: 1
       - documentIndex: 0
-        not: true
-        isKind:
-          of: Ingress
-      - documentIndex: 1
         not: true
         isKind:
           of: Ingress
@@ -24,12 +20,8 @@ tests:
       ingress.main.enabled: false
     asserts:
       - hasDocuments:
-          count: 2
+          count: 1
       - documentIndex: 0
-        not: true
-        isKind:
-          of: Ingress
-      - documentIndex: 1
         not: true
         isKind:
           of: Ingress
@@ -41,16 +33,12 @@ tests:
       ingress.main.enabled: true
     asserts:
       - hasDocuments:
-          count: 3
+          count: 2
       - documentIndex: 0
         not: true
         isKind:
           of: Ingress
       - documentIndex: 1
-        not: true
-        isKind:
-          of: Ingress
-      - documentIndex: 2
         isKind:
           of: Ingress
 
@@ -68,23 +56,19 @@ tests:
                   port: http
     asserts:
       - hasDocuments:
-          count: 4
+          count: 3
       - documentIndex: 0
         not: true
         isKind:
           of: Ingress
-      - documentIndex: 1
-        not: true
-        isKind:
-          of: Ingress
-      - documentIndex: &FirstIngressDocument 2
+      - documentIndex: &FirstIngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *FirstIngressDocument
         equal:
           path: metadata.name
-          value: RELEASE-NAME
-      - documentIndex: &SecondIngressDocument 3
+          value: RELEASE-NAME-main
+      - documentIndex: &SecondIngressDocument 2
         isKind:
           of: Ingress
       - documentIndex: *SecondIngressDocument
@@ -107,16 +91,12 @@ tests:
                   port: http
     asserts:
       - hasDocuments:
-          count: 3
+          count: 2
       - documentIndex: 0
         not: true
         isKind:
           of: Ingress
-      - documentIndex: 1
-        not: true
-        isKind:
-          of: Ingress
-      - documentIndex: &FirstIngressDocument 2
+      - documentIndex: &FirstIngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *FirstIngressDocument

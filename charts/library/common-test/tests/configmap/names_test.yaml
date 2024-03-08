@@ -7,12 +7,8 @@ tests:
   - it: default should pass
     asserts:
       - hasDocuments:
-          count: 2
+          count: 1
       - documentIndex: 0
-        not: true
-        isKind:
-          of: ConfigMap
-      - documentIndex: 1
         not: true
         isKind:
           of: ConfigMap
@@ -26,12 +22,8 @@ tests:
             test: test
     asserts:
       - hasDocuments:
-          count: 2
+          count: 1
       - documentIndex: 0
-        not: true
-        isKind:
-          of: ConfigMap
-      - documentIndex: 1
         not: true
         isKind:
           of: ConfigMap
@@ -47,14 +39,14 @@ tests:
             test: test
     asserts:
       - hasDocuments:
-          count: 4
-      - documentIndex: &FirstConfigmapDocument 2
+          count: 3
+      - documentIndex: &FirstConfigmapDocument 1
         isKind:
           of: ConfigMap
       - documentIndex: *FirstConfigmapDocument
         isNotNullOrEmpty:
           path: metadata.name
-      - documentIndex: &SecondConfigmapDocument 3
+      - documentIndex: &SecondConfigmapDocument 2
         isKind:
           of: ConfigMap
       - documentIndex: *SecondConfigmapDocument
@@ -69,8 +61,8 @@ tests:
             test: test
     asserts:
       - hasDocuments:
-          count: 3
-      - documentIndex: &ConfigmapDocument 2
+          count: 2
+      - documentIndex: &ConfigmapDocument 1
         isKind:
           of: ConfigMap
       - documentIndex: *ConfigmapDocument
@@ -87,8 +79,8 @@ tests:
           nameOverride: http
     asserts:
       - hasDocuments:
-          count: 3
-      - documentIndex: &ConfigmapDocument 2
+          count: 2
+      - documentIndex: &ConfigmapDocument 1
         isKind:
           of: ConfigMap
       - documentIndex: *ConfigmapDocument

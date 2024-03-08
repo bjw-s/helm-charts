@@ -5,6 +5,8 @@ templates:
   - common.yaml
 tests:
   - it: default should pass
+    values:
+      - ../_values/service_main_default.yaml
     asserts:
       - hasDocuments:
           count: 2
@@ -17,10 +19,10 @@ tests:
           value: RELEASE-NAME
 
   - it: custom name suffix should pass
+    values:
+      - ../_values/service_main_default.yaml
     set:
-      service:
-        main:
-          nameOverride: http
+      service.main.nameOverride: http
     asserts:
       - documentIndex: &ServiceDocument 1
         isKind:
@@ -29,3 +31,31 @@ tests:
         equal:
           path: metadata.name
           value: RELEASE-NAME-http
+
+  - it: multiple should pass
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service:
+        second:
+          controller: main
+          ports:
+            ui:
+              port: 8082
+    asserts:
+      - hasDocuments:
+          count: 3
+      - documentIndex: &ServiceDocumentFirst 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocumentFirst
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-main
+      - documentIndex: &ServiceDocumentSecond 2
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocumentSecond
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-second

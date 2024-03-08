@@ -15,7 +15,7 @@ templates:
 tests:
   - it: default metadata should pass
     asserts:
-      - documentIndex: &NetworkPolicyDocument 2
+      - documentIndex: &NetworkPolicyDocument 1
         isKind:
           of: NetworkPolicy
       - documentIndex: *NetworkPolicyDocument
@@ -39,7 +39,7 @@ tests:
           labels:
             test_label: test
     asserts:
-      - documentIndex: &NetworkPolicyDocument 2
+      - documentIndex: &NetworkPolicyDocument 1
         isKind:
           of: NetworkPolicy
       - documentIndex: *NetworkPolicyDocument
@@ -71,7 +71,7 @@ tests:
           labels:
             test_label: test
     asserts:
-      - documentIndex: &NetworkPolicyDocument 2
+      - documentIndex: &NetworkPolicyDocument 1
         isKind:
           of: NetworkPolicy
       - documentIndex: *NetworkPolicyDocument

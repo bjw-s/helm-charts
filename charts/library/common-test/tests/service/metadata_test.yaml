@@ -5,6 +5,8 @@ templates:
   - common.yaml
 tests:
   - it: default metadata should pass
+    values:
+      - ../_values/service_main_default.yaml
     asserts:
       - documentIndex: &ServiceDocument 1
         isKind:
@@ -23,6 +25,8 @@ tests:
             helm.sh/chart: common-test-1.0.0
 
   - it: custom metadata should pass
+    values:
+      - ../_values/service_main_default.yaml
     set:
       service:
         main:
@@ -51,6 +55,8 @@ tests:
             test_label: test
 
   - it: custom metadata with global metadata should pass
+    values:
+      - ../_values/service_main_default.yaml
     set:
       global:
         labels:

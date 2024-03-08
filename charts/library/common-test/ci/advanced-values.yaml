@@ -48,6 +48,13 @@ controllers:
           HTTP_PORT: 8889
           HTTPS_PORT: 9999
 
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 8081
+
 ingress:
   main:
     hosts:

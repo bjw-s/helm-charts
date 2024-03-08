@@ -12,7 +12,8 @@ Convert networkPolicy values to an object
   {{- if $objectValues.nameOverride -}}
     {{- $objectName = printf "%s-%s" $objectName $objectValues.nameOverride -}}
   {{- else -}}
-    {{- if ne $identifier "main" -}}
+    {{- $enabledNetworkPolicies := (include "bjw-s.common.lib.networkPolicy.enabledNetworkPolicies" (dict "rootContext" $rootContext) | fromYaml ) }}
+    {{- if gt (len $enabledNetworkPolicies) 1 -}}
       {{- $objectName = printf "%s-%s" $objectName $identifier -}}
     {{- end -}}
   {{- end -}}

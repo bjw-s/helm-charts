@@ -10,7 +10,7 @@ values:
 tests:
   - it: default should pass
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -32,7 +32,7 @@ tests:
                 service:
                   name: main
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -55,7 +55,7 @@ tests:
                   name: main
                   port: http
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -73,7 +73,7 @@ tests:
                 service:
                   name: main
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -86,7 +86,7 @@ tests:
       ingress.main:
         defaultBackend: test
     asserts:
-      - documentIndex: &IngressDocument 2
+      - documentIndex: &IngressDocument 1
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
