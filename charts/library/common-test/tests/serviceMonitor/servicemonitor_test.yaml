@@ -8,13 +8,11 @@ tests:
   - it: a serviceMonitor is not created by default
     asserts:
       - hasDocuments:
-          count: 2
-      - documentIndex: &ServiceDocument 0
+          count: 1
+      - documentIndex: 0
+        not: true
         isKind:
-          of: Deployment
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
+          of: ServiceMonitor
 
   - it: a serviceMonitor is not created when disabled
     set:
@@ -24,13 +22,11 @@ tests:
           serviceName: "{{ .Release.Name }}"
     asserts:
       - hasDocuments:
-          count: 2
-      - documentIndex: &ServiceDocument 0
+          count: 1
+      - documentIndex: 0
+        not: true
         isKind:
-          of: Deployment
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
+          of: ServiceMonitor
 
   - it: a serviceMonitor is created
     set:
@@ -47,8 +43,8 @@ tests:
               scrapeTimeout: 10s
     asserts:
       - hasDocuments:
-          count: 3
-      - documentIndex: &ServiceMonitorDocument 2
+          count: 2
+      - documentIndex: &ServiceMonitorDocument 1
         isKind:
           of: ServiceMonitor
       - documentIndex: *ServiceMonitorDocument
@@ -95,8 +91,8 @@ tests:
               scrapeTimeout: 10s
     asserts:
       - hasDocuments:
-          count: 3
-      - documentIndex: &ServiceMonitorDocument 2
+          count: 2
+      - documentIndex: &ServiceMonitorDocument 1
         isKind:
           of: ServiceMonitor
       - documentIndex: *ServiceMonitorDocument
@@ -124,8 +120,8 @@ tests:
               scrapeTimeout: 10s
     asserts:
       - hasDocuments:
-          count: 3
-      - documentIndex: &ServiceMonitorDocument 2
+          count: 2
+      - documentIndex: &ServiceMonitorDocument 1
         isKind:
           of: ServiceMonitor
       - documentIndex: *ServiceMonitorDocument
@@ -155,8 +151,8 @@ tests:
               scrapeTimeout: 10s
     asserts:
       - hasDocuments:
-          count: 3
-      - documentIndex: &ServiceMonitorDocument 2
+          count: 2
+      - documentIndex: &ServiceMonitorDocument 1
         isKind:
           of: ServiceMonitor
       - documentIndex: *ServiceMonitorDocument
@@ -187,8 +183,8 @@ tests:
             - testlabel2
     asserts:
       - hasDocuments:
-          count: 3
-      - documentIndex: &ServiceMonitorDocument 2
+          count: 2
+      - documentIndex: &ServiceMonitorDocument 1
         isKind:
           of: ServiceMonitor
       - documentIndex: *ServiceMonitorDocument

@@ -5,6 +5,8 @@ templates:
   - common.yaml
 tests:
   - it: default should pass
+    values:
+      - ../_values/service_main_default.yaml
     asserts:
       - hasDocuments:
           count: 2
@@ -16,11 +18,13 @@ tests:
           path: spec.ports[0]
           value:
             name: http
-            port: 8080
+            port: 8081
             protocol: TCP
-            targetPort: 8080
+            targetPort: 8081
 
   - it: custom name should pass
+    values:
+      - ../_values/service_main_default.yaml
     set:
       service:
         main:
@@ -44,6 +48,8 @@ tests:
             targetPort: 8080
 
   - it: custom target port should pass
+    values:
+      - ../_values/service_main_default.yaml
     set:
       service:
         main:
@@ -60,6 +66,6 @@ tests:
           path: spec.ports[0]
           value:
             name: http
-            port: 8080
+            port: 8081
             protocol: TCP
             targetPort: 80

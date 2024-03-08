@@ -12,8 +12,8 @@ tests:
             test: test
     asserts:
       - hasDocuments:
-          count: 3
-      - documentIndex: &ConfigmapDocument 2
+          count: 2
+      - documentIndex: &ConfigmapDocument 1
         isKind:
           of: ConfigMap
       - documentIndex: *ConfigmapDocument
@@ -40,8 +40,8 @@ tests:
             test_label: test
     asserts:
       - hasDocuments:
-          count: 3
-      - documentIndex: &ConfigmapDocument 2
+          count: 2
+      - documentIndex: &ConfigmapDocument 1
         isKind:
           of: ConfigMap
       - documentIndex: *ConfigmapDocument
@@ -76,8 +76,8 @@ tests:
             test_label: test
     asserts:
       - hasDocuments:
-          count: 3
-      - documentIndex: &ConfigmapDocument 2
+          count: 2
+      - documentIndex: &ConfigmapDocument 1
         isKind:
           of: ConfigMap
       - documentIndex: *ConfigmapDocument

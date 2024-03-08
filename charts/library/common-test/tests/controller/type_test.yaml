@@ -29,7 +29,7 @@ tests:
                 tag: 31
     asserts:
       - hasDocuments:
-          count: 3
+          count: 2
       - documentIndex: &firstDeploymentDoc 0
         isKind:
           of: Deployment
@@ -65,7 +65,7 @@ tests:
                 tag: 31
     asserts:
       - hasDocuments:
-          count: 3
+          count: 2
       - documentIndex: &firstDeploymentDoc 0
         isKind:
           of: Deployment
@@ -131,16 +131,4 @@ tests:
       controllers.main.enabled: false
     asserts:
       - hasDocuments:
-          count: 1
-      - documentIndex: &ControllerDoc 0
-        not: true
-        isKind:
-          of: StatefulSet
-      - documentIndex: *ControllerDoc
-        not: true
-        isKind:
-          of: DaemonSet
-      - documentIndex: *ControllerDoc
-        not: true
-        isKind:
-          of: Controller
+          count: 0

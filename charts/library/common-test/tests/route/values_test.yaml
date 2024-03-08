@@ -7,12 +7,11 @@ tests:
   - it: setting gateway should pass
     set:
       route.main:
-        enabled: true
         parentRefs:
           - name: parentName
             namespace: parentNamespace
     asserts:
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: &HTTPRouteDocument 1
         isKind:
           of: HTTPRoute
       - documentIndex: *HTTPRouteDocument
@@ -27,14 +26,13 @@ tests:
   - it: custom host and path should pass
     set:
       route.main:
-        enabled: true
         parentRefs:
           - name: parentName
             namespace: parentNamespace
         hostnames:
           - chart-test.local
     asserts:
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: &HTTPRouteDocument 1
         isKind:
           of: HTTPRoute
       - documentIndex: *HTTPRouteDocument
@@ -45,14 +43,13 @@ tests:
   - it: custom host with template
     set:
       route.main:
-        enabled: true
         parentRefs:
           - name: parentName
             namespace: parentNamespace
         hostnames:
           - "{{ .Release.Name }}.local"
     asserts:
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: &HTTPRouteDocument 1
         isKind:
           of: HTTPRoute
       - documentIndex: *HTTPRouteDocument
@@ -64,7 +61,6 @@ tests:
     set:
       route:
         main:
-          enabled: true
           kind: HTTPRoute
           parentRefs:
             - name: parentName
@@ -88,7 +84,6 @@ tests:
               timeouts:
                 backendRequest: 30s
         grpc:
-          enabled: true
           kind: GRPCRoute
           parentRefs:
             - name: parentName
@@ -110,7 +105,6 @@ tests:
                       type: ReplacePrefixMatch
                       replacePrefixMatch: ""
         tcp:
-          enabled: true
           kind: TCPRoute
           parentRefs:
             - name: parentName
@@ -132,7 +126,6 @@ tests:
                       type: ReplacePrefixMatch
                       replacePrefixMatch: ""
         tls:
-          enabled: true
           kind: TLSRoute
           parentRefs:
             - name: parentName
@@ -154,7 +147,6 @@ tests:
                       type: ReplacePrefixMatch
                       replacePrefixMatch: ""
         udp:
-          enabled: true
           kind: UDPRoute
           parentRefs:
             - name: parentName
@@ -176,17 +168,17 @@ tests:
                       type: ReplacePrefixMatch
                       replacePrefixMatch: ""
     asserts:
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: &GRPCRouteDocument 1
         isKind:
           of: GRPCRoute
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: *GRPCRouteDocument
         equal:
           path: spec.rules[0].matches
           value:
             - path:
                 type: PathPrefix
                 value: /test
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: *GRPCRouteDocument
         equal:
           path: spec.rules[0].filters
           value:
@@ -195,17 +187,17 @@ tests:
                 path:
                   type: ReplacePrefixMatch
                   replacePrefixMatch: ""
-      - documentIndex: &HTTPRouteDocument 3
+      - documentIndex: &HTTPRouteDocument 2
         isKind:
           of: HTTPRoute
-      - documentIndex: &HTTPRouteDocument 3
+      - documentIndex: *HTTPRouteDocument
         equal:
           path: spec.rules[0].matches
           value:
             - path:
                 type: PathPrefix
                 value: /test
-      - documentIndex: &HTTPRouteDocument 3
+      - documentIndex: *HTTPRouteDocument
         equal:
           path: spec.rules[0].filters
           value:
@@ -214,34 +206,34 @@ tests:
                 path:
                   type: ReplacePrefixMatch
                   replacePrefixMatch: ""
-      - documentIndex: &HTTPRouteDocument 4
+      - documentIndex: &TCPRouteDocument 3
         isKind:
           of: TCPRoute
-      - documentIndex: &HTTPRouteDocument 4
+      - documentIndex: *TCPRouteDocument
         notExists:
           path: spec.rules[0].matches
-      - documentIndex: &HTTPRouteDocument 4
+      - documentIndex: *TCPRouteDocument
         notExists:
           path: spec.rules[0].filters
-      - documentIndex: &HTTPRouteDocument 5
+      - documentIndex: &TLSRouteDocument 4
         isKind:
           of: TLSRoute
-      - documentIndex: &HTTPRouteDocument 5
+      - documentIndex: *TLSRouteDocument
         notExists:
           path: spec.rules[0].matches
-      - documentIndex: &HTTPRouteDocument 5
+      - documentIndex: *TLSRouteDocument
         notExists:
           path: spec.rules[0].filters
-      - documentIndex: &HTTPRouteDocument 6
+      - documentIndex: &UDPRouteDocument 5
         isKind:
           of: UDPRoute
-      - documentIndex: &HTTPRouteDocument 6
+      - documentIndex: *UDPRouteDocument
         notExists:
           path: spec.rules[0].matches
-      - documentIndex: &HTTPRouteDocument 6
+      - documentIndex: *UDPRouteDocument
         notExists:
           path: spec.rules[0].filters
-      - documentIndex: &HTTPRouteDocument 6
+      - documentIndex: *UDPRouteDocument
         notExists:
           path: spec.rules[0].timeouts
 
@@ -265,16 +257,16 @@ tests:
             - name: parentName
               namespace: parentNamespace
     asserts:
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: &TCPRouteDocument 1
         isKind:
           of: TCPRoute
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: *TCPRouteDocument
         notExists:
           path: spec.hostnames
-      - documentIndex: &HTTPRouteDocument 3
+      - documentIndex: &UDPRouteDocument 2
         isKind:
           of: UDPRoute
-      - documentIndex: &HTTPRouteDocument 3
+      - documentIndex: *UDPRouteDocument
         notExists:
           path: spec.hostnames
 
@@ -293,16 +285,16 @@ tests:
               namespace: parentNamespace
               sectionName: parentSection
     asserts:
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: &HTTPRouteDocumentFirst 1
         isKind:
           of: HTTPRoute
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: *HTTPRouteDocumentFirst
         notExists:
           path: spec.parentRefs[0].sectionName
-      - documentIndex: &HTTPRouteDocument 3
+      - documentIndex: &HTTPRouteDocumentSecond 2
         isKind:
           of: HTTPRoute
-      - documentIndex: &HTTPRouteDocument 3
+      - documentIndex: *HTTPRouteDocumentSecond
         equal:
           path: spec.parentRefs[0].sectionName
           value: parentSection
@@ -339,16 +331,16 @@ tests:
               timeouts:
                 backendRequest: 10s
     asserts:
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: &GRPCRouteDocument 1
         isKind:
           of: GRPCRoute
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: *GRPCRouteDocument
         notExists:
           path: spec.rules[0].timeouts.backendRequest
-      - documentIndex: &HTTPRouteDocument 3
+      - documentIndex: &HTTPRouteDocument 2
         isKind:
           of: HTTPRoute
-      - documentIndex: &HTTPRouteDocument 3
+      - documentIndex: *HTTPRouteDocument
         equal:
           path: spec.rules[0].timeouts.backendRequest
           value: 30s

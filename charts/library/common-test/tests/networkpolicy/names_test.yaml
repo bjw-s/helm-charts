@@ -15,8 +15,8 @@ tests:
           rules: {}
     asserts:
       - hasDocuments:
-          count: 3
-      - documentIndex: &NetworkPolicyDocument 2
+          count: 2
+      - documentIndex: &NetworkPolicyDocument 1
         isKind:
           of: NetworkPolicy
       - documentIndex: *NetworkPolicyDocument
@@ -35,7 +35,7 @@ tests:
           rules: {}
           nameOverride: block-ingress
     asserts:
-      - documentIndex: &NetworkPolicyDocument 2
+      - documentIndex: &NetworkPolicyDocument 1
         isKind:
           of: NetworkPolicy
       - documentIndex: *NetworkPolicyDocument

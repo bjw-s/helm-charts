@@ -15,12 +15,8 @@ tests:
       persistence.config.enabled: false
     asserts:
       - hasDocuments:
-          count: 2
+          count: 1
       - documentIndex: 0
-        not: true
-        isKind:
-          of: PersistentVolumeClaim
-      - documentIndex: 1
         not: true
         isKind:
           of: PersistentVolumeClaim
@@ -30,15 +26,11 @@ tests:
       persistence.config.enabled: true
     asserts:
       - hasDocuments:
-          count: 3
+          count: 2
       - documentIndex: &PersistentVolumeClaimDocument 0
         isKind:
           of: PersistentVolumeClaim
       - documentIndex: 1
-        not: true
-        isKind:
-          of: PersistentVolumeClaim
-      - documentIndex: 2
         not: true
         isKind:
           of: PersistentVolumeClaim

@@ -12,7 +12,7 @@ tests:
         size: 1Gi
     asserts:
       - hasDocuments:
-          count: 3
+          count: 2
       - documentIndex: &PersistentVolumeClaimDocument 0
         isKind:
           of: PersistentVolumeClaim
@@ -30,7 +30,7 @@ tests:
         size: 1Gi
     asserts:
       - hasDocuments:
-          count: 3
+          count: 2
       - documentIndex: &PersistentVolumeClaimDocument 0
         isKind:
           of: PersistentVolumeClaim
@@ -48,7 +48,7 @@ tests:
         size: 1Gi
     asserts:
       - hasDocuments:
-          count: 2
+          count: 1
       - documentIndex: &PersistentVolumeClaimDocument 0
         isKind:
           of: Deployment

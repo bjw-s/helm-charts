@@ -7,7 +7,6 @@ tests:
   - it: default should pass
     set:
       route.main:
-        enabled: true
         parentRefs:
           - name: parentName
             namespace: parentNamespace
@@ -20,7 +19,7 @@ tests:
                 port: 8080
                 weight: 1
     asserts:
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: &HTTPRouteDocument 1
         isKind:
           of: HTTPRoute
       - documentIndex: *HTTPRouteDocument
@@ -37,7 +36,6 @@ tests:
   - it: custom service reference should pass
     set:
       route.main:
-        enabled: true
         parentRefs:
           - name: parentName
             namespace: parentNamespace
@@ -49,7 +47,7 @@ tests:
                 namespace: serviceNamespace
                 weight: 123
     asserts:
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: &HTTPRouteDocument 1
         isKind:
           of: HTTPRoute
       - documentIndex: *HTTPRouteDocument
@@ -66,7 +64,6 @@ tests:
   - it: custom service reference with filter should fail
     set:
       route.main:
-        enabled: true
         parentRefs:
           - name: parentName
             namespace: parentNamespace
@@ -89,7 +86,6 @@ tests:
   - it: custom service with filter should pass
     set:
       route.main:
-        enabled: true
         parentRefs:
           - name: parentName
             namespace: parentNamespace
@@ -100,7 +96,7 @@ tests:
                   scheme: https
                   statusCode: 301
     asserts:
-      - documentIndex: &HTTPRouteDocument 2
+      - documentIndex: &HTTPRouteDocument 1
         isKind:
           of: HTTPRoute
       - documentIndex: *HTTPRouteDocument
