@@ -7,7 +7,7 @@ within the common library.
   {{- $statefulsetObject := .object -}}
 
   {{- $labels := merge
-    (dict "app.kubernetes.io/component" $statefulsetObject.identifier)
+    (dict "common.bjw-s.dev/controller" $statefulsetObject.identifier)
     ($statefulsetObject.labels | default dict)
     (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
   -}}
@@ -38,7 +38,7 @@ spec:
     {{- end }}
   selector:
     matchLabels:
-      app.kubernetes.io/component: {{ $statefulsetObject.identifier }}
+      common.bjw-s.dev/controller: {{ $statefulsetObject.identifier }}
       {{- include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | nindent 6 }}
   serviceName: {{ include "bjw-s.common.lib.chart.names.fullname" $rootContext }}
   template:

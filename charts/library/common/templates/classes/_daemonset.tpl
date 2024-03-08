@@ -7,7 +7,7 @@ within the common library.
   {{- $daemonsetObject := .object -}}
 
   {{- $labels := merge
-    (dict "app.kubernetes.io/component" $daemonsetObject.identifier)
+    (dict "common.bjw-s.dev/controller" $daemonsetObject.identifier)
     ($daemonsetObject.labels | default dict)
     (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
   -}}
@@ -30,7 +30,7 @@ spec:
   revisionHistoryLimit: {{ default 3 $daemonsetObject.revisionHistoryLimit }}
   selector:
     matchLabels:
-      app.kubernetes.io/component: {{ $daemonsetObject.identifier }}
+      common.bjw-s.dev/controller: {{ $daemonsetObject.identifier }}
       {{- include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | nindent 6 }}
   template:
     metadata:

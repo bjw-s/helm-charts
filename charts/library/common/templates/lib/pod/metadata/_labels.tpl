@@ -7,7 +7,7 @@ Returns the value for labels
 
   {{- /* Default labels */ -}}
   {{- $labels := merge
-    (dict "app.kubernetes.io/component" $controllerObject.identifier)
+    (dict "common.bjw-s.dev/controller" $controllerObject.identifier)
   -}}
 
   {{- /* Fetch the Pod selectorLabels */ -}}

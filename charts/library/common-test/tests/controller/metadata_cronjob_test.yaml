@@ -22,7 +22,7 @@ tests:
         equal:
           path: metadata.labels
           value:
-            app.kubernetes.io/component: main
+            common.bjw-s.dev/controller: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
@@ -50,7 +50,7 @@ tests:
         equal:
           path: metadata.labels
           value:
-            app.kubernetes.io/component: main
+            common.bjw-s.dev/controller: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
@@ -85,7 +85,7 @@ tests:
         equal:
           path: metadata.labels
           value:
-            app.kubernetes.io/component: main
+            common.bjw-s.dev/controller: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
@@ -116,7 +116,7 @@ tests:
         equal:
           path: spec.jobTemplate.spec.template.metadata.labels
           value:
-            app.kubernetes.io/component: main
+            common.bjw-s.dev/controller: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
             test_label: test

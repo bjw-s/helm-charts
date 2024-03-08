@@ -20,7 +20,7 @@ within the common library.
   {{- else -}}
     {{- $podSelector = dict "matchLabels" (merge
       ($networkPolicyObject.extraSelectorLabels | default dict)
-      (dict "app.kubernetes.io/component" $networkPolicyObject.controller)
+      (dict "common.bjw-s.dev/controller" $networkPolicyObject.controller)
       (include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | fromYaml)
     ) -}}
   {{- end -}}
