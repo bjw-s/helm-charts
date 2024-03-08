@@ -35,7 +35,13 @@ examples/helm/vaultwarden/values.yaml
 
 !!! warning
 
-    These docs are still being written
+    These docs are still being written. Stuff to include:
+
+    - Removal of `main` objects
+      - Object names
+      - Required fields, json-schema
+    - Disabled `enableServiceLinks`
+    - Example migration code
 
 ### From 1.x.x to 2.0.x
 
