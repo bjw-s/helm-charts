@@ -10,9 +10,12 @@ In order to mount a configMap to a mount point within the Pod you can use the
 
 | Field         | Mandatory | Docs / Description                                                         |
 | ------------- | --------- | -------------------------------------------------------------------------- |
-| `name`        | Yes       | Which configMap should be mounted. Supports Helm templating.               |
+| `name`        | No        | Which configMap should be mounted. Supports Helm templating.               |
+| `identifier`  | No        | Reference a configMap from the `configMaps` key by its identifier.         |
 | `defaultMode` | No        | The default file access permission bit.                                    |
 | `items`       | No        | Specify item-specific configuration. Will be passed 1:1 to the volumeSpec. |
+
+Either `name` or `identifier` is required.
 
 !!! note
 
