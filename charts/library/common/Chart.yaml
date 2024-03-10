@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.0.0-beta3
+version: 3.0.0-beta4
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -19,10 +19,13 @@ annotations:
         Default objects (they used to be called main) have been commented out and will therefore no longer provide any (both expected and unexpected) default values.
     - kind: changed
       description: |-
-        enableServiceLinks is disabled by default
+        enableServiceLinks is now disabled by default
     - kind: added
       description: |-
         Added support for restartPolicy field on container level
     - kind: added
       description: |-
         Added json-schema to the chart
+    - kind: added
+      description: |-
+        Allow referencing secrets and configMaps by identifier in persistence section

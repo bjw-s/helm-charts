@@ -93,10 +93,21 @@
       "name": {
         "type": "string"
       },
+      "identifier": {
+        "type": "string"
+      },
       "advancedMounts": {"$ref": "#/advancedMounts"},
       "globalMounts": {"$ref": "#/globalMounts"}
     },
-    "required": ["name"]
+    "oneOf": [{"required": ["name"]}, {"required": ["identifier"]}],
+    "dependencies": {
+      "name": {
+        "not": {"required": ["identifier"]}
+      },
+      "identifier": {
+        "not": {"required": ["name"]}
+      }
+    }
   },
 
   "secretItem": {
@@ -114,10 +125,21 @@
       "name": {
         "type": "string"
       },
+      "identifier": {
+        "type": "string"
+      },
       "advancedMounts": {"$ref": "#/advancedMounts"},
       "globalMounts": {"$ref": "#/globalMounts"}
     },
-    "required": ["name"]
+    "oneOf": [{"required": ["name"]}, {"required": ["identifier"]}],
+    "dependencies": {
+      "name": {
+        "not": {"required": ["identifier"]}
+      },
+      "identifier": {
+        "not": {"required": ["name"]}
+      }
+    }
   },
 
   "nfsItem": {

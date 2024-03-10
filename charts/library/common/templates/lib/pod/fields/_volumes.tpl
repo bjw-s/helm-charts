@@ -58,8 +58,16 @@ Returns the value for volumes
 
     {{- /* configMap persistence type */ -}}
     {{- else if eq $persistenceValues.type "configMap" -}}
-      {{- $objectName := (required (printf "name not set for persistence item %s" $identifier) $persistenceValues.name) -}}
-      {{- $objectName = tpl $objectName $rootContext -}}
+      {{- $objectName := "" -}}
+      {{- if $persistenceValues.name -}}
+        {{- $objectName = tpl $persistenceValues.name $rootContext -}}
+      {{- else if $persistenceValues.identifier -}}
+        {{- $object := (include "bjw-s.common.lib.configMap.getByIdentifier" (dict "rootContext" $rootContext "id" $persistenceValues.identifier) | fromYaml ) -}}
+        {{- if not $object -}}
+          {{fail (printf "No configmap found with this identifier. (persistence item '%s', identifier '%s')" $identifier $persistenceValues.identifier)}}
+        {{- end -}}
+        {{- $objectName = $object.name -}}
+      {{- end -}}
       {{- $_ := set $volume "configMap" dict -}}
       {{- $_ := set $volume.configMap "name" $objectName -}}
       {{- with $persistenceValues.defaultMode -}}
@@ -71,8 +79,16 @@ Returns the value for volumes
 
     {{- /* Secret persistence type */ -}}
     {{- else if eq $persistenceValues.type "secret" -}}
-      {{- $objectName := (required (printf "name not set for persistence item %s" $identifier) $persistenceValues.name) -}}
-      {{- $objectName = tpl $objectName $rootContext -}}
+      {{- $objectName := "" -}}
+      {{- if $persistenceValues.name -}}
+        {{- $objectName = tpl $persistenceValues.name $rootContext -}}
+      {{- else if $persistenceValues.identifier -}}
+        {{- $object := (include "bjw-s.common.lib.secret.getByIdentifier" (dict "rootContext" $rootContext "id" $persistenceValues.identifier) | fromYaml ) -}}
+        {{- if not $object -}}
+          {{fail (printf "No secret found with this identifier. (persistence item '%s', identifier '%s')" $identifier $persistenceValues.identifier)}}
+        {{- end -}}
+        {{- $objectName = $object.name -}}
+      {{- end -}}
       {{- $_ := set $volume "secret" dict -}}
       {{- $_ := set $volume.secret "secretName" $objectName -}}
       {{- with $persistenceValues.defaultMode -}}

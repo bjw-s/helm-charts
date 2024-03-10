@@ -1,3 +1,5 @@
+---
+# yaml-language-server: $schema=../../common/values.schema.json
 controllers:
   main:
     containers:
@@ -27,6 +29,13 @@ ingress:
     tls:
       - hosts:
           - "test.local"
+
+service:
+  main:
+    controller: main
+    ports:
+      http:
+        port: 8080
 
 persistence:
   media:
