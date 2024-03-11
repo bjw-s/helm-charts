@@ -6,11 +6,12 @@ templates:
 
 values:
   - ../_values/ingress_main_default_hosts.yaml
+  - ../_values/service_main_default.yaml
 
 tests:
   - it: default should pass
     asserts:
-      - documentIndex: &IngressDocument 1
+      - documentIndex: &IngressDocument 2
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -30,9 +31,9 @@ tests:
             paths:
               - path: /test
                 service:
-                  name: main
+                  identifier: main
     asserts:
-      - documentIndex: &IngressDocument 1
+      - documentIndex: &IngressDocument 2
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -52,10 +53,10 @@ tests:
             paths:
               - path: /
                 service:
-                  name: main
+                  identifier: main
                   port: http
     asserts:
-      - documentIndex: &IngressDocument 1
+      - documentIndex: &IngressDocument 2
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -71,9 +72,9 @@ tests:
             paths:
               - path: "/{{ .Release.Name }}.path"
                 service:
-                  name: main
+                  identifier: main
     asserts:
-      - documentIndex: &IngressDocument 1
+      - documentIndex: &IngressDocument 2
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument
@@ -86,7 +87,7 @@ tests:
       ingress.main:
         defaultBackend: test
     asserts:
-      - documentIndex: &IngressDocument 1
+      - documentIndex: &IngressDocument 2
         isKind:
           of: Ingress
       - documentIndex: *IngressDocument

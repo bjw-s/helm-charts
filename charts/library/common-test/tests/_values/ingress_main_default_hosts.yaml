@@ -1,3 +1,5 @@
+---
+# yaml-language-server: $schema=../../../common/values.schema.json
 ingress:
   main:
     hosts:
@@ -5,5 +7,5 @@ ingress:
         paths:
           - path: /
             service:
-              name: main
-              port: http
+              name: RELEASE-NAME
+              port: 8081

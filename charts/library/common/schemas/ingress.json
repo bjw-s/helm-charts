@@ -65,17 +65,10 @@
             },
 
             "service": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "port": {
-                  "type": ["string", "integer"]
-                }
-              },
-              "required": ["name"]
+              "oneOf": [
+                {"$ref": "#/serviceReferenceByName"},
+                {"$ref": "#/serviceReferenceByIdentifier"}
+              ]
             }
           },
           "required": ["path", "service"]
@@ -101,5 +94,33 @@
       }
     },
     "required": ["hosts"]
+  },
+
+  "serviceReferenceByName": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "port": {
+        "type": ["integer"]
+      }
+    },
+    "required": ["name", "port"]
+  },
+
+  "serviceReferenceByIdentifier": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "identifier": {
+        "type": "string"
+      },
+      "port": {
+        "type": ["string", "integer"]
+      }
+    },
+    "required": ["identifier"]
   }
 }

@@ -44,6 +44,7 @@ tests:
 
   - it: multiple ingress should pass
     values:
+      - ../_values/service_main_default.yaml
       - ../_values/ingress_main_default_hosts.yaml
     set:
       ingress.test:
@@ -52,23 +53,27 @@ tests:
             paths:
               - path: /
                 service:
-                  name: main
+                  identifier: main
                   port: http
     asserts:
       - hasDocuments:
-          count: 3
+          count: 4
       - documentIndex: 0
         not: true
         isKind:
           of: Ingress
-      - documentIndex: &FirstIngressDocument 1
+      - documentIndex: 1
+        not: true
+        isKind:
+          of: Ingress
+      - documentIndex: &FirstIngressDocument 2
         isKind:
           of: Ingress
       - documentIndex: *FirstIngressDocument
         equal:
           path: metadata.name
           value: RELEASE-NAME-main
-      - documentIndex: &SecondIngressDocument 2
+      - documentIndex: &SecondIngressDocument 3
         isKind:
           of: Ingress
       - documentIndex: *SecondIngressDocument
@@ -87,7 +92,7 @@ tests:
             paths:
               - path: /
                 service:
-                  name: main
+                  identifier: main
                   port: http
     asserts:
       - hasDocuments:

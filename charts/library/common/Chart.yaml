@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.0.0-beta4
+version: 3.0.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,16 +16,22 @@ annotations:
   artifacthub.io/changes: |-
     - kind: changed
       description: |-
-        Default objects (they used to be called main) have been commented out and will therefore no longer provide any (both expected and unexpected) default values.
+        BREAKING: Default objects (they used to be called main) have been commented out and will therefore no longer provide any (both expected and unexpected) default values.
     - kind: changed
       description: |-
-        enableServiceLinks is now disabled by default
+        BREAKING: `enableServiceLinks` is now disabled by default
+    - kind: changed
+      description: |-
+        BREAKING: Referencing services under Ingress paths has been separated in explicit `name` and `identifier` keys.
     - kind: added
       description: |-
-        Added support for restartPolicy field on container level
+        Added support for restartPolicy field on container level. This enables Kubernetes 1.29 sidecar containers
+      links:
+        - name: Reference documentation
+          url: https://kubernetes.io/docs/concepts/workloads/pods/sidecar-containers/
     - kind: added
       description: |-
-        Added json-schema to the chart
+        Added json-schema validation to the chart
     - kind: added
       description: |-
         Allow referencing secrets and configMaps by identifier in persistence section
