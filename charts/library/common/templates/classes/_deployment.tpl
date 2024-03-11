@@ -7,7 +7,7 @@ using the common library.
   {{- $deploymentObject := .object -}}
 
   {{- $labels := merge
-    (dict "common.bjw-s.dev/controller" $deploymentObject.identifier)
+    (dict "app.kubernetes.io/component" $deploymentObject.identifier)
     ($deploymentObject.labels | default dict)
     (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
   -}}
@@ -50,7 +50,7 @@ spec:
     {{- end }}
   selector:
     matchLabels:
-      common.bjw-s.dev/controller: {{ $deploymentObject.identifier }}
+      app.kubernetes.io/component: {{ $deploymentObject.identifier }}
       {{- include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | nindent 6 }}
   template:
     metadata:

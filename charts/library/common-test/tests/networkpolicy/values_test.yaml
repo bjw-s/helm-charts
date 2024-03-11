@@ -50,7 +50,7 @@ tests:
           path: spec.podSelector
           value:
             matchLabels:
-              common.bjw-s.dev/controller: main
+              app.kubernetes.io/component: main
               app.kubernetes.io/instance: RELEASE-NAME
               app.kubernetes.io/name: RELEASE-NAME
 

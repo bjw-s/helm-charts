@@ -7,7 +7,7 @@ within the common library.
   {{- $jobObject := .object -}}
 
   {{- $labels := merge
-    (dict "common.bjw-s.dev/controller" $jobObject.identifier)
+    (dict "app.kubernetes.io/component" $jobObject.identifier)
     ($jobObject.labels | default dict)
     (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
   -}}

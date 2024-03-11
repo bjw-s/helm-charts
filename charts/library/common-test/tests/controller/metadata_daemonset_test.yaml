@@ -18,7 +18,7 @@ tests:
         equal:
           path: metadata.labels
           value:
-            common.bjw-s.dev/controller: main
+            app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
@@ -46,7 +46,7 @@ tests:
         equal:
           path: metadata.labels
           value:
-            common.bjw-s.dev/controller: main
+            app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME
@@ -81,7 +81,7 @@ tests:
         equal:
           path: metadata.labels
           value:
-            common.bjw-s.dev/controller: main
+            app.kubernetes.io/component: main
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/managed-by: Helm
             app.kubernetes.io/name: RELEASE-NAME

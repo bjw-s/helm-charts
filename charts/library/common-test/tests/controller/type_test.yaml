@@ -15,7 +15,7 @@ tests:
           value: RELEASE-NAME
       - documentIndex: *deploymentDoc
         equal:
-          path: metadata.labels['common.bjw-s.dev/controller']
+          path: metadata.labels['app.kubernetes.io/component']
           value: main
 
   - it: additional controllers should pass
@@ -39,7 +39,7 @@ tests:
           value: RELEASE-NAME-main
       - documentIndex: *firstDeploymentDoc
         equal:
-          path: metadata.labels['common.bjw-s.dev/controller']
+          path: metadata.labels['app.kubernetes.io/component']
           value: main
       - documentIndex: &secondDeploymentDoc 1
         isKind:
@@ -50,7 +50,7 @@ tests:
           value: RELEASE-NAME-second
       - documentIndex: *secondDeploymentDoc
         equal:
-          path: metadata.labels['common.bjw-s.dev/controller']
+          path: metadata.labels['app.kubernetes.io/component']
           value: second
 
   - it: additional controllers with nameOverride should pass
@@ -75,7 +75,7 @@ tests:
           value: RELEASE-NAME-main
       - documentIndex: *firstDeploymentDoc
         equal:
-          path: metadata.labels['common.bjw-s.dev/controller']
+          path: metadata.labels['app.kubernetes.io/component']
           value: main
       - documentIndex: &secondDeploymentDoc 1
         isKind:
@@ -86,7 +86,7 @@ tests:
           value: RELEASE-NAME-testOverride
       - documentIndex: *secondDeploymentDoc
         equal:
-          path: metadata.labels['common.bjw-s.dev/controller']
+          path: metadata.labels['app.kubernetes.io/component']
           value: second
 
   - it: daemonset should pass

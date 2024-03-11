@@ -12,7 +12,7 @@ using the common library.
   {{- end -}}
 
   {{- $labels := merge
-    (dict "common.bjw-s.dev/controller" $cronjobObject.identifier)
+    (dict "app.kubernetes.io/component" $cronjobObject.identifier)
     ($cronjobObject.labels | default dict)
     (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
   -}}
