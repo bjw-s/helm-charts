@@ -310,7 +310,7 @@
         "required": ["name", "key"]
       }
     },
-    "required": ["secretKeyRef"]
+    "required": ["configMapKeyRef"]
   },
 
   "envValueFrom.fieldRef": {
