@@ -92,7 +92,7 @@ persistence:
 
 </details>
 
-The values for app-template v2.x would become this:
+The values for app-template v3.x would become this:
 
 ```yaml
 ---
