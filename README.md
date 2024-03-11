@@ -49,15 +49,15 @@ If you like this project, please consider supporting my work through my [GitHub 
 
 ### Discord
 
-Join the k8s-at-home [Discord](https://discord.gg/home-operations) community on Discord.
+Join the home-operations [Discord](https://discord.gg/home-operations) community on Discord.
 
 ### Repository topics
 
-Have a look at people running Kubernetes at home by checking the ["`k8s-at-home`" topic on GitHub](https://github.com/topics/k8s-at-home?o=desc&s=updated).
+Have a look at people running Kubernetes at home by checking the ["`k8s-at-home`"](https://github.com/topics/k8s-at-home?o=desc&s=updated) or ["`kubesearch`"](https://github.com/topics/kubesearch?o=desc&s=updated) on GitHub.
 
 ### Search
 
-You can use this following [search engine](https://nanne.dev/k8s-at-home-search/) provided by [@whazor](https://github.com/whazor) to search for public
+You can use the awesome [kubesearch](https://kubesearch.dev) provided by [@whazor](https://github.com/whazor) to search for public
 repositories containing any application you might wish to run.
 
 ---
