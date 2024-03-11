@@ -33,15 +33,134 @@ examples/helm/vaultwarden/values.yaml
 
 ### From 2.x.x to 3.0.x
 
+The main changes from v2.x to v3.x are the removal of the default `main` objects and the introduction of JSON schema validation.
+
 !!! warning
 
-    These docs are still being written. Stuff to include:
+    **IMPORTANT** The introduction of the json schema adds additional validations and restrictions on the contents of your chart values.
+    Things may have been missed during the initial schema creation, so if you run in to any unexpected validation errors please [raise an issue](https://github.com/bjw-s/helm-charts/issues/new?assignees=bjw-s&labels=bug&projects=&template=bug-report.md&title=)
 
-    - Removal of `main` objects
-      - Object names
-      - Required fields, json-schema
-    - Disabled `enableServiceLinks`
-    - Example migration code
+Given the following real-life example values.yaml for app-template v2:
+
+<details>
+<summary>Expand</summary>
+
+```yaml
+---
+defaultPodOptions:
+  securityContext:
+    runAsUser: 568
+    runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: "OnRootMismatch"
+    supplementalGroups:
+      - 65539
+
+controllers:
+  main:
+    containers:
+      main:
+        image:
+          repository: ghcr.io/onedr0p/sabnzbd
+          tag: latest
+          pullPolicy: IfNotPresent
+
+service:
+  main:
+    ports:
+      http:
+        port: 8080
+
+ingress:
+  media:
+    enabled: true
+    className: "ingress-nginx"
+    hosts:
+      - host: sabnzbd.bjw-s.dev
+        paths:
+          - path: /
+            service:
+              name: main
+              port: http
+
+persistence:
+  media:
+    existingClaim: nas-media
+    globalMounts:
+      - path: /data/nas-media
+```
+
+</details>
+
+The values for app-template v2.x would become this:
+
+```yaml
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.0/charts/library/common/values.schema.json
+defaultPodOptions:
+  enableServiceLinks: true
+  securityContext:
+    runAsUser: 568
+    runAsGroup: 568
+    fsGroup: 568
+    fsGroupChangePolicy: "OnRootMismatch"
+    supplementalGroups:
+      - 65539
+
+controllers:
+  sabnzbd: # this can now be any name you wish
+    containers:
+      app: # this can now be any name you wish
+        image:
+          repository: ghcr.io/onedr0p/sabnzbd
+          tag: latest
+          pullPolicy: IfNotPresent
+
+        probes:
+          liveness:
+            enabled: true
+          readiness:
+            enabled: true
+          startup:
+            enabled: true
+            spec:
+              failureThreshold: 30
+              periodSeconds: 5
+
+service:
+  app: # this can now be any name you wish
+    controller: sabnzbd
+    ports:
+      http:
+        port: 8080
+
+ingress:
+  media: # this can now be any name you wish
+    className: "ingress-nginx"
+    hosts:
+      - host: sabnzbd.bjw-s.dev
+        paths:
+          - path: /
+            service:
+              identifier: app
+              port: http
+
+persistence:
+  media:
+    existingClaim: nas-media
+    globalMounts:
+      - path: /data/nas-media
+```
+
+#### Changes in this example
+
+This is not meant as an exhaustive list of changes, but rather a "most common" example.
+
+- The `main` object for controllers, containers, services and ingress has been removed from `values.yaml` and will therefore no longer provide any (both expected and unexpected) default values.
+- The `config` object for persistence has been removed from `values.yaml` and will therefore no longer provide any (both expected and unexpected) default values.
+- `enableServiceLinks` has been disabled by default. In order to explicitly enable serviceLinks, set the value to `true`.
+- `ingress.*.hosts.*.paths.*.service` Service references now require either `name` or `identifier` to be set.
+- Persistence items of type `configMap` and `secret` object references now allow either `name` or `identifier` to be set.
 
 ### From 1.x.x to 2.0.x
 
