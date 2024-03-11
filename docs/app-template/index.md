@@ -96,7 +96,7 @@ The values for app-template v2.x would become this:
 
 ```yaml
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.0/charts/library/common/values.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.1/charts/library/common/values.schema.json
 defaultPodOptions:
   enableServiceLinks: true
   securityContext:
