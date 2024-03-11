@@ -328,6 +328,9 @@
     "type": "object",
     "additionalProperties": false,
     "properties": {
+      "apiVersion": {
+        "type": "string"
+      },
       "fieldPath": {
         "type": "string"
       }
