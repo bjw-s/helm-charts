@@ -20,6 +20,9 @@ annotations:
     - kind: changed
       description: |-
         BREAKING: `enableServiceLinks` is now disabled by default
+    - kind: changed
+      description: |-
+        BREAKING: Referencing services under Ingress paths has been separated in explicit `name` and `identifier` keys.
     - kind: added
       description: |-
         Added support for restartPolicy field on container level. This enables Kubernetes 1.29 sidecar containers

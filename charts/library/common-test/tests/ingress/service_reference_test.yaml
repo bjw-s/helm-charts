@@ -52,6 +52,29 @@ tests:
               port:
                 number: 1234
 
+  - it: custom service reference with template should pass
+    set:
+      ingress.main:
+        hosts:
+          - host: chart-test.local
+            paths:
+              - path: /
+                service:
+                  name: "{{ .Release.Name }}"
+                  port: 1234
+    asserts:
+      - documentIndex: &IngressDocument 1
+        isKind:
+          of: Ingress
+      - documentIndex: *IngressDocument
+        equal:
+          path: spec.rules[0].http.paths[0].backend
+          value:
+            service:
+              name: RELEASE-NAME
+              port:
+                number: 1234
+
   - it: multiple hosts with port name references should pass
     set:
       service:
@@ -72,14 +95,14 @@ tests:
                 - path: /
                   pathType: Prefix
                   service:
-                    name: main
+                    identifier: main
                     port: http
             - host: http2.chart-test.local
               paths:
                 - path: /
                   pathType: Prefix
                   service:
-                    name: main
+                    identifier: main
                     port: http2
     asserts:
       - documentIndex: &IngressDocument 2

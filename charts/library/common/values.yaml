@@ -359,8 +359,6 @@ controllers: {}
 
 #     # -- Specify any initContainers here as dictionary items.
 #     # Each initContainer should have its own key
-#     # initContainers get sorted alphanumerically by the `<order>-<identifier>` combination
-#     # if no order or dependsOn has been configured for them.
 #     initContainers: {}
 
 serviceAccount:
@@ -521,8 +519,10 @@ ingress:
   #           pathType: Prefix
   #           service:
   #             # -- Overrides the service name reference for this path
-  #             # This can be an actual service name, or reference a service identifier from this values.yaml
+  #             # The service name to reference.
   #             name: main
+  #             # -- Reference a service identifier from this values.yaml
+  #             identifier: main
   #             # -- Overrides the service port number reference for this path
   #             port:
 
