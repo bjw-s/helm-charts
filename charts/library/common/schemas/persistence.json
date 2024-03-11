@@ -96,6 +96,28 @@
       "identifier": {
         "type": "string"
       },
+      "defaultMode": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "mode": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "advancedMounts": {"$ref": "#/advancedMounts"},
       "globalMounts": {"$ref": "#/globalMounts"}
     },
@@ -127,6 +149,28 @@
       },
       "identifier": {
         "type": "string"
+      },
+      "defaultMode": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "key": {
+              "type": "string"
+            },
+            "mode": {
+              "format": "int32",
+              "type": "integer"
+            },
+            "path": {
+              "type": "string"
+            }
+          }
+        }
       },
       "advancedMounts": {"$ref": "#/advancedMounts"},
       "globalMounts": {"$ref": "#/globalMounts"}
