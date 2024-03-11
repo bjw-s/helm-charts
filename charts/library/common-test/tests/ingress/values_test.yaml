@@ -23,6 +23,32 @@ tests:
           path: spec.rules[0].http.paths[0].path
           value: "/"
 
+  - it: nameOverride should pass
+    set:
+      ingress.main:
+        nameOverride: test
+    asserts:
+      - documentIndex: &IngressDocument 2
+        isKind:
+          of: Ingress
+      - documentIndex: *IngressDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-test
+
+  - it: nameOverride with template should pass
+    set:
+      ingress.main:
+        nameOverride: "{{ .Release.Name }}"
+    asserts:
+      - documentIndex: &IngressDocument 2
+        isKind:
+          of: Ingress
+      - documentIndex: *IngressDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME
+
   - it: custom host and path should pass
     set:
       ingress.main:

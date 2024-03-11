@@ -32,6 +32,20 @@ tests:
           path: metadata.name
           value: RELEASE-NAME-http
 
+  - it: custom name suffix with template should pass
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service.main.nameOverride: "{{ .Release.Name }}"
+    asserts:
+      - documentIndex: &ServiceDocument 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME
+
   - it: multiple should pass
     values:
       - ../_values/service_main_default.yaml

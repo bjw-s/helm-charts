@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.0.1
+version: 3.0.2
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -14,6 +14,9 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: fixed
+      description: |-
+        Fixed nameOverride logic to prevent duplicated name
     - kind: changed
       description: |-
         BREAKING: Default objects (they used to be called main) have been commented out and will therefore no longer provide any (both expected and unexpected) default values.

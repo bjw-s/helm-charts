@@ -56,6 +56,8 @@ tests:
   - it: additional controllers with nameOverride should pass
     set:
       controllers:
+        main:
+          nameOverride: "{{ .Release.Name }}"
         second:
           nameOverride: testOverride
           containers:
@@ -72,7 +74,7 @@ tests:
       - documentIndex: *firstDeploymentDoc
         equal:
           path: metadata.name
-          value: RELEASE-NAME-main
+          value: RELEASE-NAME
       - documentIndex: *firstDeploymentDoc
         equal:
           path: metadata.labels['app.kubernetes.io/component']

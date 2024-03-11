@@ -10,11 +10,16 @@ Convert ingress values to an object
   {{- $objectName := (include "bjw-s.common.lib.chart.names.fullname" $rootContext) -}}
 
   {{- if $objectValues.nameOverride -}}
-    {{- $objectName = printf "%s-%s" $objectName $objectValues.nameOverride -}}
+    {{- $override := tpl $objectValues.nameOverride $rootContext -}}
+    {{- if not (eq $objectName $override) -}}
+      {{- $objectName = printf "%s-%s" $objectName $override -}}
+    {{- end -}}
   {{- else -}}
     {{- $enabledIngresses := (include "bjw-s.common.lib.ingress.enabledIngresses" (dict "rootContext" $rootContext) | fromYaml ) }}
     {{- if gt (len $enabledIngresses) 1 -}}
-      {{- $objectName = printf "%s-%s" $objectName $identifier -}}
+      {{- if not (eq $objectName $identifier) -}}
+        {{- $objectName = printf "%s-%s" $objectName $identifier -}}
+      {{- end -}}
     {{- end -}}
   {{- end -}}
   {{- $_ := set $objectValues "name" $objectName -}}

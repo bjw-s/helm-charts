@@ -14,7 +14,9 @@ Convert PVC values to an object
       {{- $objectName = printf "%s-%s" $objectName $objectValues.nameOverride -}}
     {{- end -}}
   {{- else -}}
-    {{- $objectName = printf "%s-%s" $objectName $identifier -}}
+    {{- if not (eq $objectName $identifier) -}}
+      {{- $objectName = printf "%s-%s" $objectName $identifier -}}
+    {{- end -}}
   {{- end -}}
   {{- $_ := set $objectValues "name" $objectName -}}
   {{- $_ := set $objectValues "identifier" $identifier -}}

@@ -15,11 +15,16 @@ Convert controller values to an object
   {{- $objectName := (include "bjw-s.common.lib.chart.names.fullname" $rootContext) -}}
 
   {{- if $objectValues.nameOverride -}}
-    {{- $objectName = printf "%s-%s" $objectName $objectValues.nameOverride -}}
+    {{- $override := tpl $objectValues.nameOverride $rootContext -}}
+    {{- if not (eq $objectName $override) -}}
+      {{- $objectName = printf "%s-%s" $objectName $override -}}
+    {{- end -}}
   {{- else -}}
     {{- $enabledControllers := (include "bjw-s.common.lib.controller.enabledControllers" (dict "rootContext" $rootContext) | fromYaml ) }}
     {{- if gt (len $enabledControllers) 1 -}}
-      {{- $objectName = printf "%s-%s" $objectName $identifier -}}
+      {{- if not (eq $objectName $identifier) -}}
+        {{- $objectName = printf "%s-%s" $objectName $identifier -}}
+      {{- end -}}
     {{- end -}}
   {{- end -}}
   {{- $_ := set $objectValues "name" $objectName -}}

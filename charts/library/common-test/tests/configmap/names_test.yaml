@@ -87,3 +87,21 @@ tests:
         equal:
           path: metadata.name
           value: RELEASE-NAME-http
+
+  - it: with templated nameOverride should pass
+    set:
+      configMaps:
+        config:
+          data:
+            test: test
+          nameOverride: "{{ .Release.Name }}"
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: &ConfigmapDocument 1
+        isKind:
+          of: ConfigMap
+      - documentIndex: *ConfigmapDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME
