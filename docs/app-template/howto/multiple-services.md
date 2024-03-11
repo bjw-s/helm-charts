@@ -18,9 +18,7 @@ controllers:
 
 service:
   main:
-    # The controller for this service is set to
-    # "main" by the default app-template values
-    # controller: main
+    controller: main # (1)!
     ports:
       http:
         port: 8080
@@ -58,9 +56,7 @@ controllers:
 
 service:
   main:
-    # The controller for this service is set to
-    # "main" by the default app-template values
-    # controller: main
+    controller: main # (1)!
     ports:
       http:
         port: 8080

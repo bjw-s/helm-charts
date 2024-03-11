@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/app-template-3.0.0/charts/other/app-template/schemas/helmrelease-helm-v2beta2.schema.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -11,7 +12,7 @@ spec:
       chart: app-template
       # -- Version of the app-template helm chart
       # this example is not automatically updated, so be sure to use the latest chart version
-      version: 0.1.1
+      version: 3.0.0
       interval: 15m
       sourceRef:
         kind: HelmRepository
@@ -54,30 +55,28 @@ spec:
     ingress:
       # -- Enable and configure ingress settings for the chart under this key.
       main:
-        enabled: true
         hosts:
           - host: chart-example.local
             paths:
               - path: /
                 pathType: Prefix
                 service:
-                  name: main
+                  identifier: main
                   port: http
               - path: /notifications/hub/negotiate
                 pathType: Prefix
                 service:
-                  name: main
+                  identifier: main
                   port: http
               - path: /notifications/hub
                 pathType: Prefix
                 service:
-                  name: main
+                  identifier: main
                   port: websocket
 
     route:
       # -- Enable and configure route settings for the chart under this key.
       main:
-        enabled: true
         parentRefs:
           - name: gateway
             namespace: gateway-namespace
@@ -119,7 +118,6 @@ spec:
     # -- Configure persistence settings for the chart under this key.
     persistence:
       config:
-        enabled: true
         type: persistentVolumeClaim
         accessMode: ReadWriteOnce
         size: 1Gi

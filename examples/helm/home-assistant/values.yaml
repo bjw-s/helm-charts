@@ -1,3 +1,6 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/app-template-3.0.0/charts/other/app-template/values.schema.json
+
 # Configure options applied to all pods
 defaultPodOptions:
   automountServiceAccountToken: false
@@ -63,30 +66,28 @@ service:
 ingress:
   # Configure an Ingress for the main application
   main:
-    enabled: true
-    ingressClassName: "external-nginx"
+    className: "external-nginx"
     hosts:
       - host: &host "hass.example.local"
         paths:
           - path: /
             pathType: Prefix
             service:
-              name: main
+              identifier: main
               port: http
     tls:
       - hosts:
           - *host
   # Configure an Ingress for the code-server sidecar
   code:
-    enabled: true
-    ingressClassName: "internal-nginx"
+    className: "internal-nginx"
     hosts:
       - host: &host-code "hass-code.example.local"
         paths:
           - path: /
             pathType: Prefix
             service:
-              name: code
+              identifier: code
               port: http
     tls:
       - hosts:
@@ -95,14 +96,12 @@ ingress:
 persistence:
   # Configure the main configuration storage location
   config:
-    enabled: true
     existingClaim: home-assistant-config
     globalMounts:
       - path: /config
 
   # Configure an NFS mount to store backups on
   backup:
-    enabled: true
     type: nfs
     server: nas.example.lan
     path: /volume/Backups/k8s/hass
