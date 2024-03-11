@@ -152,6 +152,81 @@ persistence:
       - path: /data/nas-media
 ```
 
+#### 🚧 Diff view
+
+<details>
+<summary>Expand</summary>
+
+```diff
+--- old
++++ new
+@@ -1,42 +1,55 @@
+---
++# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.1/charts/library/common/values.schema.json
+ defaultPodOptions:
++  enableServiceLinks: true
+   securityContext:
+     runAsUser: 568
+     runAsGroup: 568
+     fsGroup: 568
+     fsGroupChangePolicy: "OnRootMismatch"
+     supplementalGroups:
+       - 65539
+
+ controllers:
+-  main:
++  sabnzbd: # this can now be any name you wish
+     containers:
+-      main:
++      app: # this can now be any name you wish
+         image:
+           repository: ghcr.io/onedr0p/sabnzbd
+           tag: latest
+           pullPolicy: IfNotPresent
+
++        probes:
++          liveness:
++            enabled: true
++          readiness:
++            enabled: true
++          startup:
++            enabled: true
++            spec:
++              failureThreshold: 30
++              periodSeconds: 5
++
+ service:
+-  main:
++  app: # this can now be any name you wish
++    controller: sabnzbd
+     ports:
+       http:
+         port: 8080
+
+ ingress:
+-  media:
+-    enabled: true
++  media: # this can now be any name you wish
+     className: "ingress-nginx"
+     hosts:
+       - host: sabnzbd.bjw-s.dev
+         paths:
+           - path: /
+             service:
+-              name: main
++              identifier: app
+               port: http
+
+ persistence:
+   media:
+     existingClaim: nas-media
+     globalMounts:
+       - path: /data/nas-media
+
+```
+
+</details>
+
 #### Changes in this example
 
 This is not meant as an exhaustive list of changes, but rather a "most common" example.
