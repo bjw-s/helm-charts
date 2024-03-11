@@ -56,8 +56,19 @@ spec:
             pathType: {{ default "Prefix" .pathType }}
             backend:
               service:
-                {{ $service := include "bjw-s.common.lib.service.getByIdentifier" (dict "rootContext" $rootContext "id" .service.name) | fromYaml -}}
+                {{ $service := dict -}}
+                {{ $serviceName := "" -}}
                 {{ $servicePort := 0 -}}
+
+                {{ if .service.name -}}
+                  {{ $serviceName = tpl .service.name $rootContext -}}
+                {{ else if .service.identifier -}}
+                  {{ $service = (include "bjw-s.common.lib.service.getByIdentifier" (dict "rootContext" $rootContext "id" .service.identifier) | fromYaml ) -}}
+                  {{ if not $service -}}
+                    {{fail (printf "No service found with this identifier. (ingress: '%s', path: '%s', identifier: '%s')" $ingressObject.identifier .path .service.identifier)}}
+                  {{ end -}}
+                  {{ $serviceName = $service.name -}}
+                {{ end -}}
 
                 {{ if empty (dig "port" nil .service) -}}
                   {{/* Default to the Service primary port if no port has been specified */ -}}
@@ -73,10 +84,10 @@ spec:
                     {{ $servicePort = .service.port -}}
                   {{ else if kindIs "string" .service.port -}}
                     {{/* If a port name is given, try to resolve to a number */ -}}
-                    {{ $servicePort = include "bjw-s.common.lib.service.getPortNumberByName" (dict "rootContext" $rootContext "serviceID" .service.name "portName" .service.port) -}}
+                    {{ $servicePort = include "bjw-s.common.lib.service.getPortNumberByName" (dict "rootContext" $rootContext "serviceID" .service.identifier "portName" .service.port) -}}
                   {{ end -}}
                 {{ end -}}
-                name: {{ default .service.name $service.name }}
+                name: {{ default .service.name $serviceName }}
                 port:
                   number: {{ $servicePort }}
           {{- end }}

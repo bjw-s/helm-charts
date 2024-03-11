@@ -44,21 +44,14 @@ Read through the [values.yaml](./values.yaml) file. It has several commented out
 
 ## Values
 
-**Important**: When deploying an application Helm chart you can add more values from the common library chart [here](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common)
+**Important**: When deploying an application Helm chart you can add more values from the common library chart [here](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common/values.yaml)
 
-The following table contains an overview of available values and their descriptions / default values.
-
-<details>
-<summary>Expand</summary>
-
-{{ template "chart.valuesTable" . }}
-
-</details>
+These values will be validated by a JSON schema which can be found [here](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common/values.schema.json)
 
 ## Support
 
 - See the [Docs](http://bjw-s.github.io/helm-charts/docs/)
 - Open an [issue](https://github.com/bjw-s/helm-charts/issues/new/choose)
-- Join the k8s-at-home [Discord](https://discord.gg/k8s-at-home) community
+- Join the home-operations [Discord](https://discord.gg/home-operations) community
 
 {{ template "helm-docs.versionFooter" . }}
