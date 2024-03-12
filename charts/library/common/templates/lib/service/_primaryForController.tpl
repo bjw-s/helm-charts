@@ -13,7 +13,7 @@ Return the primary service object for a controller
   {{- if $enabledServices -}}
     {{- range $name, $service := $enabledServices -}}
       {{- /* Determine the Service that has been marked as primary */ -}}
-      {{- if and (hasKey $service "primary") $service.primary -}}
+      {{- if and (eq $service.controller $controllerIdentifier) $service.primary -}}
         {{- $identifier = $name -}}
         {{- $result = $service -}}
       {{- end -}}
@@ -21,8 +21,12 @@ Return the primary service object for a controller
 
     {{- /* Return the first Service if none has been explicitly marked as primary */ -}}
     {{- if not $result -}}
-      {{- $identifier = keys $enabledServices | first -}}
-      {{- $result = get $enabledServices $identifier -}}
+      {{- range $name, $service := $enabledServices -}}
+        {{- if and (not $result) (eq $service.controller $controllerIdentifier) -}}
+          {{- $identifier = $name -}}
+          {{- $result = $service -}}
+        {{- end -}}
+      {{- end -}}
     {{- end -}}
 
     {{- include "bjw-s.common.lib.service.valuesToObject" (dict "rootContext" $rootContext "id" $identifier "values" $result) -}}

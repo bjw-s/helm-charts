@@ -146,6 +146,56 @@ tests:
               port: 80
             timeoutSeconds: 1
 
+  - it: multiple services should pass
+    set:
+      service:
+        other:
+          controller: other
+          ports:
+            http:
+              enabled: true
+              port: 8080
+        main:
+          controller: main
+          ports:
+            http:
+              enabled: true
+              port: &port 80
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].livenessProbe
+          value:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: *port
+            timeoutSeconds: 1
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].readinessProbe
+          value:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: *port
+            timeoutSeconds: 1
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].startupProbe
+          value:
+            failureThreshold: 3
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            tcpSocket:
+              port: *port
+            timeoutSeconds: 1
+
   - it: disabled service should pass
     set:
       service:
