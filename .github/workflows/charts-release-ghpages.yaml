@@ -32,14 +32,14 @@ jobs:
           private-key: "${{ secrets.BJWS_APP_PRIVATE_KEY }}"
 
       - name: Checkout charts branch
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4
+        uses: actions/checkout@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
           path: "src"
           fetch-depth: 0
 
       - name: Checkout gh-pages branch
-        uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4
+        uses: actions/checkout@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
           path: "dest"
