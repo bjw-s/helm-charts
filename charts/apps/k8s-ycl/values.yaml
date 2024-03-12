@@ -39,8 +39,10 @@ controllers:
               httpGet:
                 path: /healthz
                 port: 8081
+              initialDelaySeconds: 0
               failureThreshold: 30
-              periodSeconds: 10
+              periodSeconds: 5
+              timeoutSeconds: 1
 
 persistence:
   certs:
