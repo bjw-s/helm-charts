@@ -16,4 +16,4 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        Improved fix for preventing potential incorrect controller references
+        Fix template error when probes are enabled without a valid service
