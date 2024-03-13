@@ -101,6 +101,9 @@
       "targetPort": {
         "type": ["string", "integer"]
       },
+      "nodePort": {
+        "type": ["string", "integer"]
+      },
       "appProtocol": {
         "type": "string"
       }
