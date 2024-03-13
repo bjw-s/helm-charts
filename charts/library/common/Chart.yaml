@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.0.3
+version: 3.0.4
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,7 +16,4 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        Fixed probes intermittently choosing the wrong service
-    - kind: fixed
-      description: |-
-        Prevent potential incorrect controller references
+        Improved fix for preventing potential incorrect controller references
