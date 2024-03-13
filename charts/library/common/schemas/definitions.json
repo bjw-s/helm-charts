@@ -2,14 +2,14 @@
   "annotations": {
     "type": ["object", "null"],
     "additionalProperties": {
-      "type": ["string"]
+      "type": ["string", "null"]
     }
   },
 
   "labels": {
     "type": ["object", "null"],
     "additionalProperties": {
-      "type": ["string"]
+      "type": ["string", "null"]
     }
   }
 }

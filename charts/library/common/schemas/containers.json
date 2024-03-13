@@ -51,7 +51,7 @@
             "type": "object",
             "additionalProperties": {
               "anyOf": [
-                {"type": ["string", "number", "boolean"]},
+                {"type": ["string", "number", "boolean", "null"]},
                 {"$ref": "#/envValue"},
                 {"$ref": "#/envValueFrom"},
                 {"$ref": "#/envImplicitValueFrom"}
@@ -172,7 +172,7 @@
         "type": "string"
       },
       "value": {
-        "type": ["string", "number", "boolean"]
+        "type": ["string", "number", "boolean", "null"]
       }
     },
     "required": ["name", "value"]
@@ -183,7 +183,7 @@
     "additionalProperties": false,
     "properties": {
       "value": {
-        "type": ["string", "number", "boolean"]
+        "type": ["string", "number", "boolean", "null"]
       },
       "dependsOn": {"$ref": "#/envDependsOn"}
     },
