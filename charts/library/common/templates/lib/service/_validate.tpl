@@ -9,6 +9,11 @@ Validate Service values
     {{- fail (printf "controller field is required for Service. (service: %s)" $serviceObject.identifier) -}}
   {{- end -}}
 
+  {{- $serviceController := include "bjw-s.common.lib.controller.getByIdentifier" (dict "rootContext" $rootContext "id" $serviceObject.controller) -}}
+  {{- if empty $serviceController -}}
+    {{- fail (printf "No enabled controller found with this identifier. (service: '%s', controller: '%s')" $serviceObject.identifier $serviceObject.controller) -}}
+  {{- end -}}
+
   {{- /* Validate Service type */ -}}
   {{- $validServiceTypes := (list "ClusterIP" "LoadBalancer" "NodePort" "ExternalName" "ExternalIP") -}}
   {{- if and $serviceObject.type (not (mustHas $serviceObject.type $validServiceTypes)) -}}

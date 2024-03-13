@@ -146,6 +146,68 @@ tests:
               port: 80
             timeoutSeconds: 1
 
+  - it: multiple services should pass
+    set:
+      controllers:
+        other:
+          containers:
+            main:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+                pullPolicy: IfNotPresent
+              probes:
+                liveness:
+                  enabled: true
+                readiness:
+                  enabled: true
+                startup:
+                  enabled: true
+      service:
+        other:
+          controller: other
+          ports:
+            http:
+              enabled: true
+              port: &secondDeploymentPort 8080
+        main:
+          controller: main
+          ports:
+            http:
+              enabled: true
+              port: &firstDeploymentPort 80
+    asserts:
+      - documentIndex: &firstDeploymentDocument 0
+        isKind:
+          of: Deployment
+      - documentIndex: *firstDeploymentDocument
+        equal:
+          path: spec.template.spec.containers[0].livenessProbe.tcpSocket.port
+          value: *firstDeploymentPort
+      - documentIndex: *firstDeploymentDocument
+        equal:
+          path: spec.template.spec.containers[0].readinessProbe.tcpSocket.port
+          value: *firstDeploymentPort
+      - documentIndex: *firstDeploymentDocument
+        equal:
+          path: spec.template.spec.containers[0].startupProbe.tcpSocket.port
+          value: *firstDeploymentPort
+      - documentIndex: &secondDeploymentDocument 1
+        isKind:
+          of: Deployment
+      - documentIndex: *secondDeploymentDocument
+        equal:
+          path: spec.template.spec.containers[0].livenessProbe.tcpSocket.port
+          value: *secondDeploymentPort
+      - documentIndex: *secondDeploymentDocument
+        equal:
+          path: spec.template.spec.containers[0].readinessProbe.tcpSocket.port
+          value: *secondDeploymentPort
+      - documentIndex: *secondDeploymentDocument
+        equal:
+          path: spec.template.spec.containers[0].startupProbe.tcpSocket.port
+          value: *secondDeploymentPort
+
   - it: disabled service should pass
     set:
       service:

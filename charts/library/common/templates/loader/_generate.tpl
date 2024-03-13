@@ -2,6 +2,9 @@
 Secondary entrypoint and primary loader for the common chart
 */}}
 {{- define "bjw-s.common.loader.generate" -}}
+  {{- /* Run global chart validations */ -}}
+  {{- include "bjw-s.common.lib.chart.validate" . -}}
+
   {{- /* Build the templates */ -}}
   {{- include "bjw-s.common.render.pvcs" . | nindent 0 -}}
   {{- include "bjw-s.common.render.serviceAccount" . | nindent 0 -}}

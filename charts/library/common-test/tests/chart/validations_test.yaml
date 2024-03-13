@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: Chart validations
+templates:
+  - common.yaml
+tests:
+  - it: advancedMounts invalid controller reference should fail
+    set:
+      persistence:
+        data:
+          type: configMap
+          name: myConfigMap
+          advancedMounts:
+            test:
+              main:
+                - path: /data/config.yaml
+                  readOnly: false
+                  mountPropagation: HostToContainer
+                  subPath: config.yaml
+    asserts:
+      - failedTemplate:
+          errorMessage: "No enabled controller found with this identifier. (persistence item: 'data', controller: 'test')"
