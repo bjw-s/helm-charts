@@ -17,3 +17,6 @@ annotations:
     - kind: fixed
       description: |-
         Fixed probes intermittently choosing the wrong service
+    - kind: fixed
+      description: |-
+        Prevent potential incorrect controller references

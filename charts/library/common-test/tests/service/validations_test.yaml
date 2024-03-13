@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: Service validations
+templates:
+  - common.yaml
+tests:
+  - it: invalid controller reference should fail
+    set:
+      service:
+        main:
+          controller: other
+    asserts:
+      - failedTemplate:
+          errorMessage: "No enabled controller found with this identifier. (service: 'main', controller: 'other')"
