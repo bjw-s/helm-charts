@@ -3,11 +3,10 @@
 suite: ingress values
 templates:
   - common.yaml
-
 values:
   - ../_values/ingress_main_default_hosts.yaml
   - ../_values/service_main_default.yaml
-
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:

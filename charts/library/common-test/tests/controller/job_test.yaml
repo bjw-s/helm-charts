@@ -3,6 +3,8 @@
 suite: job configuration
 templates:
   - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default job configuration should pass
     set:

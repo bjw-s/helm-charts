@@ -3,6 +3,8 @@
 suite: Service validations
 templates:
   - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: invalid controller reference should fail
     set:

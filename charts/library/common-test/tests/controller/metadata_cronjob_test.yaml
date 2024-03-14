@@ -3,7 +3,8 @@
 suite: controller metadata cronjob
 templates:
   - common.yaml
-
+values:
+  - ../_values/controllers_main_default_container.yaml
 set:
   controllers.main.cronjob.schedule: "*/20 * * * *"
 

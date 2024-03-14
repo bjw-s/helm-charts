@@ -3,6 +3,8 @@
 suite: persistence configmap
 templates:
   - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: configmap persistence type should pass
     set:

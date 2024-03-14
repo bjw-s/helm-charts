@@ -3,6 +3,8 @@
 suite: pod with multiple containers
 templates:
   - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: with explicit name should pass
     set:

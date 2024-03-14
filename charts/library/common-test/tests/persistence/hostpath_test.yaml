@@ -3,6 +3,8 @@
 suite: persistence hostpath
 templates:
   - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: hostPath should pass
     set:

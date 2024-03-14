@@ -3,6 +3,8 @@
 suite: pod sidecar containers
 templates:
   - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: with default order
     set:

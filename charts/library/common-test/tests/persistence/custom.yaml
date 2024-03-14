@@ -3,6 +3,8 @@
 suite: persistence custom
 templates:
   - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: custom persistence type should pass
     set:
