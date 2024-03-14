@@ -36,14 +36,13 @@
         ]
       },
       "env": {
-        "anyOf": [
+        "oneOf": [
           {
             "type": "array",
             "items": {
               "anyOf": [
-                {"$ref": "#/envValueWithName"},
-                {"$ref": "#/envValueFromWithName"},
-                {"$ref": "#/envImplicitValueFromWithName"}
+                {"$ref": "envVars.json#/envVarListItem"},
+                {"$ref": "envVars.json#/valueFromListItem"}
               ]
             }
           },
@@ -51,10 +50,9 @@
             "type": "object",
             "additionalProperties": {
               "anyOf": [
-                {"type": ["string", "number", "boolean", "null"]},
-                {"$ref": "#/envValue"},
-                {"$ref": "#/envValueFrom"},
-                {"$ref": "#/envImplicitValueFrom"}
+                {"$ref": "envVars.json#/envVarValue"},
+                {"$ref": "envVars.json#/envVarItem"},
+                {"$ref": "envVars.json#/valueFromItem"}
               ]
             }
           }
@@ -162,180 +160,6 @@
         "type": "string"
       }
     }
-  },
-
-  "envValueWithName": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "name": {
-        "type": "string"
-      },
-      "value": {
-        "type": ["string", "number", "boolean", "null"]
-      }
-    },
-    "required": ["name", "value"]
-  },
-
-  "envValue": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "value": {
-        "type": ["string", "number", "boolean", "null"]
-      },
-      "dependsOn": {"$ref": "#/envDependsOn"}
-    },
-    "required": ["value"]
-  },
-
-  "envValueFromWithName": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "name": {
-        "type": "string"
-      },
-      "valueFrom": {
-        "oneOf": [
-          {"$ref": "#/envValueFrom.fieldRef"},
-          {"$ref": "#/envValueFrom.secretKeyRef"}
-        ]
-      },
-      "dependsOn": {"$ref": "#/envDependsOn"}
-    },
-    "required": ["name", "valueFrom"]
-  },
-
-  "envValueFrom": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "valueFrom": {
-        "oneOf": [
-          {"$ref": "#/envValueFrom.fieldRef"},
-          {"$ref": "#/envValueFrom.secretKeyRef"}
-        ]
-      },
-      "dependsOn": {"$ref": "#/envDependsOn"}
-    },
-    "required": ["valueFrom"]
-  },
-
-  "envImplicitValueFromWithName": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "name": {
-        "type": "string"
-      },
-      "fieldRef": {"$ref": "#/envValueFrom.fieldPath"},
-      "secretKeyRef": {"$ref": "#/envValueFrom.secretKeyRef"},
-      "configMapKeyRef": {"$ref": "#/envValueFrom.configMapKeyRef"}
-    },
-    "required": ["name"],
-    "dependencies": {
-      "fieldRef": {
-        "allOf": [
-          {"not": {"required": ["secretKeyRef"]}},
-          {"not": {"required": ["configMapKeyRef"]}}
-        ]
-      },
-      "secretKeyRef": {
-        "allOf": [
-          {"not": {"required": ["fieldRef"]}},
-          {"not": {"required": ["configMapKeyRef"]}}
-        ]
-      },
-      "configMapKeyRef": {
-        "allOf": [
-          {"not": {"required": ["secretKeyRef"]}},
-          {"not": {"required": ["configMapKeyRef"]}}
-        ]
-      }
-    }
-  },
-
-  "envImplicitValueFrom": {
-    "type": "object",
-    "oneOf": [
-      {"$ref": "#/envValueFrom.fieldRef"},
-      {"$ref": "#/envValueFrom.secretKeyRef"},
-      {"$ref": "#/envValueFrom.configMapKeyRef"}
-    ]
-  },
-
-  "envDependsOn": {
-    "oneOf": [
-      {"type": "string"},
-      {"type": "array", "items": {"type": "string"}}
-    ]
-  },
-
-  "envValueFrom.secretKeyRef": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "secretKeyRef": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "key": {
-            "type": "string"
-          }
-        },
-        "required": ["name", "key"]
-      }
-    },
-    "required": ["secretKeyRef"]
-  },
-
-  "envValueFrom.configMapKeyRef": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "configMapKeyRef": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "key": {
-            "type": "string"
-          }
-        },
-        "required": ["name", "key"]
-      }
-    },
-    "required": ["configMapKeyRef"]
-  },
-
-  "envValueFrom.fieldRef": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "fieldRef": {
-        "$ref": "#/envValueFrom.fieldPath"
-      }
-    },
-    "required": ["fieldRef"]
-  },
-
-  "envValueFrom.fieldPath": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "apiVersion": {
-        "type": "string"
-      },
-      "fieldPath": {
-        "type": "string"
-      }
-    },
-    "required": ["fieldPath"]
   },
 
   "probe": {
