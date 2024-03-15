@@ -3,7 +3,8 @@
 suite: pvc storageclass
 templates:
   - common.yaml
-
+values:
+  - ../_values/controllers_main_default_container.yaml
 set:
   persistence.config:
     accessMode: ReadWriteOnce

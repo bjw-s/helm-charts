@@ -3,10 +3,9 @@
 suite: ingress tls
 templates:
   - common.yaml
-
 values:
   - ../_values/ingress_main_default_hosts.yaml
-
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default should pass
     asserts:

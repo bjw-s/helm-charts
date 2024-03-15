@@ -3,6 +3,8 @@
 suite: nameOverride tests
 templates:
   - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default name is set to release name
     asserts:

@@ -3,6 +3,8 @@
 suite: container image tag
 templates:
   - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: string tag should pass
     set:

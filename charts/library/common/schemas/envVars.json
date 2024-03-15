@@ -1,0 +1,245 @@
+{
+  "envVarValue": {
+    "type": ["string", "number", "boolean", "null"]
+  },
+
+  "envVarListItem": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "name": {"type": "string"},
+      "value": {"$ref": "#/envVarValue"}
+    },
+    "required": ["name", "value"]
+  },
+
+  "envVarItem": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "value": {"$ref": "#/envVarValue"},
+      "dependsOn": {"$ref": "#/envVarDependsOn"}
+    },
+    "required": ["value"]
+  },
+
+  "valueFromListItem": {
+    "oneOf": [
+      {"$ref": "#/valueFromListItemExplicit"},
+      {"$ref": "#/valueFromListItemImplicit"}
+    ]
+  },
+
+  "valueFromListItemExplicit": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "name": {"type": "string"},
+      "valueFrom": {"$ref": "#/valueFromOptions"}
+    },
+    "required": ["name", "valueFrom"]
+  },
+
+  "valueFromListItemImplicit": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "name": {"type": "string"},
+      "fieldRef": {"$ref": "#/fieldRefSelector"},
+      "resourceFieldRef": {"$ref": "#/resourceFieldRefSelector"},
+      "secretKeyRef": {"$ref": "#/objectKeySelector"},
+      "configMapKeyRef": {"$ref": "#/objectKeySelector"}
+    },
+    "required": ["name"],
+    "dependencies": {
+      "fieldRef": {
+        "allOf": [
+          {"not": {"required": ["resourceFieldRef"]}},
+          {"not": {"required": ["secretKeyRef"]}},
+          {"not": {"required": ["configMapKeyRef"]}}
+        ]
+      },
+      "resourceFieldRef": {
+        "allOf": [
+          {"not": {"required": ["fieldRef"]}},
+          {"not": {"required": ["secretKeyRef"]}},
+          {"not": {"required": ["configMapKeyRef"]}}
+        ]
+      },
+      "secretKeyRef": {
+        "allOf": [
+          {"not": {"required": ["fieldRef"]}},
+          {"not": {"required": ["resourceFieldRef"]}},
+          {"not": {"required": ["configMapKeyRef"]}}
+        ]
+      },
+      "configMapKeyRef": {
+        "allOf": [
+          {"not": {"required": ["fieldRef"]}},
+          {"not": {"required": ["resourceFieldRef"]}},
+          {"not": {"required": ["secretKeyRef"]}}
+        ]
+      }
+    }
+  },
+
+  "valueFromItem": {
+    "oneOf": [
+      {"$ref": "#/valueFromItemExplicit"},
+      {"$ref": "#/valueFromItemImplicit"}
+    ]
+  },
+
+  "valueFromItemExplicit": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "valueFrom": {"$ref": "#/valueFromOptions"},
+      "dependsOn": {"$ref": "#/envVarDependsOn"}
+    },
+    "required": ["valueFrom"]
+  },
+
+  "valueFromItemImplicit": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "fieldRef": {"$ref": "#/fieldRefSelector"},
+      "resourceFieldRef": {"$ref": "#/resourceFieldRefSelector"},
+      "secretKeyRef": {"$ref": "#/objectKeySelector"},
+      "configMapKeyRef": {"$ref": "#/objectKeySelector"},
+      "dependsOn": {"$ref": "#/envVarDependsOn"}
+    },
+    "dependencies": {
+      "fieldRef": {
+        "allOf": [
+          {"not": {"required": ["resourceFieldRef"]}},
+          {"not": {"required": ["secretKeyRef"]}},
+          {"not": {"required": ["configMapKeyRef"]}}
+        ]
+      },
+      "resourceFieldRef": {
+        "allOf": [
+          {"not": {"required": ["fieldRef"]}},
+          {"not": {"required": ["secretKeyRef"]}},
+          {"not": {"required": ["configMapKeyRef"]}}
+        ]
+      },
+      "secretKeyRef": {
+        "allOf": [
+          {"not": {"required": ["fieldRef"]}},
+          {"not": {"required": ["resourceFieldRef"]}},
+          {"not": {"required": ["configMapKeyRef"]}}
+        ]
+      },
+      "configMapKeyRef": {
+        "allOf": [
+          {"not": {"required": ["fieldRef"]}},
+          {"not": {"required": ["resourceFieldRef"]}},
+          {"not": {"required": ["secretKeyRef"]}}
+        ]
+      }
+    }
+  },
+
+  "valueFromOptions": {
+    "type": "object",
+    "oneOf": [
+      {"$ref": "#/fieldRef"},
+      {"$ref": "#/resourceFieldRef"},
+      {"$ref": "#/secretKeyRef"},
+      {"$ref": "#/configMapKeyRef"}
+    ]
+  },
+
+  "secretKeyRef": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "secretKeyRef": {"$ref": "#/objectKeySelector"}
+    },
+    "required": ["secretKeyRef"]
+  },
+
+  "configMapKeyRef": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "configMapKeyRef": {"$ref": "#/objectKeySelector"}
+    },
+    "required": ["configMapKeyRef"]
+  },
+
+  "fieldRef": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "fieldRef": {"$ref": "#/fieldRefSelector"}
+    },
+    "required": ["fieldRef"]
+  },
+
+  "fieldRefSelector": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "apiVersion": {
+        "type": "string"
+      },
+      "fieldPath": {
+        "type": "string"
+      }
+    },
+    "required": ["fieldPath"]
+  },
+
+  "resourceFieldRef": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "resourceFieldRef": {"$ref": "#/resourceFieldRefSelector"}
+    },
+    "required": ["resourceFieldRef"]
+  },
+
+  "resourceFieldRefSelector": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "containerName": {
+        "type": "string"
+      },
+      "divisor": {
+        "oneOf": [{"type": "string"}, {"type": "number"}]
+      },
+      "resource": {
+        "type": "string"
+      }
+    },
+    "required": ["resource"]
+  },
+
+  "envVarDependsOn": {
+    "oneOf": [
+      {"type": "string"},
+      {
+        "type": "array",
+        "items": {"type": "string"}
+      }
+    ]
+  },
+
+  "objectKeySelector": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "key": {
+        "type": "string"
+      }
+    },
+    "required": ["name", "key"]
+  }
+}

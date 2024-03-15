@@ -3,10 +3,9 @@
 suite: ingress metadata
 templates:
   - common.yaml
-
 values:
   - ../_values/ingress_main_default_hosts.yaml
-
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default metadata should pass
     asserts:

@@ -3,7 +3,8 @@
 suite: NetworkPolicy values
 templates:
   - common.yaml
-
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: main networkpolicy is disabled by default
     asserts:

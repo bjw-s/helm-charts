@@ -18,7 +18,9 @@ Return the primary port for a given Service object.
   {{- /* Return the first port if none has been explicitly marked as primary */ -}}
   {{- if not $result -}}
     {{- $firstPortKey := keys $enabledPorts | first -}}
-    {{- $result = get $enabledPorts $firstPortKey -}}
+    {{- if $firstPortKey -}}
+      {{- $result = get $enabledPorts $firstPortKey -}}
+    {{- end -}}
   {{- end -}}
 
   {{- $result | toYaml -}}

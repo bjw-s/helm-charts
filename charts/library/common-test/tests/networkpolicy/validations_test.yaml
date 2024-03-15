@@ -3,6 +3,8 @@
 suite: NetworkPolicy validations
 templates:
   - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: networkpolicy requires either controller reference or podSelector
     set:

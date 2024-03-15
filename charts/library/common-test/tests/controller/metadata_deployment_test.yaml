@@ -3,6 +3,8 @@
 suite: controller metadata deployment
 templates:
   - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default metadata should pass
     set:

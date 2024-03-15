@@ -3,7 +3,8 @@
 suite: container probes
 templates:
   - common.yaml
-
+values:
+  - ../_values/controllers_main_default_container.yaml
 set:
   controllers.main.containers.main.probes.liveness.enabled: true
   controllers.main.containers.main.probes.readiness.enabled: true

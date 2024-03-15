@@ -3,6 +3,8 @@
 suite: pod initContainers
 templates:
   - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: with custom env vars dict should pass
     set:

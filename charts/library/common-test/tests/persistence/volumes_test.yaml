@@ -3,6 +3,8 @@
 suite: persistence volumes
 templates:
   - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: no persistence should pass
     asserts:
