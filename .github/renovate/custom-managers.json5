@@ -1,0 +1,17 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  customManagers: [
+    {
+      customType: "regex",
+      description: "Process common lib json schema references",
+      fileMatch: ["\\.json$"],
+      matchStrings: [
+        // https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.0.3/charts/library/common/values.schema.json
+        "https:\\/\\/raw.githubusercontent.com\\/bjw-s\\/helm-charts\\/(?<depName>\\S+?)-(?<currentValue>[\\d\\.]+?)\\/\\S+",
+      ],
+      datasourceTemplate: "helm",
+      versioningTemplate: "semver",
+      registryUrlTemplate: "https://bjw-s.github.io/helm-charts"
+    },
+  ],
+}
