@@ -129,6 +129,7 @@ controllers:
 
 service:
   app: # this can now be any name you wish
+    primary: true
     controller: sabnzbd
     ports:
       http:
