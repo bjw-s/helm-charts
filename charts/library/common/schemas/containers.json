@@ -185,6 +185,18 @@
       "type": {
         "type": "string",
         "enum": ["TCP", "HTTP", "HTTPS", "AUTO"]
+      },
+      "initialDelaySeconds": {
+        "type": "number"
+      },
+      "failureThreshold": {
+        "type": "number"
+      },
+      "timeoutSeconds": {
+        "type": "number"
+      },
+      "periodSeconds": {
+        "type": "number"
       }
     }
   }
