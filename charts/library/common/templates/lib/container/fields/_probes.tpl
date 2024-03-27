@@ -39,10 +39,10 @@ Probes used by the container.
             {{- $probeType = $probeValues.type | default "TCP" -}}
           {{- end -}}
 
-          {{- $_ := set $probeDefinition "initialDelaySeconds" (default 0 $probeSpec.initialDelaySeconds) -}}
-          {{- $_ := set $probeDefinition "failureThreshold" (default 3 $probeSpec.failureThreshold) -}}
-          {{- $_ := set $probeDefinition "timeoutSeconds" (default 1 $probeSpec.timeoutSeconds) -}}
-          {{- $_ := set $probeDefinition "periodSeconds" (default 10 $probeSpec.periodSeconds) -}}
+          {{- $_ := set $probeDefinition "initialDelaySeconds" (include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $probeSpec.initialDelaySeconds "default" 0) | int) -}}
+          {{- $_ := set $probeDefinition "failureThreshold" (include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $probeSpec.failureThreshold "default" 3) | int) -}}
+          {{- $_ := set $probeDefinition "timeoutSeconds" (include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $probeSpec.timeoutSeconds "default" 1) | int) -}}
+          {{- $_ := set $probeDefinition "periodSeconds" (include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $probeSpec.periodSeconds "default" 10) | int) -}}
 
           {{- $probeHeader := "" -}}
           {{- if or ( eq $probeType "HTTPS" ) ( eq $probeType "HTTP" ) -}}
