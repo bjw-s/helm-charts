@@ -16,4 +16,7 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        Fixed default cronJob settings overriding `0` values
+        Fixed `default` function overriding `0` values
+    - kind: added
+      description: |-
+        Add jobLabel and namespaceSelector to serviceMonitor
