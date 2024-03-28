@@ -56,7 +56,8 @@ tests:
         equal:
           path: spec.namespaceSelector
           value:
-            - NAMESPACE
+            matchNames:
+              - NAMESPACE
       - documentIndex: *ServiceMonitorDocument
         equal:
           path: spec.jobName
