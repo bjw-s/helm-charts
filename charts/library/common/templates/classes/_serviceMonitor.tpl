@@ -21,6 +21,10 @@ metadata:
   annotations: {{- toYaml . | nindent 4 -}}
   {{- end }}
 spec:
+  jobLabel: "{{ $serviceMonitorObject.name }}"
+  namespaceSelector:
+    matchNames:
+      - {{ $rootContext.Release.Namespace }}
   selector:
     {{- if $serviceMonitorObject.selector -}}
       {{- tpl ($serviceMonitorObject.selector | toYaml) $rootContext | nindent 4}}

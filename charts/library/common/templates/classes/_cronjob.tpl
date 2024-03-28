@@ -36,13 +36,13 @@ metadata:
 spec:
   suspend: {{ default false $cronJobSettings.suspend }}
   concurrencyPolicy: {{ default "Forbid" $cronJobSettings.concurrencyPolicy }}
-  startingDeadlineSeconds: {{ default 30 $cronJobSettings.startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $cronJobSettings.startingDeadlineSeconds "default" 30) }}
   {{- with $timeZone }}
   timeZone: {{ . }}
   {{- end }}
   schedule: {{ $cronJobSettings.schedule | quote }}
-  successfulJobsHistoryLimit: {{ default 1 $cronJobSettings.successfulJobsHistory }}
-  failedJobsHistoryLimit: {{ default 1 $cronJobSettings.failedJobsHistory }}
+  successfulJobsHistoryLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $cronJobSettings.successfulJobsHistory "default" 1) }}
+  failedJobsHistoryLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $cronJobSettings.failedJobsHistory "default" 1) }}
   jobTemplate:
     spec:
       {{- with $cronJobSettings.ttlSecondsAfterFinished }}
@@ -51,7 +51,7 @@ spec:
       {{- with $cronJobSettings.parallelism }}
       parallelism: {{ . }}
       {{- end }}
-      backoffLimit: {{ default 6 $cronJobSettings.backoffLimit }}
+      backoffLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $cronJobSettings.backoffLimit "default" 6) }}
       template:
         metadata:
           {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "controllerObject" $cronjobObject)) }}

@@ -64,7 +64,7 @@ spec:
       name: {{ default .name $service.name }}
       namespace: {{ default $rootContext.Release.Namespace .namespace }}
       port: {{ default .port $servicePrimaryPort.port }}
-      weight: {{ default 1 .weight }}
+      weight: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" .weight "default" 1) }}
     {{- end }}
     {{- if or (eq $routeKind "HTTPRoute") (eq $routeKind "GRPCRoute") }}
       {{- with .matches }}
