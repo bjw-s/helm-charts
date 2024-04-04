@@ -60,7 +60,7 @@ tests:
               - NAMESPACE
       - documentIndex: *ServiceMonitorDocument
         equal:
-          path: spec.jobName
+          path: spec.jobLabel
           value: RELEASE-NAME
       - documentIndex: *ServiceMonitorDocument
         equal:
