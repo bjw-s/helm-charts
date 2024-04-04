@@ -17,6 +17,9 @@ annotations:
     - kind: fixed
       description: |-
         Fixed `default` function overriding `0` values
+    - kind: fixed
+      description: |-
+        Fixed missing `volumeName` field in persistence schema
     - kind: added
       description: |-
         Add jobLabel and namespaceSelector to serviceMonitor
