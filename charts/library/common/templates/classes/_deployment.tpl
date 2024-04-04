@@ -27,7 +27,7 @@ metadata:
   annotations: {{- toYaml . | nindent 4 -}}
   {{- end }}
 spec:
-  revisionHistoryLimit: {{ default 3 $deploymentObject.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $deploymentObject.revisionHistoryLimit "default" 3) }}
   {{- if hasKey $deploymentObject "replicas" }}
     {{- if not (eq $deploymentObject.replicas nil) }}
   replicas: {{ $deploymentObject.replicas }}

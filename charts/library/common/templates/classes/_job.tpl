@@ -42,7 +42,7 @@ spec:
   {{- with $jobSettings.completionMode }}
   completionMode: {{ . }}
   {{- end }}
-  backoffLimit: {{ default 6 $jobSettings.backoffLimit }}
+  backoffLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $jobSettings.backoffLimit "default" 6) }}
   template:
     metadata:
       {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "controllerObject" $jobObject)) }}

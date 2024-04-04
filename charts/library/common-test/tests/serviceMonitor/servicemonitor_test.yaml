@@ -54,6 +54,16 @@ tests:
           value: RELEASE-NAME
       - documentIndex: *ServiceMonitorDocument
         equal:
+          path: spec.namespaceSelector
+          value:
+            matchNames:
+              - NAMESPACE
+      - documentIndex: *ServiceMonitorDocument
+        equal:
+          path: spec.jobLabel
+          value: RELEASE-NAME
+      - documentIndex: *ServiceMonitorDocument
+        equal:
           path: spec.selector.matchLabels
           value:
             app.kubernetes.io/instance: RELEASE-NAME

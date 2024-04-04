@@ -51,6 +51,9 @@
       "storageClass": {
         "type": "string"
       },
+      "volumeName": {
+        "type": "string"
+      },
       "advancedMounts": {"$ref": "#/advancedMounts"},
       "globalMounts": {"$ref": "#/globalMounts"}
     },

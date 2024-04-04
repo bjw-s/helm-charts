@@ -27,7 +27,7 @@ metadata:
   annotations: {{- toYaml . | nindent 4 -}}
   {{- end }}
 spec:
-  revisionHistoryLimit: {{ default 3 $daemonsetObject.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $daemonsetObject.revisionHistoryLimit "default" 3) }}
   selector:
     matchLabels:
       app.kubernetes.io/component: {{ $daemonsetObject.identifier }}
