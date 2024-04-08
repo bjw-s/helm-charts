@@ -496,10 +496,10 @@ ingress:
   #   # -- Override the name suffix that is used for this ingress.
   #   nameOverride:
 
-  #   # -- Provide additional annotations which may be required.
+  #   # -- Provide additional annotations which may be required. Helm templates can be used.
   #   annotations: {}
 
-  #   # -- Provide additional labels which may be required.
+  #   # -- Provide additional labels which may be required. Helm templates can be used.
   #   labels: {}
 
   #   # -- Set the ingressClass that is used for this ingress.
