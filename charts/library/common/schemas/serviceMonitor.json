@@ -27,6 +27,12 @@
         "additionalProperties": false,
         "properties": {
           "matchLabels": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "matchExpressions": {
             "type": "array",
             "items": {
               "type": "object",
@@ -40,9 +46,6 @@
                 }
               }
             }
-          },
-          "matchExpressions": {
-            "type": "object"
           }
         }
       },
