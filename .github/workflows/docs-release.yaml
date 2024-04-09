@@ -44,7 +44,7 @@ jobs:
         run: mkdocs build -f .ci/mkdocs/mkdocs.yml
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3.9.3
+        uses: peaceiris/actions-gh-pages@v4.0.0
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ steps.app-token.outputs.token }}
