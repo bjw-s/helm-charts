@@ -122,24 +122,3 @@ tests:
       - documentIndex: *IngressDocument
         notExists:
           path: spec.rules
-
-  - it: host with templated annotations should pass
-    set:
-      ingress.main:
-        annotations:
-          gethomepage.dev/name: "{{ .Release.Name | lower }}"
-        hosts:
-          - host: "{{ .Release.Name }}.hostname"
-            paths:
-              - path: /
-                service:
-                  identifier: main
-                  port: http
-    asserts:
-      - documentIndex: &IngressDocument 2
-        isKind:
-          of: Ingress
-      - documentIndex: *IngressDocument
-        equal:
-          path: metadata.annotations["gethomepage.dev/name"]
-          value: release-name

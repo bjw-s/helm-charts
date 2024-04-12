@@ -16,7 +16,7 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        Support templating Ingress annotations and labels
+        Support templating in annotation and label values for all objects
     - kind: fixed
       description: |-
         Fixed failing ServiceMonitor test
