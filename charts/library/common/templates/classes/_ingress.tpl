@@ -21,10 +21,16 @@ kind: Ingress
 metadata:
   name: {{ $ingressObject.name }}
   {{- with $labels }}
-  labels: {{- tpl (toYaml .) $rootContext | nindent 4 -}}
+  labels:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ tpl $value $rootContext }}
+    {{- end }}
   {{- end }}
   {{- with $annotations }}
-  annotations: {{- tpl (toYaml .) $rootContext | nindent 4 -}}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ tpl $value $rootContext }}
+    {{- end }}
   {{- end }}
 spec:
   {{- if $ingressObject.className }}
