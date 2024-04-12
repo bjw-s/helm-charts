@@ -14,6 +14,9 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: changed
+    - kind: added
       description: |-
-        Support templating the ingress annotations
+        Support templating Ingress annotations and labels
+    - kind: fixed
+      description: |-
+        Fixed failing ServiceMonitor test
