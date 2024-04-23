@@ -35,8 +35,8 @@ Returns the value for annotations
   {{- end -}}
   {{- if $configMapsFound -}}
     {{- $annotations = merge
-      (dict "checksum/configMaps" (toYaml $configMapsFound | sha256sum))
       $annotations
+      (dict "checksum/configMaps" (toYaml $configMapsFound | sha256sum))
     -}}
   {{- end -}}
 

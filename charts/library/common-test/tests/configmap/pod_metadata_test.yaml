@@ -29,3 +29,29 @@ tests:
           path: spec.template.metadata.annotations
           value:
             checksum/configMaps: 66d23d7a53c4e2a523ba85a969696b4ebb78ec5d79ab9c12c210c1569f48511b
+  - it: allow overriding checksum
+    set:
+      defaultPodOptions:
+        annotations:
+          checksum/configMaps: "override"
+      configMaps:
+        config:
+          enabled: true
+          data:
+            test: value 1
+        test_default_enabled:
+          data:
+            test: value 1
+        test_disabled:
+          enabled: false
+          data:
+            test: value 1
+    asserts:
+      - documentIndex: &ControllerDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *ControllerDoc
+        equal:
+          path: spec.template.metadata.annotations
+          value:
+            checksum/configMaps: override
