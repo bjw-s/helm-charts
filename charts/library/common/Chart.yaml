@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.1.0
+version: 3.2.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -14,12 +14,18 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: fixed
-      description: |-
-        Fixed `default` function overriding `0` values
-    - kind: fixed
-      description: |-
-        Fixed missing `volumeName` field in persistence schema
     - kind: added
       description: |-
-        Add jobLabel and namespaceSelector to serviceMonitor
+        Support templating in annotation and label values for all objects
+    - kind: added
+      description: |-
+        Support activeDeadlineSeconds field on CronJobs and Jobs
+    - kind: added
+      description: |-
+        Support excluding secrets and configMaps from pod checksum annotation
+    - kind: fixed
+      description: |-
+        Fixed failing ServiceMonitor test
+    - kind: fixed
+      description: |-
+        Fixed networkPolicies not rendering correctly

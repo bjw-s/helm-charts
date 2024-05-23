@@ -28,10 +28,16 @@ kind: CronJob
 metadata:
   name: {{ $cronjobObject.name }}
   {{- with $labels }}
-  labels: {{- toYaml . | nindent 4 -}}
+  labels:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ tpl $value $rootContext }}
+    {{- end }}
   {{- end }}
   {{- with $annotations }}
-  annotations: {{- toYaml . | nindent 4 -}}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ tpl $value $rootContext }}
+    {{- end }}
   {{- end }}
 spec:
   suspend: {{ default false $cronJobSettings.suspend }}
@@ -45,6 +51,9 @@ spec:
   failedJobsHistoryLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $cronJobSettings.failedJobsHistory "default" 1) }}
   jobTemplate:
     spec:
+      {{- with $cronJobSettings.activeDeadlineSeconds }}
+      activeDeadlineSeconds: {{ . }}
+      {{- end }}
       {{- with $cronJobSettings.ttlSecondsAfterFinished }}
       ttlSecondsAfterFinished: {{ . }}
       {{- end }}

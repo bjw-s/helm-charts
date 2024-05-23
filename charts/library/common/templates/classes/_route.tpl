@@ -28,10 +28,16 @@ kind: {{ $routeKind }}
 metadata:
   name: {{ $routeObject.name }}
   {{- with $labels }}
-  labels: {{- toYaml . | nindent 4 -}}
+  labels:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ tpl $value $rootContext }}
+    {{- end }}
   {{- end }}
   {{- with $annotations }}
-  annotations: {{- toYaml . | nindent 4 -}}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ tpl $value $rootContext }}
+    {{- end }}
   {{- end }}
 spec:
   parentRefs:

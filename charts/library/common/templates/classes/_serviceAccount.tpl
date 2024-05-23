@@ -20,10 +20,16 @@ kind: ServiceAccount
 metadata:
   name: {{ $serviceAccountObject.name }}
   {{- with $labels }}
-  labels: {{- toYaml . | nindent 4 -}}
+  labels:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ tpl $value $rootContext }}
+    {{- end }}
   {{- end }}
   {{- with $annotations }}
-  annotations: {{- toYaml . | nindent 4 -}}
+  annotations:
+    {{- range $key, $value := . }}
+    {{ $key }}: {{ tpl $value $rootContext }}
+    {{- end }}
   {{- end }}
 secrets:
   - name: {{ include "bjw-s.common.lib.chart.names.fullname" $rootContext }}-sa-token

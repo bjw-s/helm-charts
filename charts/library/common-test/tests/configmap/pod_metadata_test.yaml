@@ -16,6 +16,10 @@ tests:
         test_default_enabled:
           data:
             test: value 1
+        test_not_in_checksum:
+          includeInChecksum: false
+          data:
+            test: value 1
         test_disabled:
           enabled: false
           data:
