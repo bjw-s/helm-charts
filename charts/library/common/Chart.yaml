@@ -20,6 +20,9 @@ annotations:
     - kind: added
       description: |-
         Support activeDeadlineSeconds field on CronJobs and Jobs
+    - kind: added
+      description: |-
+        Support excluding secrets and configMaps from pod checksum annotation
     - kind: fixed
       description: |-
         Fixed failing ServiceMonitor test
