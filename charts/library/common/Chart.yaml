@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.2.0
+version: 3.2.1
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,7 +16,7 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        Support templating in annotation and label values for all objects
+        Support templating in annotation and label values for all objects (fixed in v3.2.1)
     - kind: added
       description: |-
         Support activeDeadlineSeconds field on CronJobs and Jobs
