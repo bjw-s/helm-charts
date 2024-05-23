@@ -1,6 +1,6 @@
 # k8s-ycl
 
-![Version: 1.2.7](https://img.shields.io/badge/Version-1.2.7-informational?style=flat-square) ![AppVersion: v0.2.0](https://img.shields.io/badge/AppVersion-v0.2.0-informational?style=flat-square)
+![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![AppVersion: v0.2.0](https://img.shields.io/badge/AppVersion-v0.2.0-informational?style=flat-square)
 
 Kubernetes admission controller to remove CPU limits from Pods.
 
@@ -20,7 +20,7 @@ Kubernetes: `>=1.22.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://bjw-s.github.io/helm-charts | common | 3.1.0 |
+| https://bjw-s.github.io/helm-charts | common | 3.2.0 |
 
 ## Values
 
