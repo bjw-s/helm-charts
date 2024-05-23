@@ -17,6 +17,9 @@ annotations:
     - kind: added
       description: |-
         Support templating in annotation and label values for all objects
+    - kind: added
+      description: |-
+        Support activeDeadlineSeconds field on CronJobs and Jobs
     - kind: fixed
       description: |-
         Fixed failing ServiceMonitor test

@@ -51,6 +51,9 @@ spec:
   failedJobsHistoryLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $cronJobSettings.failedJobsHistory "default" 1) }}
   jobTemplate:
     spec:
+      {{- with $cronJobSettings.activeDeadlineSeconds }}
+      activeDeadlineSeconds: {{ . }}
+      {{- end }}
       {{- with $cronJobSettings.ttlSecondsAfterFinished }}
       ttlSecondsAfterFinished: {{ . }}
       {{- end }}

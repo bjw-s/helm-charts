@@ -229,6 +229,9 @@
       "timeZone": {
         "type": "string"
       },
+      "activeDeadlineSeconds": {
+        "type": "integer"
+      },
       "ttlSecondsAfterFinished": {
         "type": "integer"
       }
@@ -253,6 +256,9 @@
       "suspend": {
         "type": "boolean",
         "default": false
+      },
+      "activeDeadlineSeconds": {
+        "type": "integer"
       },
       "ttlSecondsAfterFinished": {
         "type": "integer"

@@ -36,6 +36,9 @@ metadata:
   {{- end }}
 spec:
   suspend: {{ default false $jobSettings.suspend }}
+  {{- with $jobSettings.activeDeadlineSeconds }}
+  activeDeadlineSeconds: {{ . }}
+  {{- end }}
   {{- with $jobSettings.ttlSecondsAfterFinished }}
   ttlSecondsAfterFinished: {{ . }}
   {{- end }}
