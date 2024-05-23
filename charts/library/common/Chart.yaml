@@ -23,3 +23,6 @@ annotations:
     - kind: fixed
       description: |-
         Fixed failing ServiceMonitor test
+    - kind: fixed
+      description: |-
+        Fixed networkPolicies not rendering correctly
