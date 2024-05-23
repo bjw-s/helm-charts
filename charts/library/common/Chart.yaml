@@ -16,4 +16,16 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        Add configMapsFromFolderBasePath to create ConfigMaps from a folder
+        Support templating in annotation and label values for all objects
+    - kind: added
+      description: |-
+        Support activeDeadlineSeconds field on CronJobs and Jobs
+    - kind: added
+      description: |-
+        Support excluding secrets and configMaps from pod checksum annotation
+    - kind: fixed
+      description: |-
+        Fixed failing ServiceMonitor test
+    - kind: fixed
+      description: |-
+        Fixed networkPolicies not rendering correctly

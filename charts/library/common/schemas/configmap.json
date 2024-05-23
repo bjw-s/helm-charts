@@ -7,6 +7,10 @@
         "type": "boolean",
         "default": true
       },
+      "includeInChecksum": {
+        "type": "boolean",
+        "default": true
+      },
       "annotations": {
         "$ref": "definitions.json#/annotations"
       },

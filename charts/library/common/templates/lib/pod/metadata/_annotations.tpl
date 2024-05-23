@@ -29,7 +29,11 @@ Returns the value for annotations
     {{- if hasKey $configmap "enabled" -}}
       {{- $configMapEnabled = $configmap.enabled -}}
     {{- end -}}
-    {{- if $configMapEnabled -}}
+    {{- $configMapIncludeInChecksum := true -}}
+    {{- if hasKey $configmap "includeInChecksum" -}}
+      {{- $configMapIncludeInChecksum = $configmap.includeInChecksum -}}
+    {{- end -}}
+    {{- if and $configMapEnabled $configMapIncludeInChecksum -}}
       {{- $_ := set $configMapsFound $name (toYaml $configmap.data | sha256sum) -}}
     {{- end -}}
   {{- end -}}
@@ -47,7 +51,11 @@ Returns the value for annotations
     {{- if hasKey $secret "enabled" -}}
       {{- $secretEnabled = $secret.enabled -}}
     {{- end -}}
-    {{- if $secretEnabled -}}
+    {{- $secretIncludeInChecksum := true -}}
+    {{- if hasKey $secret "includeInChecksum" -}}
+      {{- $secretIncludeInChecksum = $secret.includeInChecksum -}}
+    {{- end -}}
+    {{- if and $secretEnabled $secretIncludeInChecksum -}}
       {{- $_ := set $secretsFound $name (toYaml $secret.stringData | sha256sum) -}}
     {{- end -}}
   {{- end -}}

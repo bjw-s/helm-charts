@@ -82,3 +82,34 @@ tests:
             global_label: test
             helm.sh/chart: common-test-1.0.0
             test_label: test
+
+
+  - it: custom metadata with templates should pass
+    set:
+      ingress.main:
+        annotations:
+          template_annotation1: "{{ .Release.Name | lower }}"
+          template_annotation2: "{{ .Chart.Name | lower }}"
+        labels:
+          template_label1: "{{ .Release.Name | lower }}"
+          template_label2: "{{ .Chart.Name | lower }}"
+    asserts:
+      - documentIndex: &IngressDocument 1
+        isKind:
+          of: Ingress
+      - documentIndex: *IngressDocument
+        equal:
+          path: metadata.annotations["template_annotation1"]
+          value: release-name
+      - documentIndex: *IngressDocument
+        equal:
+          path: metadata.annotations["template_annotation2"]
+          value: common-test
+      - documentIndex: *IngressDocument
+        equal:
+          path: metadata.labels["template_label1"]
+          value: release-name
+      - documentIndex: *IngressDocument
+        equal:
+          path: metadata.labels["template_label2"]
+          value: common-test
