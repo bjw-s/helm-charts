@@ -16,4 +16,4 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        # TODO: Update
+        Added support for specifying unsupported raw resources.
