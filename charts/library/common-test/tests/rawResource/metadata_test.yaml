@@ -1,0 +1,98 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: rawResource metadata
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  rawResources:
+    config:
+      apiVersion: v1
+      kind: Endpoint
+      spec:
+        test: test
+tests:
+  - it: default metadata should pass
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: &rawResourceDocument 1
+        isKind:
+          of: Endpoint
+      - documentIndex: *rawResourceDocument
+        notExists:
+          path: metadata.annotations
+      - documentIndex: *rawResourceDocument
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            helm.sh/chart: common-test-1.0.0
+
+  - it: custom metadata should pass
+    set:
+      rawResources:
+        config:
+          annotations:
+            test_annotation: test
+          labels:
+            test_label: test
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: &rawResourceDocument 1
+        isKind:
+          of: Endpoint
+      - documentIndex: *rawResourceDocument
+        equal:
+          path: metadata.annotations
+          value:
+            test_annotation: test
+      - documentIndex: *rawResourceDocument
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            helm.sh/chart: common-test-1.0.0
+            test_label: test
+
+  - it: custom metadata with global metadata should pass
+    set:
+      global:
+        labels:
+          global_label: test
+        annotations:
+          global_annotation: test
+      rawResources:
+        config:
+          annotations:
+            test_annotation: test
+          labels:
+            test_label: test
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: &rawResourceDocument 1
+        isKind:
+          of: Endpoint
+      - documentIndex: *rawResourceDocument
+        equal:
+          path: metadata.annotations
+          value:
+            global_annotation: test
+            test_annotation: test
+      - documentIndex: *rawResourceDocument
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            global_label: test
+            helm.sh/chart: common-test-1.0.0
+            test_label: test

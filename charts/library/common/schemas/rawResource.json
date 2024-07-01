@@ -1,0 +1,29 @@
+{
+  "instance": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "apiVersion": {
+        "type": "string"
+      },
+      "kind": {
+        "type": "string"
+      },
+      "annotations": {
+        "$ref": "definitions.json#/annotations"
+      },
+      "labels": {
+        "$ref": "definitions.json#/labels"
+      },
+      "nameOverride": {
+        "type": "string"
+      },
+      "spec": {}
+    },
+    "required": ["apiVersion", "kind", "spec"]
+  }
+}

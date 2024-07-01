@@ -95,3 +95,16 @@ persistence:
           - path: /data/config.yaml
             readOnly: false
             subPath: config.yaml
+
+rawResources:
+  unsupportedPDB:
+    enabled: true
+    nameOverride: pdb
+    apiVersion: policy/v1
+    kind: PodDisruptionBudget
+    spec:
+      spec:
+        minAvailable: 1
+        selector:
+          matchLabels:
+            app.kubernetes.io/instance: "{{ .Release.Name }}"
