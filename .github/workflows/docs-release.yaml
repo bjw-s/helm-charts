@@ -21,7 +21,7 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - name: "Generate Short Lived OAuth App Token (ghs_*)"
-        uses: actions/create-github-app-token@v1.10.2
+        uses: actions/create-github-app-token@v1.10.3
         id: app-token
         with:
           app-id: "${{ secrets.BJWS_APP_ID }}"
