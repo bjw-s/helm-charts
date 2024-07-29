@@ -146,6 +146,22 @@
       "podManagementPolicy": {
         "type": "string"
       },
+      "persistentVolumeClaimRetentionPolicy": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "whenDeleted": {
+            "type": "string",
+            "enum": ["Delete", "Retain"],
+            "default": "Retain"
+          },
+          "whenScaled": {
+            "type": "string",
+            "enum": ["Delete", "Retain"],
+            "default": "Retain"
+          }
+        }
+      },
       "volumeClaimTemplates": {
         "type": "array",
         "items": {

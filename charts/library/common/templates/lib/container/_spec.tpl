@@ -51,6 +51,12 @@ resources: {{ toYaml . | trim | nindent 2 }}
   {{- with $containerObject.restartPolicy }}
 restartPolicy: {{ . | trim }}
   {{- end -}}
+  {{- with $containerObject.stdin }}
+stdin: {{ . | trim }}
+  {{- end -}}
+  {{- with $containerObject.tty }}
+tty: {{ . | trim }}
+  {{- end -}}
   {{- with (include "bjw-s.common.lib.container.field.volumeMounts" (dict "ctx" $ctx) | trim) }}
 volumeMounts: {{ . | trim | nindent 2 }}
   {{- end -}}

@@ -723,3 +723,22 @@ networkpolicies:
   #     # -- The egress rules for this networkPolicy. Allows all egress traffic by default.
   #     egress:
   #       - {}
+
+# -- Configure any unsupported raw resources here.
+# @default -- See below
+rawResources: {}
+  # example:
+  #   # -- Enables or disables the resource. Defaults to true
+  #   enabled: false
+  #   # -- Specify the apiVersion of the resource.
+  #   apiVersion: v1
+  #   # -- Specify the kind of the resource.
+  #   kind: Endpoint
+  #   # -- Override the name suffix that is used for this resource.
+  #   nameOverride: ""
+  #   # -- Provide additional annotations which may be required.
+  #   annotations: {}
+  #   # -- Provide additional labels which may be required.
+  #   labels: {}
+  #   # -- Configure the contents of the resource that is to be rendered.
+  #   spec:

@@ -1,0 +1,78 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: rawResource values
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  rawResources:
+    endpoint:
+      apiVersion: v1
+      kind: Endpoint
+      spec:
+        subsets:
+          - addresses:
+            - ip: 127.0.0.1
+            ports:
+            - name: "{{ .Release.Name }}"
+              port: 443
+              protocol: TCP
+tests:
+  - it: default should pass
+    asserts:
+      - hasDocuments:
+          count: 2
+      - documentIndex: &rawResourceDocument 1
+        isKind:
+          of: Endpoint
+      - documentIndex: *rawResourceDocument
+        equal:
+          path: subsets[0].addresses[0].ip
+          value: 127.0.0.1
+
+  - it: nameOverride should pass
+    set:
+      rawResources.endpoint:
+        nameOverride: test
+    asserts:
+      - documentIndex: &rawResourceDocument 1
+        isKind:
+          of: Endpoint
+      - documentIndex: *rawResourceDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-test
+
+  - it: nameOverride with template should pass
+    set:
+      rawResources.endpoint:
+        nameOverride: "{{ .Release.Name }}"
+    asserts:
+      - documentIndex: &rawResourceDocument 1
+        isKind:
+          of: Endpoint
+      - documentIndex: *rawResourceDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME
+
+  - it: spec with template should pass
+    set:
+      rawResources.endpoint:
+        spec:
+          subsets:
+            - addresses:
+              - ip: 127.0.0.1
+              ports:
+              - name: "{{ .Release.Name }}"
+                port: 443
+                protocol: TCP
+    asserts:
+      - documentIndex: &rawResourceDocument 1
+        isKind:
+          of: Endpoint
+      - documentIndex: *rawResourceDocument
+        equal:
+          path: subsets[0].ports[0].name
+          value: RELEASE-NAME

@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.2.1
+version: 3.3.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,16 +16,16 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        Support templating in annotation and label values for all objects (fixed in v3.2.1)
+        Added support for specifying unsupported raw resources.
     - kind: added
       description: |-
-        Support activeDeadlineSeconds field on CronJobs and Jobs
+        Added `stdin` and `tty` fields to container spec.
     - kind: added
       description: |-
-        Support excluding secrets and configMaps from pod checksum annotation
+        Added `persistentVolumeClaimRetentionPolicy` field to statefulset spec.
     - kind: fixed
       description: |-
-        Fixed failing ServiceMonitor test
+        Added `externalName` field to service schema.
     - kind: fixed
       description: |-
-        Fixed networkPolicies not rendering correctly
+        Always allow specifying `nodePort` field on service ports.

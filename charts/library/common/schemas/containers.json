@@ -149,12 +149,20 @@
       "securityContext": {
         "$ref": "k8s-api.json#/core.v1.ContainerSecurityContext"
       },
+      "stdin": {
+        "type": "boolean",
+        "default": false
+      },
       "terminationMessagePath": {
         "type": "string"
       },
       "terminationMessagePolicy": {
         "type": "string",
         "enum": ["File", "FallbackToLogsOnError"]
+      },
+      "tty": {
+        "type": "boolean",
+        "default": false
       },
       "workingDir": {
         "type": "string"

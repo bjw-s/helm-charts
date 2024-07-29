@@ -16,4 +16,5 @@ Secondary entrypoint and primary loader for the common chart
   {{- include "bjw-s.common.render.configMaps" . | nindent 0 -}}
   {{- include "bjw-s.common.render.secrets" . | nindent 0 -}}
   {{- include "bjw-s.common.render.networkpolicies" . | nindent 0 -}}
+  {{- include "bjw-s.common.render.rawResources" . | nindent 0 -}}
 {{- end -}}
