@@ -20,3 +20,6 @@ annotations:
     - kind: added
       description: |-
         Added `stdin` and `tty` fields to container spec.
+    - kind: fixed
+      description: |-
+        Added `externalName` field to service schema.
