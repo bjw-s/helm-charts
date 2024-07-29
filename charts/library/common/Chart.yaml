@@ -17,3 +17,6 @@ annotations:
     - kind: added
       description: |-
         Added support for specifying unsupported raw resources.
+    - kind: added
+      description: |-
+        Added `stdin` and `tty` fields to container spec.
