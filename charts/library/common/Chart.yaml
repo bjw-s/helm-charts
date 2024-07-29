@@ -26,3 +26,6 @@ annotations:
     - kind: fixed
       description: |-
         Added `externalName` field to service schema.
+    - kind: fixed
+      description: |-
+        Always allow specifying `nodePort` field on service ports.
