@@ -20,6 +20,9 @@ annotations:
     - kind: added
       description: |-
         Added `stdin` and `tty` fields to container spec.
+    - kind: added
+      description: |-
+        Added `persistentVolumeClaimRetentionPolicy` field to statefulset spec.
     - kind: fixed
       description: |-
         Added `externalName` field to service schema.
