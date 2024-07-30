@@ -24,3 +24,36 @@ Renders the configMap objects required by the chart.
     {{- end -}}
   {{- end -}}
 {{- end -}}
+
+{{/*
+Renders configMap objects required by the chart from a folder in the repo's path.
+*/}}
+{{- define "bjw-s.common.render.configMaps.fromFiles" -}}
+{{- $rootValues := .Values -}}
+
+{{/* Generate a list of unique top level folders */}}
+{{ $topLevelFolders := dict}}
+{{- range $path, $_ := .Files.Glob (printf "%s/*/*" .Values.configMapsFromFolderBasePath) -}}
+    {{- $_ := set $topLevelFolders (dir $path) "" -}}
+{{- end -}}
+{{- $top_level_folder_list := keys $topLevelFolders | sortAlpha -}}
+
+  {{/* Iterate over the top level folders */}}
+  {{ range $path := $top_level_folder_list }}
+    {{- $filesContentNoFormat := ($.Files.Glob (printf "%s/*" $path)) -}}
+    {{- $filesContent := dict -}}
+    {{- range $file_name, $content := $filesContentNoFormat -}}
+      {{- $key := base $file_name -}}
+      {{- if contains ".escape" $key -}}
+        {{- $key := $key | replace ".escape" "" -}}
+        {{- $filesContent = merge $filesContent (dict $key (($.Files.Get $file_name) | replace "{{" "{{ `{{` }}")) -}}
+      {{- else -}}
+        {{- $filesContent = merge $filesContent (dict $key ($.Files.Get $file_name))  -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $configMapValues := dict "enabled" true "labels" dict "annotations" dict "data" $filesContent -}}
+    {{- $existingConfigMaps := (get $rootValues "configMaps"| default dict) -}}
+    {{- $mergedConfigMaps := deepCopy $existingConfigMaps | merge (dict (base $path) $configMapValues) -}}
+    {{- $rootValues := merge $rootValues (dict "configMaps" $mergedConfigMaps) -}}
+  {{ end }}
+{{ end }}
