@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.3.0
+version: 3.3.1
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -25,7 +25,7 @@ annotations:
         Added `persistentVolumeClaimRetentionPolicy` field to statefulset spec.
     - kind: fixed
       description: |-
-        Added `externalName` field to service schema.
+        Added `externalName` field to service schema. (fixed in v3.3.1)
     - kind: fixed
       description: |-
         Always allow specifying `nodePort` field on service ports.
