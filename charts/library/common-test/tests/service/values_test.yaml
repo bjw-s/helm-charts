@@ -106,3 +106,20 @@ tests:
         equal:
           path: spec.allocateLoadBalancerNodePorts
           value: false
+
+  - it: externalName should pass for ExternalName service
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service:
+        main:
+          type: ExternalName
+          externalName: my.database.example.com
+    asserts:
+      - documentIndex: &ServiceDocument 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument
+        equal:
+          path: spec.externalName
+          value: my.database.example.com

@@ -47,6 +47,9 @@ spec:
       app.kubernetes.io/component: {{ $statefulsetObject.identifier }}
       {{- include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | nindent 6 }}
   serviceName: {{ include "bjw-s.common.lib.chart.names.fullname" $rootContext }}
+  {{- with (dig "statefulset" "persistentVolumeClaimRetentionPolicy" nil $statefulsetObject) }}
+  persistentVolumeClaimRetentionPolicy:  {{ . | toYaml | nindent 4 }}
+  {{- end }}
   template:
     metadata:
       {{- with (include "bjw-s.common.lib.pod.metadata.annotations" (dict "rootContext" $rootContext "controllerObject" $statefulsetObject)) }}

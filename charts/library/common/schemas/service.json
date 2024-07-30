@@ -22,6 +22,9 @@
       "clusterIP": {
         "type": "string"
       },
+      "externalName": {
+        "type": "string"
+      },
       "loadBalancerIP": {
         "type": "string"
       },
