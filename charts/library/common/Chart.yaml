@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.3.1
+version: 3.3.2
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -19,7 +19,7 @@ annotations:
         Added support for specifying unsupported raw resources.
     - kind: added
       description: |-
-        Added `stdin` and `tty` fields to container spec.
+        Added `stdin` and `tty` fields to container spec. (fixed in v3.3.2)
     - kind: added
       description: |-
         Added `persistentVolumeClaimRetentionPolicy` field to statefulset spec.

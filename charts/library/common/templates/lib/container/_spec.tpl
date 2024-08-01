@@ -52,10 +52,10 @@ resources: {{ toYaml . | trim | nindent 2 }}
 restartPolicy: {{ . | trim }}
   {{- end -}}
   {{- with $containerObject.stdin }}
-stdin: {{ . | trim }}
+stdin: {{ . }}
   {{- end -}}
   {{- with $containerObject.tty }}
-tty: {{ . | trim }}
+tty: {{ . }}
   {{- end -}}
   {{- with (include "bjw-s.common.lib.container.field.volumeMounts" (dict "ctx" $ctx) | trim) }}
 volumeMounts: {{ . | trim | nindent 2 }}
