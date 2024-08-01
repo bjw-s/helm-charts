@@ -10,7 +10,7 @@ maintainers:
 dependencies:
   - name: common
     repository: https://bjw-s.github.io/helm-charts
-    version: 3.3.1
+    version: 3.3.2
 annotations:
   artifacthub.io/changes: |-
     - kind: changed
