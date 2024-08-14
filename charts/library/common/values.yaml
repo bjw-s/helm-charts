@@ -197,8 +197,8 @@ controllers: {}
 #     # -- Set default options for all (init)Containers here
 #     # Each of these options can be overridden on a container level
 #     defaultContainerOptions: {}
-#       # -- image pull policy
-#       pullPolicy:
+#       # -- Set the resource requests / limits for the container.
+#       resources:
 #       # -- Configure the Security Context for the container
 #       securityContext: {}
 
