@@ -195,10 +195,14 @@ controllers: {}
 #     pod: {}
 
 #     # -- Whether to apply defaultContainerOptions to initContainers
-#     applyDefaultContainerOptionsToInitContainers: true
+#     applyToInitContainers: true
 #     # -- Set default options for all (init)Containers here
 #     # Each of these options can be overridden on a container level
 #     defaultContainerOptions: {}
+#       # -- Environment variables.
+#       env:
+#       # -- Secrets and/or ConfigMaps that will be loaded as environment variables.
+#       envFrom: {}
 #       # -- Set the resource requests / limits for the container.
 #       resources:
 #       # -- Configure the Security Context for the container
