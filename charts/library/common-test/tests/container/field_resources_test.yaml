@@ -23,6 +23,11 @@ tests:
             resources:
               requests:
                 memory: 1Gi
+          initContainers:
+            test:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
     asserts:
       - documentIndex: 0
         isKind:
@@ -30,6 +35,12 @@ tests:
       - documentIndex: 0
         equal:
           path: spec.template.spec.containers[0].resources
+          value:
+            requests:
+              memory: 1Gi
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.initContainers[0].resources
           value:
             requests:
               memory: 1Gi
@@ -47,6 +58,11 @@ tests:
               resources:
                 requests:
                   memory: 2Gi
+          initContainers:
+            test:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
     asserts:
       - documentIndex: 0
         isKind:
@@ -57,3 +73,70 @@ tests:
           value:
             requests:
               memory: 2Gi
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.initContainers[0].resources
+          value:
+            requests:
+              memory: 1Gi
+
+  - it: defaultContainerOption with initContainer override should pass
+    set:
+      controllers:
+        main:
+          defaultContainerOptions:
+            resources:
+              requests:
+                memory: 1Gi
+          initContainers:
+            test:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+              resources:
+                requests:
+                  memory: 2Gi
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].resources
+          value:
+            requests:
+              memory: 1Gi
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.initContainers[0].resources
+          value:
+            requests:
+              memory: 2Gi
+
+  - it: defaultContainerOption disabled for initContainer should pass
+    set:
+      controllers:
+        main:
+          applyDefaultContainerOptionsToInitContainers: false
+          defaultContainerOptions:
+            resources:
+              requests:
+                memory: 1Gi
+          initContainers:
+            test:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].resources
+          value:
+            requests:
+              memory: 1Gi
+      - documentIndex: 0
+        notExists:
+          path: spec.template.spec.initContainers[0].resources

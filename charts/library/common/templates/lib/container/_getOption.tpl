@@ -3,6 +3,7 @@ Returns the value for the specified field
 */ -}}
 {{- define "bjw-s.common.lib.container.getOption" -}}
   {{- $rootContext := .ctx.rootContext -}}
+  {{- $containerType := .ctx.containerType -}}
   {{- $controllerObject := .ctx.controllerObject -}}
   {{- $containerObject := .ctx.containerObject -}}
   {{- $option := .option -}}
@@ -10,12 +11,24 @@ Returns the value for the specified field
 
   {{- $value := $default -}}
 
-  {{- /* Set to the default if it is set */ -}}
-  {{- $defaultOption := dig $option nil (default dict $controllerObject.defaultContainerOptions) -}}
-  {{- if kindIs "bool" $defaultOption -}}
-    {{- $value = $defaultOption -}}
-  {{- else if not (empty $defaultOption) -}}
-    {{- $value = $defaultOption -}}
+  {{- /* Apply default options by default */ -}}
+  {{- $applyDefaultContainerOptions := true -}}
+
+  {{- /* Allow disabling default options for initContainers */ -}}
+  {{- if (eq "init" $containerType) -}}
+    {{- if hasKey $controllerObject "applyDefaultContainerOptionsToInitContainers" -}}
+      {{- $applyDefaultContainerOptions = $controllerObject.applyDefaultContainerOptionsToInitContainers -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- /* Set to the default container option if it is set */ -}}
+  {{- if (eq true $applyDefaultContainerOptions) -}}
+    {{- $defaultOption := dig $option nil (default dict $controllerObject.defaultContainerOptions) -}}
+    {{- if kindIs "bool" $defaultOption -}}
+      {{- $value = $defaultOption -}}
+    {{- else if not (empty $defaultOption) -}}
+      {{- $value = $defaultOption -}}
+    {{- end -}}
   {{- end -}}
 
   {{- /* See if a container-specific override is needed */ -}}

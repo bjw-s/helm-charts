@@ -47,6 +47,10 @@
       "statefulset": {
         "$ref": "#/statefulset"
       },
+      "applyDefaultContainerOptionsToInitContainers": {
+        "type": "boolean",
+        "default": true
+      },
       "defaultContainerOptions": {
         "type": "object",
         "additionalProperties": false,

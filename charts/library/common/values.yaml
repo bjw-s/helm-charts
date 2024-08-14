@@ -194,6 +194,8 @@ controllers: {}
 #     # Controller-specific overrides for `defaultPodOptions` keys
 #     pod: {}
 
+#     # -- Whether to apply defaultContainerOptions to initContainers
+#     applyDefaultContainerOptionsToInitContainers: true
 #     # -- Set default options for all (init)Containers here
 #     # Each of these options can be overridden on a container level
 #     defaultContainerOptions: {}

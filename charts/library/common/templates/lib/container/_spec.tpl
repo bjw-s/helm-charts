@@ -4,8 +4,9 @@ The container definition included in the Pod.
 {{- define "bjw-s.common.lib.container.spec" -}}
   {{- $rootContext := .rootContext -}}
   {{- $controllerObject := .controllerObject -}}
+  {{- $containerType := .containerType -}}
   {{- $containerObject := .containerObject -}}
-  {{- $ctx := dict "rootContext" $rootContext "controllerObject" $controllerObject "containerObject" $containerObject -}}
+  {{- $ctx := dict "rootContext" $rootContext "controllerObject" $controllerObject "containerType" $containerType "containerObject" $containerObject -}}
 
 name: {{ include "bjw-s.common.lib.container.field.name" (dict "ctx" $ctx) | trim }}
 image: {{ include "bjw-s.common.lib.container.field.image" (dict "ctx" $ctx) | trim }}
