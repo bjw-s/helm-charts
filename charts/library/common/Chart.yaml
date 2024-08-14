@@ -18,5 +18,5 @@ annotations:
       description: |-
         Add configMapsFromFolderBasePath to create ConfigMaps from a folder
     - kind: added
-      description: |-        
+      description: |-
         Added support for setting `defaultContainerOptions`.
