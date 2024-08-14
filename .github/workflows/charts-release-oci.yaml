@@ -20,6 +20,10 @@ jobs:
   release-charts:
     name: Release charts
     runs-on: ubuntu-22.04
+    permissions:
+      packages: write # needed for ghcr access
+      actions: read # for detecting the Github Actions environment.
+      id-token: write # for creating OIDC tokens for signing.
     steps:
       - name: Checkout chart sources
         uses: actions/checkout@v4
@@ -32,6 +36,9 @@ jobs:
           setup-tools: |
             helmv3
           helm: "${{ env.HELM_VERSION }}"
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3.6.0
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -52,5 +59,10 @@ jobs:
             CHART_VERSION=$(yq e '.version' ${{ env.CHARTS_SRC_DIR }}/${CHART}/Chart.yaml)
 
             helm package "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}/${CHART_NAME}" --dependency-update --destination "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}" --version "${CHART_VERSION}"
-            helm push "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}/${CHART_NAME}-${CHART_VERSION}.tgz" oci://${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm
+            helm push "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}/${CHART_NAME}-${CHART_VERSION}.tgz" oci://${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm &> push-metadata.txt
+            CHART_DIGEST=$(awk '/Digest: /{print $2}' push-metadata.txt)
+            cosign sign -y "${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm/${CHART_NAME}:${CHART_VERSION}@${CHART_DIGEST}"
+            cosign verify "${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm/${CHART_NAME}:${CHART_VERSION}@${CHART_DIGEST}" \
+              --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+              --certificate-identity "https://github.com/${GITHUB_WORKFLOW_REF}"
           done
