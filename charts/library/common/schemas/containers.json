@@ -36,65 +36,10 @@
         ]
       },
       "env": {
-        "oneOf": [
-          {
-            "type": "array",
-            "items": {
-              "anyOf": [
-                {"$ref": "envVars.json#/envVarListItem"},
-                {"$ref": "envVars.json#/valueFromListItem"}
-              ]
-            }
-          },
-          {
-            "type": "object",
-            "additionalProperties": {
-              "anyOf": [
-                {"$ref": "envVars.json#/envVarValue"},
-                {"$ref": "envVars.json#/envVarItem"},
-                {"$ref": "envVars.json#/valueFromItem"}
-              ]
-            }
-          }
-        ]
+        "$ref": "#/env"
       },
       "envFrom": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "additionalProperties": false,
-          "properties": {
-            "configMap": {
-              "type": "string"
-            },
-            "configMapRef": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "name": {"type": "string"},
-                "identifier": {"type": "string"},
-                "optional": {"type": "boolean"}
-              },
-              "oneOf": [{"required": ["name"]}, {"required": ["identifier"]}]
-            },
-            "prefix": {
-              "type": ["string", "null"]
-            },
-            "secret": {
-              "type": "string"
-            },
-            "secretRef": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "name": {"type": "string"},
-                "identifier": {"type": "string"},
-                "optional": {"type": "boolean"}
-              },
-              "oneOf": [{"required": ["name"]}, {"required": ["identifier"]}]
-            }
-          }
-        }
+        "$ref": "#/envFrom"
       },
       "image": {
         "type": "object",
@@ -166,6 +111,69 @@
       },
       "workingDir": {
         "type": "string"
+      }
+    }
+  },
+
+  "env": {
+    "oneOf": [
+      {
+        "type": "array",
+        "items": {
+          "anyOf": [
+            {"$ref": "envVars.json#/envVarListItem"},
+            {"$ref": "envVars.json#/valueFromListItem"}
+          ]
+        }
+      },
+      {
+        "type": "object",
+        "additionalProperties": {
+          "anyOf": [
+            {"$ref": "envVars.json#/envVarValue"},
+            {"$ref": "envVars.json#/envVarItem"},
+            {"$ref": "envVars.json#/valueFromItem"}
+          ]
+        }
+      }
+    ]
+  },
+
+  "envFrom": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "configMap": {
+          "type": "string"
+        },
+        "configMapRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {"type": "string"},
+            "identifier": {"type": "string"},
+            "optional": {"type": "boolean"}
+          },
+          "oneOf": [{"required": ["name"]}, {"required": ["identifier"]}]
+        },
+        "prefix": {
+          "type": ["string", "null"]
+        },
+        "secret": {
+          "type": "string"
+        },
+        "secretRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "name": {"type": "string"},
+            "identifier": {"type": "string"},
+            "optional": {"type": "boolean"}
+          },
+          "oneOf": [{"required": ["name"]}, {"required": ["identifier"]}]
+        }
       }
     }
   },
