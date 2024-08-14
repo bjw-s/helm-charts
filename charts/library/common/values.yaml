@@ -194,6 +194,14 @@ controllers: {}
 #     # Controller-specific overrides for `defaultPodOptions` keys
 #     pod: {}
 
+#     # -- Set default options for all (init)Containers here
+#     # Each of these options can be overridden on a container level
+#     defaultContainerOptions: {}
+#       # -- image pull policy
+#       pullPolicy:
+#       # -- Configure the Security Context for the container
+#       securityContext: {}
+
 #     containers:
 #       main:
 #         # -- Override the container name

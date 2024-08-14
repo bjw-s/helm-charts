@@ -21,8 +21,8 @@ args: {{ . | trim | nindent 2 }}
   {{- with $containerObject.workingDir }}
 workingDir: {{ . | trim }}
   {{- end -}}
-  {{- with $containerObject.securityContext }}
-securityContext: {{ toYaml . | trim | nindent 2 }}
+  {{- with (include "bjw-s.common.lib.container.getOption" (dict "ctx" $ctx "option" "securityContext")) }}
+securityContext: {{ . | nindent 2 }}
   {{- end -}}
   {{- with $containerObject.lifecycle }}
 lifecycle: {{ toYaml . | trim | nindent 2 }}
@@ -45,8 +45,8 @@ ports: {{ toYaml . | trim | nindent 2 }}
   {{- with (include "bjw-s.common.lib.container.field.probes" (dict "ctx" $ctx) | trim) }}
     {{- . | trim | nindent 0 -}}
   {{- end -}}
-  {{- with $containerObject.resources }}
-resources: {{ toYaml . | trim | nindent 2 }}
+  {{- with (include "bjw-s.common.lib.container.getOption" (dict "ctx" $ctx "option" "resources")) }}
+resources: {{ . | nindent 2 }}
   {{- end -}}
   {{- with $containerObject.restartPolicy }}
 restartPolicy: {{ . | trim }}

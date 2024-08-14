@@ -47,6 +47,18 @@
       "statefulset": {
         "$ref": "#/statefulset"
       },
+      "defaultContainerOptions": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "resources": {
+            "$ref": "k8s-api.json#/core.v1.ResourceRequirements"
+          },
+          "securityContext": {
+            "$ref": "k8s-api.json#/core.v1.ContainerSecurityContext"
+          }
+        }
+      },
       "initContainers": {
         "type": "object",
         "additionalProperties": {
