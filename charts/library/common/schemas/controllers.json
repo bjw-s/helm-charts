@@ -60,7 +60,7 @@
           },
           "command": {
             "$ref": "containers.json#/command"
-          },          
+          },
           "env": {
             "$ref": "containers.json#/env"
           },

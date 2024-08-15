@@ -103,5 +103,5 @@ tests:
         equal:
           path: spec.template.spec.containers[0].command
           value:
-        - value 1
-        - value 2
+            - value 1
+            - value 2
