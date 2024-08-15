@@ -14,7 +14,7 @@ Args used by the container.
   {{- $args := list -}}
 
   {{- /* See if an override is desired */ -}}
-  {{- if not (empty $argValues)) -}}
+  {{- if not (empty $argValues) -}}
     {{- if kindIs "string" $argValues -}}
       {{- $args = append $args $argValues -}}
     {{- else -}}
