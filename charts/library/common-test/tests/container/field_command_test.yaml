@@ -73,3 +73,35 @@ tests:
           value:
             - /bin/sh
             - -c
+
+  - it: command from defaultContainerOptions should pass
+    set:
+      controllers.main.defaultContainerOptions:
+        command: value_of_command
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].command
+          value:
+            - value_of_command
+
+  - it: command from defaultContainerOptions with container override should pass
+    set:
+      controllers.main.defaultContainerOptions:
+        command: value_of_command
+      controllers.main.containers.main.command:
+        - value 1
+        - value 2
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].command
+          value:
+        - value 1
+        - value 2

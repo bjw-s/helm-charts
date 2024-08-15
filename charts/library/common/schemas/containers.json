@@ -9,22 +9,10 @@
         "default": true
       },
       "args": {
-        "oneOf": [
-          {
-            "type": "array",
-            "items": {"type": "string"}
-          },
-          {"type": "string"}
-        ]
+        "$ref": "#/args"
       },
       "command": {
-        "oneOf": [
-          {
-            "type": "array",
-            "items": {"type": "string"}
-          },
-          {"type": "string"}
-        ]
+        "$ref": "#/command"
       },
       "dependsOn": {
         "oneOf": [
@@ -113,6 +101,26 @@
         "type": "string"
       }
     }
+  },
+
+  "args": {
+    "oneOf": [
+      {
+        "type": "array",
+        "items": {"type": "string"}
+      },
+      {"type": "string"}
+    ]
+  },
+
+  "command": {
+    "oneOf": [
+      {
+        "type": "array",
+        "items": {"type": "string"}
+      },
+      {"type": "string"}
+    ]
   },
 
   "env": {

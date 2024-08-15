@@ -195,10 +195,14 @@ controllers: {}
 #     pod: {}
 
 #     # -- Whether to apply defaultContainerOptions to initContainers
-#     applyToInitContainers: true
+#     applyDefaultContainerOptionsToInitContainers: true
 #     # -- Set default options for all (init)Containers here
 #     # Each of these options can be overridden on a container level
-#     defaultContainerOptions: {}
+#     defaultContainerOptions:
+#       # -- Override the command(s) for the containers
+#       command:
+#       # -- Override the args for the containers
+#       args:
 #       # -- Environment variables.
 #       env:
 #       # -- Secrets and/or ConfigMaps that will be loaded as environment variables.
@@ -225,11 +229,11 @@ controllers: {}
 #           # -- image pull policy
 #           pullPolicy:
 
-#         # -- Override the command(s) for the default container
+#         # -- Override the command(s) for the container
 #         command: []
-#         # -- Override the args for the default container
+#         # -- Override the args for the container
 #         args: []
-#         # -- Override the working directory for the default container
+#         # -- Override the working directory for the container
 #         workingDir:
 
 #         # -- Environment variables. Template enabled.

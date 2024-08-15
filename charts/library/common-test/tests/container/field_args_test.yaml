@@ -75,3 +75,35 @@ tests:
             - sleep
             - infinity
             - test
+
+  - it: args from defaultContainerOptions should pass
+    set:
+      controllers.main.defaultContainerOptions:
+        args: value_of_args
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].args
+          value:
+            - value_of_args
+
+  - it: args from defaultContainerOptions with container override should pass
+    set:
+      controllers.main.defaultContainerOptions:
+        args: value_of_args
+      controllers.main.containers.main.args:
+        - value 1
+        - value 2
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].args
+          value:
+        - value 1
+        - value 2

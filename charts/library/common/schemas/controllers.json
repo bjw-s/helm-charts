@@ -55,6 +55,12 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "args": {
+            "$ref": "containers.json#/args"
+          },
+          "command": {
+            "$ref": "containers.json#/command"
+          },          
           "env": {
             "$ref": "containers.json#/env"
           },
