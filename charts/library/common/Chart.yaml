@@ -16,4 +16,7 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
+        Add configMapsFromFolderBasePath to create ConfigMaps from a folder
+    - kind: added
+      description: |-
         Added support for setting `defaultContainerOptions`.
