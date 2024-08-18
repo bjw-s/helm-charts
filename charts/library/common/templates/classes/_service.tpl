@@ -49,6 +49,9 @@ spec:
   loadBalancerSourceRanges:
     {{ toYaml $serviceObject.loadBalancerSourceRanges | nindent 4 }}
   {{- end -}}
+  {{- if $serviceObject.loadBalancerClass }}
+  loadBalancerClass: {{ $serviceObject.loadBalancerClass }}
+  {{- end -}}
   {{- else if eq $svcType "ExternalName" }}
   type: {{ $svcType }}
   {{- if $serviceObject.externalName }}
