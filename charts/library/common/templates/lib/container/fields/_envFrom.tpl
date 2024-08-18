@@ -1,14 +1,19 @@
 {{/*
-Env field used by the container.
+envFrom field used by the container.
 */}}
 {{- define "bjw-s.common.lib.container.field.envFrom" -}}
   {{- $ctx := .ctx -}}
   {{- $rootContext := $ctx.rootContext -}}
   {{- $containerObject := $ctx.containerObject -}}
 
-  {{- if not (empty (get $containerObject "envFrom")) -}}
+  {{- $envFromValues := include "bjw-s.common.lib.container.getOption" (dict "ctx" $ctx "option" "envFrom") -}}
+  {{/* This is a terrible hack because Helm otherwise doesn't understand how to decode the object */}}
+  {{- $envFromValues = printf "envFrom:\n%s" ($envFromValues | indent 2) | fromYaml -}}
+  {{- $envFromValues = $envFromValues.envFrom -}}
+
+  {{- if not (empty $envFromValues) -}}
     {{- $envFrom := list -}}
-    {{- range $containerObject.envFrom -}}
+    {{- range $envFromValues -}}
       {{- $item := dict -}}
 
       {{- if hasKey . "configMap" -}}

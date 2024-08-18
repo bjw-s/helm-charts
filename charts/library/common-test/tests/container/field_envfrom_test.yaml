@@ -41,6 +41,61 @@ tests:
             configMapRef:
               name: myCustomConfig
 
+  - it: envFrom from defaultContainerOptions should pass
+    set:
+      controllers.main.defaultContainerOptions:
+        envFrom:
+          - secretRef:
+              name: myCustomSecret
+            prefix: test
+          - configMapRef:
+              name: myCustomConfig
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[0]
+          value:
+            secretRef:
+              name: myCustomSecret
+            prefix: test
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[1]
+          value:
+            configMapRef:
+              name: myCustomConfig
+
+  - it: envFrom from defaultContainerOptions with container override should pass
+    set:
+      controllers.main.defaultContainerOptions:
+        envFrom:
+          - secretRef:
+              name: myCustomSecret
+            prefix: test
+          - configMapRef:
+              name: myCustomConfig
+      controllers.main.containers.main.envFrom:
+        - secretRef:
+            name: myCustomSecretOverride
+          prefix: test
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].envFrom[0]
+          value:
+            secretRef:
+              name: myCustomSecretOverride
+            prefix: test
+      - documentIndex: *DeploymentDoc
+        notExists:
+          path: spec.template.spec.containers[0].envFrom[1]
+
   - it: envFrom configmap identifier reference should pass
     set:
       controllers.main.containers.main.envFrom:

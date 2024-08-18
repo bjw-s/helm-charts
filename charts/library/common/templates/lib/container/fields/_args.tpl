@@ -5,18 +5,20 @@ Args used by the container.
   {{- $ctx := .ctx -}}
   {{- $containerObject := $ctx.containerObject -}}
 
+  {{- $argValues := include "bjw-s.common.lib.container.getOption" (dict "ctx" $ctx "option" "args") -}}
+  {{/* This is a terrible hack because Helm otherwise doesn't understand how to decode the object */}}
+  {{- $argValues = printf "args:\n%s" ($argValues | indent 2) | fromYaml -}}
+  {{- $argValues = $argValues.args -}}
+
   {{- /* Default to empty list */ -}}
   {{- $args := list -}}
 
   {{- /* See if an override is desired */ -}}
-  {{- if not (empty (get $containerObject "args")) -}}
-    {{- $option := get $containerObject "args" -}}
-    {{- if not (empty $option) -}}
-      {{- if kindIs "string" $option -}}
-        {{- $args = append $args $option -}}
-      {{- else -}}
-        {{- $args = $option -}}
-      {{- end -}}
+  {{- if not (empty $argValues) -}}
+    {{- if kindIs "string" $argValues -}}
+      {{- $args = append $args $argValues -}}
+    {{- else -}}
+      {{- $args = $argValues -}}
     {{- end -}}
   {{- end -}}
 

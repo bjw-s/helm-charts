@@ -194,6 +194,24 @@ controllers: {}
 #     # Controller-specific overrides for `defaultPodOptions` keys
 #     pod: {}
 
+#     # -- Whether to apply defaultContainerOptions to initContainers
+#     applyDefaultContainerOptionsToInitContainers: true
+#     # -- Set default options for all (init)Containers here
+#     # Each of these options can be overridden on a container level
+#     defaultContainerOptions:
+#       # -- Override the command(s) for the containers
+#       command:
+#       # -- Override the args for the containers
+#       args:
+#       # -- Environment variables.
+#       env:
+#       # -- Secrets and/or ConfigMaps that will be loaded as environment variables.
+#       envFrom: {}
+#       # -- Set the resource requests / limits for the container.
+#       resources:
+#       # -- Configure the Security Context for the container
+#       securityContext: {}
+
 #     containers:
 #       main:
 #         # -- Override the container name
@@ -211,11 +229,11 @@ controllers: {}
 #           # -- image pull policy
 #           pullPolicy:
 
-#         # -- Override the command(s) for the default container
+#         # -- Override the command(s) for the container
 #         command: []
-#         # -- Override the args for the default container
+#         # -- Override the args for the container
 #         args: []
-#         # -- Override the working directory for the default container
+#         # -- Override the working directory for the container
 #         workingDir:
 
 #         # -- Environment variables. Template enabled.
@@ -409,6 +427,18 @@ configMaps:
   #   # -- configMap data content. Helm template enabled.
   #   data:
   #     foo: bar
+
+# -- A path in your parent's chart filesystem where you can add files to be converted into individual ConfigMaps.
+# Your files will need to be two levels deep from the base path.
+# For example, if you set this to `files/`, and you have this file tree
+# files:
+# └── configmap1
+#     ├── file1
+#     └── file2
+# This will generate a ConfigMap named `configmap1` with keys `file1` and `file2`, values being the respective contents of those files.
+# If your file contains `gotpl` syntax that you don't want templated by Helm, prefix the file extension with `.escape` and it will be treated as a regular string.
+# For example, `file1.escape.yaml` will be converted to `file1.yaml` in the ConfigMap with the contents of the file not templated.
+configMapsFromFolderBasePath: null
 
 # -- Configure the services for the chart here.
 # Additional services can be added by adding a dictionary key similar to the 'main' service.

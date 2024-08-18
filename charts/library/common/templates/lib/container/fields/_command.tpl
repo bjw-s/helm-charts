@@ -5,18 +5,20 @@ Command used by the container.
   {{- $ctx := .ctx -}}
   {{- $containerObject := $ctx.containerObject -}}
 
+  {{- $commandValues := include "bjw-s.common.lib.container.getOption" (dict "ctx" $ctx "option" "command") -}}
+  {{/* This is a terrible hack because Helm otherwise doesn't understand how to decode the object */}}
+  {{- $commandValues = printf "command:\n%s" ($commandValues | indent 2) | fromYaml -}}
+  {{- $commandValues = $commandValues.command -}}
+
   {{- /* Default to empty list */ -}}
   {{- $command := list -}}
 
   {{- /* See if an override is desired */ -}}
-  {{- if not (empty (get $containerObject "command")) -}}
-    {{- $option := get $containerObject "command" -}}
-    {{- if not (empty $option) -}}
-      {{- if kindIs "string" $option -}}
-        {{- $command = append $command $option -}}
-      {{- else -}}
-        {{- $command = $option -}}
-      {{- end -}}
+  {{- if not (empty $commandValues) -}}
+    {{- if kindIs "string" $commandValues -}}
+      {{- $command = append $command $commandValues -}}
+    {{- else -}}
+      {{- $command = $commandValues -}}
     {{- end -}}
   {{- end -}}
 
