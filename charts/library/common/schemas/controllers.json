@@ -51,6 +51,11 @@
         "type": "boolean",
         "default": true
       },
+      "defaultContainerOptionsStrategy": {
+        "type": "string",
+        "default": "overwrite",
+        "enum": ["overwrite", "merge"]
+      },
       "defaultContainerOptions": {
         "type": "object",
         "additionalProperties": false,
@@ -66,6 +71,9 @@
           },
           "envFrom": {
             "$ref": "containers.json#/envFrom"
+          },
+          "image": {
+            "$ref": "containers.json#/image"
           },
           "resources": {
             "$ref": "k8s-api.json#/core.v1.ResourceRequirements"

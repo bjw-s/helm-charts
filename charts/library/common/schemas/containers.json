@@ -30,21 +30,7 @@
         "$ref": "#/envFrom"
       },
       "image": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "pullPolicy": {
-            "type": "string",
-            "enum": ["Always", "IfNotPresent"]
-          },
-          "repository": {
-            "type": "string"
-          },
-          "tag": {
-            "type": ["string", "number"]
-          }
-        },
-        "required": ["repository", "tag"]
+        "$ref": "#/image"
       },
       "lifecycle": {
         "$ref": "k8s-api.json#/core.v1.Lifecycle"
@@ -182,6 +168,23 @@
           },
           "oneOf": [{"required": ["name"]}, {"required": ["identifier"]}]
         }
+      }
+    }
+  },
+
+  "image": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "pullPolicy": {
+        "type": "string",
+        "enum": ["Always", "IfNotPresent"]
+      },
+      "repository": {
+        "type": "string"
+      },
+      "tag": {
+        "type": ["string", "number"]
       }
     }
   },

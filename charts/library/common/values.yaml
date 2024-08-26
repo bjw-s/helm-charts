@@ -196,9 +196,21 @@ controllers: {}
 
 #     # -- Whether to apply defaultContainerOptions to initContainers
 #     applyDefaultContainerOptionsToInitContainers: true
+#     # -- Set the strategy for the default container options. Defaults to
+#     #    overwrite: If container-level options are set, use those instead of the defaults.
+#     #    merge: If container-level options are set, merge them with the defaults
+#     # @default -- overwrite
+#     defaultContainerOptionsStrategy: overwrite
 #     # -- Set default options for all (init)Containers here
 #     # Each of these options can be overridden on a container level
 #     defaultContainerOptions:
+#       image:
+#         # -- Override the image repository for the containers
+#         repository:
+#         # -- Override the image tag for the containers
+#         tag:
+#         # -- Override the image pull policy for the containers
+#         pullPolicy:
 #       # -- Override the command(s) for the containers
 #       command:
 #       # -- Override the args for the containers

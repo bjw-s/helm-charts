@@ -21,13 +21,13 @@ Returns the value for initContainers
 
     {{- if $containerEnabled -}}
       {{- /* Create object from the container values */ -}}
-      {{- $containerObject := (include "bjw-s.common.lib.container.valuesToObject" (dict "rootContext" $rootContext "id" $key "values" $containerValues)) | fromYaml -}}
+      {{- $containerObject := (include "bjw-s.common.lib.container.valuesToObject" (dict "rootContext" $rootContext "controllerObject" $controllerObject "containerType" "init" "id" $key "values" $containerValues)) | fromYaml -}}
 
       {{- /* Perform validations on the Container before rendering */ -}}
       {{- include "bjw-s.common.lib.container.validate" (dict "rootContext" $ "controllerObject" $controllerObject "containerObject" $containerObject) -}}
 
       {{- /* Generate the Container spec */ -}}
-      {{- $renderedContainer := include "bjw-s.common.lib.container.spec" (dict "rootContext" $rootContext "controllerObject" $controllerObject "containerType" "init" "containerObject" $containerObject) | fromYaml -}}
+      {{- $renderedContainer := include "bjw-s.common.lib.container.spec" (dict "rootContext" $rootContext "controllerObject" $controllerObject "containerObject" $containerObject) | fromYaml -}}
       {{- $_ := set $renderedContainers $key $renderedContainer -}}
 
       {{- /* Determine the Container order */ -}}

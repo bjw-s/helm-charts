@@ -5,11 +5,7 @@ Env field used by the container.
   {{- $ctx := .ctx -}}
   {{- $rootContext := $ctx.rootContext -}}
   {{- $containerObject := $ctx.containerObject -}}
-
-  {{- $envValues := include "bjw-s.common.lib.container.getOption" (dict "ctx" $ctx "option" "env") -}}
-  {{/* This is a terrible hack because Helm otherwise doesn't understand how to decode the object */}}
-  {{- $envValues = printf "env:\n%s" ($envValues | indent 2) | fromYaml -}}
-  {{- $envValues = $envValues.env -}}
+  {{- $envValues := get $containerObject "env" -}}
 
   {{- /* Default to empty list */ -}}
   {{- $envList := list -}}
