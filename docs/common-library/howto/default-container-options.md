@@ -7,6 +7,16 @@ hide:
 
 It is possible to configure default container options under the `controllers.*.defaultContainerOptions` key. These options will be applied to all containers within the controller.
 
+The following fields can be configured on this level:
+
+- `args`
+- `command`
+- `env`
+- `envFrom`
+- `image`
+- `resources`
+- `securityContext`
+
 ## Only applying to regular containers
 
 By default the `defaultContainerOptions` will be applied to both `initContainers` and regular `containers`.
