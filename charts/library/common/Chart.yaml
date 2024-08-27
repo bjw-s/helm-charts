@@ -20,6 +20,9 @@ annotations:
     - kind: added
       description: |-
         Added support for setting `defaultContainerOptions`.
+      links:
+        - name: Documentation
+          url: https://bjw-s.github.io/helm-charts/docs/common-library/howto/default-container-options
     - kind: added
       description: |-
         Added support for `loadBalancerClass`.
