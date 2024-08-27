@@ -75,6 +75,9 @@ nav:
               - NFS share: common-library/storage/types/nfs-share.md
               - persistentVolumeClaim: common-library/storage/types/persistentVolumeClaim.md
               - Secret: common-library/storage/types/secret.md
+      - How To...:
+          - common-library/howto/index.md
+          - Default container options: common-library/howto/default-container-options.md
   - App Template:
       - app-template/index.md
       - How To...:

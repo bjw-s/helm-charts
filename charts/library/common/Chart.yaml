@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.3.2
+version: 3.4.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,16 +16,16 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        Added support for specifying unsupported raw resources.
+        Add configMapsFromFolderBasePath to create ConfigMaps from a folder
     - kind: added
       description: |-
-        Added `stdin` and `tty` fields to container spec. (fixed in v3.3.2)
+        Added support for setting `defaultContainerOptions`.
+      links:
+        - name: Documentation
+          url: https://bjw-s.github.io/helm-charts/docs/common-library/howto/default-container-options
     - kind: added
       description: |-
-        Added `persistentVolumeClaimRetentionPolicy` field to statefulset spec.
+        Added support for `loadBalancerClass`.
     - kind: fixed
       description: |-
-        Added `externalName` field to service schema. (fixed in v3.3.1)
-    - kind: fixed
-      description: |-
-        Always allow specifying `nodePort` field on service ports.
+        Fixed volume name reference when persistence key matches release name.

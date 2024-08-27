@@ -1,0 +1,142 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: container resources
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        notExists:
+          path: spec.template.spec.containers[0].resources
+
+  - it: defaultContainerOption should pass
+    set:
+      controllers:
+        main:
+          defaultContainerOptions:
+            resources:
+              requests:
+                memory: 1Gi
+          initContainers:
+            test:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].resources
+          value:
+            requests:
+              memory: 1Gi
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.initContainers[0].resources
+          value:
+            requests:
+              memory: 1Gi
+
+  - it: defaultContainerOption with container override should pass
+    set:
+      controllers:
+        main:
+          defaultContainerOptions:
+            resources:
+              requests:
+                memory: 1Gi
+          containers:
+            main:
+              resources:
+                requests:
+                  memory: 2Gi
+          initContainers:
+            test:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].resources
+          value:
+            requests:
+              memory: 2Gi
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.initContainers[0].resources
+          value:
+            requests:
+              memory: 1Gi
+
+  - it: defaultContainerOption with initContainer override should pass
+    set:
+      controllers:
+        main:
+          defaultContainerOptions:
+            resources:
+              requests:
+                memory: 1Gi
+          initContainers:
+            test:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+              resources:
+                requests:
+                  memory: 2Gi
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].resources
+          value:
+            requests:
+              memory: 1Gi
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.initContainers[0].resources
+          value:
+            requests:
+              memory: 2Gi
+
+  - it: defaultContainerOption disabled for initContainer should pass
+    set:
+      controllers:
+        main:
+          applyDefaultContainerOptionsToInitContainers: false
+          defaultContainerOptions:
+            resources:
+              requests:
+                memory: 1Gi
+          initContainers:
+            test:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].resources
+          value:
+            requests:
+              memory: 1Gi
+      - documentIndex: 0
+        notExists:
+          path: spec.template.spec.initContainers[0].resources
