@@ -51,7 +51,9 @@ Returns the value for volumes
             {{- $pvcName = (printf "%s-%s" (include "bjw-s.common.lib.chart.names.fullname" $rootContext) $persistenceValues.nameOverride) -}}
           {{- end -}}
         {{- else -}}
-          {{- $pvcName = (printf "%s-%s" (include "bjw-s.common.lib.chart.names.fullname" $rootContext) $identifier) -}}
+          {{- if not (eq $pvcName $identifier) -}}
+            {{- $pvcName = (printf "%s-%s" (include "bjw-s.common.lib.chart.names.fullname" $rootContext) $identifier) -}}
+          {{- end -}}
         {{- end -}}
       {{- end -}}
       {{- $_ := set $volume "persistentVolumeClaim" (dict "claimName" $pvcName) -}}

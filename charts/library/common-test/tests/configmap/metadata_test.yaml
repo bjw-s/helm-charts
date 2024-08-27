@@ -98,3 +98,56 @@ tests:
             global_label: test
             helm.sh/chart: common-test-1.0.0
             test_label: test
+
+  - it: default metadata from folder should pass
+    set:
+      configMaps:
+        config:
+          data:
+            test: test
+      configMapsFromFolderBasePath: ci/configMapsFolder
+    asserts:
+      - hasDocuments:
+          count: 4
+      - documentIndex: &FirstConfigmapDocument 1
+        isKind:
+          of: ConfigMap
+      - documentIndex: *FirstConfigmapDocument
+        notExists:
+          path: metadata.annotations
+      - documentIndex: *FirstConfigmapDocument
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            helm.sh/chart: common-test-1.0.0
+      - documentIndex: &SecondConfigmapDocument 2
+        isKind:
+          of: ConfigMap
+      - documentIndex: *SecondConfigmapDocument
+        notExists:
+          path: metadata.annotations
+      - documentIndex: *SecondConfigmapDocument
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            helm.sh/chart: common-test-1.0.0
+      - documentIndex: &ThirdConfigmapDocument 3
+        isKind:
+          of: ConfigMap
+      - documentIndex: *ThirdConfigmapDocument
+        notExists:
+          path: metadata.annotations
+      - documentIndex: *ThirdConfigmapDocument
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            helm.sh/chart: common-test-1.0.0

@@ -3,10 +3,10 @@
 suite: container image tag
 templates:
   - common.yaml
-values:
-  - ../_values/controllers_main_default_container.yaml
 tests:
   - it: string tag should pass
+    values:
+      - ../_values/controllers_main_default_container.yaml
     set:
       controllers.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
@@ -21,6 +21,8 @@ tests:
           value: ghcr.io/mendhak/http-https-echo:latest
 
   - it: integer tag should pass
+    values:
+      - ../_values/controllers_main_default_container.yaml
     set:
       controllers.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
@@ -35,6 +37,8 @@ tests:
           value: ghcr.io/mendhak/http-https-echo:1.23
 
   - it: template tag should pass
+    values:
+      - ../_values/controllers_main_default_container.yaml
     set:
       controllers.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
@@ -47,3 +51,38 @@ tests:
         equal:
           path: spec.template.spec.containers[0].image
           value: ghcr.io/mendhak/http-https-echo:1.0.0
+
+  - it: tag from defaultContainerOptions should pass
+    set:
+      controllers.main:
+        defaultContainerOptions:
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+            tag: 32
+        containers:
+          main: {} # needed to have at least a container enabled
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].image
+          value: ghcr.io/mendhak/http-https-echo:32
+
+  - it: tag from defaultContainerOptions with container override should pass
+    set:
+      controllers.main.defaultContainerOptions.image:
+        repository: ghcr.io/mendhak/http-https-echo
+        tag: 32
+      controllers.main.containers.main.image:
+        repository: ghcr.io/mendhak/http-https-echo-override
+        tag: 33
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].image
+          value: ghcr.io/mendhak/http-https-echo-override:33

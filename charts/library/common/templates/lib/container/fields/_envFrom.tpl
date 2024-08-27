@@ -1,14 +1,15 @@
 {{/*
-Env field used by the container.
+envFrom field used by the container.
 */}}
 {{- define "bjw-s.common.lib.container.field.envFrom" -}}
   {{- $ctx := .ctx -}}
   {{- $rootContext := $ctx.rootContext -}}
   {{- $containerObject := $ctx.containerObject -}}
+  {{- $envFromValues := get $containerObject "envFrom" -}}
 
-  {{- if not (empty (get $containerObject "envFrom")) -}}
+  {{- if not (empty $envFromValues) -}}
     {{- $envFrom := list -}}
-    {{- range $containerObject.envFrom -}}
+    {{- range $envFromValues -}}
       {{- $item := dict -}}
 
       {{- if hasKey . "configMap" -}}

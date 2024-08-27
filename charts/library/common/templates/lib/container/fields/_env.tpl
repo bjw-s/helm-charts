@@ -5,25 +5,26 @@ Env field used by the container.
   {{- $ctx := .ctx -}}
   {{- $rootContext := $ctx.rootContext -}}
   {{- $containerObject := $ctx.containerObject -}}
+  {{- $envValues := get $containerObject "env" -}}
 
   {{- /* Default to empty list */ -}}
   {{- $envList := list -}}
 
   {{- /* See if an override is desired */ -}}
-  {{- if not (empty (get $containerObject "env")) -}}
-    {{- if kindIs "slice" $containerObject.env -}}
+  {{- if not (empty $envValues) -}}
+    {{- if kindIs "slice" $envValues -}}
       {{- /* Env is a list so we assume the order is already as desired */ -}}
-      {{- range $name, $var := $containerObject.env -}}
+      {{- range $name, $var := $envValues -}}
         {{- if kindIs "int" $name -}}
           {{- $name = required "environment variables as a list of maps require a name field" $var.name -}}
         {{- end -}}
       {{- end -}}
-      {{- $envList = $containerObject.env -}}
+      {{- $envList = $envValues -}}
     {{- else -}}
       {{- /* Env is a map so we must check if ordering is desired */ -}}
       {{- $graph := dict -}}
 
-      {{- range $name, $var := $containerObject.env -}}
+      {{- range $name, $var := $envValues -}}
         {{- if kindIs "map" $var -}}
           {{- /* Value is a map so ordering can be specified */ -}}
           {{- if empty (dig "dependsOn" nil $var) -}}
@@ -44,7 +45,7 @@ Env field used by the container.
 
       {{- range $name := $args.out -}}
         {{- $envItem := dict "name" $name -}}
-        {{- $envValue := get $containerObject.env $name -}}
+        {{- $envValue := get $envValues $name -}}
 
         {{- if kindIs "map" $envValue -}}
           {{- $envItem := merge $envItem (omit $envValue "dependsOn") -}}

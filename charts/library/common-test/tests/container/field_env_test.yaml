@@ -237,3 +237,37 @@ tests:
           value:
             name: DEPENDENT_ENV
             value: moo_two
+
+  - it: env from defaultContainerOptions should pass
+    set:
+      controllers.main.defaultContainerOptions:
+        env:
+          string: value_of_env
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].env[0]
+          value:
+            name: string
+            value: value_of_env
+
+  - it: env from defaultContainerOptions with container override should pass
+    set:
+      controllers.main.defaultContainerOptions:
+        env:
+          string: value_of_env
+      controllers.main.containers.main.env:
+        someThingElse: value_of_env
+    asserts:
+      - documentIndex: &DeploymentDoc 0
+        isKind:
+          of: Deployment
+      - documentIndex: *DeploymentDoc
+        equal:
+          path: spec.template.spec.containers[0].env[0]
+          value:
+            name: someThingElse
+            value: value_of_env

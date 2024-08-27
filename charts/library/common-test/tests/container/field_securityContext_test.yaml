@@ -1,0 +1,59 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: container securityContext
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: default should pass
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        notExists:
+          path: spec.template.spec.containers[0].securityContext
+
+  - it: defaultContainerOption should pass
+    set:
+      controllers:
+        main:
+          defaultContainerOptions:
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].securityContext
+          value:
+            runAsUser: 1000
+            runAsGroup: 1000
+
+  - it: defaultContainerOption with container override should pass
+    set:
+      controllers:
+        main:
+          defaultContainerOptions:
+            securityContext:
+              runAsUser: 1000
+              runAsGroup: 1000
+          containers:
+            main:
+              securityContext:
+                runAsUser: 568
+                runAsGroup: 568
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.containers[0].securityContext
+          value:
+            runAsUser: 568
+            runAsGroup: 568

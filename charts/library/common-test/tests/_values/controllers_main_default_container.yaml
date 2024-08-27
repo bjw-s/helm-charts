@@ -6,4 +6,3 @@ controllers:
         image:
           repository: ghcr.io/mendhak/http-https-echo
           tag: 31
-          pullPolicy: IfNotPresent
