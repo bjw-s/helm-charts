@@ -23,3 +23,6 @@ annotations:
     - kind: added
       description: |-
         Added support for `loadBalancerClass`.
+    - kind: fixed
+      description: |-
+        Fixed volume name reference when persistence key matches release name.
