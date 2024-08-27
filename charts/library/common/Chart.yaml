@@ -20,3 +20,6 @@ annotations:
     - kind: added
       description: |-
         Added support for setting `defaultContainerOptions`.
+    - kind: added
+      description: |-
+        Added support for `loadBalancerClass`.
