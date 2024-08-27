@@ -44,7 +44,7 @@ The expected `resources` field on the `main` container is expected to look like 
 ```yaml
 resources:
   requests:
-    cpu: 150m
+    cpu: 100m
 ```
 
 ### Merge
@@ -79,5 +79,5 @@ The expected `resources` field on the `main` container is expected to look like 
 resources:
   requests:
     memory: 1Gi
-    cpu: 150m
+    cpu: 100m
 ```
