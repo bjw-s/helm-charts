@@ -32,6 +32,9 @@
         "type": "array",
         "items": {"type": "string"}
       },
+      "loadBalancerClass": {
+        "type": "string"
+      },
       "externalTrafficPolicy": {
         "type": "string",
         "enum": ["Cluster", "Local"]
