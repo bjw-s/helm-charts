@@ -54,7 +54,7 @@ Renders configMap objects required by the chart from a folder in the repo's path
         {{- $filesContent = merge $filesContent (dict $key ($.Files.Get $file_name))  -}}
       {{- end -}}
     {{- end -}}
-    
+
     {{- $configMapValues := dict "enabled" true "labels" dict "annotations" dict "data" $filesContent "binaryData" $binaryFilesContent -}}
     {{- $existingConfigMaps := (get $rootValues "configMaps"| default dict) -}}
     {{- $mergedConfigMaps := deepCopy $existingConfigMaps | merge (dict (base $path) $configMapValues) -}}
