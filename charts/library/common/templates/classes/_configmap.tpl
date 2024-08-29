@@ -31,8 +31,12 @@ metadata:
     {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
+{{- with $configMapObject.data }}
 data:
-  {{- with $configMapObject.data }}
     {{- tpl (toYaml .) $rootContext | nindent 2 }}
-  {{- end }}
+{{- end }}
+{{- with $configMapObject.binaryData }}
+binaryData:
+    {{- tpl (toYaml .) $rootContext | nindent 2 }}
+{{- end }}
 {{- end -}}
