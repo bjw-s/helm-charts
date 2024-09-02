@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.4.0
+version: 3.5.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,16 +16,4 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        Add configMapsFromFolderBasePath to create ConfigMaps from a folder
-    - kind: added
-      description: |-
-        Added support for setting `defaultContainerOptions`.
-      links:
-        - name: Documentation
-          url: https://bjw-s.github.io/helm-charts/docs/common-library/howto/default-container-options
-    - kind: added
-      description: |-
-        Added support for `loadBalancerClass`.
-    - kind: fixed
-      description: |-
-        Fixed volume name reference when persistence key matches release name.
+        Add support for multiple ServiceAccounts
