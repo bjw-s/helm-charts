@@ -405,6 +405,19 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+  # -- Additional Service Accounts to create
+  # Each extra service account admit the same keys as the main service account
+  extraServiceAccounts: {}
+  #   serviceAccount2:
+  #     create: true
+  #     annotations:
+  #       test: test
+  #   serviceAccount3:
+  #     create: true
+  #     name: custom-service-account
+  #     labels:
+  #       test: test
+
 # -- Use this to populate secrets with the values you specify.
 # Be aware that these values are not encrypted by default, and could therefore visible
 # to anybody with access to the values.yaml file.
@@ -768,7 +781,8 @@ networkpolicies:
 
 # -- Configure any unsupported raw resources here.
 # @default -- See below
-rawResources: {}
+rawResources:
+  {}
   # example:
   #   # -- Enables or disables the resource. Defaults to true
   #   enabled: false
