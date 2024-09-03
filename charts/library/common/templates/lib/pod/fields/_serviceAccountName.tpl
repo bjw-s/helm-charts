@@ -10,7 +10,7 @@ Returns the value for serviceAccountName
   {{- if (get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "create") -}}
     {{- $serviceAccountName = get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "name" -}}
   {{- end -}}
-  
+
   {{- with $controllerObject.serviceAccount -}}
     {{- if hasKey . "identifier" -}}
       {{- $serviceAccountName = get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" .identifier) | fromYaml) "name" -}}
