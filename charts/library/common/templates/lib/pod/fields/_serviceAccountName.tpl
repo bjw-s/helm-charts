@@ -3,9 +3,16 @@ Returns the value for serviceAccountName
 */ -}}
 {{- define "bjw-s.common.lib.pod.field.serviceAccountName" -}}
   {{- $rootContext := .ctx.rootContext -}}
+  {{- $controllerObject := .ctx.controllerObject -}}
 
-  {{- $serviceAccountValues := (mustDeepCopy $rootContext.Values.serviceAccount) -}}
-  {{- $serviceAccountObject := (include "bjw-s.common.lib.serviceAccount.valuesToObject" (dict "rootContext" $rootContext "id" "default" "values" $serviceAccountValues)) | fromYaml -}}
-  {{- $serviceAccountObject.name -}}
+  {{- $serviceAccountName := get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "name" -}}
+  {{- with $controllerObject.serviceAccount -}}
+    {{- if hasKey . "identifier" -}}
+      {{- $serviceAccountName = get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" .identifier) | fromYaml) "name" -}}
+    {{- else if hasKey . "name" -}}
+      {{- $serviceAccountName = .name -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $serviceAccountName -}}
 
 {{- end -}}
