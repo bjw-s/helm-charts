@@ -2,7 +2,6 @@
   "instance": {
     "type": "object",
     "additionalProperties": false,
-
     "properties": {
       "enabled": {
         "type": "boolean",
@@ -10,7 +9,13 @@
       },
       "type": {
         "type": "string",
-        "enum": ["deployment", "statefulset", "daemonset", "cronjob", "job"],
+        "enum": [
+          "deployment",
+          "statefulset",
+          "daemonset",
+          "cronjob",
+          "job"
+        ],
         "default": "deployment"
       },
       "annotations": {
@@ -26,7 +31,10 @@
         "$ref": "pod.json#/options"
       },
       "replicas": {
-        "type": ["integer", "null"],
+        "type": [
+          "integer",
+          "null"
+        ],
         "default": 1
       },
       "revisionHistoryLimit": {
@@ -54,7 +62,10 @@
       "defaultContainerOptionsStrategy": {
         "type": "string",
         "default": "overwrite",
-        "enum": ["overwrite", "merge"]
+        "enum": [
+          "overwrite",
+          "merge"
+        ]
       },
       "defaultContainerOptions": {
         "type": "object",
@@ -94,23 +105,51 @@
         "additionalProperties": {
           "$ref": "containers.json#/container"
         }
+      },
+      "serviceAccount": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          }
+        }
       }
     },
-
     "allOf": [
       {
         "if": {
           "properties": {
-            "type": {"const": "deployment"}
+            "type": {
+              "const": "deployment"
+            }
           }
         },
         "then": {
           "not": {
             "anyOf": [
-              {"required": ["statefulset"]},
-              {"required": ["cronjob"]},
-              {"required": ["job"]},
-              {"required": ["daemonset"]}
+              {
+                "required": [
+                  "statefulset"
+                ]
+              },
+              {
+                "required": [
+                  "cronjob"
+                ]
+              },
+              {
+                "required": [
+                  "job"
+                ]
+              },
+              {
+                "required": [
+                  "daemonset"
+                ]
+              }
             ]
           }
         }
@@ -118,16 +157,32 @@
       {
         "if": {
           "properties": {
-            "type": {"const": "statefulset"}
+            "type": {
+              "const": "statefulset"
+            }
           },
-          "required": ["type"]
+          "required": [
+            "type"
+          ]
         },
         "then": {
           "not": {
             "anyOf": [
-              {"required": ["cronjob"]},
-              {"required": ["job"]},
-              {"required": ["daemonset"]}
+              {
+                "required": [
+                  "cronjob"
+                ]
+              },
+              {
+                "required": [
+                  "job"
+                ]
+              },
+              {
+                "required": [
+                  "daemonset"
+                ]
+              }
             ]
           }
         }
@@ -135,49 +190,83 @@
       {
         "if": {
           "properties": {
-            "type": {"const": "cronjob"}
+            "type": {
+              "const": "cronjob"
+            }
           },
-          "required": ["type"]
+          "required": [
+            "type"
+          ]
         },
         "then": {
           "allOf": [
             {
               "not": {
                 "anyOf": [
-                  {"required": ["statefulset"]},
-                  {"required": ["job"]},
-                  {"required": ["daemonset"]}
+                  {
+                    "required": [
+                      "statefulset"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "job"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "daemonset"
+                    ]
+                  }
                 ]
               }
             },
-            {"required": ["cronjob"]}
+            {
+              "required": [
+                "cronjob"
+              ]
+            }
           ]
         }
       },
       {
         "if": {
           "properties": {
-            "type": {"const": "job"}
+            "type": {
+              "const": "job"
+            }
           },
-          "required": ["type"]
+          "required": [
+            "type"
+          ]
         },
         "then": {
           "not": {
             "anyOf": [
-              {"required": ["statefulset"]},
-              {"required": ["cronjob"]},
-              {"required": ["daemonset"]}
+              {
+                "required": [
+                  "statefulset"
+                ]
+              },
+              {
+                "required": [
+                  "cronjob"
+                ]
+              },
+              {
+                "required": [
+                  "daemonset"
+                ]
+              }
             ]
           }
         }
       }
     ]
   },
-
   "statefulset": {
     "type": "object",
     "additionalProperties": false,
-
     "properties": {
       "podManagementPolicy": {
         "type": "string"
@@ -188,12 +277,18 @@
         "properties": {
           "whenDeleted": {
             "type": "string",
-            "enum": ["Delete", "Retain"],
+            "enum": [
+              "Delete",
+              "Retain"
+            ],
             "default": "Retain"
           },
           "whenScaled": {
             "type": "string",
-            "enum": ["Delete", "Retain"],
+            "enum": [
+              "Delete",
+              "Retain"
+            ],
             "default": "Retain"
           }
         }
@@ -206,11 +301,9 @@
       }
     }
   },
-
   "statefulset.volumeClaimTemplate": {
     "type": "object",
     "additionalProperties": false,
-
     "properties": {
       "enabled": {
         "type": "boolean",
@@ -225,11 +318,21 @@
           "$ref": "persistence.json#/mountPathCollection"
         }
       },
-      "annotations": {"$ref": "definitions.json#/annotations"},
-      "dataSource": {"$ref": "persistence.json#/dataSourceReference"},
-      "dataSourceRef": {"$ref": "persistence.json#/dataSourceReference"},
-      "globalMounts": {"$ref": "persistence.json#/globalMounts"},
-      "labels": {"$ref": "definitions.json#/labels"},
+      "annotations": {
+        "$ref": "definitions.json#/annotations"
+      },
+      "dataSource": {
+        "$ref": "persistence.json#/dataSourceReference"
+      },
+      "dataSourceRef": {
+        "$ref": "persistence.json#/dataSourceReference"
+      },
+      "globalMounts": {
+        "$ref": "persistence.json#/globalMounts"
+      },
+      "labels": {
+        "$ref": "definitions.json#/labels"
+      },
       "name": {
         "type": "string"
       },
@@ -240,13 +343,14 @@
         "type": "string"
       }
     },
-    "required": ["name", "size"]
+    "required": [
+      "name",
+      "size"
+    ]
   },
-
   "cronjob": {
     "type": "object",
     "additionalProperties": false,
-
     "properties": {
       "backoffLimit": {
         "type": "integer",
@@ -288,13 +392,13 @@
         "type": "integer"
       }
     },
-    "required": ["schedule"]
+    "required": [
+      "schedule"
+    ]
   },
-
   "job": {
     "type": "object",
     "additionalProperties": false,
-
     "properties": {
       "backoffLimit": {
         "type": "integer",
