@@ -5,7 +5,12 @@ Returns the value for serviceAccountName
   {{- $rootContext := .ctx.rootContext -}}
   {{- $controllerObject := .ctx.controllerObject -}}
 
-  {{- $serviceAccountName := get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "name" -}}
+  {{- $serviceAccountName := "default" -}}
+
+  {{- if (get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "create") -}}
+    {{- $serviceAccountName = get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "name" -}}
+  {{- end -}}
+  
   {{- with $controllerObject.serviceAccount -}}
     {{- if hasKey . "identifier" -}}
       {{- $serviceAccountName = get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" .identifier) | fromYaml) "name" -}}
