@@ -1,0 +1,60 @@
+---
+suite: rbac metadata
+
+set:
+  serviceAccount:
+    name: test-sa
+
+templates:
+  - common.yaml
+values:
+  - ../_values/rbac_values.yaml
+tests:
+  - it: default metadata should pass
+    asserts:
+      - hasDocuments:
+          count: 4
+      - documentIndex: &RoleDocument 2
+        isKind:
+          of: Role
+      - documentIndex: *RoleDocument
+        notExists:
+          path: metadata.annotations
+      - documentIndex: *RoleDocument
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            helm.sh/chart: common-test-1.0.0
+
+  - it: custom metadata should pass
+    set:
+      rbac:
+        roles:
+          defaultRole:
+            annotations:
+              test_annotation: test
+            labels:
+              test_label: test
+    asserts:
+      - hasDocuments:
+          count: 4
+      - documentIndex: &RoleDocument 2
+        isKind:
+          of: Role
+      - documentIndex: *RoleDocument
+        equal:
+          path: metadata.annotations
+          value:
+            test_annotation: test
+      - documentIndex: *RoleDocument
+        equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            helm.sh/chart: common-test-1.0.0
+            test_label: test

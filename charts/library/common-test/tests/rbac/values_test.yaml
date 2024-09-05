@@ -1,0 +1,52 @@
+---
+suite: rbac values
+
+set:
+  serviceAccount:
+    name: test-sa
+
+templates:
+  - common.yaml
+values:
+  - ../_values/rbac_values.yaml
+tests:
+  - it: default role and rolebinding should pass
+    asserts:
+      - hasDocuments:
+          count: 4
+      - documentIndex: &RoleDocument 2
+        isKind:
+          of: Role
+      - documentIndex: *RoleDocument
+        equal:
+          path: rules[0].verbs
+          value: ["get", "list"]
+
+      - documentIndex: &BindingDocument 3
+        isKind:
+          of: RoleBinding
+      - documentIndex: *BindingDocument
+        equal:
+          path: subjects[0].name
+          value: "test-sa"
+
+  - it: custom role values should pass
+    set:
+      rbac:
+        roles:
+          customRole:
+            type: ClusterRole
+            rules:
+              - apiGroups: ["*"]
+                resources: ["*"]
+                verbs: ["get", "list", "watch"]
+    asserts:
+      - hasDocuments:
+          count: 5
+      - documentIndex: &RoleDocument 2
+        isKind:
+          of: ClusterRole
+      - documentIndex: *RoleDocument
+        equal:
+          path: rules[0].verbs
+          value: ["get", "list", "watch"]
