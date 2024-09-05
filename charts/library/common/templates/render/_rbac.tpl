@@ -2,7 +2,7 @@
 Renders RBAC objects required by the chart.
 */}}
 {{- define "bjw-s.common.render.rbac" -}}
-  {{- $rootContext := . -}}  
+  {{- $rootContext := . -}}
   {{- include "bjw-s.common.render.rbac.roles" (dict "rootContext" $rootContext) -}}
 
   {{- include "bjw-s.common.render.rbac.roleBindings" (dict "rootContext" $rootContext) -}}

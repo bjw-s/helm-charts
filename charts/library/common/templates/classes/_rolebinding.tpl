@@ -25,10 +25,10 @@ This template serves as a blueprint for generating RoleBinding objects in Kubern
       {{- else -}}
         {{- $subject := dict "name" .name "kind" .kind "namespace" .namespace -}}
         {{- $subjects = mustAppend $subjects $subject -}}
-      {{- end -}} 
+      {{- end -}}
     {{- end -}}
     {{- $subjects = $subjects | uniq | toYaml -}}
-  {{- end -}} 
+  {{- end -}}
 
   {{- $role := dict -}}
   {{- with  $roleBindingObject.roleRef -}}

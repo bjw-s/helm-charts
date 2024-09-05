@@ -16,7 +16,7 @@ This template serves as a blueprint for generating Role objects in Kubernetes.
   {{- $rules := "" -}}
   {{- with $roleObject.rules -}}
     {{- $rules = (toYaml . ) | trim -}}
-  {{- end -}} 
+  {{- end -}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 {{ with $roleObject.type -}}
