@@ -20,3 +20,6 @@ annotations:
     - kind: added
       description: |-
         Add support for internalTrafficPolicy field in Services
+    - kind: added
+      description: |-
+        Add support for multiple ServiceAccounts

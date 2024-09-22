@@ -116,6 +116,14 @@ controllers: {}
 #     # -- ReplicaSet revision history limit
 #     revisionHistoryLimit: 3
 
+#     # -- Set the controller service account name
+#     # This is entirely optional, if empty or `null` the controller will use the default service account
+#     serviceAccount:
+#       # -- Only use one of `name` or `identifier`. In case both are specified it will prioritize `identifier`.
+#       # -- Reference a service account identifier from this values.yaml
+#       identifier:
+#       # -- Explicitly set the service account name
+#       name:
 #     # -- CronJob configuration. Required only when using `controller.type: cronjob`.
 #     # @default -- See below
 #     cronjob:
@@ -404,6 +412,19 @@ serviceAccount:
   # -- The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
+
+  # -- Additional Service Accounts to create
+  # Each extra service account admit the same keys as the main service account
+  extraServiceAccounts: {}
+  #   serviceAccount2:
+  #     create: true
+  #     annotations:
+  #       test: test
+  #   serviceAccount3:
+  #     create: true
+  #     name: custom-service-account
+  #     labels:
+  #       test: test
 
 # -- Use this to populate secrets with the values you specify.
 # Be aware that these values are not encrypted by default, and could therefore visible
