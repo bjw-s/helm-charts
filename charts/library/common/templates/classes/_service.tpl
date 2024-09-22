@@ -60,6 +60,9 @@ spec:
   {{- else }}
   type: {{ $svcType }}
   {{- end }}
+  {{- if $serviceObject.internalTrafficPolicy }}
+  internalTrafficPolicy: {{ $serviceObject.internalTrafficPolicy }}
+  {{- end }}
   {{- if $serviceObject.externalTrafficPolicy }}
   externalTrafficPolicy: {{ $serviceObject.externalTrafficPolicy }}
   {{- end }}

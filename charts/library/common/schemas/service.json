@@ -35,6 +35,10 @@
       "loadBalancerClass": {
         "type": "string"
       },
+      "internalTrafficPolicy": {
+        "type": "string",
+        "enum": ["Cluster", "Local"]
+      },
       "externalTrafficPolicy": {
         "type": "string",
         "enum": ["Cluster", "Local"]
