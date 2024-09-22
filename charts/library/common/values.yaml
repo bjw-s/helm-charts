@@ -477,6 +477,10 @@ service:
   #   # -- Set the service type
   #   type: ClusterIP
 
+  #   # -- Specify the internalTrafficPolicy for the service. Options: Cluster, Local
+  #   # -- [[ref](https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/)]
+  #   internalTrafficPolicy:
+
   #   # -- Specify the externalTrafficPolicy for the service. Options: Cluster, Local
   #   # -- [[ref](https://kubernetes.io/docs/tutorials/services/source-ip/)]
   #   externalTrafficPolicy:

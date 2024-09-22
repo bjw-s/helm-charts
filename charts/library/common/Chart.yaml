@@ -17,3 +17,6 @@ annotations:
     - kind: added
       description: |-
         Add support for binary files in configMapsFromFolderBasePath
+    - kind: added
+      description: |-
+        Add support for internalTrafficPolicy field in Services
