@@ -1,0 +1,44 @@
+---
+suite: rbac validations
+
+set:
+  serviceAccount:
+    name: test-sa
+
+templates:
+  - common.yaml
+values:
+  - ../_values/rbac_values.yaml
+tests:
+  - it: role type must be valid
+    set:
+      rbac:
+        roles:
+          invalidRole:
+            type: InvalidRole
+            rules: {}
+    asserts:
+      - failedTemplate:
+          errorMessage: "You selected: `InvalidRole`. Type must be one of:"
+
+  - it: role rules can't be empty
+    set:
+      rbac:
+        roles:
+          invalidRole:
+            type: Role
+            rules: []
+    asserts:
+      - failedTemplate:
+          errorMessage: "Rules can't be empty"
+
+  - it: roleBinding requires roleRef
+    set:
+      rbac:
+        bindings:
+          invalidBinding:
+            type: RoleBinding
+            roleRef: {}
+    asserts:
+      - failedTemplate:
+          errorMessage: "If not using identifier roleRef must have a `name` key"

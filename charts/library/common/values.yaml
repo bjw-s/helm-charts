@@ -116,6 +116,14 @@ controllers: {}
 #     # -- ReplicaSet revision history limit
 #     revisionHistoryLimit: 3
 
+#     # -- Set the controller service account name
+#     # This is entirely optional, if empty or `null` the controller will use the default service account
+#     serviceAccount:
+#       # -- Only use one of `name` or `identifier`. In case both are specified it will prioritize `identifier`.
+#       # -- Reference a service account identifier from this values.yaml
+#       identifier:
+#       # -- Explicitly set the service account name
+#       name:
 #     # -- CronJob configuration. Required only when using `controller.type: cronjob`.
 #     # @default -- See below
 #     cronjob:
@@ -393,6 +401,7 @@ controllers: {}
 
 serviceAccount:
   # -- Specifies whether a service account should be created
+  # The identifier for this ServiceAccount will be `default`
   create: false
 
   # -- Annotations to add to the service account
@@ -404,6 +413,19 @@ serviceAccount:
   # -- The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
+
+  # -- Additional Service Accounts to create
+  # Each extra service account admit the same keys as the main service account
+  extraServiceAccounts: {}
+  #   serviceAccount2:
+  #     create: true
+  #     annotations:
+  #       test: test
+  #   serviceAccount3:
+  #     create: true
+  #     name: custom-service-account
+  #     labels:
+  #       test: test
 
 # -- Use this to populate secrets with the values you specify.
 # Be aware that these values are not encrypted by default, and could therefore visible
@@ -450,6 +472,8 @@ configMaps:
 # This will generate a ConfigMap named `configmap1` with keys `file1` and `file2`, values being the respective contents of those files.
 # If your file contains `gotpl` syntax that you don't want templated by Helm, prefix the file extension with `.escape` and it will be treated as a regular string.
 # For example, `file1.escape.yaml` will be converted to `file1.yaml` in the ConfigMap with the contents of the file not templated.
+# If your file is a binary file like an image, prefix the file extension with `.binary`
+# For example, `file1.binary.png` will be converted to `file1.png` in the ConfigMap under binaryData with the contents of the file base64 encoded.
 configMapsFromFolderBasePath: null
 
 # -- Configure the services for the chart here.
@@ -474,6 +498,10 @@ service:
 
   #   # -- Set the service type
   #   type: ClusterIP
+
+  #   # -- Specify the internalTrafficPolicy for the service. Options: Cluster, Local
+  #   # -- [[ref](https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/)]
+  #   internalTrafficPolicy:
 
   #   # -- Specify the externalTrafficPolicy for the service. Options: Cluster, Local
   #   # -- [[ref](https://kubernetes.io/docs/tutorials/services/source-ip/)]
@@ -768,7 +796,8 @@ networkpolicies:
 
 # -- Configure any unsupported raw resources here.
 # @default -- See below
-rawResources: {}
+rawResources:
+  {}
   # example:
   #   # -- Enables or disables the resource. Defaults to true
   #   enabled: false
@@ -784,3 +813,38 @@ rawResources: {}
   #   labels: {}
   #   # -- Configure the contents of the resource that is to be rendered.
   #   spec:
+
+# -- Configure the Roles and Role Bindings for the chart here.
+rbac:
+  {}
+  # roles:
+  #   role1:
+  #     # -- Force replace the name of the object.
+  #     forceRename: <force name>
+  #     # -- Enables or disables the Role. Can be templated.
+  #     enabled: true
+  #     # -- Set to Role,ClusterRole
+  #     type: Role
+  #     rules:
+  #       - apiGroups: ["*"]
+  #         resources: ["*"]
+  #         verbs: ["get", "list", "watch"]
+  # bindings:
+  #   binding1:
+  #     # -- Force replace the name of the object.
+  #     forceRename: <force name>
+  #     # -- Enables or disables the Role. Can be templated.
+  #     enabled: true
+  #     # -- Set to RoleBinding,ClusterRoleBinding
+  #     type: RoleBinding
+  #     # -- Can be an identifier of rbac.roles or a custom name and kind
+  #     roleRef:
+  #       name: test-role
+  #       kind: Role
+  #       identifier: test
+  #     # -- If using an identifier it will be automatically filled, otherwise every key will need to be explicitly declared
+  #     subjects:
+  #       - identifier: default
+  #       - kind: ServiceAccount
+  #         name: test
+  #         namespace: "{{ .Release.Namespace }}"

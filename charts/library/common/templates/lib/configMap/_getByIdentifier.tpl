@@ -7,6 +7,6 @@ Return a configMap Object by its Identifier.
 
   {{- $configMapValues := dig $identifier nil $rootContext.Values.configMaps -}}
   {{- if not (empty $configMapValues) -}}
-    {{- include "bjw-s.common.lib.configMap.valuesToObject" (dict "rootContext" $rootContext "id" $identifier "values" $configMapValues) -}}
+    {{- include "bjw-s.common.lib.valuesToObject" (dict "rootContext" $rootContext "id" $identifier "values" $configMapValues) -}}
   {{- end -}}
 {{- end -}}
