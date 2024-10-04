@@ -25,8 +25,17 @@
         "additionalProperties": {
           "type": "string"
         }
+      },
+      "binaryData": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
       }
     },
-    "required": ["data"]
+    "oneOf": [
+        {"required": ["data"]},
+        {"required": ["binaryData"]}
+    ]
   }
 }

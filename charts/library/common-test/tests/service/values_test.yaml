@@ -56,6 +56,22 @@ tests:
           path: spec.externalTrafficPolicy
           value: Local
 
+  - it: internalTrafficPolicy should pass
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service:
+        main:
+          internalTrafficPolicy: Local
+    asserts:
+      - documentIndex: &ServiceDocument 1
+        isKind:
+          of: Service
+      - documentIndex: *ServiceDocument
+        equal:
+          path: spec.internalTrafficPolicy
+          value: Local
+
   - it: externalTrafficPolicy should pass for LoadBalancer service
     values:
       - ../_values/service_main_default.yaml

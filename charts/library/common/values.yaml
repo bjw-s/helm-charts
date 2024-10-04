@@ -472,6 +472,8 @@ configMaps:
 # This will generate a ConfigMap named `configmap1` with keys `file1` and `file2`, values being the respective contents of those files.
 # If your file contains `gotpl` syntax that you don't want templated by Helm, prefix the file extension with `.escape` and it will be treated as a regular string.
 # For example, `file1.escape.yaml` will be converted to `file1.yaml` in the ConfigMap with the contents of the file not templated.
+# If your file is a binary file like an image, prefix the file extension with `.binary`
+# For example, `file1.binary.png` will be converted to `file1.png` in the ConfigMap under binaryData with the contents of the file base64 encoded.
 configMapsFromFolderBasePath: null
 
 # -- Configure the services for the chart here.
@@ -496,6 +498,10 @@ service:
 
   #   # -- Set the service type
   #   type: ClusterIP
+
+  #   # -- Specify the internalTrafficPolicy for the service. Options: Cluster, Local
+  #   # -- [[ref](https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/)]
+  #   internalTrafficPolicy:
 
   #   # -- Specify the externalTrafficPolicy for the service. Options: Cluster, Local
   #   # -- [[ref](https://kubernetes.io/docs/tutorials/services/source-ip/)]
