@@ -2,6 +2,8 @@
 Renders the configMap objects required by the chart.
 */}}
 {{- define "bjw-s.common.render.configMaps" -}}
+  {{- $rootContext := $ -}}
+
   {{- /* Generate named configMaps as required */ -}}
   {{- range $key, $configMap := .Values.configMaps }}
     {{- /* Enable configMap by default, but allow override */ -}}
@@ -14,7 +16,7 @@ Renders the configMap objects required by the chart.
       {{- $configMapValues := (mustDeepCopy $configMap) -}}
 
       {{- /* Create object from the raw configMap values */ -}}
-      {{- $configMapObject := (include "bjw-s.common.lib.configMap.valuesToObject" (dict "rootContext" $ "id" $key "values" $configMapValues)) | fromYaml -}}
+      {{- $configMapObject := (include "bjw-s.common.lib.valuesToObject" (dict "rootContext" $rootContext "id" $key "values" $configMapValues)) | fromYaml -}}
 
       {{- /* Perform validations on the configMap before rendering */ -}}
       {{- include "bjw-s.common.lib.configMap.validate" (dict "rootContext" $ "object" $configMapObject) -}}
