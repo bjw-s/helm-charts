@@ -1,6 +1,6 @@
 # app-template
 
-![Version: 3.4.0](https://img.shields.io/badge/Version-3.4.0-informational?style=flat-square)
+![Version: 3.5.0](https://img.shields.io/badge/Version-3.5.0-informational?style=flat-square)
 
 A common powered chart template. This can be useful for small projects that don't have their own chart.
 
@@ -12,7 +12,7 @@ Kubernetes: `>=1.22.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://bjw-s.github.io/helm-charts | common | 3.4.0 |
+| https://bjw-s.github.io/helm-charts | common | 3.5.0 |
 
 ## Installing the Chart
 
