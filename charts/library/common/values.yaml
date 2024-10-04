@@ -401,6 +401,7 @@ controllers: {}
 
 serviceAccount:
   # -- Specifies whether a service account should be created
+  # The identifier for this ServiceAccount will be `default`
   create: false
 
   # -- Annotations to add to the service account
@@ -812,3 +813,38 @@ rawResources:
   #   labels: {}
   #   # -- Configure the contents of the resource that is to be rendered.
   #   spec:
+
+# -- Configure the Roles and Role Bindings for the chart here.
+rbac:
+  {}
+  # roles:
+  #   role1:
+  #     # -- Force replace the name of the object.
+  #     forceRename: <force name>
+  #     # -- Enables or disables the Role. Can be templated.
+  #     enabled: true
+  #     # -- Set to Role,ClusterRole
+  #     type: Role
+  #     rules:
+  #       - apiGroups: ["*"]
+  #         resources: ["*"]
+  #         verbs: ["get", "list", "watch"]
+  # bindings:
+  #   binding1:
+  #     # -- Force replace the name of the object.
+  #     forceRename: <force name>
+  #     # -- Enables or disables the Role. Can be templated.
+  #     enabled: true
+  #     # -- Set to RoleBinding,ClusterRoleBinding
+  #     type: RoleBinding
+  #     # -- Can be an identifier of rbac.roles or a custom name and kind
+  #     roleRef:
+  #       name: test-role
+  #       kind: Role
+  #       identifier: test
+  #     # -- If using an identifier it will be automatically filled, otherwise every key will need to be explicitly declared
+  #     subjects:
+  #       - identifier: default
+  #       - kind: ServiceAccount
+  #         name: test
+  #         namespace: "{{ .Release.Namespace }}"

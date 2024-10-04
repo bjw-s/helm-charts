@@ -1,0 +1,58 @@
+---
+suite: rbac names
+
+set:
+  serviceAccount:
+    name: test-sa
+
+templates:
+  - common.yaml
+values:
+  - ../_values/rbac_values.yaml
+tests:
+  - it: default role and rolebinding names should pass
+    asserts:
+      - hasDocuments:
+          count: 4
+      - documentIndex: &RoleDocument 2
+        isKind:
+          of: Role
+      - documentIndex: *RoleDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-defaultRole
+
+      - documentIndex: &BindingDocument 3
+        isKind:
+          of: RoleBinding
+      - documentIndex: *BindingDocument
+        equal:
+          path: metadata.name
+          value: RELEASE-NAME-defaultBinding
+
+  - it: custom role name should pass
+    set:
+      rbac:
+        roles:
+          defaultRole:
+            forceRename: customRole
+        bindings:
+          defaultBinding:
+            forceRename: customBinding
+    asserts:
+      - hasDocuments:
+          count: 4
+      - documentIndex: &RoleDocument 2
+        isKind:
+          of: Role
+      - documentIndex: &BindingDocument 3
+        isKind:
+          of: RoleBinding
+      - documentIndex: *RoleDocument
+        equal:
+          path: metadata.name
+          value: customRole
+      - documentIndex: *BindingDocument
+        equal:
+          path: metadata.name
+          value: customBinding

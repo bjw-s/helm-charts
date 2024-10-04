@@ -23,3 +23,6 @@ annotations:
     - kind: added
       description: |-
         Add support for multiple ServiceAccounts
+    - kind: added
+      description: |-
+        Add support for multiple RBAC resources
