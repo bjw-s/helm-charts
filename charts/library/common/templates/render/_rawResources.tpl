@@ -2,7 +2,9 @@
 Renders other arbirtrary objects required by the chart.
 */}}
 {{- define "bjw-s.common.render.rawResources" -}}
-  {{- /* Generate pvc as required */ -}}
+  {{- $rootContext := $ -}}
+
+  {{- /* Generate raw resources as required */ -}}
   {{- range $key, $resource := .Values.rawResources -}}
     {{- /* Enable by default, but allow override */ -}}
     {{- $resourceEnabled := true -}}
@@ -14,7 +16,7 @@ Renders other arbirtrary objects required by the chart.
       {{- $resourceValues := (mustDeepCopy $resource) -}}
 
       {{- /* Create object from the raw resource values */ -}}
-      {{- $resourceObject := (include "bjw-s.common.lib.rawResource.valuesToObject" (dict "rootContext" $ "id" $key "values" $resourceValues)) | fromYaml -}}
+      {{- $resourceObject := (include "bjw-s.common.lib.valuesToObject" (dict "rootContext" $rootContext "id" $key "values" $resourceValues)) | fromYaml -}}
 
       {{- /* Perform validations on the resource before rendering */ -}}
       {{- include "bjw-s.common.lib.rawResource.validate" (dict "rootContext" $ "object" $resourceValues) -}}
