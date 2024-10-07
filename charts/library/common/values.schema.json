@@ -34,6 +34,9 @@
         "$ref": "schemas/controllers.json#/instance"
       }
     },
+    "enforceServiceAccountCreation": {
+      "type": "boolean"
+    },
     "serviceAccount": {
       "$ref": "schemas/serviceAccount.json#/settings"
     },
