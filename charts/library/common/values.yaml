@@ -9,6 +9,10 @@ global:
   # -- Set additional global annotations. Helm templates can be used.
   annotations: {}
 
+# -- If true forces the controllers to use the `default` ServiceAccount for the namespace if one is not explicitly defined.
+# This feature flag will be removed on future versions
+enforceDefaultServiceAccountCreation: false
+
 # -- Set default options for all controllers / pods here
 # Each of these options can be overridden on a Controller level
 defaultPodOptions:
