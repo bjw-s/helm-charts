@@ -9,10 +9,6 @@ global:
   # -- Set additional global annotations. Helm templates can be used.
   annotations: {}
 
-# -- If true forces the controllers to use the `default` ServiceAccount for the namespace if one is not explicitly defined.
-# This feature flag will be removed on future versions
-enforceServiceAccountCreation: false
-
 # -- Set default options for all controllers / pods here
 # Each of these options can be overridden on a Controller level
 defaultPodOptions:
@@ -402,6 +398,10 @@ controllers: {}
 #     # -- Specify any initContainers here as dictionary items.
 #     # Each initContainer should have its own key
 #     initContainers: {}
+
+# -- If true forces the controllers to use the `default` ServiceAccount for the namespace if one is not explicitly defined.
+# This feature flag will be removed on future versions where this will be the default behavior.
+enforceServiceAccountCreation: false
 
 serviceAccount:
   # -- Specifies whether a service account should be created
