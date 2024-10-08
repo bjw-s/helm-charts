@@ -20,7 +20,7 @@ Kubernetes: `>=1.22.0-0`
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://bjw-s.github.io/helm-charts | common | 3.5.0 |
+| https://bjw-s.github.io/helm-charts | common | 3.5.1 |
 
 ## Values
 
