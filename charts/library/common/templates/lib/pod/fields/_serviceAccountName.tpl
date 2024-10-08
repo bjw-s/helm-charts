@@ -7,8 +7,12 @@ Returns the value for serviceAccountName
 
   {{- $serviceAccountName := "default" -}}
 
-  {{- if (get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "create") -}}
-    {{- $serviceAccountName = get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "name" -}}
+  {{- if $rootContext.Values.enforceServiceAccountCreation -}}
+    {{- if (get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "create") -}}
+      {{- $serviceAccountName = get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "name" -}}
+    {{- end -}}
+  {{- else -}}
+      {{- $serviceAccountName = get (include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" "default") | fromYaml) "name" -}}
   {{- end -}}
 
   {{- with $controllerObject.serviceAccount -}}
