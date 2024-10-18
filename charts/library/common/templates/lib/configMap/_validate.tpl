@@ -7,7 +7,7 @@ Validate configMap values
   {{- $identifier := .id -}}
 
   {{- if empty $configMapValues -}}
-    {{- fail (printf "\nThere was an error loading ConfigMap: %s.\nIf it was automatically generated from a folder verify that files are properly flagged as `binary` or `escaped`" $identifier) -}}
+    {{- fail (printf "There was an error loading ConfigMap: %s. If it was automatically generated from a folder verify that files are properly flagged as `binary` or `escaped`" $identifier) -}}
   {{- end -}}
   {{- if and (empty (get $configMapValues "data")) (empty (get $configMapValues "binaryData")) -}}
     {{- fail (printf "No data or binaryData specified for configMap. (configMap: %s)" $configMapValues.identifier) }}
