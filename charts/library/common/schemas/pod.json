@@ -43,6 +43,10 @@
         "type": "boolean",
         "default": false
       },
+      "hostUsers": {
+        "type": "boolean",
+        "default": false
+      },
       "hostname": {
         "type": "string"
       },

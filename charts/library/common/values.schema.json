@@ -1,14 +1,11 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.5.1/charts/library/common/values.schema.json",
+  "$id": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.6.0/charts/library/common/values.schema.json",
   "type": "object",
   "properties": {
     "global": {
       "type": "object",
       "properties": {
-        "annotations": {
-          "$ref": "schemas/definitions.json#/annotations"
-        },
         "nameOverride": {
           "type": [
             "string",
@@ -21,8 +18,15 @@
             "null"
           ]
         },
+        "propagateGlobalMetadataToPods": {
+          "type": "boolean",
+          "default": false
+        },
         "labels": {
           "$ref": "schemas/definitions.json#/labels"
+        },
+        "annotations": {
+          "$ref": "schemas/definitions.json#/annotations"
         }
       }
     },

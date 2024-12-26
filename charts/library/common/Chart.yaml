@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.5.1
+version: 3.6.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,4 +16,7 @@ annotations:
   artifacthub.io/changes: |-
     - kind: added
       description: |-
-        Add feature flag to override enforcing the creation of a default ServiceAccount
+        Add hostUsers field to pod spec for k8s clusters >= 1.29
+    - kind: added
+      description: |-
+        Allow propagating global labels and annotations to Pod metadata

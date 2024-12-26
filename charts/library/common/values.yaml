@@ -4,6 +4,8 @@ global:
   nameOverride:
   # -- Set the entire name definition
   fullnameOverride:
+  # -- Propagate global metadata to Pod labels.
+  propagateGlobalMetadataToPods: false
   # -- Set additional global labels. Helm templates can be used.
   labels: {}
   # -- Set additional global annotations. Helm templates can be used.
@@ -47,6 +49,9 @@ defaultPodOptions:
 
   # -- Use the host's pid namespace
   hostPID: false
+
+  # -- Use the host's user namespace (requires 1.29 or newer)
+  hostUsers: true
 
   # -- Set image pull secrets
   imagePullSecrets: []

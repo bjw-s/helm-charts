@@ -1,0 +1,58 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod security
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+capabilities:
+  majorVersion: 1
+  minorVersion: 29
+tests:
+  - it: default should pass for kubernetes < 1.28
+    capabilities:
+      majorVersion: 1
+      minorVersion: 28
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        notExists:
+          path: spec.template.spec.hostUsers
+
+  - it: default should pass for kubernetes >= 1.29
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.hostUsers
+          value: true
+
+  - it: hostUsers disabled should pass
+    set:
+      defaultPodOptions:
+        hostUsers: false
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.hostUsers
+          value: false
+
+  - it: hostUsers enabled should pass
+    set:
+      defaultPodOptions:
+        hostUsers: true
+    asserts:
+      - documentIndex: 0
+        isKind:
+          of: Deployment
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.hostUsers
+          value: true
