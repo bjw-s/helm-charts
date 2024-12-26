@@ -19,12 +19,12 @@ maintainers:
 dependencies:
   - name: common
     repository: https://bjw-s.github.io/helm-charts
-    version: 3.5.1
+    version: 3.6.0
 annotations:
   artifacthub.io/changes: |-
     - kind: changed
       description: |
-        Update common library to 3.5.1
+        Update common library to 3.6.0
   artifacthub.io/links: |
     - name: "source"
       url: "https://github.com/bjw-s/k8s-ycl"
