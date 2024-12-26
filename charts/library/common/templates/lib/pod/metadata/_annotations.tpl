@@ -6,7 +6,17 @@ Returns the value for annotations
   {{- $controllerObject := .controllerObject -}}
 
   {{- /* Default annotations */ -}}
-  {{- $annotations := dict -}}
+  {{- $annotations := merge
+    (dict)
+  -}}
+
+  {{- /* Include global annotations if specified */ -}}
+  {{- if $rootContext.Values.global.propagateGlobalMetadataToPods -}}
+    {{- $annotations = merge
+      (include "bjw-s.common.lib.metadata.globalAnnotations" $rootContext | fromYaml)
+      $annotations
+    -}}
+  {{- end -}}
 
   {{- /* Set to the default if it is set */ -}}
   {{- $defaultOption := get (default dict $rootContext.Values.defaultPodOptions) "annotations" -}}

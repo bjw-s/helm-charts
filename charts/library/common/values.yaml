@@ -4,6 +4,8 @@ global:
   nameOverride:
   # -- Set the entire name definition
   fullnameOverride:
+  # -- Propagate global metadata to Pod labels.
+  propagateGlobalMetadataToPods: false
   # -- Set additional global labels. Helm templates can be used.
   labels: {}
   # -- Set additional global annotations. Helm templates can be used.

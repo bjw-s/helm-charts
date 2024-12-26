@@ -17,3 +17,6 @@ annotations:
     - kind: added
       description: |-
         Add hostUsers field to pod spec for k8s clusters >= 1.29
+    - kind: added
+      description: |-
+        Allow propagating global labels and annotations to Pod metadata

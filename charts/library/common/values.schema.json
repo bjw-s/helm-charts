@@ -6,9 +6,6 @@
     "global": {
       "type": "object",
       "properties": {
-        "annotations": {
-          "$ref": "schemas/definitions.json#/annotations"
-        },
         "nameOverride": {
           "type": [
             "string",
@@ -21,8 +18,15 @@
             "null"
           ]
         },
+        "propagateGlobalMetadataToPods": {
+          "type": "boolean",
+          "default": false
+        },
         "labels": {
           "$ref": "schemas/definitions.json#/labels"
+        },
+        "annotations": {
+          "$ref": "schemas/definitions.json#/annotations"
         }
       }
     },
