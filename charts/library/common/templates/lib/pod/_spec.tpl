@@ -28,7 +28,9 @@ hostIPC: {{ include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "
 hostNetwork: {{ include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "hostNetwork" "default" false) }}
 hostPID: {{ include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "hostPID" "default" false) }}
   {{- if ge ($rootContext.Capabilities.KubeVersion.Minor | int) 29 }}
-hostUsers: {{ include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "hostUsers" "default" true) }}
+    {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "hostUsers")) }}
+hostUsers: {{ . | trim }}
+    {{- end -}}
   {{- end }}
 dnsPolicy: {{ include "bjw-s.common.lib.pod.field.dnsPolicy" (dict "ctx" $ctx) | trim }}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "dnsConfig")) }}

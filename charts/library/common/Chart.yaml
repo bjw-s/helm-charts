@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.6.0
+version: 3.6.1
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -14,9 +14,6 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: added
+    - kind: fixed
       description: |-
-        Add hostUsers field to pod spec for k8s clusters >= 1.29
-    - kind: added
-      description: |-
-        Allow propagating global labels and annotations to Pod metadata
+        Only add hostUsers when explicitly configured
