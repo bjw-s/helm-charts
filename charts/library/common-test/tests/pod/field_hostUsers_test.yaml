@@ -9,50 +9,51 @@ capabilities:
   majorVersion: 1
   minorVersion: 29
 tests:
-  - it: default should pass for kubernetes < 1.28
+  - it: should not be present by default for kubernetes < 1.28
     capabilities:
       majorVersion: 1
       minorVersion: 28
+    documentSelector: &DeploymentSelector
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        notExists:
+      - notExists:
           path: spec.template.spec.hostUsers
 
-  - it: default should pass for kubernetes >= 1.29
-    asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
-          path: spec.template.spec.hostUsers
-          value: true
-
-  - it: hostUsers disabled should pass
+  - it: should not be present even if specified for kubernetes < 1.28
+    capabilities:
+      majorVersion: 1
+      minorVersion: 28
     set:
       defaultPodOptions:
         hostUsers: false
+    documentSelector: *DeploymentSelector
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - notExists:
+          path: spec.template.spec.hostUsers
+
+  - it: should not be present by default for kubernetes >= 1.29
+    documentSelector: *DeploymentSelector
+    asserts:
+      - notExists:
+          path: spec.template.spec.hostUsers
+
+  - it: hostUsers disabled should set for kubernetes >= 1.29
+    set:
+      defaultPodOptions:
+        hostUsers: false
+    documentSelector: *DeploymentSelector
+    asserts:
+      - equal:
           path: spec.template.spec.hostUsers
           value: false
 
-  - it: hostUsers enabled should pass
+  - it: hostUsers enabled should be set for kubernetes >= 1.29
     set:
       defaultPodOptions:
         hostUsers: true
+    documentSelector: *DeploymentSelector
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.hostUsers
           value: true

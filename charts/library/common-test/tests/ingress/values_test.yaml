@@ -110,7 +110,11 @@ tests:
   - it: with defaultBackend should pass
     set:
       ingress.main:
-        defaultBackend: test
+        defaultBackend:
+          resource:
+            apiGroup: k8s.example.com
+            kind: StorageBucket
+            name: static-assets
     asserts:
       - documentIndex: &IngressDocument 2
         isKind:
@@ -118,7 +122,11 @@ tests:
       - documentIndex: *IngressDocument
         equal:
           path: spec.defaultBackend
-          value: test
+          value:
+            resource:
+              apiGroup: k8s.example.com
+              kind: StorageBucket
+              name: static-assets
       - documentIndex: *IngressDocument
         notExists:
           path: spec.rules

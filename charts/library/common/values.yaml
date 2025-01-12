@@ -51,7 +51,7 @@ defaultPodOptions:
   hostPID: false
 
   # -- Use the host's user namespace (requires 1.29 or newer)
-  hostUsers: true
+  hostUsers:
 
   # -- Set image pull secrets
   imagePullSecrets: []

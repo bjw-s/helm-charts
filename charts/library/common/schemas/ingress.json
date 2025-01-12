@@ -18,7 +18,7 @@
       },
 
       "defaultBackend": {
-        "type": "string"
+        "$ref": "k8s-api.json#/networking.v1.ingressBackend"
       },
 
       "hosts": {
@@ -42,8 +42,7 @@
           "$ref": "#/tlsEntry"
         }
       }
-    },
-    "required": ["hosts"]
+    }
   },
 
   "hostEntry": {
