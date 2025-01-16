@@ -37,11 +37,14 @@
       },
       "hostNetwork": {
         "type": "boolean",
-        "default": "false"
+        "default": false
       },
       "hostPID": {
         "type": "boolean",
         "default": false
+      },
+      "hostUsers": {
+        "type": ["boolean", "null"]
       },
       "hostname": {
         "type": "string"

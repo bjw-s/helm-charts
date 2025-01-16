@@ -1,0 +1,66 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: "pod metadata: annotations"
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: default pod annotations
+    documentSelector: &DeploymentSelector
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME
+    asserts:
+      - notExists:
+          path: spec.template.metadata.annotations
+
+  - it: pod annotations from defaultPodOptions should be included
+    set:
+      defaultPodOptions:
+        annotations:
+          defaultPodOptionsAnnotation: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.annotations
+          content:
+            defaultPodOptionsAnnotation: test
+
+  - it: pod annotations from pod options should be included
+    set:
+      controllers:
+        main:
+          pod:
+            annotations:
+              podOptionsAnnotation: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.annotations
+          content:
+            podOptionsAnnotation: test
+
+  - it: pod annotations from global annotations should not be included by default
+    set:
+      global:
+        annotations:
+          globalAnnotation: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isNotSubset:
+          path: spec.template.metadata.annotations
+          content:
+            globalAnnotation: test
+
+  - it: pod annotations from global annotations should be included when requested
+    set:
+      global:
+        propagateGlobalMetadataToPods: true
+        annotations:
+          globalAnnotation: test
+    documentSelector: *DeploymentSelector
+    asserts:
+      - isSubset:
+          path: spec.template.metadata.annotations
+          content:
+            globalAnnotation: test
