@@ -17,4 +17,3 @@ annotations:
     - kind: fixed
       description: |-
         Revamped configMap.fromFiles into configMap.fromFolder
-
