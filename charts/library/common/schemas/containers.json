@@ -178,7 +178,7 @@
     "properties": {
       "pullPolicy": {
         "type": "string",
-        "enum": ["Always", "IfNotPresent"]
+        "enum": ["Always", "IfNotPresent", "Never"]
       },
       "repository": {
         "type": "string"
