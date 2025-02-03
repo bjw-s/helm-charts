@@ -22,6 +22,9 @@
       "nameOverride": {
         "type": "string"
       },
+      "forceRename": {
+        "type": "string"
+      },
       "spec": {}
     },
     "required": ["apiVersion", "kind", "spec"]
