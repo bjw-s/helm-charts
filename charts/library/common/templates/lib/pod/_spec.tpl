@@ -55,7 +55,7 @@ restartPolicy: {{ . | trim }}
 nodeSelector: {{ . | nindent 2 }}
   {{- end -}}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "affinity")) }}
-affinity: {{ . | nindent 2 }}
+affinity: {{- tpl . $rootContext | nindent 2 }}
   {{- end -}}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "topologySpreadConstraints")) }}
 topologySpreadConstraints: {{ . | nindent 2 }}

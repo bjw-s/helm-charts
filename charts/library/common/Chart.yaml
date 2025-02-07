@@ -29,3 +29,6 @@ annotations:
     - kind: added
       description: |-
         Add support for templating ServiceMonitor endpoints
+    - kind: added
+      description: |-
+        Add support for templating Pod affinity
