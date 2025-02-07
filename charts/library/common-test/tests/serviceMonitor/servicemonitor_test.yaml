@@ -176,3 +176,43 @@ tests:
           value:
             - testlabel1
             - testlabel2
+
+  - it: a serviceMonitor can be configured with templated endpoints
+    set:
+      serviceMonitor:
+        main:
+          labels:
+            test.label: testvalue
+          serviceName: "{{ .Release.Name }}"
+          endpoints:
+            - port: http
+              scheme: http
+              path: /metrics
+              interval: 1m
+              scrapeTimeout: 10s
+              basicAuth:
+                username:
+                  name: "{{.Release.Name}}-secret"
+                  key: USERNAME
+                password:
+                  name: "{{.Release.Name}}-secret"
+                  key: PASSWORD
+    documentSelector: &ServiceMonitorSelector
+      path: $[?(@.kind == "ServiceMonitor")].metadata.name
+      value: RELEASE-NAME
+    asserts:
+      - equal:
+          path: spec.endpoints
+          value:
+            - port: http
+              scheme: http
+              path: /metrics
+              interval: 1m
+              scrapeTimeout: 10s
+              basicAuth:
+                username:
+                  name: RELEASE-NAME-secret
+                  key: USERNAME
+                password:
+                  name: RELEASE-NAME-secret
+                  key: PASSWORD

@@ -26,3 +26,6 @@ annotations:
     - kind: added
       description: |-
         Add support for setting shareProcessNamespace on Pods
+    - kind: added
+      description: |-
+        Add support for templating ServiceMonitor endpoints

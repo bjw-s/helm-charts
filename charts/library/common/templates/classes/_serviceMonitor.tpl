@@ -39,7 +39,7 @@ spec:
       app.kubernetes.io/service: {{ tpl $serviceMonitorObject.serviceName $rootContext }}
       {{- include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | nindent 6 }}
     {{- end }}
-  endpoints: {{- toYaml $serviceMonitorObject.endpoints | nindent 4 }}
+  endpoints: {{- tpl (toYaml $serviceMonitorObject.endpoints) $rootContext | nindent 4 }}
   {{- if not (empty $serviceMonitorObject.targetLabels )}}
   targetLabels:
     {{- toYaml $serviceMonitorObject.targetLabels | nindent 4 }}
