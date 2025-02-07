@@ -17,3 +17,6 @@ annotations:
     - kind: added
       description: |-
         Allow setting pullPolicy to Never
+    - kind: added
+      description: |-
+        Revamped configMap.fromFiles into configMap.fromFolder
