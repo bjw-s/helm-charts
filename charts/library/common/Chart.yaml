@@ -14,6 +14,9 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
+    - kind: fixed
+      description: |-
+        Raw resources with `forceRename` fields are no longer flagged as invalid
     - kind: added
       description: |-
         Allow setting pullPolicy to Never
