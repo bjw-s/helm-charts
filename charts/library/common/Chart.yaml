@@ -14,12 +14,6 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   artifacthub.io/changes: |-
-    - kind: fixed
+    - kind: added
       description: |-
-        Only add hostUsers when explicitly configured
-    - kind: fixed
-      description: |-
-        `hosts` should be an optional field for Ingress resources
-    - kind: fixed
-      description: |-
-        `defaultBackend` should be an object for Ingress resources
+        Allow setting pullPolicy to Never
