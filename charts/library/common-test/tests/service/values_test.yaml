@@ -15,17 +15,16 @@ tests:
           ports:
             first:
               port: 80
+    documentSelector: &ServiceSelector
+      path: kind
+      value: Service
     asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &FirstServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *FirstServiceDocument
-        notExists:
-          path: spec.allocateLoadBalancerNodePorts
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: RELEASE-NAME
 
-  - it: services can be disabled
+  - it: service not present when disabled
     values:
       - ../_values/service_main_default.yaml
     set:
@@ -33,13 +32,13 @@ tests:
         main:
           enabled: false
     asserts:
-      - hasDocuments:
-          count: 1
-      - documentIndex: &DeploymentDocument 0
-        isKind:
-          of: Deployment
+      - not: true
+        containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: RELEASE-NAME
 
-  - it: externalTrafficPolicy should pass for NodePort service
+  - it: externalTrafficPolicy can be configured for NodePort service
     values:
       - ../_values/service_main_default.yaml
     set:
@@ -47,32 +46,26 @@ tests:
         main:
           type: NodePort
           externalTrafficPolicy: Local
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.externalTrafficPolicy
           value: Local
 
-  - it: internalTrafficPolicy should pass
+  - it: internalTrafficPolicy can be configured
     values:
       - ../_values/service_main_default.yaml
     set:
       service:
         main:
           internalTrafficPolicy: Local
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.internalTrafficPolicy
           value: Local
 
-  - it: externalTrafficPolicy should pass for LoadBalancer service
+  - it: externalTrafficPolicy can be configured for LoadBalancer service
     values:
       - ../_values/service_main_default.yaml
     set:
@@ -80,12 +73,9 @@ tests:
         main:
           type: LoadBalancer
           externalTrafficPolicy: Local
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.externalTrafficPolicy
           value: Local
 
@@ -97,12 +87,9 @@ tests:
         main:
           type: LoadBalancer
           allocateLoadBalancerNodePorts: true
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.allocateLoadBalancerNodePorts
           value: true
 
@@ -114,16 +101,13 @@ tests:
         main:
           type: LoadBalancer
           allocateLoadBalancerNodePorts: false
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.allocateLoadBalancerNodePorts
           value: false
 
-  - it: externalName should pass for ExternalName service
+  - it: externalName can be configured for ExternalName service
     values:
       - ../_values/service_main_default.yaml
     set:
@@ -131,11 +115,8 @@ tests:
         main:
           type: ExternalName
           externalName: my.database.example.com
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.externalName
           value: my.database.example.com

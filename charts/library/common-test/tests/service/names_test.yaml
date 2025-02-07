@@ -6,49 +6,42 @@ templates:
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
-  - it: default should pass
+  - it: default name
     values:
       - ../_values/service_main_default.yaml
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: RELEASE-NAME
     asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: metadata.name
           value: RELEASE-NAME
 
-  - it: custom name suffix should pass
+  - it: custom name suffix
     values:
       - ../_values/service_main_default.yaml
     set:
       service.main.nameOverride: http
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: RELEASE-NAME-http
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - exists:
           path: metadata.name
-          value: RELEASE-NAME-http
 
-  - it: custom name suffix with template should pass
+  - it: custom name suffix with template
     values:
       - ../_values/service_main_default.yaml
     set:
-      service.main.nameOverride: "{{ .Release.Name }}"
+      service.main.nameOverride: "{{ .Chart.Name }}"
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: RELEASE-NAME-common-test
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - exists:
           path: metadata.name
-          value: RELEASE-NAME
 
-  - it: multiple should pass
+  - it: multiple services
     values:
       - ../_values/service_main_default.yaml
     set:
@@ -59,19 +52,13 @@ tests:
             ui:
               port: 8082
     asserts:
-      - hasDocuments:
-          count: 3
-      - documentIndex: &ServiceDocumentFirst 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocumentFirst
-        equal:
-          path: metadata.name
+      - documentSelector:
+          path: $[?(@.kind == "Service")].metadata.name
           value: RELEASE-NAME-main
-      - documentIndex: &ServiceDocumentSecond 2
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocumentSecond
-        equal:
+        exists:
           path: metadata.name
+      - documentSelector:
+          path: $[?(@.kind == "Service")].metadata.name
           value: RELEASE-NAME-second
+        exists:
+          path: metadata.name

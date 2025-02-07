@@ -6,89 +6,91 @@ templates:
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
-  - it: default should pass
+  - it: default should render
     values:
       - ../_values/service_main_default.yaml
+    documentSelector: &ServiceSelector
+      path: $[?(@.kind == "Service")].metadata.name
+      value: RELEASE-NAME
     asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.ports[0].protocol
           value: TCP
 
-  - it: explicit TCP should pass
+  - it: explicit TCP should render
     values:
       - ../_values/service_main_default.yaml
     set:
       service.main.ports.http.protocol: TCP
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.ports[0].protocol
           value: TCP
 
-  - it: explicit UDP should pass
+  - it: explicit UDP should render
     values:
       - ../_values/service_main_default.yaml
     set:
       service.main.ports.http.protocol: UDP
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.ports[0].protocol
           value: UDP
 
-  - it: explicit HTTP should pass
+  - it: explicit HTTP should render
     values:
       - ../_values/service_main_default.yaml
     set:
       service.main.ports.http.protocol: HTTP
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.ports[0].protocol
           value: TCP
-      - documentIndex: *ServiceDocument
-        notExists:
+      - notExists:
           path: metadata.annotations
 
-  - it: explicit HTTPS should pass
+  - it: explicit HTTPS should render
     values:
       - ../_values/service_main_default.yaml
     set:
       service.main.ports.http.protocol: HTTPS
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.ports[0].protocol
           value: TCP
 
-  - it: explicit appProtocol should pass
+  - it: explicit appProtocol should render
     values:
       - ../_values/service_main_default.yaml
     set:
       service.main.ports.http.appProtocol: kubernetes.io/h2c
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.ports[0].appProtocol
           value: kubernetes.io/h2c
+
+  - it: mixed protocols can be configured on the same port number
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service.main.ports.udptest:
+        port: 8081
+        protocol: UDP
+    documentSelector: *ServiceSelector
+    asserts:
+      - equal:
+          path: spec.ports
+          value:
+            - name: http
+              port: 8081
+              protocol: TCP
+              targetPort: 8081
+            - name: udptest
+              port: 8081
+              protocol: UDP
+              targetPort: 8081

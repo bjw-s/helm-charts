@@ -9,14 +9,11 @@ tests:
   - it: default should pass
     values:
       - ../_values/service_main_default.yaml
+    documentSelector: &ServiceSelector
+      path: $[?(@.kind == "Service")].metadata.name
+      value: RELEASE-NAME
     asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.ports[0]
           value:
             name: http
@@ -36,12 +33,9 @@ tests:
             server:
               enabled: true
               port: 8080
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.ports[0]
           value:
             name: server
@@ -59,12 +53,9 @@ tests:
             http:
               enabled: true
               targetPort: 80
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: spec.ports[0]
           value:
             name: http
