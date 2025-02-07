@@ -54,7 +54,13 @@ Probes used by the container.
                 "scheme" $probeType
               )
             -}}
-          {{- else }}
+          {{- else if (eq $probeType "GRPC") -}}
+            {{- $probeHeader = "grpc" -}}
+            {{- $_ := set $probeDefinition $probeHeader dict -}}
+              {{- if $probeValues.service -}}
+                {{- $_ := set (index $probeDefinition $probeHeader) "service" $probeValues.service -}}
+              {{- end -}}
+          {{- else -}}
             {{- $probeHeader = "tcpSocket" -}}
             {{- $_ := set $probeDefinition $probeHeader dict -}}
           {{- end -}}

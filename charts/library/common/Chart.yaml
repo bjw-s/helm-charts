@@ -32,3 +32,6 @@ annotations:
     - kind: added
       description: |-
         Add support for templating Pod affinity
+    - kind: added
+      description: |-
+        Add support for configuring gRPC probes
