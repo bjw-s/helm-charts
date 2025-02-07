@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.6.2
+version: 3.7.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -17,3 +17,9 @@ annotations:
     - kind: fixed
       description: |-
         Raw resources with `forceRename` fields are no longer flagged as invalid
+    - kind: added
+      description: |-
+        Allow setting pullPolicy to Never
+    - kind: added
+      description: |-
+        Revamped configMap.fromFiles into configMap.fromFolder
