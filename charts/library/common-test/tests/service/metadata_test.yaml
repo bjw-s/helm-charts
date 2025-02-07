@@ -6,18 +6,16 @@ templates:
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
-  - it: default metadata should pass
+  - it: default metadata
     values:
       - ../_values/service_main_default.yaml
+    documentSelector: &ServiceSelector
+      path: $[?(@.kind == "Service")].metadata.name
+      value: RELEASE-NAME
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        notExists:
+      - notExists:
           path: metadata.annotations
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
@@ -26,7 +24,7 @@ tests:
             app.kubernetes.io/service: RELEASE-NAME
             helm.sh/chart: common-test-1.0.0
 
-  - it: custom metadata should pass
+  - it: custom metadata
     values:
       - ../_values/service_main_default.yaml
     set:
@@ -36,17 +34,13 @@ tests:
             test_annotation: test
           labels:
             test_label: test
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: metadata.annotations
           value:
             test_annotation: test
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
@@ -56,7 +50,7 @@ tests:
             helm.sh/chart: common-test-1.0.0
             test_label: test
 
-  - it: custom metadata with global metadata should pass
+  - it: custom metadata with global metadata
     values:
       - ../_values/service_main_default.yaml
     set:
@@ -71,18 +65,14 @@ tests:
             test_annotation: test
           labels:
             test_label: test
+    documentSelector: *ServiceSelector
     asserts:
-      - documentIndex: &ServiceDocument 1
-        isKind:
-          of: Service
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: metadata.annotations
           value:
             global_annotation: test
             test_annotation: test
-      - documentIndex: *ServiceDocument
-        equal:
+      - equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME

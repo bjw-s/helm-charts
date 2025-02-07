@@ -178,7 +178,7 @@
     "properties": {
       "pullPolicy": {
         "type": "string",
-        "enum": ["Always", "IfNotPresent"]
+        "enum": ["Always", "IfNotPresent", "Never"]
       },
       "repository": {
         "type": "string"
@@ -206,12 +206,15 @@
       "port": {
         "type": ["number", "string"]
       },
+      "service": {
+        "type": "string"
+      },
       "spec": {
         "$ref": "k8s-api.json#/core.v1.Probe"
       },
       "type": {
         "type": "string",
-        "enum": ["TCP", "HTTP", "HTTPS", "AUTO"]
+        "enum": ["TCP", "HTTP", "HTTPS", "GRPC", "AUTO"]
       }
     }
   }

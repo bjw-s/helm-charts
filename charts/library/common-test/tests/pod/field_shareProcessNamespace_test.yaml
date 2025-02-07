@@ -1,0 +1,35 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod security
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: shareProcessNamespace should not be present by default
+    documentSelector: &DeploymentSelector
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME
+    asserts:
+      - notExists:
+          path: spec.template.spec.shareProcessNamespace
+
+  - it: shareProcessNamespace disabled should pass
+    set:
+      defaultPodOptions:
+        shareProcessNamespace: false
+    documentSelector: *DeploymentSelector
+    asserts:
+      - equal:
+          path: spec.template.spec.shareProcessNamespace
+          value: false
+
+  - it: shareProcessNamespace enabled should pass
+    set:
+      defaultPodOptions:
+        shareProcessNamespace: true
+    documentSelector: *DeploymentSelector
+    asserts:
+      - equal:
+          path: spec.template.spec.shareProcessNamespace
+          value: true

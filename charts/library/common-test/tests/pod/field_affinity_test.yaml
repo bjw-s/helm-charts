@@ -6,16 +6,15 @@ templates:
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
-  - it: default should pass
+  - it: affinity is not present by default
+    documentSelector: &DeploymentSelector
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: RELEASE-NAME
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        notExists:
+      - notExists:
           path: spec.template.spec.affinity
 
-  - it: defaultPodOption should pass
+  - it: affinity can be set with defaultPodOption
     set:
       defaultPodOptions:
         affinity:
@@ -28,12 +27,9 @@ tests:
                       values:
                         - antarctica-east1
                         - antarctica-west1
+    documentSelector: *DeploymentSelector
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.affinity
           value:
             nodeAffinity:
@@ -46,7 +42,7 @@ tests:
                           - antarctica-east1
                           - antarctica-west1
 
-  - it: defaultPodOption with pod override should pass
+  - it: affinity can be set with defaultPodOption and overridden on pod level
     set:
       defaultPodOptions:
         affinity:
@@ -72,12 +68,9 @@ tests:
                           values:
                             - asia-east1
                             - asia-west1
+    documentSelector: *DeploymentSelector
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.affinity
           value:
             nodeAffinity:
@@ -89,3 +82,33 @@ tests:
                         values:
                           - asia-east1
                           - asia-west1
+
+  - it: affinity can be configured with templated valued
+    set:
+      controllers:
+        main:
+          pod:
+            affinity:
+              podAntiAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  - labelSelector:
+                      matchExpressions:
+                        - key: app
+                          operator: In
+                          values:
+                            - "{{ .Release.Name }}"
+                    topologyKey: kubernetes.io/hostname
+    documentSelector: *DeploymentSelector
+    asserts:
+      - equal:
+          path: spec.template.spec.affinity
+          value:
+            podAntiAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchExpressions:
+                      - key: app
+                        operator: In
+                        values:
+                          - RELEASE-NAME
+                  topologyKey: kubernetes.io/hostname

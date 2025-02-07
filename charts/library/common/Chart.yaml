@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.6.1
+version: 3.7.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,10 +16,22 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        Only add hostUsers when explicitly configured
-    - kind: fixed
+        Raw resources with `forceRename` fields are no longer flagged as invalid
+    - kind: added
       description: |-
-        `hosts` should be an optional field for Ingress resources
-    - kind: fixed
+        Allow setting pullPolicy to Never
+    - kind: added
       description: |-
-        `defaultBackend` should be an object for Ingress resources
+        Revamped configMap.fromFiles into configMap.fromFolder
+    - kind: added
+      description: |-
+        Add support for setting shareProcessNamespace on Pods
+    - kind: added
+      description: |-
+        Add support for templating ServiceMonitor endpoints
+    - kind: added
+      description: |-
+        Add support for templating Pod affinity
+    - kind: added
+      description: |-
+        Add support for configuring gRPC probes

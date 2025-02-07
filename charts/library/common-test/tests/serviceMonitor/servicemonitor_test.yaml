@@ -8,12 +8,11 @@ values:
 tests:
   - it: a serviceMonitor is not created by default
     asserts:
-      - hasDocuments:
-          count: 1
-      - documentIndex: 0
-        not: true
-        isKind:
-          of: ServiceMonitor
+      - not: true
+        containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: RELEASE-NAME
 
   - it: a serviceMonitor is not created when disabled
     set:
@@ -22,14 +21,13 @@ tests:
           enabled: false
           serviceName: "{{ .Release.Name }}"
     asserts:
-      - hasDocuments:
-          count: 1
-      - documentIndex: 0
-        not: true
-        isKind:
-          of: ServiceMonitor
+      - not: true
+        containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: RELEASE-NAME
 
-  - it: a serviceMonitor is created
+  - it: a serviceMonitor can be configured
     set:
       serviceMonitor:
         main:
@@ -42,35 +40,25 @@ tests:
               path: /metrics
               interval: 1m
               scrapeTimeout: 10s
+    documentSelector: &ServiceMonitorSelector
+      path: $[?(@.kind == "ServiceMonitor")].metadata.name
+      value: RELEASE-NAME
     asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &ServiceMonitorDocument 1
-        isKind:
-          of: ServiceMonitor
-      - documentIndex: *ServiceMonitorDocument
-        equal:
-          path: metadata.name
-          value: RELEASE-NAME
-      - documentIndex: *ServiceMonitorDocument
-        equal:
+      - equal:
           path: spec.namespaceSelector
           value:
             matchNames:
               - NAMESPACE
-      - documentIndex: *ServiceMonitorDocument
-        equal:
+      - equal:
           path: spec.jobLabel
           value: RELEASE-NAME
-      - documentIndex: *ServiceMonitorDocument
-        equal:
+      - equal:
           path: spec.selector.matchLabels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
             app.kubernetes.io/service: RELEASE-NAME
-      - documentIndex: *ServiceMonitorDocument
-        equal:
+      - equal:
           path: spec.endpoints
           value:
             - port: http
@@ -78,8 +66,7 @@ tests:
               path: /metrics
               interval: 1m
               scrapeTimeout: 10s
-      - documentIndex: *ServiceMonitorDocument
-        equal:
+      - equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
@@ -88,7 +75,7 @@ tests:
             helm.sh/chart: common-test-1.0.0
             test.label: testvalue
 
-  - it: a serviceMonitor is created with nameOverride
+  - it: a serviceMonitor can be created with a nameOverride
     set:
       serviceMonitor:
         main:
@@ -100,25 +87,18 @@ tests:
               path: /metrics
               interval: 1m
               scrapeTimeout: 10s
+    documentSelector:
+      path: $[?(@.kind == "ServiceMonitor")].metadata.name
+      value: RELEASE-NAME-test
     asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &ServiceMonitorDocument 1
-        isKind:
-          of: ServiceMonitor
-      - documentIndex: *ServiceMonitorDocument
-        equal:
-          path: metadata.name
-          value: RELEASE-NAME-test
-      - documentIndex: *ServiceMonitorDocument
-        equal:
+      - equal:
           path: spec.selector.matchLabels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
             app.kubernetes.io/service: RELEASE-NAME
 
-  - it: a serviceMonitor is created with a templated service
+  - it: a templated service can be configured
     set:
       serviceMonitor:
         main:
@@ -129,25 +109,16 @@ tests:
               path: /metrics
               interval: 1m
               scrapeTimeout: 10s
+    documentSelector: *ServiceMonitorSelector
     asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &ServiceMonitorDocument 1
-        isKind:
-          of: ServiceMonitor
-      - documentIndex: *ServiceMonitorDocument
-        equal:
-          path: metadata.name
-          value: RELEASE-NAME
-      - documentIndex: *ServiceMonitorDocument
-        equal:
+      - equal:
           path: spec.selector.matchLabels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
             app.kubernetes.io/service: RELEASE-NAME
 
-  - it: a serviceMonitor is created with a custom selector
+  - it: a custom selector can be configured
     set:
       serviceMonitor:
         main:
@@ -160,25 +131,16 @@ tests:
               path: /metrics
               interval: 1m
               scrapeTimeout: 10s
+    documentSelector: *ServiceMonitorSelector
     asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &ServiceMonitorDocument 1
-        isKind:
-          of: ServiceMonitor
-      - documentIndex: *ServiceMonitorDocument
-        equal:
-          path: metadata.name
-          value: RELEASE-NAME
-      - documentIndex: *ServiceMonitorDocument
-        equal:
+      - equal:
           path: spec.selector
           value:
             matchExpressions:
               - key: k8s-app
                 operator: Exists
 
-  - it: a serviceMonitor is created with targetLabels
+  - it: targetLabels can be configured
     set:
       serviceMonitor:
         main:
@@ -193,25 +155,15 @@ tests:
           targetLabels:
             - testlabel1
             - testlabel2
+    documentSelector: *ServiceMonitorSelector
     asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &ServiceMonitorDocument 1
-        isKind:
-          of: ServiceMonitor
-      - documentIndex: *ServiceMonitorDocument
-        equal:
-          path: metadata.name
-          value: RELEASE-NAME
-      - documentIndex: *ServiceMonitorDocument
-        equal:
+      - equal:
           path: spec.selector.matchLabels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
             app.kubernetes.io/name: RELEASE-NAME
             app.kubernetes.io/service: RELEASE-NAME
-      - documentIndex: *ServiceMonitorDocument
-        equal:
+      - equal:
           path: spec.endpoints
           value:
             - port: http
@@ -219,9 +171,48 @@ tests:
               path: /metrics
               interval: 1m
               scrapeTimeout: 10s
-      - documentIndex: *ServiceMonitorDocument
-        equal:
+      - equal:
           path: spec.targetLabels
           value:
             - testlabel1
             - testlabel2
+
+  - it: a serviceMonitor can be configured with templated endpoints
+    set:
+      serviceMonitor:
+        main:
+          labels:
+            test.label: testvalue
+          serviceName: "{{ .Release.Name }}"
+          endpoints:
+            - port: http
+              scheme: http
+              path: /metrics
+              interval: 1m
+              scrapeTimeout: 10s
+              basicAuth:
+                username:
+                  name: "{{.Release.Name}}-secret"
+                  key: USERNAME
+                password:
+                  name: "{{.Release.Name}}-secret"
+                  key: PASSWORD
+    documentSelector: &ServiceMonitorSelector
+      path: $[?(@.kind == "ServiceMonitor")].metadata.name
+      value: RELEASE-NAME
+    asserts:
+      - equal:
+          path: spec.endpoints
+          value:
+            - port: http
+              scheme: http
+              path: /metrics
+              interval: 1m
+              scrapeTimeout: 10s
+              basicAuth:
+                username:
+                  name: RELEASE-NAME-secret
+                  key: USERNAME
+                password:
+                  name: RELEASE-NAME-secret
+                  key: PASSWORD

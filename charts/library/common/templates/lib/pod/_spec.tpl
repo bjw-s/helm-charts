@@ -31,6 +31,9 @@ hostPID: {{ include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "
     {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "hostUsers")) }}
 hostUsers: {{ . | trim }}
     {{- end -}}
+    {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "shareProcessNamespace")) }}
+shareProcessNamespace: {{ . | trim }}
+    {{- end -}}
   {{- end }}
 dnsPolicy: {{ include "bjw-s.common.lib.pod.field.dnsPolicy" (dict "ctx" $ctx) | trim }}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "dnsConfig")) }}
@@ -52,7 +55,7 @@ restartPolicy: {{ . | trim }}
 nodeSelector: {{ . | nindent 2 }}
   {{- end -}}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "affinity")) }}
-affinity: {{ . | nindent 2 }}
+affinity: {{- tpl . $rootContext | nindent 2 }}
   {{- end -}}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "topologySpreadConstraints")) }}
 topologySpreadConstraints: {{ . | nindent 2 }}
