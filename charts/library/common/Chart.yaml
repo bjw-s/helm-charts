@@ -23,3 +23,6 @@ annotations:
     - kind: added
       description: |-
         Revamped configMap.fromFiles into configMap.fromFolder
+    - kind: added
+      description: |-
+        Add support for setting shareProcessNamespace on Pods

@@ -79,6 +79,10 @@ defaultPodOptions:
   # -- Configure the Security Context for the Pod
   securityContext: {}
 
+  # -- Allows sharing process namespace between containers in a Pod
+  # -- [[ref](https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/)]
+  shareProcessNamespace:
+
   # -- Duration in seconds the pod needs to terminate gracefully
   # -- [[ref](https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#lifecycle)]
   terminationGracePeriodSeconds:

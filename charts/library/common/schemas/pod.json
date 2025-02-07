@@ -79,6 +79,10 @@
       "securityContext": {
         "$ref": "k8s-api.json#/core.v1.PodSecurityContext"
       },
+      "shareProcessNamespace": {
+        "type": ["boolean", "null"],
+        "default": false
+      },
       "terminationGracePeriodSeconds": {
         "type": ["integer", "null"]
       },
