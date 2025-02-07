@@ -19,28 +19,24 @@ set:
               port: 443
               protocol: TCP
 tests:
-  - it: default should pass
+  - it: raw resources can be configured
+    documentSelector: &EndpointSelector
+      path: $[?(@.kind == "Endpoint")].metadata.name
+      value: RELEASE-NAME-endpoint
     asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &rawResourceDocument 1
-        isKind:
-          of: Endpoint
-      - documentIndex: *rawResourceDocument
-        equal:
+      - equal:
           path: subsets[0].addresses[0].ip
           value: 127.0.0.1
 
-  - it: nameOverride should pass
+  - it: nameOverride can be configured
     set:
       rawResources.endpoint:
         nameOverride: test
+    documentSelector:
+      path: $[?(@.kind == "Endpoint")].metadata.name
+      value: RELEASE-NAME-test
     asserts:
-      - documentIndex: &rawResourceDocument 1
-        isKind:
-          of: Endpoint
-      - documentIndex: *rawResourceDocument
-        equal:
+      - equal:
           path: metadata.name
           value: RELEASE-NAME-test
 
@@ -48,16 +44,15 @@ tests:
     set:
       rawResources.endpoint:
         nameOverride: "{{ .Release.Name }}"
+    documentSelector:
+      path: $[?(@.kind == "Endpoint")].metadata.name
+      value: RELEASE-NAME
     asserts:
-      - documentIndex: &rawResourceDocument 1
-        isKind:
-          of: Endpoint
-      - documentIndex: *rawResourceDocument
-        equal:
+      - equal:
           path: metadata.name
           value: RELEASE-NAME
 
-  - it: spec with template should pass
+  - it: spec can render Helm template
     set:
       rawResources.endpoint:
         spec:
@@ -68,11 +63,8 @@ tests:
               - name: "{{ .Release.Name }}"
                 port: 443
                 protocol: TCP
+    documentSelector: *EndpointSelector
     asserts:
-      - documentIndex: &rawResourceDocument 1
-        isKind:
-          of: Endpoint
-      - documentIndex: *rawResourceDocument
-        equal:
+      - equal:
           path: subsets[0].ports[0].name
           value: RELEASE-NAME

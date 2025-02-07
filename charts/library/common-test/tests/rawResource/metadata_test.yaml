@@ -13,18 +13,14 @@ set:
       spec:
         test: test
 tests:
-  - it: default metadata should pass
+  - it: default metadata should be present
+    documentSelector: &EndpointSelector
+      path: $[?(@.kind == "Endpoint")].metadata.name
+      value: RELEASE-NAME-config
     asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &rawResourceDocument 1
-        isKind:
-          of: Endpoint
-      - documentIndex: *rawResourceDocument
-        notExists:
+      - notExists:
           path: metadata.annotations
-      - documentIndex: *rawResourceDocument
-        equal:
+      - equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
@@ -32,7 +28,7 @@ tests:
             app.kubernetes.io/name: RELEASE-NAME
             helm.sh/chart: common-test-1.0.0
 
-  - it: custom metadata should pass
+  - it: custom metadata can be configured
     set:
       rawResources:
         config:
@@ -40,19 +36,13 @@ tests:
             test_annotation: test
           labels:
             test_label: test
+    documentSelector: *EndpointSelector
     asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &rawResourceDocument 1
-        isKind:
-          of: Endpoint
-      - documentIndex: *rawResourceDocument
-        equal:
+      - equal:
           path: metadata.annotations
           value:
             test_annotation: test
-      - documentIndex: *rawResourceDocument
-        equal:
+      - equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
@@ -61,7 +51,7 @@ tests:
             helm.sh/chart: common-test-1.0.0
             test_label: test
 
-  - it: custom metadata with global metadata should pass
+  - it: global metadata can be configured with local overrides
     set:
       global:
         labels:
@@ -74,20 +64,14 @@ tests:
             test_annotation: test
           labels:
             test_label: test
+    documentSelector: *EndpointSelector
     asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &rawResourceDocument 1
-        isKind:
-          of: Endpoint
-      - documentIndex: *rawResourceDocument
-        equal:
+      - equal:
           path: metadata.annotations
           value:
             global_annotation: test
             test_annotation: test
-      - documentIndex: *rawResourceDocument
-        equal:
+      - equal:
           path: metadata.labels
           value:
             app.kubernetes.io/instance: RELEASE-NAME
