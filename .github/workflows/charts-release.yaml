@@ -34,59 +34,73 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Collect charts to release
-        uses: bjw-s/helm-charts-actions/collect-charts@main
-        id: collect-charts
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v45
         with:
-          repoConfigFile: ./.ci/repo-config.yaml
-          overrideCharts: "[${{ inputs.charts }}]"
-          requireHeadAheadOfBase: false
+          dir_names: true
 
-  release-library-charts:
-    name: Release Library charts to GitHub pages
-    uses: ./.github/workflows/charts-release-ghpages.yaml
-    needs:
-      - prepare
-    with:
-      charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
-    secrets: inherit
+      - name: List all changed files
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: |
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "$file was changed"
+          done
 
-  tag-library-charts:
-    name: Create git tags for library charts
-    uses: ./.github/workflows/tag-charts.yaml
-    needs:
-      - prepare
-      - release-library-charts
-    with:
-      charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
-    secrets: inherit
+      # - name: Collect charts to release
+      #   uses: bjw-s/helm-charts-actions/collect-charts@main
+      #   id: collect-charts
+      #   with:
+      #     repoConfigFile: ./.ci/repo-config.yaml
+      #     overrideCharts: "[${{ inputs.charts }}]"
+      #     requireHeadAheadOfBase: false
 
-  release-application-charts:
-    name: Release Application charts to GitHub pages
-    uses: ./.github/workflows/charts-release-ghpages.yaml
-    needs:
-      - prepare
-      - release-library-charts
-    with:
-      charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
-    secrets: inherit
+  # release-library-charts:
+  #   name: Release Library charts to GitHub pages
+  #   uses: ./.github/workflows/charts-release-ghpages.yaml
+  #   needs:
+  #     - prepare
+  #   with:
+  #     charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
+  #   secrets: inherit
 
-  tag-application-charts:
-    name: Create git tags for application charts
-    uses: ./.github/workflows/tag-charts.yaml
-    needs:
-      - prepare
-      - release-application-charts
-    with:
-      charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
-    secrets: inherit
+  # tag-library-charts:
+  #   name: Create git tags for library charts
+  #   uses: ./.github/workflows/tag-charts.yaml
+  #   needs:
+  #     - prepare
+  #     - release-library-charts
+  #   with:
+  #     charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
+  #   secrets: inherit
 
-  release-github-oci:
-    name: Release Application charts to GitHub Container Registry
-    uses: ./.github/workflows/charts-release-oci.yaml
-    needs:
-      - prepare
-      - release-library-charts
-    with:
-      charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
-    secrets: inherit
+  # release-application-charts:
+  #   name: Release Application charts to GitHub pages
+  #   uses: ./.github/workflows/charts-release-ghpages.yaml
+  #   needs:
+  #     - prepare
+  #     - release-library-charts
+  #   with:
+  #     charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
+  #   secrets: inherit
+
+  # tag-application-charts:
+  #   name: Create git tags for application charts
+  #   uses: ./.github/workflows/tag-charts.yaml
+  #   needs:
+  #     - prepare
+  #     - release-application-charts
+  #   with:
+  #     charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
+  #   secrets: inherit
+
+  # release-github-oci:
+  #   name: Release Application charts to GitHub Container Registry
+  #   uses: ./.github/workflows/charts-release-oci.yaml
+  #   needs:
+  #     - prepare
+  #     - release-library-charts
+  #   with:
+  #     charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
+  #   secrets: inherit
