@@ -46,7 +46,7 @@ jobs:
           files: |
             library/**
           files_ignore: |
-            library/*-test
+            library/common-test
 
       - name: Get changed charts
         id: changed-charts
