@@ -23,12 +23,12 @@ env:
   HELM_VERSION: 3.11.2
 
 jobs:
-  prepare:
+  changed-charts:
     name: Prepare data required for release
     runs-on: ubuntu-22.04
     outputs:
-      libraryChartsToRelease: ${{ steps.collect-charts.outputs.chartsLibraryToRelease }}
-      applicationChartsToRelease: ${{ steps.collect-charts.outputs.chartsApplicationToRelease }}
+      libraryChartsToRelease: ${{ steps.changed-library-charts.outputs.all_changed_files }}
+      applicationChartsToRelease: ${{ steps.changed-charts.outputs.all_changed_files }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -81,11 +81,37 @@ jobs:
       #     overrideCharts: "[${{ inputs.charts }}]"
       #     requireHeadAheadOfBase: false
 
-  # release-library-charts:
-  #   name: Release Library charts to GitHub pages
+  release-library-charts:
+    name: Release Library charts
+    runs-on: ubuntu-22.04
+    needs:
+      - changed-charts
+    strategy:
+      matrix:
+        files: ${{ fromJSON(needs.changed-charts.outputs.libraryChartsToRelease) }}
+      max-parallel: 2
+      fail-fast: false
+    steps:
+      - name: List all changed library charts
+        run: |
+          echo ${{ matrix.files }}
+
+  release-charts:
+    name: Release Library charts
+    runs-on: ubuntu-22.04
+    needs:
+      - changed-charts
+    strategy:
+      matrix:
+        files: ${{ fromJSON(needs.changed-charts.outputs.applicationChartsToRelease) }}
+      max-parallel: 2
+      fail-fast: false
+    steps:
+      - name: List all changed library charts
+        run: |
+          echo ${{ matrix.files }}
+
   #   uses: ./.github/workflows/charts-release-ghpages.yaml
-  #   needs:
-  #     - prepare
   #   with:
   #     charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
   #   secrets: inherit
