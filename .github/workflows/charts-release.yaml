@@ -39,8 +39,8 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v45
         with:
-          path: ./charts
-          # dir_names: true
+          files: |
+            charts/**
           dir_names_max_depth: 3
 
       - name: List all changed files
