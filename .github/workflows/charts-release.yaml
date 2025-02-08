@@ -20,7 +20,7 @@ on:
       - "charts/**"
 
 env:
-  HELM_VERSION: 3.11.2
+  HELM_VERSION: 3.17.0
 
 jobs:
   changed-charts:
@@ -59,30 +59,6 @@ jobs:
           files_ignore: |
             library/**
 
-      - name: List all changed library charts
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-library-charts.outputs.all_changed_files }}
-        run: |
-          for file in ${ALL_CHANGED_FILES}; do
-            echo "$file was changed"
-          done
-
-      - name: List all changed library charts
-        env:
-          ALL_CHANGED_FILES: ${{ steps.changed-charts.outputs.all_changed_files }}
-        run: |
-          for file in ${ALL_CHANGED_FILES}; do
-            echo "$file was changed"
-          done
-
-      # - name: Collect charts to release
-      #   uses: bjw-s/helm-charts-actions/collect-charts@main
-      #   id: collect-charts
-      #   with:
-      #     repoConfigFile: ./.ci/repo-config.yaml
-      #     overrideCharts: "[${{ inputs.charts }}]"
-      #     requireHeadAheadOfBase: false
-
   release-library-charts:
     name: Release Library charts
     runs-on: ubuntu-22.04
@@ -103,6 +79,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs:
       - changed-charts
+      - release-library-charts
     strategy:
       matrix:
         charts: ${{ fromJSON(needs.changed-charts.outputs.applicationChartsToRelease) }}
