@@ -39,7 +39,8 @@ jobs:
         id: changed-library-charts
         uses: tj-actions/changed-files@v45
         with:
-          base_sha: main
+          matrix: true
+          base_sha: main  # TODO: Remove this
           path: charts
           dir_names: true
           dir_names_max_depth: 2
@@ -50,7 +51,8 @@ jobs:
         id: changed-charts
         uses: tj-actions/changed-files@v45
         with:
-          base_sha: main
+          matrix: true
+          base_sha: main  # TODO: Remove this
           path: charts
           dir_names: true
           dir_names_max_depth: 2
@@ -88,13 +90,13 @@ jobs:
       - changed-charts
     strategy:
       matrix:
-        files: ${{ fromJSON(needs.changed-charts.outputs.libraryChartsToRelease) }}
+        charts: ${{ fromJSON(needs.changed-charts.outputs.libraryChartsToRelease) }}
       max-parallel: 2
       fail-fast: false
     steps:
       - name: List all changed library charts
         run: |
-          echo ${{ matrix.files }}
+          echo ${{ matrix.charts }}
 
   release-charts:
     name: Release Library charts
@@ -103,13 +105,13 @@ jobs:
       - changed-charts
     strategy:
       matrix:
-        files: ${{ fromJSON(needs.changed-charts.outputs.applicationChartsToRelease) }}
+        charts: ${{ fromJSON(needs.changed-charts.outputs.applicationChartsToRelease) }}
       max-parallel: 2
       fail-fast: false
     steps:
       - name: List all changed library charts
         run: |
-          echo ${{ matrix.files }}
+          echo ${{ matrix.charts }}
 
   #   uses: ./.github/workflows/charts-release-ghpages.yaml
   #   with:
