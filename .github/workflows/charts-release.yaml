@@ -35,7 +35,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get changed charts
+      - name: Get changed library charts
         id: changed-files
         uses: tj-actions/changed-files@v45
         with:
@@ -43,6 +43,19 @@ jobs:
           path: charts
           dir_names: true
           dir_names_max_depth: 2
+          files: |
+            library/**
+
+      - name: Get changed other charts
+        id: changed-files
+        uses: tj-actions/changed-files@v45
+        with:
+          base_sha: main
+          path: charts
+          dir_names: true
+          dir_names_max_depth: 2
+          files_ignore: |
+            library/**
 
       - name: List all changed files
         env:
