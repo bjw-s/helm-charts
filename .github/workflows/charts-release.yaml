@@ -36,7 +36,7 @@ jobs:
           fetch-depth: 0
 
       - name: Get changed library charts
-        id: changed-files
+        id: changed-library-charts
         uses: tj-actions/changed-files@v45
         with:
           base_sha: main
@@ -48,8 +48,8 @@ jobs:
           files_ignore: |
             library/*-test
 
-      - name: Get changed other charts
-        id: changed-files
+      - name: Get changed charts
+        id: changed-charts
         uses: tj-actions/changed-files@v45
         with:
           base_sha: main
@@ -59,9 +59,17 @@ jobs:
           files_ignore: |
             library/**
 
-      - name: List all changed files
+      - name: List all changed library charts
         env:
-          ALL_CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+          ALL_CHANGED_FILES: ${{ steps.changed-library-charts.outputs.all_changed_files }}
+        run: |
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "$file was changed"
+          done
+
+      - name: List all changed library charts
+        env:
+          ALL_CHANGED_FILES: ${{ steps.changed-charts.outputs.all_changed_files }}
         run: |
           for file in ${ALL_CHANGED_FILES}; do
             echo "$file was changed"
