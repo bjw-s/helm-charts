@@ -17,6 +17,11 @@
 👋 Welcome to my Helm Charts repository. This repo contains Helm charts that I have developed to run applications in my [home Kubernetes cluster](https://github.com/bjw-s/home-ops/).
 This repo is **not** intended to be a replacement for any of the large collections of Helm charts that are out there.
 
+# 🚨 Notification 🚨
+
+This repository is scheduled to move to a new location on May 1st 2025. See https://github.com/bjw-s/helm-charts/issues/378 for more details.
+
+
 ---
 
 ## Installation
