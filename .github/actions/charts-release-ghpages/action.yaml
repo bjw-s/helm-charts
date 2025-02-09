@@ -41,6 +41,7 @@ runs:
         TARGET_FOLDER: ${{ inputs.targetFolder }}
       run: |
         for ARTIFACT in */; do
+          ARTIFACT=${ARTIFACT%*/}
           echo ${ARTIFACT}
           prefix_removed_chart=${ARTIFACT/#$ARTIFACT_PREFIX}
           DELIMITER='__'
