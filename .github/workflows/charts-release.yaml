@@ -41,7 +41,7 @@ jobs:
         id: repo-config
         shell: bash
         run: |
-          echo "config=$(yq '.' '.ci/repo-config.yaml' -o json)" >> "$GITHUB_OUTPUT"
+          echo "config=$(yq '.' '.ci/repo-config.yaml' -o json -I=0)" >> "$GITHUB_OUTPUT"
 
       - name: Get changed library charts
         id: changed-library-charts
