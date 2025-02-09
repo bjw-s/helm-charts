@@ -84,6 +84,7 @@ jobs:
           echo ${{ matrix.charts }}
 
       - name: Generate Token
+        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         uses: actions/create-github-app-token@v1
         id: app-token
         with:
@@ -91,12 +92,14 @@ jobs:
           private-key: "${{ secrets.BJWS_APP_PRIVATE_KEY }}"
 
       - name: Checkout source branch
+        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         uses: actions/checkout@v4
         with:
           path: src
           fetch-depth: 0
 
       - name: Checkout gh-pages branch
+        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         uses: actions/checkout@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
@@ -105,6 +108,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install Kubernetes tools
+        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         uses: yokawasa/action-setup-kube-tools@v0.11.1
         with:
           setup-tools: |
@@ -112,11 +116,13 @@ jobs:
           helm: "${{ env.HELM_VERSION }}"
 
       - name: Package Helm Chart
+        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         shell: bash
         env:
           SRC_DIR: "src/charts"
           DEST_DIR: gh-pages
         run: |
+          mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
           CHART_TYPE=${CHART_PATH_PARTS[0]}
           helm package "${SRC_DIR}/${{ matrix.charts }}" --dependency-update --destination "${DEST_DIR}/${CHART_TYPE}"
 
