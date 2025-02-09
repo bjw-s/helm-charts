@@ -204,6 +204,7 @@ jobs:
         uses: ./src/.github/actions/publish-folder-to-pages
         with:
           path: gh-pages/
+          deleteArtifactAfterPublish: true
 
   # release-charts:
   #   name: Release charts

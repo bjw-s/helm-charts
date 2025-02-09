@@ -47,11 +47,11 @@ runs:
         retention-days: 1
         if-no-files-found: error
 
-    # - name: Deploy to GitHub Pages
-    #   id: deploy-gh-pages
-    #   uses: actions/deploy-pages@v4
-    #   with:
-    #     artifact_name: ${{ inputs.artifactName }}
+    - name: Deploy to GitHub Pages
+      id: deploy-gh-pages
+      uses: actions/deploy-pages@v4
+      with:
+        artifact_name: ${{ inputs.artifactName }}
 
     - name: Clean up artifact
       if: ${{ inputs.deleteArtifactAfterPublish == 'true' }}
