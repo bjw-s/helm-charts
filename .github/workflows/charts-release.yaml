@@ -178,7 +178,8 @@ jobs:
             CHART_FOLDER=${CHART_PATH_PARTS[0]}
 
             mkdir -p "gh-pages/${CHART_FOLDER}"
-            cp "artifacts/${CHART}/*.tgz" "gh-pages/${CHART_FOLDER}/"
+            ls "artifacts/${CHART}/"
+            # cp "artifacts/${CHART}/*.tgz" "gh-pages/${CHART_FOLDER}/"
           done
 
   # release-charts:
