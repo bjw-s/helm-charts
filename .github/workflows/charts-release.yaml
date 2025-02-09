@@ -77,9 +77,9 @@ jobs:
         charts: ${{ fromJSON(needs.changed-charts.outputs.libraryChartsToRelease) }}
       max-parallel: 2
       fail-fast: false
-    if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
     steps:
       - name: Echo chart folder
+        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         run: |
           echo ${{ matrix.charts }}
 
@@ -94,9 +94,9 @@ jobs:
         charts: ${{ fromJSON(needs.changed-charts.outputs.applicationChartsToRelease) }}
       max-parallel: 2
       fail-fast: false
-    if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
     steps:
       - name: Echo chart folder
+        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         run: |
           echo ${{ matrix.charts }}
 
