@@ -201,7 +201,7 @@ jobs:
           disable_globbing: true
 
       - name: Publish changes to GitHub Pages
-        uses: ./src/.github/actions/override-chart-deps
+        uses: ./src/.github/actions/publish-folder-to-pages
         with:
           path: gh-pages/
 
