@@ -143,6 +143,12 @@ jobs:
           path: artifacts
           pattern: library__*
 
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          path: src
+
       - name: Checkout gh-pages branch
         uses: actions/checkout@v4
         with:
@@ -188,7 +194,7 @@ jobs:
           disable_globbing: true
 
       - name: Publish changes to GitHub Pages
-        uses: ./.github/actions/override-chart-deps
+        uses: ./src/.github/actions/override-chart-deps
         with:
           path: gh-pages/
 
