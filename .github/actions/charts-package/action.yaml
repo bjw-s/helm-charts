@@ -52,7 +52,7 @@ runs:
         ROOT_DIR: "${{ inputs.rootFolder }}"
         CHART_DIR: "${{ inputs.chartFolder }}"
         PARENT_DIR: "${{ steps.chart-details.outputs.parentdir }}"
-        TARGET_DIR: "${{ steps.chart-details.outputs.destinationFolder }}"
+        TARGET_DIR: "${{ inputs.outputs.destinationFolder }}"
       run: |
         helm package "${ROOT_DIR}/${CHART_DIR}" --dependency-update --destination "${TARGET_DIR}/${PARENT_DIR}"
 
