@@ -42,8 +42,9 @@ runs:
     - name: Dereference JSON schema before packaging
       uses: bjw-s/helm-charts-actions/dereference-json-schema@main
       with:
-        schemaFile: "${{ inputs.chartFolder }}/${{ inputs.chartFolder }}/values.schema.json"
-        outputFile: "${{ inputs.chartFolder }}/${{ inputs.chartFolder }}/values.schema.json"
+        schemaFile: "${{ inputs.rootFolder }}/${{ inputs.chartFolder }}/values.schema.json"
+        outputFile: "${{ inputs.rootFolder }}/${{ inputs.chartFolder }}/values.schema.json"
+        allowFileNotFound: true
 
     - name: Package Helm Chart
       shell: bash
