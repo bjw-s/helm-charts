@@ -112,11 +112,25 @@ jobs:
           targetFolder: gh-pages
           targetBranch: gh-pages
 
-      # - name: Publish changes to GitHub Pages
-      #   uses: ./src/.github/actions/publish-folder-to-pages
-      #   with:
-      #     path: gh-pages/
-      #     deleteArtifactAfterPublish: true
+      - name: Publish changes to GitHub Pages
+        uses: ./src/.github/actions/publish-folder-to-pages
+        with:
+          path: gh-pages/
+
+  cleanup-library-charts-artifacts:
+    name: Release library charts to GitHub Pages
+    runs-on: ubuntu-22.04
+    needs:
+      - package-library-charts
+      - release-library-charts-to-github-pages
+    if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
+    steps:
+    - name: Clean up artifact
+      uses: joernott/rm-artifact@v1
+      with:
+        name: "*"
+        useGlob: true
+        failOnError: true
 
   # release-charts:
   #   name: Release charts
