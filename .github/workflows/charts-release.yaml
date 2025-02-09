@@ -115,6 +115,13 @@ jobs:
             helmv3
           helm: "${{ env.HELM_VERSION }}"
 
+      - name: Dereference JSON schema
+        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
+        uses: bjw-s/helm-charts-actions/dereference-json-schema@main
+        with:
+          schemaFile: src/charts/${{ matrix.charts }}/values.schema.json
+          outputFile: src/charts/${{ matrix.charts }}/values.schema.json
+
       - name: Package Helm Chart
         if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         shell: bash
