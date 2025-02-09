@@ -1,0 +1,64 @@
+---
+name: "Prepare chart artifacts for release"
+description: "Prepare chart artifacts for release to GitHub Pages"
+inputs:
+  artifactPattern:
+    description: "Pattern to match artifacts to release"
+    required: true
+  targetFolder:
+    description: "Folder where to move the chart artifacts"
+    required: true
+    default: gh-pages
+  targetBranch:
+    description: "Branch to push the chart artifacts"
+    required: true
+    default: gh-pages
+
+runs:
+  using: "composite"
+  steps:
+    - name: Prepare artifacts folder
+      shell: bash
+      run: |
+        mkdir -p artifacts
+
+    - name: Download chart artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: artifacts
+        pattern: ${{ inputs.artifactPattern }}
+
+    - name: Copy artifacts to gh-pages structure
+      shell: bash
+      run: |
+        CHARTS=$( ls artifacts/ )
+        for CHART in "${CHARTS[@]}" ; do
+          DELIMITER='__'
+          s=${CHART}${DELIMITER}
+          CHART_PATH_PARTS=();
+          while [[ $s ]]; do
+              CHART_PATH_PARTS+=( "${s%%"${DELIMITER}"*}" );
+              s=${s#*"${DELIMITER}"};
+          done;
+
+          CHART_FOLDER=${CHART_PATH_PARTS[0]}
+          mkdir -p "${{ inputs.targetFolder }}/${CHART_FOLDER}"
+          cp artifacts/${CHART}/* ${{ inputs.targetFolder }}/${CHART_FOLDER}/
+        done
+
+    - name: Update chart index
+      shell: bash
+      working-directory: ${{ inputs.targetFolder }}
+      run: |
+        helm repo index . --url https://bjw-s.github.io/helm-charts/
+
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        repository: ${{ inputs.artifactPattern }}
+        branch: ${{ inputs.targetBranch }}
+        commit_user_name: "bjw-s-bot[bot]"
+        commit_user_email: 87358111+bjw-s-bot[bot]@users.noreply.github.com
+        commit_author: bjw-s-bot[bot] <87358111+bjw-s-bot[bot]@users.noreply.github.com>
+        file_pattern: "index.yaml **/*.tgz"
+        disable_globbing: true

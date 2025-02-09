@@ -12,9 +12,6 @@ on:
     paths:
       - "charts/**"
 
-env:
-  HELM_VERSION: 3.17.0
-
 jobs:
   prepare-release:
     name: Prepare data required for release
@@ -67,7 +64,6 @@ jobs:
     strategy:
       matrix:
         charts: ${{ fromJSON(needs.prepare-release.outputs.libraryChartsToRelease) }}
-      max-parallel: 2
       fail-fast: false
     if: ${{ needs.prepare-release.outputs.libraryChartsToRelease != '[]' }}
     steps:
@@ -78,61 +74,47 @@ jobs:
           path: src
           fetch-depth: 0
 
-      - name: Install Kubernetes tools
+      - name: Package Helm charts
+        uses: ./src/.github/actions/charts-package
         if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
-        uses: yokawasa/action-setup-kube-tools@v0.11.1
         with:
-          setup-tools: |
-            helmv3
-          helm: "${{ env.HELM_VERSION }}"
+          rootFolder: src/charts
+          chartFolder: ${{ matrix.charts }}
 
-      - name: Grab chart details
-        id: chart-details
-        shell: bash
-        env:
-          SRC_DIR: "src/charts"
-        run: |
-          mapfile -t CHART_PATH_PARTS < <(echo "${{ matrix.charts }}" | tr '/' '\n')
-          CHART_FOLDER=${CHART_PATH_PARTS[0]}
-          echo "folder=${CHART_FOLDER}" >> "$GITHUB_OUTPUT"
-          echo "name=$(yq '.name' ${SRC_DIR}/${{ matrix.charts }}/Chart.yaml)" >> "$GITHUB_OUTPUT"
-          echo "version=$(yq '.version' ${SRC_DIR}/${{ matrix.charts }}/Chart.yaml)" >> "$GITHUB_OUTPUT"
+  # release-library-charts-to-github-pages:
+  #   name: Release library charts to GitHub Pages
+  #   runs-on: ubuntu-22.04
+  #   needs:
+  #     - package-library-charts
+  #   if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
+  #   permissions:
+  #     pages: write
+  #     id-token: write
+  #   steps:
+  #     - name: Checkout source branch
+  #       uses: actions/checkout@v4
+  #       with:
+  #         path: src
 
-      - name: Dereference JSON schema before packaging
-        if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
-        uses: bjw-s/helm-charts-actions/dereference-json-schema@main
-        with:
-          schemaFile: src/charts/${{ matrix.charts }}/values.schema.json
-          outputFile: src/charts/${{ matrix.charts }}/values.schema.json
+  #     - name: Checkout gh-pages branch
+  #       uses: actions/checkout@v4
+  #       with:
+  #         path: gh-pages
+  #         ref: gh-pages
+  #         fetch-depth: 0
 
-      - name: Package Helm Chart
-        if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
-        shell: bash
-        env:
-          SRC_DIR: src/charts
-          CHART_FOLDER: "${{ steps.chart-details.outputs.folder }}"
-        run: |
-          helm package "${SRC_DIR}/${{ matrix.charts }}" --dependency-update --destination "out/${CHART_FOLDER}"
+  #     - name: Prepare artifacts for release to GitHub Pages
+  #       uses: ./src/.github/actions/charts-release-ghpages
+  #       with:
+  #         artifactPattern: library__*
+  #         targetFolder: gh-pages
+  #         targetBranch: gh-pages
 
-      - name: Upload artifact
-        if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: "${{ steps.chart-details.outputs.folder }}__${{ steps.chart-details.outputs.name }}__${{ steps.chart-details.outputs.version }}"
-          path: out/${{ steps.chart-details.outputs.folder }}/${{ steps.chart-details.outputs.name }}-${{ steps.chart-details.outputs.version }}.tgz
-          retention-days: 7
-
-  release-library-charts-to-github-pages:
-    name: Release library charts to GitHub Pages
-    uses: ./.github/workflows/charts-release-ghpages.yaml
-    if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
-    needs:
-      - package-library-charts
-    permissions:
-      pages: write
-      id-token: write
-    with:
-      artifactPattern: "library__*"
+  #     - name: Publish changes to GitHub Pages
+  #       uses: ./src/.github/actions/publish-folder-to-pages
+  #       with:
+  #         path: gh-pages/
+  #         deleteArtifactAfterPublish: true
 
   # release-charts:
   #   name: Release charts
