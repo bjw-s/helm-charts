@@ -66,9 +66,10 @@ jobs:
       - prepare-release
     strategy:
       matrix:
-        charts: ${{ fromJSON(needs.prepare-release.outputs.libraryChartsToRelease) || [] }}
+        charts: ${{ fromJSON(needs.prepare-release.outputs.libraryChartsToRelease) }}
       max-parallel: 2
       fail-fast: false
+    if: ${{ needs.prepare-release.outputs.libraryChartsToRelease != '[]' }}
     steps:
       - name: Checkout source branch
         if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
