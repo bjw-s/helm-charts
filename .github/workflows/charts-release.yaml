@@ -122,7 +122,7 @@ jobs:
           SRC_DIR: "src/charts"
           DEST_DIR: gh-pages
         run: |
-          mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
+          mapfile -t CHART_PATH_PARTS < <(echo "${{ matrix.charts }}" | tr '/' '\n')
           CHART_TYPE=${CHART_PATH_PARTS[0]}
           helm package "${SRC_DIR}/${{ matrix.charts }}" --dependency-update --destination "${DEST_DIR}/${CHART_TYPE}"
 
