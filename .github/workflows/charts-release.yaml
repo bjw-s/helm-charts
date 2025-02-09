@@ -5,14 +5,6 @@ concurrency: helm-release
 
 on:
   workflow_dispatch:
-    inputs:
-      charts:
-        description: >
-          Charts to release. Comma-separated string.
-          Defaults to releasing everything.
-        default: ""
-        required: false
-
   push:
     branches:
       - main
@@ -24,7 +16,7 @@ env:
   HELM_VERSION: 3.17.0
 
 jobs:
-  changed-charts:
+  prepare-release:
     name: Prepare data required for release
     runs-on: ubuntu-22.04
     outputs:
@@ -71,27 +63,22 @@ jobs:
     name: Package library charts
     runs-on: ubuntu-22.04
     needs:
-      - changed-charts
+      - prepare-release
     strategy:
       matrix:
-        charts: ${{ fromJSON(needs.changed-charts.outputs.libraryChartsToRelease) }}
+        charts: ${{ fromJSON(needs.prepare-release.outputs.libraryChartsToRelease) }}
       max-parallel: 2
       fail-fast: false
     steps:
-      - name: Echo chart folder
-        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
-        run: |
-          echo ${{ matrix.charts }}
-
       - name: Checkout source branch
-        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
+        if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         uses: actions/checkout@v4
         with:
           path: src
           fetch-depth: 0
 
       - name: Install Kubernetes tools
-        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
+        if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         uses: yokawasa/action-setup-kube-tools@v0.11.1
         with:
           setup-tools: |
@@ -111,14 +98,14 @@ jobs:
           echo "version=$(yq '.version' ${SRC_DIR}/${{ matrix.charts }}/Chart.yaml)" >> "$GITHUB_OUTPUT"
 
       - name: Dereference JSON schema before packaging
-        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
+        if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         uses: bjw-s/helm-charts-actions/dereference-json-schema@main
         with:
           schemaFile: src/charts/${{ matrix.charts }}/values.schema.json
           outputFile: src/charts/${{ matrix.charts }}/values.schema.json
 
       - name: Package Helm Chart
-        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
+        if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         shell: bash
         env:
           SRC_DIR: src/charts
@@ -127,7 +114,7 @@ jobs:
           helm package "${SRC_DIR}/${{ matrix.charts }}" --dependency-update --destination "out/${CHART_FOLDER}"
 
       - name: Upload artifact
-        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
+        if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         uses: actions/upload-artifact@v4
         with:
           name: "${{ steps.chart-details.outputs.folder }}__${{ steps.chart-details.outputs.name }}__${{ steps.chart-details.outputs.version }}"
@@ -140,13 +127,12 @@ jobs:
     needs:
       - package-library-charts
     steps:
-      # - name: Generate Token
-      #   if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
-      #   uses: actions/create-github-app-token@v1
-      #   id: app-token
-      #   with:
-      #     app-id: "${{ secrets.BJWS_APP_ID }}"
-      #     private-key: "${{ secrets.BJWS_APP_PRIVATE_KEY }}"
+      - name: Generate Token
+        uses: actions/create-github-app-token@v1.10.4
+        id: app-token
+        with:
+          app-id: "${{ secrets.BJWS_APP_ID }}"
+          private-key: "${{ secrets.BJWS_APP_PRIVATE_KEY }}"
 
       - name: Download chart artifacts
         uses: actions/download-artifact@v4
@@ -157,7 +143,7 @@ jobs:
       - name: Checkout gh-pages branch
         uses: actions/checkout@v4
         with:
-          # token: ${{ steps.app-token.outputs.token }}
+          token: ${{ steps.app-token.outputs.token }}
           path: gh-pages
           ref: gh-pages
           fetch-depth: 0
@@ -187,11 +173,16 @@ jobs:
         run: |
           helm repo index . --url https://bjw-s.github.io/helm-charts/
 
-      - name: Push changes back to gh-pages branch
-        shell: bash
-        working-directory: gh-pages
-        run: |
-          echo TODO
+      - name: Commit Changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          repository: gh-pages
+          branch: gh-pages
+          commit_user_name: "bjw-s-bot[bot]"
+          commit_user_email: 87358111+bjw-s-bot[bot]@users.noreply.github.com
+          commit_author: bjw-s-bot[bot] <87358111+bjw-s-bot[bot]@users.noreply.github.com>
+          file_pattern: "index.yaml **/*.tgz"
+          disable_globbing: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -210,12 +201,12 @@ jobs:
   #     - release-library-charts
   #   strategy:
   #     matrix:
-  #       charts: ${{ fromJSON(needs.changed-charts.outputs.applicationChartsToRelease) }}
+  #       charts: ${{ fromJSON(needs.prepare-release.outputs.applicationChartsToRelease) }}
   #     max-parallel: 2
   #     fail-fast: false
   #   steps:
   #     - name: Echo chart folder
-  #       if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
+  #       if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
   #       run: |
   #         echo ${{ matrix.charts }}
 
