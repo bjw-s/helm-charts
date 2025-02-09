@@ -38,7 +38,7 @@ runs:
         ROOT_DIR: "${{ inputs.rootFolder }}"
         CHART_DIR: "${{ inputs.chartFolder }}"
       run: |
-        PARENT_DIR=$(dirname "${ROOT_DIR}/${CHART_DIR}")
+        PARENT_DIR=$(basename $(dirname "${ROOT_DIR}/${CHART_DIR}"))
         echo "parentdir=${PARENT_DIR}" >> "$GITHUB_OUTPUT"
         echo "name=$(yq '.name' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml)" >> "$GITHUB_OUTPUT"
         echo "version=$(yq '.version' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml)" >> "$GITHUB_OUTPUT"
