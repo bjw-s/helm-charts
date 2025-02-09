@@ -67,8 +67,8 @@ jobs:
           files_ignore: |
             library/**
 
-  release-library-charts:
-    name: Release library charts
+  package-library-charts:
+    name: Package library charts
     runs-on: ubuntu-22.04
     needs:
       - changed-charts
@@ -96,15 +96,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: src
-          fetch-depth: 0
-
-      - name: Checkout gh-pages branch
-        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
-        uses: actions/checkout@v4
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          path: gh-pages
-          ref: gh-pages
           fetch-depth: 0
 
       - name: Install Kubernetes tools
@@ -139,34 +130,49 @@ jobs:
         shell: bash
         env:
           SRC_DIR: src/charts
-          DEST_DIR: gh-pages
           CHART_FOLDER: "${{ steps.chart-details.outputs.folder }}"
         run: |
-          helm package "${SRC_DIR}/${{ matrix.charts }}" --dependency-update --destination "${DEST_DIR}/${CHART_FOLDER}"
+          helm package "${SRC_DIR}/${{ matrix.charts }}" --dependency-update --destination "out/${CHART_FOLDER}"
 
       - name: Upload artifact
+        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         uses: actions/upload-artifact@v4
         with:
-          name: "${{ matrix.charts }}/${{ steps.chart-details.outputs.version }}"
-          path: gh-pages/${{ steps.chart-details.outputs.folder }}/${{ steps.chart-details.outputs.name }}-${{ steps.chart-details.outputs.version }}.tgz
+          name: "${{ steps.chart-details.outputs.folder }}_${{ steps.chart-details.outputs.name }}_${{ steps.chart-details.outputs.version }}"
+          path: out/${{ steps.chart-details.outputs.folder }}/${{ steps.chart-details.outputs.name }}-${{ steps.chart-details.outputs.version }}.tgz
           retention-days: 7
 
-  release-charts:
-    name: Release charts
+  release-library-charts:
+    name: Release library charts
     runs-on: ubuntu-22.04
     needs:
-      - changed-charts
       - release-library-charts
-    strategy:
-      matrix:
-        charts: ${{ fromJSON(needs.changed-charts.outputs.applicationChartsToRelease) }}
-      max-parallel: 2
-      fail-fast: false
     steps:
-      - name: Echo chart folder
-        if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
-        run: |
-          echo ${{ matrix.charts }}
+      - name: Download chart artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: my-artifacts
+          pattern: library_*
+
+      - name: Display structure of downloaded files
+        run: ls -R my-artifacts
+
+  # release-charts:
+  #   name: Release charts
+  #   runs-on: ubuntu-22.04
+  #   needs:
+  #     - changed-charts
+  #     - release-library-charts
+  #   strategy:
+  #     matrix:
+  #       charts: ${{ fromJSON(needs.changed-charts.outputs.applicationChartsToRelease) }}
+  #     max-parallel: 2
+  #     fail-fast: false
+  #   steps:
+  #     - name: Echo chart folder
+  #       if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
+  #       run: |
+  #         echo ${{ matrix.charts }}
 
   #   uses: ./.github/workflows/charts-release-ghpages.yaml
   #   with:
