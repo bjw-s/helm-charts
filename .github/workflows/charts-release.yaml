@@ -124,87 +124,15 @@ jobs:
 
   release-library-charts-to-github-pages:
     name: Release library charts to GitHub Pages
-    runs-on: ubuntu-22.04
+    uses: ./.github/workflows/charts-release-ghpages.yaml
+    if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     needs:
       - package-library-charts
-    if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     permissions:
       pages: write
       id-token: write
-    steps:
-      - name: Generate Token
-        uses: actions/create-github-app-token@v1.10.4
-        id: app-token
-        with:
-          app-id: "${{ secrets.BJWS_APP_ID }}"
-          private-key: "${{ secrets.BJWS_APP_PRIVATE_KEY }}"
-
-      - name: Checkout source branch
-        uses: actions/checkout@v4
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          path: src
-
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          path: gh-pages
-          ref: gh-pages
-          fetch-depth: 0
-
-      - name: Download chart artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          pattern: library__*
-
-      - name: Copy artifacts to gh-pages structure
-        shell: bash
-        run: |
-          if [[ ! -d "artifacts" ]]; then
-            exit 0
-          fi
-
-          CHARTS=$( ls artifacts/ )
-
-          for CHART in "${CHARTS[@]}" ; do
-            delimiter='__'
-            s=${CHART}${delimiter}
-            CHART_PATH_PARTS=();
-            while [[ $s ]]; do
-                CHART_PATH_PARTS+=( "${s%%"${delimiter}"*}" );
-                s=${s#*"${delimiter}"};
-            done;
-
-            CHART_FOLDER=${CHART_PATH_PARTS[0]}
-
-            mkdir -p "gh-pages/${CHART_FOLDER}"
-            cp artifacts/${CHART}/* gh-pages/${CHART_FOLDER}/
-          done
-
-      - name: Update chart index
-        shell: bash
-        working-directory: gh-pages
-        run: |
-          helm repo index . --url https://bjw-s.github.io/helm-charts/
-
-      - name: Commit Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          repository: gh-pages
-          branch: gh-pages
-          commit_user_name: "bjw-s-bot[bot]"
-          commit_user_email: 87358111+bjw-s-bot[bot]@users.noreply.github.com
-          commit_author: bjw-s-bot[bot] <87358111+bjw-s-bot[bot]@users.noreply.github.com>
-          file_pattern: "index.yaml **/*.tgz"
-          disable_globbing: true
-
-      - name: Publish changes to GitHub Pages
-        uses: ./src/.github/actions/publish-folder-to-pages
-        with:
-          path: gh-pages/
-          deleteArtifactAfterPublish: true
+    with:
+      artifactPattern: "library__*"
 
   # release-charts:
   #   name: Release charts

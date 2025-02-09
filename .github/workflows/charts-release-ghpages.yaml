@@ -3,82 +3,67 @@ name: "Charts: Release to GitHub pages"
 on:
   workflow_call:
     inputs:
-      charts:
-        description: >
-          Json encoded list of Helm charts to release.
-          Defaults to releasing everything.
-        default: "[]"
-        required: false
+      artifactPattern:
         type: string
-    secrets:
-      BJWS_APP_ID:
+        description: "Pattern to match artifacts to release"
         required: true
-      BJWS_APP_PRIVATE_KEY:
-        required: true
-
-env:
-  HELM_VERSION: 3.11.2
 
 jobs:
   release-charts:
     name: Release charts
     runs-on: ubuntu-22.04
     steps:
-      - name: "Generate Short Lived OAuth App Token (ghs_*)"
-        uses: actions/create-github-app-token@v1.10.4
-        id: app-token
-        with:
-          app-id: "${{ secrets.BJWS_APP_ID }}"
-          private-key: "${{ secrets.BJWS_APP_PRIVATE_KEY }}"
-
-      - name: Checkout charts branch
+      - name: Checkout source branch
         uses: actions/checkout@v4
         with:
-          token: ${{ steps.app-token.outputs.token }}
-          path: "src"
-          fetch-depth: 0
+          path: src
 
       - name: Checkout gh-pages branch
         uses: actions/checkout@v4
         with:
-          token: ${{ steps.app-token.outputs.token }}
-          path: "dest"
-          ref: "gh-pages"
+          path: gh-pages
+          ref: gh-pages
           fetch-depth: 0
 
-      - name: Install Kubernetes tools
-        uses: yokawasa/action-setup-kube-tools@v0.11.1
-        with:
-          setup-tools: |
-            helmv3
-          helm: "${{ env.HELM_VERSION }}"
-
-      - name: Package Helm Charts
+      - name: Prepare artifacts folder
         shell: bash
-        env:
-          SRC_DIR: "src/charts"
-          DEST_DIR: "dest"
         run: |
-          CHARTS=( $(yq --null-input e '${{ inputs.charts }}[]' ) )
+          mkdir -p artifacts
 
+      - name: Download chart artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: ${{ inputs.artifactPattern }}
+
+      - name: Copy artifacts to gh-pages structure
+        shell: bash
+        run: |
+          CHARTS=$( ls artifacts/ )
           for CHART in "${CHARTS[@]}" ; do
-            mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '/' '\n')
-            CHART_TYPE=${CHART_PATH_PARTS[0]}
+            DELIMITER='__'
+            s=${CHART}${DELIMITER}
+            CHART_PATH_PARTS=();
+            while [[ $s ]]; do
+                CHART_PATH_PARTS+=( "${s%%"${DELIMITER}"*}" );
+                s=${s#*"${DELIMITER}"};
+            done;
 
-            helm package "${SRC_DIR}/${CHART}" --dependency-update --destination "${DEST_DIR}/${CHART_TYPE}"
+            CHART_FOLDER=${CHART_PATH_PARTS[0]}
+            mkdir -p "gh-pages/${CHART_FOLDER}"
+            cp artifacts/${CHART}/* gh-pages/${CHART_FOLDER}/
           done
 
       - name: Update chart index
         shell: bash
-        working-directory: dest
+        working-directory: gh-pages
         run: |
           helm repo index . --url https://bjw-s.github.io/helm-charts/
 
-      - name: Commit changes
+      - name: Commit Changes
         uses: stefanzweifel/git-auto-commit-action@v5
-        id: auto-commit
         with:
-          repository: dest
+          repository: gh-pages
           branch: gh-pages
           commit_user_name: "bjw-s-bot[bot]"
           commit_user_email: 87358111+bjw-s-bot[bot]@users.noreply.github.com
@@ -86,11 +71,8 @@ jobs:
           file_pattern: "index.yaml **/*.tgz"
           disable_globbing: true
 
-      - name: Wait for deploy
-        uses: fountainhead/action-wait-for-check@v1.2.0
-        if: ${{ steps.auto-commit.outputs.changes_detected }}
-        id: wait-for-deploy
+      - name: Publish changes to GitHub Pages
+        uses: ./src/.github/actions/publish-folder-to-pages
         with:
-          token: ${{ steps.app-token.outputs.token }}
-          ref: ${{ steps.auto-commit.outputs.commit_hash }}
-          checkName: deploy
+          path: gh-pages/
+          deleteArtifactAfterPublish: true
