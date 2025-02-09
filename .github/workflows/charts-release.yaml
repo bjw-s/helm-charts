@@ -175,15 +175,11 @@ jobs:
                 s=${s#*"${delimiter}"};
             done;
 
-            CHART_TYPE=${CHART_PATH_PARTS[0]}
-            CHART_NAME=${CHART_PATH_PARTS[1]}
-            CHART_VERSION=${CHART_PATH_PARTS[2]}
+            CHART_FOLDER=${CHART_PATH_PARTS[0]}
 
-            echo "${CHART_TYPE}"
-            echo "${CHART_NAME}"
-            echo "${CHART_VERSION}"
+            mkdir -p "gh-pages/${CHART_FOLDER}"
+            cp "artifacts/${CHART}/*.tgz" "gh-pages/${CHART_FOLDER}/"
           done
-
 
   # release-charts:
   #   name: Release charts
