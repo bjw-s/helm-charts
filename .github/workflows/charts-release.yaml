@@ -146,7 +146,7 @@ jobs:
     name: Release library charts
     runs-on: ubuntu-22.04
     needs:
-      - release-library-charts
+      - package-library-charts
     steps:
       - name: Download chart artifacts
         uses: actions/download-artifact@v4
