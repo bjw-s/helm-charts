@@ -66,7 +66,7 @@ jobs:
       - prepare-release
     strategy:
       matrix:
-        charts: ${{ fromJSON(needs.prepare-release.outputs.libraryChartsToRelease) }}
+        charts: ${{ fromJSON(needs.prepare-release.outputs.libraryChartsToRelease) || [] }}
       max-parallel: 2
       fail-fast: false
     steps:
