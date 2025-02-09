@@ -127,6 +127,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs:
       - package-library-charts
+    if: ${{ !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     permissions:
       pages: write
       id-token: write
@@ -137,12 +138,6 @@ jobs:
         with:
           app-id: "${{ secrets.BJWS_APP_ID }}"
           private-key: "${{ secrets.BJWS_APP_PRIVATE_KEY }}"
-
-      - name: Download chart artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          pattern: library__*
 
       - name: Checkout source branch
         uses: actions/checkout@v4
@@ -157,6 +152,12 @@ jobs:
           path: gh-pages
           ref: gh-pages
           fetch-depth: 0
+
+      - name: Download chart artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: library__*
 
       - name: Copy artifacts to gh-pages structure
         run: |
