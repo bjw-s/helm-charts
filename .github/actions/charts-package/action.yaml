@@ -66,7 +66,7 @@ runs:
         PARENT_DIR: "${{ steps.chart-details.outputs.parentdir }}"
         CHART_NAME: "${{ steps.chart-details.outputs.name }}"
         CHART_VERSION: "${{ steps.chart-details.outputs.version }}"
-        TARGET_DIR: "${{ steps.chart-details.outputs.destinationFolder }}"
+        TARGET_DIR: "${{ inputs.destinationFolder }}"
       with:
         name: "${{ env.PARENT_DIR }}__${{ env.CHART_NAME }}__${{ env.CHART_VERSION }}"
         path: "${{ env.TARGET_DIR }}/${{ env.PARENT_DIR }}/${{ env.CHART_NAME }}-${{ env.CHART_VERSION }}.tgz"
