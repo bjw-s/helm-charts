@@ -162,7 +162,7 @@ jobs:
           ref: gh-pages
           fetch-depth: 0
 
-      - name: Display structure of downloaded files
+      - name: Copy artifacts to gh-pages structure
         run: |
           CHARTS=$( ls artifacts/ )
 
