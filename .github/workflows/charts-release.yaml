@@ -160,7 +160,12 @@ jobs:
           pattern: library__*
 
       - name: Copy artifacts to gh-pages structure
+        shell: bash
         run: |
+          if [[ ! -d "artifacts" ]]; then
+            exit 0
+          fi
+
           CHARTS=$( ls artifacts/ )
 
           for CHART in "${CHARTS[@]}" ; do
