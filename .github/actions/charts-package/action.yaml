@@ -12,6 +12,10 @@ inputs:
     description: "Folder where the chart packages should be stored"
     required: true
     default: "out"
+  retentionDays:
+    description: "Duration after which artifacts will expire in days."
+    required: true
+    default: "1"
   helmVersion:
     description: "Helm version to use for packaging"
     required: true
@@ -54,7 +58,7 @@ runs:
         PARENT_DIR: "${{ steps.chart-details.outputs.parentdir }}"
         TARGET_DIR: "${{ inputs.destinationFolder }}"
       run: |
-        helm package "${ROOT_DIR}/${CHART_DIR}" --dependency-update --destination "${TARGET_DIR}/${PARENT_DIR}"
+        helm package "${ROOT_DIR}/${CHART_DIR}" --dependency-update --destination "${TARGET_DIR}/${CHART_DIR}"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
@@ -66,4 +70,4 @@ runs:
       with:
         name: "${{ env.PARENT_DIR }}__${{ env.CHART_NAME }}__${{ env.CHART_VERSION }}"
         path: "${{ env.TARGET_DIR }}/${{ env.PARENT_DIR }}/${{ env.CHART_NAME }}-${{ env.CHART_VERSION }}.tgz"
-        retention-days: 7
+        retention-days: ${{ inputs.retentionDays }}
