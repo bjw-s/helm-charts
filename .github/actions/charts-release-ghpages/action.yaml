@@ -35,24 +35,25 @@ runs:
 
     - name: Copy artifacts to gh-pages structure
       shell: bash
+      working-directory: artifacts
       env:
         ARTIFACT_PREFIX: ${{ inputs.artifactPrefix }}
         TARGET_FOLDER: ${{ inputs.targetFolder }}
       run: |
-        for CHART in artifacts/*/ ; do
-          echo ${CHART}
-          prefix_removed_chart=${CHART/#$ARTIFACT_PREFIX}
+        for ARTIFACT in */; do
+          echo ${ARTIFACT}
+          prefix_removed_chart=${ARTIFACT/#$ARTIFACT_PREFIX}
           DELIMITER='__'
           s=${prefix_removed_chart}${DELIMITER}
-          CHART_PATH_PARTS=();
+          ARTIFACT_PATH_PARTS=();
           while [[ $s ]]; do
-              CHART_PATH_PARTS+=( "${s%%"${DELIMITER}"*}" );
+              ARTIFACT_PATH_PARTS+=( "${s%%"${DELIMITER}"*}" );
               s=${s#*"${DELIMITER}"};
           done;
 
-          CHART_FOLDER=${CHART_PATH_PARTS[0]}
+          CHART_FOLDER=${ARTIFACT_PATH_PARTS[0]}
           mkdir -p "${TARGET_FOLDER}/${CHART_FOLDER}"
-          cp artifacts/${CHART}/* ${TARGET_FOLDER}/${CHART_FOLDER}/
+          cp ${ARTIFACT}/* ${TARGET_FOLDER}/${CHART_FOLDER}/
         done
 
     - name: Update chart index
