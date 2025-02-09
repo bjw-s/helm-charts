@@ -187,11 +187,20 @@ jobs:
         run: |
           helm repo index . --url https://bjw-s.github.io/helm-charts/
 
-      - name: Git status
+      - name: Push changes back to gh-pages branch
         shell: bash
         working-directory: gh-pages
         run: |
-          git status
+          echo TODO
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: gh-pages/
+
+      - name: Deploy to GitHub Pages
+        id: deploy-gh-pages
+        uses: actions/deploy-pages@v4
 
   # release-charts:
   #   name: Release charts
