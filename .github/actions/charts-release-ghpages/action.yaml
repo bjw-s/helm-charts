@@ -39,9 +39,7 @@ runs:
         ARTIFACT_PREFIX: ${{ inputs.artifactPrefix }}
         TARGET_FOLDER: ${{ inputs.targetFolder }}
       run: |
-        ls artifacts/
-        CHARTS=$( ls artifacts/ )
-        for CHART in "${CHARTS[@]}" ; do
+        for CHART in artifacts/*" ; do
           echo ${CHART}
           prefix_removed_chart=${CHART/#$ARTIFACT_PREFIX}
           DELIMITER='__'
