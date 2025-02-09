@@ -31,6 +31,7 @@ runs:
       with:
         path: artifacts
         pattern: ${{ inputs.artifactPattern }}
+        # pattern: ${{ inputs.artifactPrefix }}${{ inputs.artifactPattern }}
 
     - name: Copy artifacts to gh-pages structure
       shell: bash
@@ -38,8 +39,10 @@ runs:
         ARTIFACT_PREFIX: ${{ inputs.artifactPrefix }}
         TARGET_FOLDER: ${{ inputs.targetFolder }}
       run: |
+        ls artifacts/
         CHARTS=$( ls artifacts/ )
         for CHART in "${CHARTS[@]}" ; do
+          echo ${CHART}
           prefix_removed_chart=${CHART/#$ARTIFACT_PREFIX}
           DELIMITER='__'
           s=${prefix_removed_chart}${DELIMITER}
@@ -50,7 +53,7 @@ runs:
           done;
 
           CHART_FOLDER=${CHART_PATH_PARTS[0]}
-          mkdir -p "${{ inputs.targetFolder }}/${CHART_FOLDER}"
+          mkdir -p "${TARGET_FOLDER}/${CHART_FOLDER}"
           cp artifacts/${CHART}/* ${TARGET_FOLDER}/${CHART_FOLDER}/
         done
 
