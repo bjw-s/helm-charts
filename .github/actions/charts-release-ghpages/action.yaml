@@ -39,7 +39,7 @@ runs:
         ARTIFACT_PREFIX: ${{ inputs.artifactPrefix }}
         TARGET_FOLDER: ${{ inputs.targetFolder }}
       run: |
-        for CHART in artifacts/*" ; do
+        for CHART in artifacts/*/ ; do
           echo ${CHART}
           prefix_removed_chart=${CHART/#$ARTIFACT_PREFIX}
           DELIMITER='__'
