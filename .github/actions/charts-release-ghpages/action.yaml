@@ -30,8 +30,7 @@ runs:
       uses: actions/download-artifact@v4
       with:
         path: artifacts
-        pattern: ${{ inputs.artifactPattern }}
-        # pattern: ${{ inputs.artifactPrefix }}${{ inputs.artifactPattern }}
+        pattern: ${{ inputs.artifactPrefix }}${{ inputs.artifactPattern }}
 
     - name: Copy artifacts to gh-pages structure
       shell: bash
