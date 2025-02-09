@@ -181,9 +181,16 @@ jobs:
             cp artifacts/${CHART}/* gh-pages/${CHART_FOLDER}/
           done
 
-      - name: Git status
+      - name: Update chart index
+        shell: bash
+        working-directory: gh-pages
         run: |
-          cd gh-pages
+          helm repo index . --url https://bjw-s.github.io/helm-charts/
+
+      - name: Git status
+        shell: bash
+        working-directory: gh-pages
+        run: |
           git status
 
   # release-charts:
