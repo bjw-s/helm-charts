@@ -178,7 +178,7 @@ jobs:
             CHART_FOLDER=${CHART_PATH_PARTS[0]}
 
             mkdir -p "gh-pages/${CHART_FOLDER}"
-            cp "artifacts/${CHART}/*" "gh-pages/${CHART_FOLDER}/"
+            cp artifacts/${CHART}/* gh-pages/${CHART_FOLDER}/
           done
 
       - name: Git status
