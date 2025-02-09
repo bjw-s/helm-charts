@@ -115,7 +115,19 @@ jobs:
             helmv3
           helm: "${{ env.HELM_VERSION }}"
 
-      - name: Dereference JSON schema
+      - name: Grab chart details
+        id: chart-details
+        shell: bash
+        env:
+          SRC_DIR: "src/charts"
+        run: |
+          mapfile -t CHART_PATH_PARTS < <(echo "${{ matrix.charts }}" | tr '/' '\n')
+          CHART_FOLDER=${CHART_PATH_PARTS[0]}
+          echo "folder=${CHART_FOLDER}" >> "$GITHUB_OUTPUT"
+          echo "name=$(yq '.name' ${SRC_DIR}/${{ matrix.charts }}/Chart.yaml)" >> "$GITHUB_OUTPUT"
+          echo "version=$(yq '.version' ${SRC_DIR}/${{ matrix.charts }}/Chart.yaml)" >> "$GITHUB_OUTPUT"
+
+      - name: Dereference JSON schema before packaging
         if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         uses: bjw-s/helm-charts-actions/dereference-json-schema@main
         with:
@@ -126,12 +138,11 @@ jobs:
         if: ${{ !contains(fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
         shell: bash
         env:
-          SRC_DIR: "src/charts"
+          SRC_DIR: src/charts
           DEST_DIR: gh-pages
+          CHART_FOLDER: "${{ steps.chart-details.outputs.folder }}"
         run: |
-          mapfile -t CHART_PATH_PARTS < <(echo "${{ matrix.charts }}" | tr '/' '\n')
-          CHART_TYPE=${CHART_PATH_PARTS[0]}
-          helm package "${SRC_DIR}/${{ matrix.charts }}" --dependency-update --destination "${DEST_DIR}/${CHART_TYPE}"
+          helm package "${SRC_DIR}/${{ matrix.charts }}" --dependency-update --destination "${DEST_DIR}/${CHART_FOLDER}"
 
   release-charts:
     name: Release charts
