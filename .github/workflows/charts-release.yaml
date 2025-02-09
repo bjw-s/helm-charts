@@ -183,6 +183,7 @@ jobs:
 
       - name: Git status
         run: |
+          cd gh-pages
           git status
 
   # release-charts:
