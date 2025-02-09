@@ -167,17 +167,23 @@ jobs:
           CHARTS=$( ls artifacts/ )
 
           for CHART in "${CHARTS[@]}" ; do
-            IFS=$IFS__
-            CHART_PATH_PARTS=()
-            read -a CHART_PATH_PARTS <<< "${CHART}"
+            delimiter='__'
+            s=${CHART}${delimiter}
+            CHART_PATH_PARTS=();
+            while [[ $s ]]; do
+                CHART_PATH_PARTS+=( "${s%%"${delimiter}"*}" );
+                s=${s#*"${delimiter}"};
+            done;
+
             CHART_TYPE=${CHART_PATH_PARTS[0]}
             CHART_NAME=${CHART_PATH_PARTS[1]}
             CHART_VERSION=${CHART_PATH_PARTS[2]}
 
-            echo $CHART_TYPE
-            echo $CHART_NAME
-            echo $CHART_VERSION
+            echo "${CHART_TYPE}"
+            echo "${CHART_NAME}"
+            echo "${CHART_VERSION}"
           done
+
 
   # release-charts:
   #   name: Release charts
