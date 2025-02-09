@@ -80,41 +80,43 @@ jobs:
         with:
           rootFolder: src/charts
           chartFolder: ${{ matrix.charts }}
+          artifactPrefix: chart__
 
-  # release-library-charts-to-github-pages:
-  #   name: Release library charts to GitHub Pages
-  #   runs-on: ubuntu-22.04
-  #   needs:
-  #     - package-library-charts
-  #   if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
-  #   permissions:
-  #     pages: write
-  #     id-token: write
-  #   steps:
-  #     - name: Checkout source branch
-  #       uses: actions/checkout@v4
-  #       with:
-  #         path: src
+  release-library-charts-to-github-pages:
+    name: Release library charts to GitHub Pages
+    runs-on: ubuntu-22.04
+    needs:
+      - package-library-charts
+    if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          path: src
 
-  #     - name: Checkout gh-pages branch
-  #       uses: actions/checkout@v4
-  #       with:
-  #         path: gh-pages
-  #         ref: gh-pages
-  #         fetch-depth: 0
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          path: gh-pages
+          ref: gh-pages
+          fetch-depth: 0
 
-  #     - name: Prepare artifacts for release to GitHub Pages
-  #       uses: ./src/.github/actions/charts-release-ghpages
-  #       with:
-  #         artifactPattern: library__*
-  #         targetFolder: gh-pages
-  #         targetBranch: gh-pages
+      - name: Prepare artifacts for release to GitHub Pages
+        uses: ./src/.github/actions/charts-release-ghpages
+        with:
+          artifactPattern: library__*
+          artifactPrefix: chart__
+          targetFolder: gh-pages
+          targetBranch: gh-pages
 
-  #     - name: Publish changes to GitHub Pages
-  #       uses: ./src/.github/actions/publish-folder-to-pages
-  #       with:
-  #         path: gh-pages/
-  #         deleteArtifactAfterPublish: true
+      # - name: Publish changes to GitHub Pages
+      #   uses: ./src/.github/actions/publish-folder-to-pages
+      #   with:
+      #     path: gh-pages/
+      #     deleteArtifactAfterPublish: true
 
   # release-charts:
   #   name: Release charts

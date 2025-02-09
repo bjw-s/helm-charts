@@ -12,6 +12,10 @@ inputs:
     description: "Folder where the chart packages should be stored"
     required: true
     default: "out"
+  artifactPrefix:
+    description: "Prefix for the artifact name"
+    required: false
+    default: ""
   retentionDays:
     description: "Duration after which artifacts will expire in days."
     required: true
@@ -68,6 +72,6 @@ runs:
         CHART_VERSION: "${{ steps.chart-details.outputs.version }}"
         TARGET_DIR: "${{ inputs.destinationFolder }}"
       with:
-        name: "${{ env.PARENT_DIR }}__${{ env.CHART_NAME }}__${{ env.CHART_VERSION }}"
+        name: "${{ inputs.artifactPrefix }}${{ env.PARENT_DIR }}__${{ env.CHART_NAME }}__${{ env.CHART_VERSION }}"
         path: "${{ env.TARGET_DIR }}/${{ env.PARENT_DIR }}/${{ env.CHART_NAME }}-${{ env.CHART_VERSION }}.tgz"
         retention-days: ${{ inputs.retentionDays }}

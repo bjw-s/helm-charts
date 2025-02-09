@@ -5,6 +5,10 @@ inputs:
   artifactPattern:
     description: "Pattern to match artifacts to release"
     required: true
+  artifactPrefix:
+    description: "Prefix to strip from the artifact names"
+    required: false
+    default: ""
   targetFolder:
     description: "Folder where to move the chart artifacts"
     required: true
@@ -30,11 +34,15 @@ runs:
 
     - name: Copy artifacts to gh-pages structure
       shell: bash
+      env:
+        ARTIFACT_PREFIX: ${{ inputs.artifactPrefix }}
+        TARGET_FOLDER: ${{ inputs.targetFolder }}
       run: |
         CHARTS=$( ls artifacts/ )
         for CHART in "${CHARTS[@]}" ; do
+          prefix_removed_chart=${CHART/#$ARTIFACT_PREFIX}
           DELIMITER='__'
-          s=${CHART}${DELIMITER}
+          s=${prefix_removed_chart}${DELIMITER}
           CHART_PATH_PARTS=();
           while [[ $s ]]; do
               CHART_PATH_PARTS+=( "${s%%"${DELIMITER}"*}" );
@@ -43,7 +51,7 @@ runs:
 
           CHART_FOLDER=${CHART_PATH_PARTS[0]}
           mkdir -p "${{ inputs.targetFolder }}/${CHART_FOLDER}"
-          cp artifacts/${CHART}/* ${{ inputs.targetFolder }}/${CHART_FOLDER}/
+          cp artifacts/${CHART}/* ${TARGET_FOLDER}/${CHART_FOLDER}/
         done
 
     - name: Update chart index
