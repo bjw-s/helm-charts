@@ -55,7 +55,7 @@ runs:
 
     - name: Clean up artifact
       if: ${{ inputs.deleteArtifactAfterPublish == 'true' }}
-      uses: joernott/rm-artifacts@v1
+      uses: joernott/rm-artifact@v1
       with:
         name: ${{ inputs.artifactName }}
         useGlob: false
