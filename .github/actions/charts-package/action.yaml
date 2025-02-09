@@ -58,7 +58,7 @@ runs:
         PARENT_DIR: "${{ steps.chart-details.outputs.parentdir }}"
         TARGET_DIR: "${{ inputs.destinationFolder }}"
       run: |
-        helm package "${ROOT_DIR}/${CHART_DIR}" --dependency-update --destination "${TARGET_DIR}/${CHART_DIR}"
+        helm package "${ROOT_DIR}/${CHART_DIR}" --dependency-update --destination "${TARGET_DIR}/${PARENT_DIR}"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
