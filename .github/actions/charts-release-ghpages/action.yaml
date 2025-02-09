@@ -40,8 +40,7 @@ runs:
         ARTIFACT_PREFIX: ${{ inputs.artifactPrefix }}
         TARGET_FOLDER: ${{ inputs.targetFolder }}
       run: |
-        for ARTIFACT in */; do
-          ARTIFACT=${ARTIFACT%*/}
+        while IFS= read -d $'\0' -r ARTIFACT ; do
           echo ${ARTIFACT}
           prefix_removed_chart=${ARTIFACT/#$ARTIFACT_PREFIX}
           DELIMITER='__'
@@ -55,7 +54,7 @@ runs:
           CHART_FOLDER=${ARTIFACT_PATH_PARTS[0]}
           mkdir -p "${TARGET_FOLDER}/${CHART_FOLDER}"
           cp ${ARTIFACT}/* ${TARGET_FOLDER}/${CHART_FOLDER}/
-        done
+        done < <(find . -mindepth 1 -maxdepth 1 -type d -print0)
 
     - name: Update chart index
       shell: bash
