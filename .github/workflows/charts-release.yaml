@@ -164,7 +164,8 @@ jobs:
 
       - name: Display structure of downloaded files
         run: |
-          CHARTS=( ls artifacts/ )
+          ls artifacts/
+          CHARTS=$( ls artifacts/ )
 
           for CHART in "${CHARTS[@]}" ; do
             mapfile -t CHART_PATH_PARTS < <(echo "$CHART" | tr '__' '\n')
