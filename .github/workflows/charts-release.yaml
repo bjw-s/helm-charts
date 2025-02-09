@@ -144,6 +144,13 @@ jobs:
         run: |
           helm package "${SRC_DIR}/${{ matrix.charts }}" --dependency-update --destination "${DEST_DIR}/${CHART_FOLDER}"
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: "${{ steps.chart-details.outputs.folder }}_${{ steps.chart-details.outputs.name }}-${{ steps.chart-details.outputs.version }}"
+          path: gh-pages/${{ steps.chart-details.outputs.folder }}/${{ steps.chart-details.outputs.name }}-${{ steps.chart-details.outputs.version }}.tgz
+          retention-days: 7
+
   release-charts:
     name: Release charts
     runs-on: ubuntu-22.04
