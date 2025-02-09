@@ -1,3 +1,4 @@
+---
 name: "Charts: Release"
 
 concurrency: helm-release
@@ -27,6 +28,7 @@ jobs:
     name: Prepare data required for release
     runs-on: ubuntu-22.04
     outputs:
+      repoConfiguration: ${{ steps.repo-config.outputs.config }}
       libraryChartsToRelease: ${{ steps.changed-library-charts.outputs.all_changed_files }}
       applicationChartsToRelease: ${{ steps.changed-charts.outputs.all_changed_files }}
     steps:
@@ -34,6 +36,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Grab repository configuration
+        id: repo-config
+        shell: bash
+        run: |
+          echo "config=$(yq '.' '.ci/repo-config.yaml' -o json)" >> "$GITHUB_OUTPUT"
 
       - name: Get changed library charts
         id: changed-library-charts
@@ -60,7 +68,7 @@ jobs:
             library/**
 
   release-library-charts:
-    name: Release Library charts
+    name: Release library charts
     runs-on: ubuntu-22.04
     needs:
       - changed-charts
@@ -70,12 +78,13 @@ jobs:
       max-parallel: 2
       fail-fast: false
     steps:
-      - name: List all changed library charts
+      - name: Echo chart folder
+        # if:
         run: |
-          echo ${{ matrix.charts }}
+          echo "${{ fromJSON(needs.changed-charts.outputs.repoConfiguration).excluded-charts-release }}"
 
   release-charts:
-    name: Release Library charts
+    name: Release charts
     runs-on: ubuntu-22.04
     needs:
       - changed-charts
@@ -86,7 +95,7 @@ jobs:
       max-parallel: 2
       fail-fast: false
     steps:
-      - name: List all changed library charts
+      - name: Echo chart folder
         run: |
           echo ${{ matrix.charts }}
 
