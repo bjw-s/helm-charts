@@ -154,11 +154,13 @@ jobs:
           CHART_FOLDER: ${{ matrix.artifacts.chart_folder }}
           CHART_NAME: ${{ matrix.artifacts.chart_name }}
           CHART_VERSION: ${{ matrix.artifacts.chart_version }}
+          CHART_TAG_BASE: ${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm
+          CHART_TAG: ${CHART_NAME}:${CHART_VERSION}
         run: |
-          helm push "${CHART_NAME}-${CHART_VERSION}.tgz" oci://${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm &> push-metadata.txt
+          helm push "${CHART_NAME}-${CHART_VERSION}.tgz" oci://${CHART_TAG_BASE} &> push-metadata.txt
           CHART_DIGEST=$(awk '/Digest: /{print $2}' push-metadata.txt)
-          cosign sign --yes "${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm/${CHART_NAME}:${CHART_VERSION}@${CHART_DIGEST}"
-          cosign verify "${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm/${CHART_NAME}:${CHART_VERSION}@${CHART_DIGEST}" \
+          cosign sign --yes "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}"
+          cosign verify "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}" \
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
             --certificate-identity "https://github.com/bjw-s/helm-charts/.github/workflows/charts-release-steps.yaml@refs/heads/main"
 
