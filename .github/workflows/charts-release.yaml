@@ -37,7 +37,6 @@ jobs:
         uses: tj-actions/changed-files@v45
         with:
           matrix: true
-          base_sha: main  # TODO: Remove this
           path: charts
           dir_names: true
           dir_names_max_depth: 2
@@ -49,7 +48,6 @@ jobs:
         uses: tj-actions/changed-files@v45
         with:
           matrix: true
-          base_sha: main  # TODO: Remove this
           path: charts
           dir_names: true
           dir_names_max_depth: 2
