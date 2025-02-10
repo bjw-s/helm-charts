@@ -126,7 +126,7 @@ jobs:
         shell: bash
         env:
           JQ_COMMAND: |-
-            [.[] | {artifact_name: .name, chart_folder: (.name | split("__")[-3]), chart_name: (.name | split("__")[-2]), chart_version: (.name | split("__")[-1]) }]
+            [.[] | {artifact_name: .name, chart_name: (.name | split("__")[-2]), chart_version: (.name | split("__")[-1]) }]
         run: |
           echo '${{ steps.list.outputs.result }}' | jq -c -r "$JQ_COMMAND" > artifacts
           echo "artifacts=$(cat artifacts)" >> "$GITHUB_OUTPUT"
@@ -151,39 +151,17 @@ jobs:
           path: artifacts
           pattern: ${{ matrix.artifacts.artifact_name }}
 
-      - name: Install Cosign
-        uses: sigstore/cosign-installer@v3.6.0
-
-      - name: Install Kubernetes tools
-        uses: yokawasa/action-setup-kube-tools@v0.11.1
+      - name: Checkout source branch
+        uses: actions/checkout@v4
         with:
-          setup-tools: |
-            helmv3
-          helm: ${{ inputs.helmVersion }}
+          path: src
 
-      - name: Login to OCI Registry
-        uses: docker/login-action@v3
+      - name: Release chart to OCI registry
+        uses: ./src/.github/actions/charts-release-oci
         with:
-          registry: ${{ inputs.ociRegistry }}
-          username: ${{ github.actor }}
-          password: ${{ github.token }}
-
-      - name: Push Helm charts to OCI registry
-        shell: bash
-        working-directory: artifacts/${{ matrix.artifacts.artifact_name }}
-        env:
-          CHART_FOLDER: ${{ matrix.artifacts.chart_folder }}
-          CHART_NAME: ${{ matrix.artifacts.chart_name }}
-          CHART_VERSION: ${{ matrix.artifacts.chart_version }}
-          CHART_TAG_BASE: ${{ inputs.ociRegistry }}/${{ github.actor }}/helm
-          CHART_TAG: ${{ matrix.artifacts.chart_name }}:${{ matrix.artifacts.chart_version }}
-        run: |
-          helm push "${CHART_NAME}-${CHART_VERSION}.tgz" oci://${CHART_TAG_BASE} &> push-metadata.txt
-          CHART_DIGEST=$(awk '/Digest: /{print $2}' push-metadata.txt)
-          cosign sign --yes "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}"
-          cosign verify "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}" \
-            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-            --certificate-identity "https://github.com/${{ github.repository }}/.github/workflows/charts-release-steps.yaml@${{ github.ref }}"
+          workingDir: artifacts/${{ matrix.artifacts.artifact_name }}
+          chartName: ${{ matrix.artifacts.chart_name }}
+          chartVersion: ${{ matrix.artifacts.chart_version }}
 
   cleanup-charts-artifacts:
     name: Clean up artifacts
