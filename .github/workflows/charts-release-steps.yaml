@@ -161,7 +161,7 @@ jobs:
           CHART_NAME: ${{ matrix.artifacts.chart_name }}
           CHART_VERSION: ${{ matrix.artifacts.chart_version }}
           CHART_TAG_BASE: ${{ inputs.ociRegistry }}/${{ github.actor }}/helm
-          CHART_TAG: ${CHART_NAME}:${CHART_VERSION}
+          CHART_TAG: ${{ matrix.artifacts.chart_name }}:${{ matrix.artifacts.chart_version }}
         run: |
           helm push "${CHART_NAME}-${CHART_VERSION}.tgz" oci://${CHART_TAG_BASE} &> push-metadata.txt
           CHART_DIGEST=$(awk '/Digest: /{print $2}' push-metadata.txt)
