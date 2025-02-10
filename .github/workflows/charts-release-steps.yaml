@@ -17,6 +17,12 @@ on:
         default: "[]"
         required: false
         type: string
+      publishToGhPages:
+        description: >
+          Should the charts be published to GitHub Pages.
+        default: false  # TODO: flip to true
+        required: false
+        type: boolean
       ghPagesBranch:
         description: >
           Target branch for GitHub Pages.
@@ -36,7 +42,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout source branch
-        if: ${{ !contains(fromJSON(inputs.excludedChartsRelease, matrix.charts) }}
+        # if: ${{ !contains(fromJSON(inputs.excludedChartsRelease, matrix.charts) }}
         uses: actions/checkout@v4
         with:
           path: src
@@ -44,7 +50,7 @@ jobs:
 
       - name: Package Helm charts
         uses: ./src/.github/actions/charts-package
-        if: ${{ !contains(fromJSON(inputs.excludedChartsRelease, matrix.charts) }}
+        # if: ${{ !contains(fromJSON(inputs.excludedChartsRelease, matrix.charts) }}
         with:
           rootFolder: src/charts
           chartFolder: ${{ matrix.charts }}
