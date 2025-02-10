@@ -168,7 +168,7 @@ jobs:
           cosign sign --yes "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}"
           cosign verify "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}" \
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-            --certificate-identity "https://github.com/bjw-s/helm-charts/.github/workflows/charts-release-steps.yaml@${{ github.ref }}"
+            --certificate-identity "https://github.com/${{ github.repository }}/.github/workflows/charts-release-steps.yaml@${{ github.ref }}"
 
   cleanup-charts-artifacts:
     name: Clean up artifacts
