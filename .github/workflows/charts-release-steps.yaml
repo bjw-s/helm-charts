@@ -128,39 +128,19 @@ jobs:
           path: artifacts
           pattern: ${{ matrix.artifact_name }}
 
-  #     - name: Install Cosign
-  #       uses: sigstore/cosign-installer@v3.6.0
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3.6.0
 
-  #     - name: Push Helm charts to OCI registry
-  #       shell: bash
-  #       working-directory: artifacts
-  #       env:
-  #         ARTIFACT_PREFIX: ${{ inputs.artifactPrefix }}
-  #         TARGET_FOLDER: ${{ inputs.targetFolder }}
-  #       run: |
-  #         while IFS= read -d $'\0' -r ARTIFACT ; do
-  #           echo ${ARTIFACT}
-  #           prefix_removed_chart=${ARTIFACT/#$ARTIFACT_PREFIX}
-  #           DELIMITER='__'
-  #           s=${prefix_removed_chart}${DELIMITER}
-  #           ARTIFACT_PATH_PARTS=();
-  #           while [[ $s ]]; do
-  #               ARTIFACT_PATH_PARTS+=( "${s%%"${DELIMITER}"*}" );
-  #               s=${s#*"${DELIMITER}"};
-  #           done;
-
-  #           CHART_FOLDER=${ARTIFACT_PATH_PARTS[0]}
-  #           CHART_NAME=${ARTIFACT_PATH_PARTS[1]}
-  #           CHART_VERSION=${ARTIFACT_PATH_PARTS[2]}
-
-  #           helm push "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}/${CHART_NAME}-${CHART_VERSION}.tgz" oci://${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm &> push-metadata.txt
-  #           CHART_DIGEST=$(awk '/Digest: /{print $2}' push-metadata.txt)
-  #           cosign sign --yes "${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm/${CHART_NAME}:${CHART_VERSION}@${CHART_DIGEST}"
-  #           cosign verify "${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm/${CHART_NAME}:${CHART_VERSION}@${CHART_DIGEST}" \
-  #             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-  #             --certificate-identity "https://github.com/bjw-s/helm-charts/.github/workflows/charts-release-oci.yaml@refs/heads/main"
-
-  #         done < <(find . -mindepth 1 -maxdepth 1 -type d -print0)
+      - name: Push Helm charts to OCI registry
+        shell: bash
+        working-directory: artifacts
+        env:
+          ARTIFACT_FOLDER: ${{ matrix.artifact_name }}
+          CHART_FOLDER: ${{ matrix.chart_folder }}
+          CHART_NAME: ${{ matrix.chart_name }}
+          CHART_VERSION: ${{ matrix.chart_version }}
+        run: |
+            ls ${ARTIFACT_FOLDER}/
 
   cleanup-charts-artifacts:
     name: Clean up artifacts
