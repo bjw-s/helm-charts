@@ -34,8 +34,6 @@ jobs:
   package-library-charts:
     name: Package library charts
     runs-on: ubuntu-22.04
-    needs:
-      - prepare-release
     strategy:
       matrix:
         charts: ${{ fromJSON(inputs.charts) }}
