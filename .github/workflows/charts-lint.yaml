@@ -15,12 +15,6 @@ on:
           A JSON encoded array of charts to lint
         required: true
         type: string
-      overrideDeps:
-        description: >
-          A JSON encoded array of dependencies to override before linting
-        type: string
-        required: false
-        default: "[]"
 
 env:
   HELM_VERSION: 3.11.2
@@ -63,13 +57,6 @@ jobs:
 
       - name: Set up chart-testing
         uses: helm/chart-testing-action@v2.6.1
-
-      - name: Override chart dependencies
-        uses: ./.github/actions/override-chart-deps
-        if: ${{ inputs.overrideDeps != '[]' }}
-        with:
-          chart: ${{ matrix.chart }}
-          overrides: ${{ inputs.overrideDeps }}
 
       - name: Dereference JSON schema
         uses: bjw-s/helm-charts-actions/dereference-json-schema@main
