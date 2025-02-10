@@ -163,13 +163,12 @@ jobs:
           CHART_TAG_BASE: ${{ inputs.ociRegistry }}/${{ github.actor }}/helm
           CHART_TAG: ${CHART_NAME}:${CHART_VERSION}
         run: |
-          helm push "${CHART_NAME}-${CHART_VERSION}.tgz" oci://${CHART_TAG_BASE}
-          #  &> push-metadata.txt
-          # CHART_DIGEST=$(awk '/Digest: /{print $2}' push-metadata.txt)
-          # cosign sign --yes "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}"
-          # cosign verify "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}" \
-          #   --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-          #   --certificate-identity "https://github.com/bjw-s/helm-charts/.github/workflows/charts-release-steps.yaml@refs/heads/main"
+          helm push "${CHART_NAME}-${CHART_VERSION}.tgz" oci://${CHART_TAG_BASE} &> push-metadata.txt
+          CHART_DIGEST=$(awk '/Digest: /{print $2}' push-metadata.txt)
+          cosign sign --yes "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}"
+          cosign verify "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            --certificate-identity "https://github.com/bjw-s/helm-charts/.github/workflows/charts-release-steps.yaml@refs/heads/main"
 
   cleanup-charts-artifacts:
     name: Clean up artifacts
