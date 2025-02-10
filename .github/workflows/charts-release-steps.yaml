@@ -92,7 +92,7 @@ jobs:
     needs:
       - package-charts
     outputs:
-      artifacts: ${{ steps.list.outputs.result }}
+      artifacts: ${{ steps.artifacts.outputs.artifacts }}
     steps:
       - name: List artifacts
         id: list
@@ -108,23 +108,25 @@ jobs:
             [.[] | {artifact_name: .name, chart_folder: (.name | split("__")[-3]), chart_name: (.name | split("__")[-2]), chart_version: (.name | split("__")[-1]) }]
         run: |
           echo '${{ steps.list.outputs.result }}' | jq -r "$JQ_COMMAND" > artifacts
-          cat artifacts
-          # echo "artifacts=$(jq '.' '.ci/repo-config.yaml' -o json -I=0)" >> "$GITHUB_OUTPUT"
+          cat "artifacts=$(cat artifacts)" >> "$GITHUB_OUTPUT"
 
-#
-
-  # release-charts-to-oci:
-  #   name: Release charts to OCI registry
-  #   runs-on: ubuntu-22.04
-  #   needs:
-  #     - package-charts
-  #     - prepare-release-charts-to-oci
-  #   steps:
-  #     - name: Download chart artifacts
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         path: artifacts
-  #         pattern: chart__*
+  release-charts-to-oci:
+    name: Release charts to OCI registry
+    runs-on: ubuntu-22.04
+    if: ${{ needs.prepare-release-charts-to-oci.outputs.artifacts != '[]' }}
+    strategy:
+      matrix:
+        artifacts: ${{ fromJSON(needs.prepare-release-charts-to-oci.outputs.artifacts) }}
+      fail-fast: false
+    needs:
+      - package-charts
+      - prepare-release-charts-to-oci
+    steps:
+      - name: Download chart artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: ${{ matrix.artifact_name }}
 
   #     - name: Install Cosign
   #       uses: sigstore/cosign-installer@v3.6.0
