@@ -1,0 +1,77 @@
+---
+name: "Package charts"
+description: "Package charts for release"
+inputs:
+  rootFolder:
+    description: "Root folder containing the charts to package"
+    required: true
+  chartFolder:
+    description: "Folder containing the chart to package relative to the base folder"
+    required: true
+  destinationFolder:
+    description: "Folder where the chart packages should be stored"
+    required: true
+    default: "out"
+  artifactPrefix:
+    description: "Prefix for the artifact name"
+    required: false
+    default: ""
+  retentionDays:
+    description: "Duration after which artifacts will expire in days."
+    required: true
+    default: "1"
+  helmVersion:
+    description: "Helm version to use for packaging"
+    required: true
+    default: 3.17.0
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Kubernetes tools
+      uses: yokawasa/action-setup-kube-tools@v0.11.1
+      with:
+        setup-tools: |
+          helmv3
+        helm: "${{ inputs.helmVersion }}"
+
+    - name: Grab chart details
+      id: chart-details
+      shell: bash
+      env:
+        ROOT_DIR: "${{ inputs.rootFolder }}"
+        CHART_DIR: "${{ inputs.chartFolder }}"
+      run: |
+        PARENT_DIR=$(basename $(dirname "${ROOT_DIR}/${CHART_DIR}"))
+        echo "parentdir=${PARENT_DIR}" >> "$GITHUB_OUTPUT"
+        echo "name=$(yq '.name' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml)" >> "$GITHUB_OUTPUT"
+        echo "version=$(yq '.version' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml)" >> "$GITHUB_OUTPUT"
+
+    - name: Dereference JSON schema before packaging
+      uses: bjw-s/helm-charts-actions/dereference-json-schema@main
+      with:
+        schemaFile: "${{ inputs.rootFolder }}/${{ inputs.chartFolder }}/values.schema.json"
+        outputFile: "${{ inputs.rootFolder }}/${{ inputs.chartFolder }}/values.schema.json"
+        allowFileNotFound: true
+
+    - name: Package Helm Chart
+      shell: bash
+      env:
+        ROOT_DIR: "${{ inputs.rootFolder }}"
+        CHART_DIR: "${{ inputs.chartFolder }}"
+        PARENT_DIR: "${{ steps.chart-details.outputs.parentdir }}"
+        TARGET_DIR: "${{ inputs.destinationFolder }}"
+      run: |
+        helm package "${ROOT_DIR}/${CHART_DIR}" --dependency-update --destination "${TARGET_DIR}/${PARENT_DIR}"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      env:
+        PARENT_DIR: "${{ steps.chart-details.outputs.parentdir }}"
+        CHART_NAME: "${{ steps.chart-details.outputs.name }}"
+        CHART_VERSION: "${{ steps.chart-details.outputs.version }}"
+        TARGET_DIR: "${{ inputs.destinationFolder }}"
+      with:
+        name: "${{ inputs.artifactPrefix }}${{ env.PARENT_DIR }}__${{ env.CHART_NAME }}__${{ env.CHART_VERSION }}"
+        path: "${{ env.TARGET_DIR }}/${{ env.PARENT_DIR }}/${{ env.CHART_NAME }}-${{ env.CHART_VERSION }}.tgz"
+        retention-days: ${{ inputs.retentionDays }}
