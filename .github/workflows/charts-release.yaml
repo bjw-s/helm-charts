@@ -71,6 +71,7 @@ jobs:
       charts: ${{ needs.prepare-release.outputs.libraryChartsToRelease }}
       excludedChartsRelease: ${{ toJSON(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release) }}
       ghPagesBranch: gh-pages
+      publishToOciRegistry: false
 
   #   name: Release charts
   #   runs-on: ubuntu-22.04
