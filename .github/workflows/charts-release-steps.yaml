@@ -128,7 +128,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
-          pattern: ${{ matrix.artifact_name }}
+          pattern: ${{ matrix.artifacts.artifact_name }}
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3.6.0
@@ -149,14 +149,13 @@ jobs:
 
       - name: Push Helm charts to OCI registry
         shell: bash
-        working-directory: artifacts
+        working-directory: artifacts/${{ matrix.artifacts.artifact_name }}
         env:
-          ARTIFACT_FOLDER: ${{ matrix.artifact_name }}
-          CHART_FOLDER: ${{ matrix.chart_folder }}
-          CHART_NAME: ${{ matrix.chart_name }}
-          CHART_VERSION: ${{ matrix.chart_version }}
+          CHART_FOLDER: ${{ matrix.artifacts.chart_folder }}
+          CHART_NAME: ${{ matrix.artifacts.chart_name }}
+          CHART_VERSION: ${{ matrix.artifacts.chart_version }}
         run: |
-            ls ${ARTIFACT_FOLDER}/
+            ls
 
   cleanup-charts-artifacts:
     name: Clean up artifacts
