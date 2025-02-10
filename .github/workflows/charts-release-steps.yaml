@@ -20,7 +20,7 @@ on:
       publishToGhPages:
         description: >
           Should the charts be published to GitHub Pages.
-        default: false  # TODO: flip to true
+        default: true
         required: false
         type: boolean
       ghPagesBranch:
@@ -31,8 +31,8 @@ on:
         type: string
 
 jobs:
-  package-library-charts:
-    name: Package library charts
+  package-charts:
+    name: Package charts
     runs-on: ubuntu-22.04
     strategy:
       matrix:
@@ -54,44 +54,119 @@ jobs:
           chartFolder: ${{ matrix.charts }}
           artifactPrefix: chart__
 
-  release-library-charts-to-github-pages:
-    name: Release library charts to GitHub Pages
+  # release-charts-to-github-pages:
+  #   name: Release charts to GitHub Pages
+  #   runs-on: ubuntu-22.04
+  #   needs:
+  #     - package-charts
+  #   steps:
+  #     - name: Checkout source branch
+  #       uses: actions/checkout@v4
+  #       with:
+  #         path: src
+
+  #     - name: Checkout gh-pages branch
+  #       uses: actions/checkout@v4
+  #       with:
+  #         token: ${{ github.token }}
+  #         path: gh-pages
+  #         ref: ${{ inputs.ghPagesBranch }}
+  #         fetch-depth: 0
+
+  #     - name: Prepare artifacts for release to GitHub Pages
+  #       uses: ./src/.github/actions/charts-release-ghpages
+  #       with:
+  #         artifactPattern: "*"
+  #         artifactPrefix: chart__
+  #         targetFolder: gh-pages
+  #         targetBranch: gh-pages
+
+  #     - name: Publish changes to GitHub Pages
+  #       uses: ./src/.github/actions/publish-folder-to-pages
+  #       with:
+  #         path: gh-pages/
+
+  prepare-release-charts-to-oci:
+    name: Prepare releasing charts to OCI registry
     runs-on: ubuntu-22.04
     needs:
-      - package-library-charts
+      - package-charts
+    outputs:
+      artifacts: ${{ steps.list.outputs.result }}
     steps:
-      - name: Checkout source branch
-        uses: actions/checkout@v4
+      - name: List artifacts
+        id: list
+        uses: yakubique/list-artifacts@v1.1
         with:
-          path: src
+          name: chart__*
 
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
-        with:
-          token: ${{ github.token }}
-          path: gh-pages
-          ref: ${{ inputs.ghPagesBranch }}
-          fetch-depth: 0
+      - name: Rewrite artifacts output
+        id: artifacts
+        shell: bash
+        env:
+          JQ_COMMAND: |-
+            [.[] | {artifact_name: .name, chart_folder: (.name | split("__")[-3]), chart_name: (.name | split("__")[-2]), chart_version: (.name | split("__")[-1]) }]
+        run: |
+          echo "${{ steps.list.outputs.result }}" | jq -r "$JQ_COMMAND" > artifacts
+          cat artifacts
+          # echo "artifacts=$(jq '.' '.ci/repo-config.yaml' -o json -I=0)" >> "$GITHUB_OUTPUT"
 
-      - name: Prepare artifacts for release to GitHub Pages
-        uses: ./src/.github/actions/charts-release-ghpages
-        with:
-          artifactPattern: library__*
-          artifactPrefix: chart__
-          targetFolder: gh-pages
-          targetBranch: gh-pages
+#
 
-      - name: Publish changes to GitHub Pages
-        uses: ./src/.github/actions/publish-folder-to-pages
-        with:
-          path: gh-pages/
+  # release-charts-to-oci:
+  #   name: Release charts to OCI registry
+  #   runs-on: ubuntu-22.04
+  #   needs:
+  #     - package-charts
+  #     - prepare-release-charts-to-oci
+  #   steps:
+  #     - name: Download chart artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         path: artifacts
+  #         pattern: chart__*
 
-  cleanup-library-charts-artifacts:
+  #     - name: Install Cosign
+  #       uses: sigstore/cosign-installer@v3.6.0
+
+  #     - name: Push Helm charts to OCI registry
+  #       shell: bash
+  #       working-directory: artifacts
+  #       env:
+  #         ARTIFACT_PREFIX: ${{ inputs.artifactPrefix }}
+  #         TARGET_FOLDER: ${{ inputs.targetFolder }}
+  #       run: |
+  #         while IFS= read -d $'\0' -r ARTIFACT ; do
+  #           echo ${ARTIFACT}
+  #           prefix_removed_chart=${ARTIFACT/#$ARTIFACT_PREFIX}
+  #           DELIMITER='__'
+  #           s=${prefix_removed_chart}${DELIMITER}
+  #           ARTIFACT_PATH_PARTS=();
+  #           while [[ $s ]]; do
+  #               ARTIFACT_PATH_PARTS+=( "${s%%"${DELIMITER}"*}" );
+  #               s=${s#*"${DELIMITER}"};
+  #           done;
+
+  #           CHART_FOLDER=${ARTIFACT_PATH_PARTS[0]}
+  #           CHART_NAME=${ARTIFACT_PATH_PARTS[1]}
+  #           CHART_VERSION=${ARTIFACT_PATH_PARTS[2]}
+
+  #           helm push "${{ env.CHARTS_SRC_DIR }}/${CHART_TYPE}/${CHART_NAME}-${CHART_VERSION}.tgz" oci://${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm &> push-metadata.txt
+  #           CHART_DIGEST=$(awk '/Digest: /{print $2}' push-metadata.txt)
+  #           cosign sign --yes "${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm/${CHART_NAME}:${CHART_VERSION}@${CHART_DIGEST}"
+  #           cosign verify "${{ env.TARGET_REGISTRY }}/${{ github.actor }}/helm/${CHART_NAME}:${CHART_VERSION}@${CHART_DIGEST}" \
+  #             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+  #             --certificate-identity "https://github.com/bjw-s/helm-charts/.github/workflows/charts-release-oci.yaml@refs/heads/main"
+
+  #         done < <(find . -mindepth 1 -maxdepth 1 -type d -print0)
+
+  cleanup-charts-artifacts:
     name: Clean up artifacts
     runs-on: ubuntu-22.04
     needs:
-      - package-library-charts
-      - release-library-charts-to-github-pages
+      - package-charts
+      - release-charts-to-github-pages
+      - release-charts-to-oci
     if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     steps:
     - name: Clean up artifact
