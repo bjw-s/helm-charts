@@ -8,7 +8,7 @@ on:
   push:
     branches:
       - main
-      - rework-publishing-ci
+      - rework-publishing-ci  # TODO: Remove this
     paths:
       - "charts/**"
 
@@ -73,63 +73,19 @@ jobs:
       ghPagesBranch: gh-pages
       publishToOciRegistry: false
 
-  #   name: Release charts
-  #   runs-on: ubuntu-22.04
-  #   needs:
-  #     - changed-charts
-  #     - release-library-charts
-  #   strategy:
-  #     matrix:
-  #       charts: ${{ fromJSON(needs.prepare-release.outputs.applicationChartsToRelease) }}
-  #     max-parallel: 2
-  #     fail-fast: false
-  #   steps:
-  #     - name: Echo chart folder
-  #       if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
-  #       run: |
-  #         echo ${{ matrix.charts }}
-
-  #   uses: ./.github/workflows/charts-release-ghpages.yaml
-  #   with:
-  #     charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
-  #   secrets: inherit
-
-  # tag-library-charts:
-  #   name: Create git tags for library charts
-  #   uses: ./.github/workflows/tag-charts.yaml
-  #   needs:
-  #     - prepare
-  #     - release-library-charts
-  #   with:
-  #     charts: "${{ needs.prepare.outputs.libraryChartsToRelease }}"
-  #   secrets: inherit
-
-  # release-application-charts:
-  #   name: Release Application charts to GitHub pages
-  #   uses: ./.github/workflows/charts-release-ghpages.yaml
-  #   needs:
-  #     - prepare
-  #     - release-library-charts
-  #   with:
-  #     charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
-  #   secrets: inherit
-
-  # tag-application-charts:
-  #   name: Create git tags for application charts
-  #   uses: ./.github/workflows/tag-charts.yaml
-  #   needs:
-  #     - prepare
-  #     - release-application-charts
-  #   with:
-  #     charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
-  #   secrets: inherit
-
-  # release-github-oci:
-  #   name: Release Application charts to GitHub Container Registry
-  #   uses: ./.github/workflows/charts-release-oci.yaml
-  #   needs:
-  #     - prepare
-  #     - release-library-charts
-  #   with:
-  #     charts: "${{ needs.prepare.outputs.applicationChartsToRelease }}"
-  #   secrets: inherit
+  release-other-charts:
+    name: Release other charts
+    needs:
+      - prepare-release
+      - release-library-charts
+    if: ${{ needs.prepare-release.outputs.applicationChartsToRelease != '[]' }}
+    uses: ./.github/workflows/charts-release-steps.yaml
+    permissions:
+      pages: write
+      id-token: write
+      contents: write
+      packages: write
+    with:
+      charts: ${{ needs.prepare-release.outputs.applicationChartsToRelease }}
+      excludedChartsRelease: ${{ toJSON(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release) }}
+      ghPagesBranch: gh-pages
