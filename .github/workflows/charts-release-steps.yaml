@@ -107,7 +107,7 @@ jobs:
           JQ_COMMAND: |-
             [.[] | {artifact_name: .name, chart_folder: (.name | split("__")[-3]), chart_name: (.name | split("__")[-2]), chart_version: (.name | split("__")[-1]) }]
         run: |
-          echo "${{ steps.list.outputs.result }}" | jq -r "$JQ_COMMAND" > artifacts
+          echo '${{ steps.list.outputs.result }}' | jq -r "$JQ_COMMAND" > artifacts
           cat artifacts
           # echo "artifacts=$(jq '.' '.ci/repo-config.yaml' -o json -I=0)" >> "$GITHUB_OUTPUT"
 
