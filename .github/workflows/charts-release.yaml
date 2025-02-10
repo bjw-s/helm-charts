@@ -65,6 +65,7 @@ jobs:
     permissions:
       pages: write
       id-token: write
+      contents: write
     with:
       charts: ${{ needs.prepare-release.outputs.libraryChartsToRelease }}
       excludedChartsRelease: ${{ toJSON(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release) }}

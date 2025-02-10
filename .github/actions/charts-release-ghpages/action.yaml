@@ -66,8 +66,5 @@ runs:
       with:
         repository: ${{ inputs.targetFolder }}
         branch: ${{ inputs.targetBranch }}
-        commit_user_name: "bjw-s-bot[bot]"
-        commit_user_email: 87358111+bjw-s-bot[bot]@users.noreply.github.com
-        commit_author: bjw-s-bot[bot] <87358111+bjw-s-bot[bot]@users.noreply.github.com>
         file_pattern: "index.yaml **/*.tgz"
         disable_globbing: true
