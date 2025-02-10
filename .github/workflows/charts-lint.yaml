@@ -71,7 +71,7 @@ jobs:
           chart: ${{ matrix.chart }}
           overrides: ${{ inputs.overrideDeps }}
 
-      - name: Dereference JSON schema before packaging
+      - name: Dereference JSON schema
         uses: bjw-s/helm-charts-actions/dereference-json-schema@main
         with:
           schemaFile: "charts/${{ matrix.chart }}/values.schema.json"
