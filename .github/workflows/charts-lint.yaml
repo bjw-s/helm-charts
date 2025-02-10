@@ -71,6 +71,13 @@ jobs:
           chart: ${{ matrix.chart }}
           overrides: ${{ inputs.overrideDeps }}
 
+      - name: Dereference JSON schema before packaging
+        uses: bjw-s/helm-charts-actions/dereference-json-schema@main
+        with:
+          schemaFile: "charts/${{ matrix.chart }}/values.schema.json"
+          outputFile: "charts/${{ matrix.chart }}/values.schema.json"
+          allowFileNotFound: true
+
       - name: Run chart-testing (lint)
         run: ct lint --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
 
