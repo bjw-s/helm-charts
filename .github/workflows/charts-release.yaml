@@ -67,7 +67,7 @@ jobs:
       id-token: write
     with:
       charts: ${{ needs.prepare-release.outputs.libraryChartsToRelease }}
-      excludedChartsRelease: ${{ needs.prepare-release.outputs.repoConfiguration.excludedChartsRelease }}
+      excludedChartsRelease: ${{ fromJSON(needs.prepare-release.outputs.repoConfiguration).excludedChartsRelease }}
       ghPagesBranch: gh-pages
 
   #   name: Release charts
