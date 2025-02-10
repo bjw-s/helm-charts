@@ -29,10 +29,22 @@ on:
         default: "gh-pages"
         required: false
         type: string
+      publishToOciRegistry:
+        description: >
+          Should the charts be published to an OCI registry.
+        default: true
+        required: false
+        type: boolean
       ociRegistry:
         description: >
           Target OCI registry for Helm charts.
         default: "ghcr.io"
+        required: false
+        type: string
+      helmVersion:
+        description: >
+          Helm version to use.
+        default: "3.11.2"
         required: false
         type: string
 
@@ -59,42 +71,45 @@ jobs:
           rootFolder: src/charts
           chartFolder: ${{ matrix.charts }}
           artifactPrefix: chart__
+          helmVersion: ${{ inputs.helmVersion }}
 
-  # release-charts-to-github-pages:
-  #   name: Release charts to GitHub Pages
-  #   runs-on: ubuntu-22.04
-  #   needs:
-  #     - package-charts
-  #   steps:
-  #     - name: Checkout source branch
-  #       uses: actions/checkout@v4
-  #       with:
-  #         path: src
+  release-charts-to-github-pages:
+    name: Release charts to GitHub Pages
+    runs-on: ubuntu-22.04
+    if: ${{ inputs.publishToGhPages }}
+    needs:
+      - package-charts
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          path: src
 
-  #     - name: Checkout gh-pages branch
-  #       uses: actions/checkout@v4
-  #       with:
-  #         token: ${{ github.token }}
-  #         path: gh-pages
-  #         ref: ${{ inputs.ghPagesBranch }}
-  #         fetch-depth: 0
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          path: gh-pages
+          ref: ${{ inputs.ghPagesBranch }}
+          fetch-depth: 0
 
-  #     - name: Prepare artifacts for release to GitHub Pages
-  #       uses: ./src/.github/actions/charts-release-ghpages
-  #       with:
-  #         artifactPattern: "*"
-  #         artifactPrefix: chart__
-  #         targetFolder: gh-pages
-  #         targetBranch: gh-pages
+      - name: Prepare artifacts for release to GitHub Pages
+        uses: ./src/.github/actions/charts-release-ghpages
+        with:
+          artifactPattern: "*"
+          artifactPrefix: chart__
+          targetFolder: gh-pages
+          targetBranch: gh-pages
 
-  #     - name: Publish changes to GitHub Pages
-  #       uses: ./src/.github/actions/publish-folder-to-pages
-  #       with:
-  #         path: gh-pages/
+      - name: Publish changes to GitHub Pages
+        uses: ./src/.github/actions/publish-folder-to-pages
+        with:
+          path: gh-pages/
 
   prepare-release-charts-to-oci:
     name: Prepare releasing charts to OCI registry
     runs-on: ubuntu-22.04
+    if: ${{ inputs.publishToOciRegistry }}
     needs:
       - package-charts
     outputs:
@@ -119,7 +134,7 @@ jobs:
   release-charts-to-oci:
     name: Release charts to OCI registry
     runs-on: ubuntu-22.04
-    if: ${{ needs.prepare-release-charts-to-oci.outputs.artifacts != '[]' }}
+    if: ${{ inputs.publishToOciRegistry && needs.prepare-release-charts-to-oci.outputs.artifacts != '[]' }}
     strategy:
       matrix:
         artifacts: ${{ fromJSON(needs.prepare-release-charts-to-oci.outputs.artifacts) }}
@@ -144,7 +159,7 @@ jobs:
         with:
           setup-tools: |
             helmv3
-          helm: "3.11.2"
+          helm: ${{ inputs.helmVersion }}
 
       - name: Login to OCI Registry
         uses: docker/login-action@v3
@@ -175,7 +190,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs:
       - package-charts
-      # - release-charts-to-github-pages
+      - release-charts-to-github-pages
       - release-charts-to-oci
     if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     steps:
