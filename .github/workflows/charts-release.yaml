@@ -56,91 +56,20 @@ jobs:
           files_ignore: |
             library/**
 
-  package-library-charts:
-    name: Package library charts
-    runs-on: ubuntu-22.04
+  release-library-charts:
+    name: Release library charts
     needs:
       - prepare-release
-    strategy:
-      matrix:
-        charts: ${{ fromJSON(needs.prepare-release.outputs.libraryChartsToRelease) }}
-      fail-fast: false
     if: ${{ needs.prepare-release.outputs.libraryChartsToRelease != '[]' }}
-    steps:
-      - name: Checkout source branch
-        if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
-        uses: actions/checkout@v4
-        with:
-          path: src
-          fetch-depth: 0
-
-      - name: Package Helm charts
-        uses: ./src/.github/actions/charts-package
-        if: ${{ !contains(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release, matrix.charts) }}
-        with:
-          rootFolder: src/charts
-          chartFolder: ${{ matrix.charts }}
-          artifactPrefix: chart__
-
-  release-library-charts-to-github-pages:
-    name: Release library charts to GitHub Pages
-    runs-on: ubuntu-22.04
-    needs:
-      - package-library-charts
-    if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
+    uses: ./.github/workflows/charts-release-steps.yaml
     permissions:
       pages: write
       id-token: write
-    steps:
-      - name: Generate token
-        uses: actions/create-github-app-token@v1
-        id: app-token
-        with:
-          app-id: "${{ secrets.BJWS_APP_ID }}"
-          private-key: "${{ secrets.BJWS_APP_PRIVATE_KEY }}"
+    with:
+      charts: ${{ needs.prepare-release.outputs.libraryChartsToRelease }}
+      excludedChartsRelease: ${{ needs.prepare-release.outputs.repoConfiguration.excludedChartsRelease }}
+      ghPagesBranch: gh-pages
 
-      - name: Checkout source branch
-        uses: actions/checkout@v4
-        with:
-          path: src
-
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          path: gh-pages
-          ref: gh-pages
-          fetch-depth: 0
-
-      - name: Prepare artifacts for release to GitHub Pages
-        uses: ./src/.github/actions/charts-release-ghpages
-        with:
-          artifactPattern: library__*
-          artifactPrefix: chart__
-          targetFolder: gh-pages
-          targetBranch: gh-pages
-
-      - name: Publish changes to GitHub Pages
-        uses: ./src/.github/actions/publish-folder-to-pages
-        with:
-          path: gh-pages/
-
-  cleanup-library-charts-artifacts:
-    name: Release library charts to GitHub Pages
-    runs-on: ubuntu-22.04
-    needs:
-      - package-library-charts
-      - release-library-charts-to-github-pages
-    if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
-    steps:
-    - name: Clean up artifact
-      uses: joernott/rm-artifact@v1
-      with:
-        name: "*"
-        useGlob: true
-        failOnError: true
-
-  # release-charts:
   #   name: Release charts
   #   runs-on: ubuntu-22.04
   #   needs:

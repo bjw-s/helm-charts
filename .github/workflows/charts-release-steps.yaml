@@ -1,0 +1,98 @@
+---
+name: "Charts: Release"
+
+on:
+  workflow_call:
+    inputs:
+      charts:
+        description: >
+          Json encoded list of Helm charts to release.
+          Defaults to releasing everything.
+        default: "[]"
+        required: false
+        type: string
+      excludedChartsRelease:
+        description: >
+          Json encoded list of Helm charts to exclude from release.
+        default: "[]"
+        required: false
+        type: string
+      ghPagesBranch:
+        description: >
+          Target branch for GitHub Pages.
+        default: "gh-pages"
+        required: false
+        type: string
+
+jobs:
+  package-library-charts:
+    name: Package library charts
+    runs-on: ubuntu-22.04
+    needs:
+      - prepare-release
+    strategy:
+      matrix:
+        charts: ${{ fromJSON(inputs.charts) }}
+      fail-fast: false
+    steps:
+      - name: Checkout source branch
+        if: ${{ !contains(fromJSON(inputs.excludedChartsRelease, matrix.charts) }}
+        uses: actions/checkout@v4
+        with:
+          path: src
+          fetch-depth: 0
+
+      - name: Package Helm charts
+        uses: ./src/.github/actions/charts-package
+        if: ${{ !contains(fromJSON(inputs.excludedChartsRelease, matrix.charts) }}
+        with:
+          rootFolder: src/charts
+          chartFolder: ${{ matrix.charts }}
+          artifactPrefix: chart__
+
+  release-library-charts-to-github-pages:
+    name: Release library charts to GitHub Pages
+    runs-on: ubuntu-22.04
+    needs:
+      - package-library-charts
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          path: src
+
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          path: gh-pages
+          ref: ${{ inputs.ghPagesBranch }}
+          fetch-depth: 0
+
+      - name: Prepare artifacts for release to GitHub Pages
+        uses: ./src/.github/actions/charts-release-ghpages
+        with:
+          artifactPattern: library__*
+          artifactPrefix: chart__
+          targetFolder: gh-pages
+          targetBranch: gh-pages
+
+      - name: Publish changes to GitHub Pages
+        uses: ./src/.github/actions/publish-folder-to-pages
+        with:
+          path: gh-pages/
+
+  cleanup-library-charts-artifacts:
+    name: Release library charts to GitHub Pages
+    runs-on: ubuntu-22.04
+    needs:
+      - package-library-charts
+      - release-library-charts-to-github-pages
+    if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
+    steps:
+    - name: Clean up artifact
+      uses: joernott/rm-artifact@v1
+      with:
+        name: "*"
+        useGlob: true
+        failOnError: true
