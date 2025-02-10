@@ -1,0 +1,62 @@
+---
+name: "Publish folder to GitHub Pages"
+description: "Publish the contents of a folder to GitHub Pages"
+inputs:
+  path:
+    description: "Path that contains the content to publish"
+    required: true
+    default: "gh-pages/"
+  artifactName:
+    description: "Filename of the artifact"
+    required: true
+    default: "github-pages"
+  retention-days:
+    description: "Duration after which artifact will expire in days."
+    required: true
+    default: "1"
+  deleteArtifactAfterPublish:
+    description: "Delete the artifact after deployment?"
+    required: true
+    default: "false"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Prepare gh-pages artifact
+      shell: sh
+      env:
+        INPUT_PATH: ${{ inputs.path }}
+      run: |
+        echo ::group::Archive artifact
+        tar \
+          --dereference --hard-dereference \
+          --directory "$INPUT_PATH" \
+          -cvf "$RUNNER_TEMP/artifact.tar" \
+          --exclude=.git \
+          --exclude=.github \
+          --exclude=".[^/]*" \
+          .
+        echo ::endgroup::
+
+    - name: Upload gh-pages artifact
+      id: upload-artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.artifactName }}
+        path: ${{ runner.temp }}/artifact.tar
+        retention-days: 1
+        if-no-files-found: error
+
+    - name: Deploy to GitHub Pages
+      id: deploy-gh-pages
+      uses: actions/deploy-pages@v4
+      with:
+        artifact_name: ${{ inputs.artifactName }}
+
+    - name: Clean up artifact
+      if: ${{ inputs.deleteArtifactAfterPublish == 'true' }}
+      uses: joernott/rm-artifact@v1
+      with:
+        name: ${{ inputs.artifactName }}
+        useGlob: false
+        failOnError: true
