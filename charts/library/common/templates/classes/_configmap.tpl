@@ -31,6 +31,7 @@ metadata:
     {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
+  namespace: {{ $rootContext.Release.Namespace }}
 {{- with $configMapObject.data }}
 data:
     {{- tpl (toYaml .) $rootContext | nindent 2 }}
