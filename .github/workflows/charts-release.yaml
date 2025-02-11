@@ -101,17 +101,6 @@ jobs:
             console.log(JSON.stringify(otherCharts));
             core.setOutput('otherChartsToRelease', JSON.stringify(otherCharts));
 
-  report-changes:
-    name: Report changes
-    runs-on: ubuntu-22.04
-    needs:
-      - prepare
-    steps:
-      - name: Report changes
-        run: |
-          echo "Library: ${{ needs.prepare.outputs.libraryChartsToRelease }}"
-          echo "Other: ${{ needs.prepare.outputs.otherChartsToRelease }}"
-
   release-library-charts:
     name: Release library charts
     needs:
