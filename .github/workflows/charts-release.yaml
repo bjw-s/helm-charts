@@ -75,7 +75,9 @@ jobs:
 
             if (input = '[]') {
               let charts = []
-              const globber = await glob.create('charts/*/*');
+              const fs = require('fs');
+
+              const globber = await glob.create('charts/*/*', { implicitDescendants: false });
               for await (const file of globber.globGenerator()) {
                 relativePath = file.slice(`${cwd}/charts/`.length);
                 charts.push(relativePath);
