@@ -22,9 +22,12 @@
 .vscode/
 # OWNERS file for Kubernetes
 OWNERS
-
 # helm-docs templates
 *.gotmpl
 
-# helm unit tests
-tests/
+# Schema files
+schemas/
+
+# Test files
+test-chart/
+unittests/

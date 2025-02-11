@@ -24,5 +24,10 @@
 OWNERS
 # helm-docs templates
 *.gotmpl
+
+# Schema files
+schemas/
+
 # Test files
-tests/
+test/
+unittests/
