@@ -59,12 +59,15 @@ runs:
       uses: actions/github-script@v7
       with:
         script: |
-          var artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            run_id: context.runId,
-          });
-          console.log(artifacts);
+          const artifactPrefix = "${{ inputs.artifactPrefix }}";
+          const dstFolder = "${{ inputs.targetFolder }}";
+          allFiles = fs.readdirSync("artifacts");
+          files.forEach((entry) => {
+            const stats = fs.statSync(fullPath);
+            if (stats.isDirectory()) {
+              console.log(entry);
+            }
+          }
 
     - name: Update chart index
       shell: bash
