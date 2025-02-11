@@ -23,8 +23,10 @@ jobs:
     runs-on: ubuntu-22.04
     outputs:
       repoConfiguration: ${{ steps.repo-config.outputs.config }}
-      libraryChartsToRelease: ${{ steps.specified-charts.outputs.libraryChartsToRelease || steps.changed-library-charts.outputs.all_changed_files }}
-      otherChartsToRelease: ${{ steps.specified-charts.outputs.otherChartsToRelease || steps.changed-charts.outputs.all_changed_files }}
+      libraryChartsToRelease: |-
+        ${{ github.event_name == 'workflow_dispatch' && steps.specified-charts.outputs.libraryChartsToRelease || steps.changed-library-charts.outputs.all_changed_files }}
+      otherChartsToRelease: |-
+        ${{ github.event_name == 'workflow_dispatch' && steps.specified-charts.outputs.otherChartsToRelease || steps.changed-charts.outputs.all_changed_files }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -121,7 +123,7 @@ jobs:
     needs:
       - prepare
       - release-library-charts
-    if: |
+    if: |-
       ${{
         (needs.prepare.result == 'skipped' || needs.prepare.result == 'success') &&
         (needs.release-library-charts.result == 'skipped' || needs.release-library-charts.result == 'success') &&
