@@ -49,14 +49,6 @@ on:
         type: string
 
 jobs:
-  report-changes:
-    name: Report changes
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Report changes
-        run: |
-          echo "Charts to package: ${{ inputs.charts }}"
-
   package-charts:
     name: Package charts
     runs-on: ubuntu-22.04
@@ -108,10 +100,38 @@ jobs:
           echo "changelog=$(yq '.annotations["artifacthub.io/changes"]' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml | yq -o=json -I=0 '.')" >> "$GITHUB_OUTPUT"
 
       - name: Echo changelog
-        id: changelog
         shell: bash
         run: |
           echo "Changelog: ${{ steps.chart-details.outputs.changelog }}"
+
+      - name: Format changelog
+        id: changelog
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let input = '${{ steps.chart-details.outputs.changelog }}';
+            let changelog = "## Changelog:";
+            if (input === 'null') {
+              changelog = changelog + "\nNo changelog provided.";
+            } else {
+              let inputParsed = JSON.parse(input);
+
+              var changelogGrouped = inputParsed.reduce((result:any, currentValue:any) => {
+                (result[currentValue['kind']] = result[currentValue['kind']] || []).push(currentValue);
+                return result;
+              }, {});
+
+              for (const key in changelogGrouped) {
+                changelog = changelog + `\n### ${key[0].toUpperCase() + key.slice(1)}`;
+                let entries = changelogGrouped[key];
+
+                entries.forEach(function (entry) {
+                  changelog = changelog + `\n- ${entry.description.replace('\n', ' ')}`;
+                });
+                changelog = changelog + `\n`;
+              }
+            }
+            console.log(changelog);
 
       # - name: Create tag
       #   uses: EndBug/latest-tag@latest
