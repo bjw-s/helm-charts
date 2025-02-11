@@ -65,26 +65,31 @@ runs:
           process.chdir('artifacts');
           workingDir = process.cwd();
 
+          console.log(workingDir);
+
           const globber = await glob.create(`${artifactPrefix}*/*.tgz`);
           for await (const file of globber.globGenerator()) {
             relativePath = file.startsWith(workingDir) ? file.slice(workingDir.length) : file;
             artifactFolder = relativePath.split('/')[0];
+            console.log(artifactFolder);
             artifactFolderStrippedPrefix = artifactFolder.startsWith(workingDir) ? artifactFolder.slice(workingDir.length) : artifactFolder;
+            console.log(artifactFolderStrippedPrefix);
             chartType = artifactFolderStrippedPrefix.split('__')[0];
+            console.log(chartType);
             targetFolder = `${dstFolder}/${chartType}`;
             console.log(targetFolder)
           }
 
-    - name: Update chart index
-      shell: bash
-      working-directory: ${{ inputs.targetFolder }}
-      run: |
-        helm repo index . --url https://bjw-s.github.io/helm-charts/
+    # - name: Update chart index
+    #   shell: bash
+    #   working-directory: ${{ inputs.targetFolder }}
+    #   run: |
+    #     helm repo index . --url https://bjw-s.github.io/helm-charts/
 
-    - name: Commit Changes
-      uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        repository: ${{ inputs.targetFolder }}
-        branch: ${{ inputs.targetBranch }}
-        file_pattern: "index.yaml **/*.tgz"
-        disable_globbing: true
+    # - name: Commit Changes
+    #   uses: stefanzweifel/git-auto-commit-action@v5
+    #   with:
+    #     repository: ${{ inputs.targetFolder }}
+    #     branch: ${{ inputs.targetBranch }}
+    #     file_pattern: "index.yaml **/*.tgz"
+    #     disable_globbing: true
