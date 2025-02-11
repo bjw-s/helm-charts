@@ -63,7 +63,6 @@ runs:
           const artifactPrefix = "${{ inputs.artifactPrefix }}";
 
           baseDir = process.cwd();
-
           artifactsDir = `${process.cwd()}/artifacts`;
 
           const globber = await glob.create(`${artifactPrefix}*/*.tgz`);
