@@ -81,10 +81,9 @@ jobs:
               for await (const file of globber.globGenerator()) {
                 relativePath = file.slice(`${cwd}/charts/`.length);
                 charts.push(relativePath);
-                console.log(`Test: ${relativePath}`);
               }
             } else {
-              const charts = JSON.parse(input);
+              charts = JSON.parse(input);
             }
 
             libraryCharts = charts.filter(chart => chart.startsWith('library/'));
@@ -122,7 +121,6 @@ jobs:
     if: |
       ${{
         needs.prepare.outputs.otherChartsToRelease != '[]' &&
-        always() &&
         !failure() && !cancelled()
       }}
     uses: ./.github/workflows/charts-release-steps.yaml
