@@ -23,8 +23,8 @@ jobs:
     runs-on: ubuntu-22.04
     outputs:
       repoConfiguration: ${{ steps.repo-config.outputs.config }}
-      libraryChartsToRelease: ${{ steps.changed-library-charts.outputs.all_changed_files }}
-      otherChartsToRelease: ${{ steps.changed-charts.outputs.all_changed_files }}
+      libraryChartsToRelease: ${{ steps.specified-charts.outputs.libraryChartsToRelease || steps.changed-library-charts.outputs.all_changed_files }}
+      otherChartsToRelease: ${{ steps.specified-charts.outputs.otherChartsToRelease || steps.changed-charts.outputs.all_changed_files }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
