@@ -73,14 +73,13 @@ jobs:
             let tmpCharts = []
             if (input === '[]') {
               console.log("Empty charts input, scanning for charts in repository");
-              const fs = require('fs');
-
               const globber = await glob.create('charts/*/*', { implicitDescendants: false });
               for await (const file of globber.globGenerator()) {
                 relativePath = file.slice(`${cwd}/charts/`.length);
                 tmpCharts.push(relativePath);
               }
             } else {
+              const fs = require('fs');
               tmpCharts = JSON.parse(input);
               tmpCharts.forEach(function (chart) {
                 if (fs.existsSync(`${cwd}/charts/${chart}`)) {
@@ -124,7 +123,9 @@ jobs:
       - release-library-charts
     if: |
       ${{
-        !failure() && !cancelled() &&
+        always() &&
+        (needs.prepare.result == 'skipped' || needs.prepare.result == 'success') &&
+        (needs.release-library-charts.result == 'skipped' || needs.release-library-charts.result == 'success') &&
         needs.prepare.outputs.otherChartsToRelease != '[]'
       }}
     uses: ./.github/workflows/charts-release-steps.yaml
