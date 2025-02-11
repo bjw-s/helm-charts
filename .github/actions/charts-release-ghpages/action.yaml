@@ -68,8 +68,7 @@ runs:
           const globber = await glob.create(`${artifactPrefix}*/*.tgz`);
           for await (const file of globber.globGenerator()) {
             relativePath = file.startsWith(workingDir) ? file.slice(workingDir.length) : file;
-            console.log(relativePath);
-            artifactFolder = relativePath.split('/')[0];
+            artifactFolder = relativePath.split('/')[1];
             console.log(artifactFolder);
             artifactFolderStrippedPrefix = artifactFolder.startsWith(workingDir) ? artifactFolder.slice(workingDir.length) : artifactFolder;
             console.log(artifactFolderStrippedPrefix);
