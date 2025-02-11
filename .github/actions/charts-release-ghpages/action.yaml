@@ -62,19 +62,20 @@ runs:
           const dstFolder = "${{ inputs.targetFolder }}";
           const artifactPrefix = "${{ inputs.artifactPrefix }}";
 
-          process.chdir('artifacts');
-          workingDir = process.cwd();
+          baseDir = process.cwd();
+
+          artifactsDir = `${process.cwd()}/artifacts`;
 
           const globber = await glob.create(`${artifactPrefix}*/*.tgz`);
           for await (const file of globber.globGenerator()) {
-            relativePath = file.startsWith(workingDir) ? file.slice(workingDir.length) : file;
+            relativePath = file.startsWith(artifactsDir) ? file.slice(artifactsDir.length) : file;
             artifactFolder = relativePath.split('/')[1];
             artifactFolderStrippedPrefix = artifactFolder.startsWith(artifactPrefix) ? artifactFolder.slice(artifactPrefix.length) : artifactFolder;
-            console.log(artifactFolderStrippedPrefix);
             chartType = artifactFolderStrippedPrefix.split('__')[0];
-            console.log(chartType);
-            targetFolder = `${dstFolder}/${chartType}`;
-            console.log(targetFolder)
+            targetFolder = `${baseDir}/${dstFolder}/${chartType}`;
+
+            await io.mkdirP(targetFolder);
+            await io.cp(file, `${targetFolder}/`);
           }
 
     # - name: Update chart index
