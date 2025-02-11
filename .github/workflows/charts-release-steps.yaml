@@ -105,101 +105,108 @@ jobs:
           PARENT_DIR=$(basename $(dirname "${ROOT_DIR}/${CHART_DIR}"))
           echo "name=$(yq '.name' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml)" >> "$GITHUB_OUTPUT"
           echo "version=$(yq '.version' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml)" >> "$GITHUB_OUTPUT"
+          echo "changelog=$(yq '.annotations["artifacthub.io/changes"]' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml | yq -o=json -I=0 '.')" >> "$GITHUB_OUTPUT"
 
-      - name: Create tag
-        uses: EndBug/latest-tag@latest
-        with:
-          ref: ${{ steps.chart-details.outputs.name }}-${{ steps.chart-details.outputs.version }}
-
-  release-charts-to-github-pages:
-    name: Release charts to GitHub Pages
-    runs-on: ubuntu-22.04
-    if: ${{ inputs.publishToGhPages }}
-    needs:
-      - package-charts
-    steps:
-      - name: Checkout source branch
-        uses: actions/checkout@v4
-        with:
-          path: src
-
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
-        with:
-          token: ${{ github.token }}
-          path: gh-pages
-          ref: ${{ inputs.ghPagesBranch }}
-          fetch-depth: 0
-
-      - name: Prepare artifacts for release to GitHub Pages
-        uses: ./src/.github/actions/charts-release-ghpages
-        with:
-          artifactPattern: "*"
-          artifactPrefix: chart__
-          targetFolder: gh-pages
-          targetBranch: gh-pages
-
-      - name: Publish changes to GitHub Pages
-        uses: ./src/.github/actions/publish-folder-to-pages
-        with:
-          path: gh-pages/
-
-  prepare-release-charts-to-oci:
-    name: Prepare releasing charts to OCI registry
-    runs-on: ubuntu-22.04
-    if: ${{ inputs.publishToOciRegistry }}
-    needs:
-      - package-charts
-    outputs:
-      artifacts: ${{ steps.artifacts.outputs.artifacts }}
-    steps:
-      - name: List artifacts
-        id: list
-        uses: yakubique/list-artifacts@v1.1
-        with:
-          name: chart__*
-
-      - name: Rewrite artifacts output
-        id: artifacts
+      - name: Echo changelog
+        id: changelog
         shell: bash
-        env:
-          JQ_COMMAND: |-
-            [.[] | {artifact_name: .name, chart_name: (.name | split("__")[-2]), chart_version: (.name | split("__")[-1]) }]
         run: |
-          echo '${{ steps.list.outputs.result }}' | jq -c -r "$JQ_COMMAND" > artifacts
-          echo "artifacts=$(cat artifacts)" >> "$GITHUB_OUTPUT"
+          echo "Changelog: ${{ steps.chart-details.outputs.changelog }}"
 
-  release-charts-to-oci:
-    name: Release charts to OCI registry
-    runs-on: ubuntu-22.04
-    if: ${{ inputs.publishToOciRegistry && needs.prepare-release-charts-to-oci.outputs.artifacts != '[]' }}
-    strategy:
-      matrix:
-        artifacts: ${{ fromJSON(needs.prepare-release-charts-to-oci.outputs.artifacts) }}
-      fail-fast: false
-    needs:
-      - package-charts
-      - prepare-release-charts-to-oci
-    env:
-      TARGET_REGISTRY: ghcr.io
-    steps:
-      - name: Download chart artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          pattern: ${{ matrix.artifacts.artifact_name }}
+      # - name: Create tag
+      #   uses: EndBug/latest-tag@latest
+      #   with:
+      #     ref: ${{ steps.chart-details.outputs.name }}-${{ steps.chart-details.outputs.version }}
 
-      - name: Checkout source branch
-        uses: actions/checkout@v4
-        with:
-          path: src
+  # release-charts-to-github-pages:
+  #   name: Release charts to GitHub Pages
+  #   runs-on: ubuntu-22.04
+  #   if: ${{ inputs.publishToGhPages }}
+  #   needs:
+  #     - package-charts
+  #   steps:
+  #     - name: Checkout source branch
+  #       uses: actions/checkout@v4
+  #       with:
+  #         path: src
 
-      - name: Release chart to OCI registry
-        uses: ./src/.github/actions/charts-release-oci
-        with:
-          workingDir: artifacts/${{ matrix.artifacts.artifact_name }}
-          chartName: ${{ matrix.artifacts.chart_name }}
-          chartVersion: ${{ matrix.artifacts.chart_version }}
+  #     - name: Checkout gh-pages branch
+  #       uses: actions/checkout@v4
+  #       with:
+  #         token: ${{ github.token }}
+  #         path: gh-pages
+  #         ref: ${{ inputs.ghPagesBranch }}
+  #         fetch-depth: 0
+
+  #     - name: Prepare artifacts for release to GitHub Pages
+  #       uses: ./src/.github/actions/charts-release-ghpages
+  #       with:
+  #         artifactPattern: "*"
+  #         artifactPrefix: chart__
+  #         targetFolder: gh-pages
+  #         targetBranch: gh-pages
+
+  #     - name: Publish changes to GitHub Pages
+  #       uses: ./src/.github/actions/publish-folder-to-pages
+  #       with:
+  #         path: gh-pages/
+
+  # prepare-release-charts-to-oci:
+  #   name: Prepare releasing charts to OCI registry
+  #   runs-on: ubuntu-22.04
+  #   if: ${{ inputs.publishToOciRegistry }}
+  #   needs:
+  #     - package-charts
+  #   outputs:
+  #     artifacts: ${{ steps.artifacts.outputs.artifacts }}
+  #   steps:
+  #     - name: List artifacts
+  #       id: list
+  #       uses: yakubique/list-artifacts@v1.1
+  #       with:
+  #         name: chart__*
+
+  #     - name: Rewrite artifacts output
+  #       id: artifacts
+  #       shell: bash
+  #       env:
+  #         JQ_COMMAND: |-
+  #           [.[] | {artifact_name: .name, chart_name: (.name | split("__")[-2]), chart_version: (.name | split("__")[-1]) }]
+  #       run: |
+  #         echo '${{ steps.list.outputs.result }}' | jq -c -r "$JQ_COMMAND" > artifacts
+  #         echo "artifacts=$(cat artifacts)" >> "$GITHUB_OUTPUT"
+
+  # release-charts-to-oci:
+  #   name: Release charts to OCI registry
+  #   runs-on: ubuntu-22.04
+  #   if: ${{ inputs.publishToOciRegistry && needs.prepare-release-charts-to-oci.outputs.artifacts != '[]' }}
+  #   strategy:
+  #     matrix:
+  #       artifacts: ${{ fromJSON(needs.prepare-release-charts-to-oci.outputs.artifacts) }}
+  #     fail-fast: false
+  #   needs:
+  #     - package-charts
+  #     - prepare-release-charts-to-oci
+  #   env:
+  #     TARGET_REGISTRY: ghcr.io
+  #   steps:
+  #     - name: Download chart artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         path: artifacts
+  #         pattern: ${{ matrix.artifacts.artifact_name }}
+
+  #     - name: Checkout source branch
+  #       uses: actions/checkout@v4
+  #       with:
+  #         path: src
+
+  #     - name: Release chart to OCI registry
+  #       uses: ./src/.github/actions/charts-release-oci
+  #       with:
+  #         workingDir: artifacts/${{ matrix.artifacts.artifact_name }}
+  #         chartName: ${{ matrix.artifacts.chart_name }}
+  #         chartVersion: ${{ matrix.artifacts.chart_version }}
 
   cleanup-charts-artifacts:
     name: Clean up artifacts
