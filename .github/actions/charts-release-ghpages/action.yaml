@@ -62,6 +62,8 @@ runs:
           const dstFolder = "${{ inputs.targetFolder }}";
           process.chdir('artifacts');
 
+          console.log(process.cwd());
+
           const globber = await glob.create('${{ inputs.artifactPrefix }}*/*.tgz')
           for await (const file of globber.globGenerator()) {
             console.log(file)
