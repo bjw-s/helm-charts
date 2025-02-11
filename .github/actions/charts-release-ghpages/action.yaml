@@ -60,12 +60,10 @@ runs:
       working-directory: ${{ inputs.targetFolder }}
       run: |
         helm repo index . --url https://bjw-s.github.io/helm-charts/
-        git status
 
-    # - name: Commit Changes
-    #   uses: stefanzweifel/git-auto-commit-action@v5
-    #   with:
-    #     repository: ${{ inputs.targetFolder }}
-    #     branch: ${{ inputs.targetBranch }}
-    #     file_pattern: "index.yaml **/*.tgz"
-    #     disable_globbing: true
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        repository: ${{ inputs.targetFolder }}
+        branch: ${{ inputs.targetBranch }}
+        file_pattern: "index.yaml **/*.tgz"
