@@ -69,8 +69,7 @@ runs:
           for await (const file of globber.globGenerator()) {
             relativePath = file.startsWith(workingDir) ? file.slice(workingDir.length) : file;
             artifactFolder = relativePath.split('/')[1];
-            console.log(artifactFolder);
-            artifactFolderStrippedPrefix = artifactFolder.startsWith(workingDir) ? artifactFolder.slice(workingDir.length) : artifactFolder;
+            artifactFolderStrippedPrefix = artifactFolder.startsWith(artifactPrefix) ? artifactFolder.slice(artifactPrefix.length) : artifactFolder;
             console.log(artifactFolderStrippedPrefix);
             chartType = artifactFolderStrippedPrefix.split('__')[0];
             console.log(chartType);
