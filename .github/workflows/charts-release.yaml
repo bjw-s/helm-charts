@@ -73,21 +73,21 @@ jobs:
             let otherCharts = [];
             let cwd = process.cwd();
 
+            let tmpCharts = []
             if (input = '[]') {
-              let charts = []
               const fs = require('fs');
 
               const globber = await glob.create('charts/*/*', { implicitDescendants: false });
               for await (const file of globber.globGenerator()) {
                 relativePath = file.slice(`${cwd}/charts/`.length);
-                charts.push(relativePath);
+                tmpCharts.push(relativePath);
               }
             } else {
-              charts = JSON.parse(input);
+              tmpCharts = JSON.parse(input);
             }
 
-            libraryCharts = charts.filter(chart => chart.startsWith('library/'));
-            otherCharts = charts.filter(chart => !chart.startsWith('library/'));
+            libraryCharts = tmpCharts.filter(chart => chart.startsWith('library/'));
+            otherCharts = tmpCharts.filter(chart => !chart.startsWith('library/'));
 
             console.log("Library charts:")
             console.log(JSON.stringify(libraryCharts));
@@ -120,8 +120,8 @@ jobs:
       - release-library-charts
     if: |
       ${{
-        needs.prepare.outputs.otherChartsToRelease != '[]' &&
-        !failure() && !cancelled()
+        !failure() && !cancelled() &&
+        needs.prepare.outputs.otherChartsToRelease != '[]'
       }}
     uses: ./.github/workflows/charts-release-steps.yaml
     permissions:
