@@ -71,13 +71,13 @@ jobs:
             const charts = JSON.parse(input);
             const libraryCharts = charts.filter(chart => chart.startsWith('library/'));
             console.log(JSON.stringify(libraryCharts));
-            # core.setOutput('libraryChartsToRelease', JSON.stringify(libraryCharts));
+            // core.setOutput('libraryChartsToRelease', JSON.stringify(libraryCharts));
 
   release-library-charts:
     name: Release library charts
     needs:
       - prepare
-    if: ${{ needs.prepare.outputs.libraryChartsToRelease != '[]' }}
+    if: ${{ needs.prepare.outputs.libraryChartsToRelease != '[]' && needs.prepare.outputs.libraryChartsToRelease != '' }}
     uses: ./.github/workflows/charts-release-steps.yaml
     permissions:
       pages: write
@@ -99,7 +99,7 @@ jobs:
       ${{
         always() &&
         !failure() && !cancelled() &&
-        needs.prepare.outputs.otherChartsToRelease != '[]'
+        needs.prepare.outputs.otherChartsToRelease != '[]' && needs.prepare.outputs.otherChartsToRelease != ''
       }}
     uses: ./.github/workflows/charts-release-steps.yaml
     permissions:
