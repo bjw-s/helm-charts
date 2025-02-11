@@ -61,6 +61,18 @@ jobs:
           files_ignore: |
             library/**
 
+      - name: Get specified charts
+        id: specified-charts
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const input = '${{ github.event.inputs.charts }}';
+            const charts = JSON.parse(input);
+            const libraryCharts = charts.filter(chart => chart.startsWith('library/'));
+            console.log(JSON.stringify(libraryCharts));
+            # core.setOutput('libraryChartsToRelease', JSON.stringify(libraryCharts));
+
   release-library-charts:
     name: Release library charts
     needs:
