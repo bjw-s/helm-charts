@@ -62,7 +62,7 @@ runs:
           const artifactPrefix = "${{ inputs.artifactPrefix }}";
           const dstFolder = "${{ inputs.targetFolder }}";
           allFiles = fs.readdirSync("artifacts");
-          files.forEach((entry) => {
+          files.forEach(entry) => {
             const stats = fs.statSync(fullPath);
             if (stats.isDirectory()) {
               console.log(entry);
