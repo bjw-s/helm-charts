@@ -40,9 +40,9 @@ runs:
           const artifactPrefix = "${{ inputs.artifactPrefix }}";
 
           baseDir = process.cwd();
-          artifactsDir = `${process.cwd()}/artifacts`;
+          artifactsDir = `${baseDir}/artifacts`;
 
-          const globber = await glob.create(`${artifactPrefix}*/*.tgz`);
+          const globber = await glob.create(`${artifactsDir}/${artifactPrefix}*/*.tgz`);
           for await (const file of globber.globGenerator()) {
             relativePath = file.startsWith(artifactsDir) ? file.slice(artifactsDir.length) : file;
             artifactFolder = relativePath.split('/')[1];
