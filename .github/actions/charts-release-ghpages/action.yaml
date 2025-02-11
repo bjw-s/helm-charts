@@ -32,37 +32,37 @@ runs:
         path: artifacts
         pattern: ${{ inputs.artifactPrefix }}${{ inputs.artifactPattern }}
 
-    - name: Copy artifacts to gh-pages structure
-      shell: bash
-      working-directory: artifacts
-      env:
-        ARTIFACT_PREFIX: ${{ inputs.artifactPrefix }}
-        TARGET_FOLDER: ${{ inputs.targetFolder }}
-      run: |
-        while IFS= read -d $'\0' -r ARTIFACT ; do
-          echo ${ARTIFACT}
-          prefix_removed_chart=${ARTIFACT/#$ARTIFACT_PREFIX}
-          DELIMITER='__'
-          s=${prefix_removed_chart}${DELIMITER}
-          ARTIFACT_PATH_PARTS=();
-          while [[ $s ]]; do
-              ARTIFACT_PATH_PARTS+=( "${s%%"${DELIMITER}"*}" );
-              s=${s#*"${DELIMITER}"};
-          done;
+    # - name: Copy artifacts to gh-pages structure
+    #   shell: bash
+    #   working-directory: artifacts
+    #   env:
+    #     ARTIFACT_PREFIX: ${{ inputs.artifactPrefix }}
+    #     TARGET_FOLDER: ${{ inputs.targetFolder }}
+    #   run: |
+    #     while IFS= read -d $'\0' -r ARTIFACT ; do
+    #       echo ${ARTIFACT}
+    #       prefix_removed_chart=${ARTIFACT/#$ARTIFACT_PREFIX}
+    #       DELIMITER='__'
+    #       s=${prefix_removed_chart}${DELIMITER}
+    #       ARTIFACT_PATH_PARTS=();
+    #       while [[ $s ]]; do
+    #           ARTIFACT_PATH_PARTS+=( "${s%%"${DELIMITER}"*}" );
+    #           s=${s#*"${DELIMITER}"};
+    #       done;
 
-          CHART_FOLDER=${ARTIFACT_PATH_PARTS[0]}
-          mkdir -p "${TARGET_FOLDER}/${CHART_FOLDER}"
-          cp ${ARTIFACT}/* ${TARGET_FOLDER}/${CHART_FOLDER}/
-        done < <(find . -mindepth 1 -maxdepth 1 -type d -print0)
+    #       CHART_FOLDER=${ARTIFACT_PATH_PARTS[0]}
+    #       mkdir -p "${TARGET_FOLDER}/${CHART_FOLDER}"
+    #       cp ${ARTIFACT}/* ${TARGET_FOLDER}/${CHART_FOLDER}/
+    #     done < <(find . -mindepth 1 -maxdepth 1 -type d -print0)
 
     - name: Copy artifacts to gh-pages structure
       uses: actions/github-script@v7
       with:
         script: |
-          var artifacts = await github.actions.listWorkflowRunArtifacts({
+          var artifacts = await github.rest.actions.listWorkflowRunArtifacts({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            run_id: ${{github.event.workflow_run.id }},
+            run_id: context.runId,
           });
           console.log(artifacts);
 
