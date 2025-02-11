@@ -71,7 +71,7 @@ jobs:
             let cwd = process.cwd();
 
             let tmpCharts = []
-            if (input = '[]') {
+            if (input === '[]') {
               console.log("Empty charts input, scanning for charts in repository");
               const fs = require('fs');
 
