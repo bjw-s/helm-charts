@@ -60,17 +60,12 @@ runs:
       with:
         script: |
           const dstFolder = "${{ inputs.targetFolder }}";
-          fs.readdirSync(__dirname)
-            .filter((file) => {
-                return /^${{ inputs.artifactPrefix }}.*$/.test(file);
-            })
-            .forEach((file) => {
-              const fullPath = `${basePath}/${file}`;
-              const stats = fs.statSync(fullPath);
-              if (stats.isDirectory()) {
-                console.log(file);
-              }
-            });
+          process.chdir('artifacts');
+
+          const globber = await glob.create('${{ inputs.artifactPrefix }}*/*.tgz')
+          for await (const file of globber.globGenerator()) {
+            console.log(file)
+          }
 
     - name: Update chart index
       shell: bash
