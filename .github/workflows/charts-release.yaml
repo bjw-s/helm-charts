@@ -68,13 +68,11 @@ jobs:
         with:
           script: |
             let input = '${{ github.event.inputs.charts }}';
-
-            let libraryCharts = [];
-            let otherCharts = [];
             let cwd = process.cwd();
 
             let tmpCharts = []
             if (input = '[]') {
+              console.log("Empty charts input, scanning for charts in repository");
               const fs = require('fs');
 
               const globber = await glob.create('charts/*/*', { implicitDescendants: false });
@@ -84,17 +82,23 @@ jobs:
               }
             } else {
               tmpCharts = JSON.parse(input);
+              tmpCharts.forEach(function (chart) {
+                if (fs.existsSync(`${cwd}/charts/${chart}`)) {
+                  core.setFailed(`Chart ${chart} does not exist in repository`);
+                  process.exit(1);
+                }
+              });
             }
 
-            libraryCharts = tmpCharts.filter(chart => chart.startsWith('library/'));
-            otherCharts = tmpCharts.filter(chart => !chart.startsWith('library/'));
+            let libraryCharts = tmpCharts.filter(chart => chart.startsWith('library/'));
+            let otherCharts = tmpCharts.filter(chart => !chart.startsWith('library/'));
 
             console.log("Library charts:")
             console.log(JSON.stringify(libraryCharts));
-            // core.setOutput('libraryChartsToRelease', JSON.stringify(libraryCharts));
+            core.setOutput('libraryChartsToRelease', JSON.stringify(libraryCharts));
             console.log("Other charts:")
             console.log(JSON.stringify(otherCharts));
-            // core.setOutput('otherChartsToRelease', JSON.stringify(otherCharts));
+            core.setOutput('otherChartsToRelease', JSON.stringify(otherCharts));
 
   release-library-charts:
     name: Release library charts
