@@ -65,8 +65,6 @@ runs:
           process.chdir('artifacts');
           workingDir = process.cwd();
 
-          console.log(workingDir);
-
           const globber = await glob.create(`${artifactPrefix}*/*.tgz`);
           for await (const file of globber.globGenerator()) {
             relativePath = file.startsWith(workingDir) ? file.slice(workingDir.length) : file;
