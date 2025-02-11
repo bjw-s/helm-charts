@@ -99,11 +99,6 @@ jobs:
           echo "version=$(yq '.version' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml)" >> "$GITHUB_OUTPUT"
           echo "changelog=$(yq '.annotations["artifacthub.io/changes"]' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml | yq -o=json -I=0 '.')" >> "$GITHUB_OUTPUT"
 
-      - name: Echo changelog
-        shell: bash
-        run: |
-          echo "Changelog: ${{ steps.chart-details.outputs.changelog }}"
-
       - name: Format changelog
         id: changelog
         uses: actions/github-script@v7
