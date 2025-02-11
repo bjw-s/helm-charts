@@ -136,6 +136,7 @@ jobs:
       - release-library-charts
     if: |-
       ${{
+        !cancelled() &&
         (needs.prepare.result == 'skipped' || needs.prepare.result == 'success') &&
         (needs.release-library-charts.result == 'skipped' || needs.release-library-charts.result == 'success') &&
         needs.prepare.outputs.otherChartsToRelease != '[]'
