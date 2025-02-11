@@ -97,7 +97,7 @@ jobs:
           PARENT_DIR=$(basename $(dirname "${ROOT_DIR}/${CHART_DIR}"))
           echo "name=$(yq '.name' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml)" >> "$GITHUB_OUTPUT"
           echo "version=$(yq '.version' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml)" >> "$GITHUB_OUTPUT"
-          echo "changelog=$(yq '.annotations["artifacthub.io/changes"]' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml | yq -o=json -I=0 '.')" >> "$GITHUB_OUTPUT"
+          echo "changelog=$(yq '.annotations["artifacthub.io/changes"]' ${ROOT_DIR}/${CHART_DIR}/Chart.yaml | yq -o=json -I=0 '.' | sed 's/\\\\n/ /g')" >> "$GITHUB_OUTPUT"
 
       - name: Format changelog
         id: changelog
@@ -109,7 +109,7 @@ jobs:
             if (input === 'null') {
               changelog = changelog + "\nNo changelog provided.";
             } else {
-              let inputParsed = JSON.parse(input.replace('\n', ' '));
+              let inputParsed = JSON.parse(input);
 
               var changelogGrouped = inputParsed.reduce((result, currentValue) => {
                 (result[currentValue['kind']] = result[currentValue['kind']] || []).push(currentValue);
