@@ -111,10 +111,6 @@ jobs:
             } else {
               let inputParsed = JSON.parse(input);
 
-              var changelogGrouped = inputParsed.reduce((result:any, currentValue:any) => {
-                (result[currentValue['kind']] = result[currentValue['kind']] || []).push(currentValue);
-                return result;
-              }, {});
             }
             console.log(changelog);
 
