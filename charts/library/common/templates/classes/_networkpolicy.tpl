@@ -41,6 +41,7 @@ metadata:
     {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
+  namespace: {{ $rootContext.Release.Namespace }}
 spec:
   podSelector: {{- toYaml $podSelector | nindent 4 }}
   {{- with $networkPolicyObject.policyTypes }}
