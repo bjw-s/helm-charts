@@ -31,6 +31,7 @@ metadata:
     {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
+  namespace: {{ $rootContext.Release.Namespace }}
 secrets:
   - name: {{ get (include "bjw-s.common.lib.secret.getByIdentifier" (dict "rootContext" $rootContext "id" (printf "%s-sa-token" $serviceAccountObject.identifier) ) | fromYaml) "name"}}
 {{- end -}}

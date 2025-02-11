@@ -32,6 +32,7 @@ metadata:
     {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
+  namespace: {{ $rootContext.Release.Namespace }}
 spec:
   revisionHistoryLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $statefulsetObject.revisionHistoryLimit "default" 3) }}
   replicas: {{ $statefulsetObject.replicas }}

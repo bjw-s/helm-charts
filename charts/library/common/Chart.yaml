@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.7.0
+version: 3.7.1
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,22 +16,8 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        Raw resources with `forceRename` fields are no longer flagged as invalid
-    - kind: added
+        Values schema is now dereferenced before packaging so it no longer relies on
+        internet connectivity to validate the schema.
+    - kind: fixed
       description: |-
-        Allow setting pullPolicy to Never
-    - kind: added
-      description: |-
-        Revamped configMap.fromFiles into configMap.fromFolder
-    - kind: added
-      description: |-
-        Add support for setting shareProcessNamespace on Pods
-    - kind: added
-      description: |-
-        Add support for templating ServiceMonitor endpoints
-    - kind: added
-      description: |-
-        Add support for templating Pod affinity
-    - kind: added
-      description: |-
-        Add support for configuring gRPC probes
+        Add explicit namespace declaration to templates using Release.Namespace
