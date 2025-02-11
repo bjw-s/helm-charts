@@ -134,10 +134,12 @@ jobs:
             console.log(changelog);
             core.setOutput('changelog', changelog);
 
-      # - name: Create tag
-      #   uses: EndBug/latest-tag@latest
-      #   with:
-      #     ref: ${{ steps.chart-details.outputs.name }}-${{ steps.chart-details.outputs.version }}
+      - name: Create tag and release
+        uses: avakar/tag-and-release@v1
+        with:
+          tag_name: ${{ steps.chart-details.outputs.name }}-${{ steps.chart-details.outputs.version }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: true
 
   # release-charts-to-github-pages:
   #   name: Release charts to GitHub Pages
