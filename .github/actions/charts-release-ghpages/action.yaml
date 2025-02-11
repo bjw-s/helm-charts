@@ -57,10 +57,13 @@ runs:
 
     - name: Copy artifacts to gh-pages structure
       uses: actions/github-script@v7
-      working-directory: artifacts
       with:
         script: |
-          var artifacts = ${{ steps.changed-charts.outputs.all_changed_files }};
+          var artifacts = await github.actions.listWorkflowRunArtifacts({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: ${{github.event.workflow_run.id }},
+          });
           console.log(artifacts);
 
     - name: Update chart index
