@@ -67,11 +67,33 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const input = '${{ github.event.inputs.charts }}';
-            const charts = JSON.parse(input);
-            const libraryCharts = charts.filter(chart => chart.startsWith('library/'));
+            let input = '${{ github.event.inputs.charts }}';
+
+            let libraryCharts = [];
+            let otherCharts = [];
+            let cwd = process.cwd();
+
+            if (input = '[]') {
+              let charts = []
+              const globber = await glob.create(`charts/*/*`);
+              for await (const file of globber.globGenerator()) {
+                relativePath = file.slice(`${cwd}/charts/`.length);
+                charts.push(relativePath);
+                console.log(`Test: ${relativePath}`);
+              }
+            } else {
+              const charts = JSON.parse(input);
+            }
+
+            libraryCharts = charts.filter(chart => chart.startsWith('library/'));
+            otherCharts = charts.filter(chart => !chart.startsWith('library/'));
+
+            console.log("Library charts:")
             console.log(JSON.stringify(libraryCharts));
             // core.setOutput('libraryChartsToRelease', JSON.stringify(libraryCharts));
+            console.log("Other charts:")
+            console.log(JSON.stringify(otherCharts));
+            // core.setOutput('otherChartsToRelease', JSON.stringify(otherCharts));
 
   release-library-charts:
     name: Release library charts
@@ -97,9 +119,9 @@ jobs:
       - release-library-charts
     if: |
       ${{
+        (needs.prepare.outputs.otherChartsToRelease != '[]' && needs.prepare.outputs.otherChartsToRelease != '') &&
         always() &&
-        !failure() && !cancelled() &&
-        needs.prepare.outputs.otherChartsToRelease != '[]' && needs.prepare.outputs.otherChartsToRelease != ''
+        !failure() && !cancelled()
       }}
     uses: ./.github/workflows/charts-release-steps.yaml
     permissions:
