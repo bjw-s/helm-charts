@@ -213,8 +213,8 @@ jobs:
     runs-on: ubuntu-22.04
     needs:
       - package-charts
-      - release-charts-to-github-pages
-      - release-charts-to-oci
+      # - release-charts-to-github-pages
+      # - release-charts-to-oci
     if: ${{ always() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') }}
     steps:
     - name: Clean up artifact
