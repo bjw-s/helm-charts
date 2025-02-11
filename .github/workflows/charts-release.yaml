@@ -75,7 +75,7 @@ jobs:
 
             if (input = '[]') {
               let charts = []
-              const globber = await glob.create(`charts/*/*`);
+              const globber = await glob.create('charts/*/*');
               for await (const file of globber.globGenerator()) {
                 relativePath = file.slice(`${cwd}/charts/`.length);
                 charts.push(relativePath);
@@ -119,7 +119,7 @@ jobs:
       - release-library-charts
     if: |
       ${{
-        (needs.prepare.outputs.otherChartsToRelease != '[]' && needs.prepare.outputs.otherChartsToRelease != '') &&
+        needs.prepare.outputs.otherChartsToRelease != '[]' &&
         always() &&
         !failure() && !cancelled()
       }}
