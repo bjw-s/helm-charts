@@ -13,6 +13,7 @@ maintainers:
   - name: bjw-s
     email: me@bjw-s.dev
 annotations:
+  org.opencontainers.image.source: "https://github.com/bjw-s/helm-charts"
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-

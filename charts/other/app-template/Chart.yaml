@@ -12,6 +12,7 @@ dependencies:
     repository: https://bjw-s.github.io/helm-charts
     version: 3.7.1
 annotations:
+  org.opencontainers.image.source: "https://github.com/bjw-s/helm-charts"
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
