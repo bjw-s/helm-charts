@@ -14,11 +14,11 @@ maintainers:
     email: me@bjw-s.dev
 annotations:
   org.opencontainers.image.source: "https://github.com/bjw-s/helm-charts"
-  # artifacthub.io/changes: |-
-  #   - kind: fixed
-  #     description: |-
-  #       Values schema is now dereferenced before packaging so it no longer relies on
-  #       internet connectivity to validate the schema.
-  #   - kind: fixed
-  #     description: |-
-  #       Add explicit namespace declaration to templates using Release.Namespace
+  artifacthub.io/changes: |-
+    - kind: fixed
+      description: |-
+        Values schema is now dereferenced before packaging so it no longer relies on
+        internet connectivity to validate the schema.
+    - kind: fixed
+      description: |-
+        Add explicit namespace declaration to templates using Release.Namespace

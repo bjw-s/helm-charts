@@ -13,16 +13,16 @@ dependencies:
     version: 3.7.1
 annotations:
   org.opencontainers.image.source: "https://github.com/bjw-s/helm-charts"
-  artifacthub.io/changes: |-
-    - kind: fixed
-      description: |-
-        Values schema is now dereferenced before packaging so it no longer relies on
-        internet connectivity to validate the schema.
-    - kind: changed
-      description: |
-        Updated library version to 3.7.1.
-      links:
-        - name: Upgrade instructions from v2.x
-          url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
-        - name: Common library chart definition
-          url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
+  # artifacthub.io/changes: |-
+  #   - kind: fixed
+  #     description: |-
+  #       Values schema is now dereferenced before packaging so it no longer relies on
+  #       internet connectivity to validate the schema.
+  #   - kind: changed
+  #     description: |
+  #       Updated library version to 3.7.1.
+  #     links:
+  #       - name: Upgrade instructions from v2.x
+  #         url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+  #       - name: Common library chart definition
+  #         url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
