@@ -29,5 +29,5 @@ OWNERS
 schemas/
 
 # Test files
-test/
+test-chart/
 unittests/

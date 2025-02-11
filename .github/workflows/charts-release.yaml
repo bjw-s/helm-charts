@@ -8,7 +8,6 @@ on:
   push:
     branches:
       - main
-      - rework-publishing-ci  # TODO: Remove this
     paths:
       - "charts/**"
 
@@ -76,7 +75,14 @@ jobs:
     needs:
       - prepare
       - release-library-charts
-    if: ${{ needs.prepare.outputs.applicationChartsToRelease != '[]' }}
+    if: >-
+      ${{
+        always() &&
+        needs.prepare.outputs.applicationChartsToRelease != '[]' &&
+        (
+          contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        )
+      }}
     uses: ./.github/workflows/charts-release-steps.yaml
     permissions:
       pages: write
