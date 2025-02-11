@@ -59,15 +59,18 @@ runs:
       uses: actions/github-script@v7
       with:
         script: |
-          const artifactPrefix = "${{ inputs.artifactPrefix }}";
           const dstFolder = "${{ inputs.targetFolder }}";
-          allFiles = fs.readdirSync("artifacts");
-          files.forEach(entry) => {
-            const stats = fs.statSync(fullPath);
-            if (stats.isDirectory()) {
-              console.log(entry);
-            }
-          }
+          fs.readdirSync(__dirname)
+            .filter((file) => {
+                return /^${{ inputs.artifactPrefix }}.*$/.test(file);
+            })
+            .forEach((file) => {
+              const fullPath = `${basePath}/${file}`;
+              const stats = fs.statSync(fullPath);
+              if (stats.isDirectory()) {
+                console.log(file);
+              }
+            });
 
     - name: Update chart index
       shell: bash
