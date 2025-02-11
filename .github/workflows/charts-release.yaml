@@ -13,8 +13,8 @@ on:
       - "charts/**"
 
 jobs:
-  prepare-release:
-    name: Prepare data required for release
+  prepare:
+    name: Prepare data required for workflow
     runs-on: ubuntu-22.04
     outputs:
       repoConfiguration: ${{ steps.repo-config.outputs.config }}
@@ -57,8 +57,8 @@ jobs:
   release-library-charts:
     name: Release library charts
     needs:
-      - prepare-release
-    if: ${{ needs.prepare-release.outputs.libraryChartsToRelease != '[]' }}
+      - prepare
+    if: ${{ needs.prepare.outputs.libraryChartsToRelease != '[]' }}
     uses: ./.github/workflows/charts-release-steps.yaml
     permissions:
       pages: write
@@ -66,17 +66,17 @@ jobs:
       contents: write
       packages: write
     with:
-      charts: ${{ needs.prepare-release.outputs.libraryChartsToRelease }}
-      excludedChartsRelease: ${{ toJSON(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release) }}
+      charts: ${{ needs.prepare.outputs.libraryChartsToRelease }}
+      excludedChartsRelease: ${{ toJSON(fromJSON(needs.prepare.outputs.repoConfiguration).excluded-charts-release) }}
       ghPagesBranch: gh-pages
       publishToOciRegistry: false
 
   release-other-charts:
     name: Release other charts
     needs:
-      - prepare-release
+      - prepare
       - release-library-charts
-    if: ${{ needs.prepare-release.outputs.applicationChartsToRelease != '[]' }}
+    if: ${{ needs.prepare.outputs.applicationChartsToRelease != '[]' }}
     uses: ./.github/workflows/charts-release-steps.yaml
     permissions:
       pages: write
@@ -84,6 +84,6 @@ jobs:
       contents: write
       packages: write
     with:
-      charts: ${{ needs.prepare-release.outputs.applicationChartsToRelease }}
-      excludedChartsRelease: ${{ toJSON(fromJSON(needs.prepare-release.outputs.repoConfiguration).excluded-charts-release) }}
+      charts: ${{ needs.prepare.outputs.applicationChartsToRelease }}
+      excludedChartsRelease: ${{ toJSON(fromJSON(needs.prepare.outputs.repoConfiguration).excluded-charts-release) }}
       ghPagesBranch: gh-pages

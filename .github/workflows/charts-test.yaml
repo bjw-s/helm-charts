@@ -3,49 +3,56 @@ name: "Charts: Test"
 on:
   workflow_call:
     inputs:
-      checkoutCommit:
-        required: true
-        type: string
-      chartsToTest:
+      charts:
         description: >
-          A JSON encoded array of charts to lint
-        type: string
+          Json encoded list of Helm charts to release.
+          Defaults to releasing everything.
+        default: "[]"
         required: true
-
-env:
-  HELM_VERSION: 3.11.2
+        type: string
+      helmVersion:
+        description: >
+          Helm version to use.
+        default: "3.11.2"
+        required: false
+        type: string
 
 jobs:
   install-chart:
     name: Install chart
     runs-on: ubuntu-22.04
-    if: ${{ inputs.chartsToTest != '[]' && inputs.chartsToTest != '' }}
+    if: ${{ inputs.charts != '[]' && inputs.charts != '' }}
     strategy:
       matrix:
-        chart: ${{ fromJSON(inputs.chartsToTest) }}
+        chart: ${{ fromJSON(inputs.charts) }}
         k8s_version:
           [
-            "v1.26.15",
-            "v1.27.13",
-            "v1.28.9",
-            "v1.29.4",
-            "v1.30.0",
+            "v1.29.13",
+            "v1.30.9",
+            "v1.31.5",
+            "v1.32.1",
           ]
       fail-fast: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ inputs.checkoutCommit }}
+
+      - name: Validate prerequisite folders
+        working-directory: "charts/${{ matrix.chart }}"
+        run: |
+          CHART_TYPE=$(yq '.type // "application"' Chart.yaml)
+          if [[ ("${CHART_TYPE}" == "library") && (! -d "test-chart") ]]; then
+            echo "Library charts require a \"test-chart\" directory to run tests"
+            exit 1
+          fi
 
       - name: Install Kubernetes tools
-        uses: yokawasa/action-setup-kube-tools@v0.11.1
+        uses: yokawasa/action-setup-kube-tools@v0.11.2
         with:
           setup-tools: |
             helmv3
             kubectl
-          helm: "${{ env.HELM_VERSION }}"
+          helm: "${{ inputs.helmVersion }}"
           kubectl: "${{ matrix.k8s_version }}"
 
       - uses: actions/setup-python@v5
@@ -64,10 +71,20 @@ jobs:
         run: |
           kubectl taint --all=true nodes node.cloudprovider.kubernetes.io/uninitialized- || true
 
+      - name: Dereference JSON schema
+        uses: bjw-s/helm-charts-actions/dereference-json-schema@main
+        with:
+          schemaFile: "charts/${{ matrix.chart }}/values.schema.json"
+          outputFile: "charts/${{ matrix.chart }}/values.schema.json"
+          allowFileNotFound: true
+
       - name: Run chart-testing (install)
         working-directory: "charts/${{ matrix.chart }}"
-        # TODO: Awaiting https://github.com/actions/checkout/issues/1607
         run: |
+          if [ -d "test-chart" ]; then
+            cd "test-chart"
+          fi
+
           ct install --config "$GITHUB_WORKSPACE/.ci/ct/ct.yaml" --charts .
 
   install_success:
@@ -93,24 +110,30 @@ jobs:
   unittest-chart:
     name: Unit-test chart
     runs-on: ubuntu-22.04
-    if: ${{ inputs.chartsToTest != '[]' && inputs.chartsToTest != '' }}
+    if: ${{ inputs.charts != '[]' && inputs.charts != '' }}
     strategy:
       matrix:
-        chart: ${{ fromJSON(inputs.chartsToTest) }}
+        chart: ${{ fromJSON(inputs.charts) }}
       fail-fast: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ inputs.checkoutCommit }}
+
+      - name: Validate prerequisite folders
+        working-directory: "charts/${{ matrix.chart }}"
+        run: |
+          CHART_TYPE=$(yq '.type // "application"' Chart.yaml)
+          if [[ ("${CHART_TYPE}" == "library") && (! -d "test-chart") ]]; then
+            echo "Library charts require a \"test-chart\" directory to run tests"
+            exit 1
+          fi
 
       - name: Install Kubernetes tools
-        uses: yokawasa/action-setup-kube-tools@v0.11.1
+        uses: yokawasa/action-setup-kube-tools@v0.11.2
         with:
           setup-tools: |
             helmv3
-          helm: "${{ env.HELM_VERSION }}"
+          helm: "${{ inputs.helmVersion }}"
 
       - name: Dereference JSON schema
         uses: bjw-s/helm-charts-actions/dereference-json-schema@main
@@ -122,9 +145,18 @@ jobs:
       - name: Run tests
         working-directory: "charts/${{ matrix.chart }}"
         run: |
+          if [[ -d "test-chart" ]]; then
+            cd "test-chart"
+          fi
+
+          if [[ ! -d "unittests" ]]; then
+            echo "No unit tests found for chart ${{ matrix.chart }}"
+            exit 0
+          fi
+
           helm plugin install https://github.com/helm-unittest/helm-unittest.git
           helm dep update
-          helm unittest -f "tests/**/*_test.yaml" .
+          helm unittest -f "unittests/**/*_test.yaml" .
 
   unittest_success:
     needs:

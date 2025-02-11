@@ -13,35 +13,85 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pr-metadata:
-    uses: ./.github/workflows/pr-metadata.yaml
+  prepare:
+    name: Prepare data required for workflow
+    runs-on: ubuntu-22.04
+    outputs:
+      repoConfiguration: ${{ steps.repo-config.outputs.config }}
+      addedOrModifiedFiles: ${{ steps.added-modified-files.outputs.all_changed_files }}
+      chartsToLint: ${{ steps.charts-to-lint.outputs.filteredCharts }}
+      chartsToInstall: ${{ steps.charts-to-install.outputs.filteredCharts }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Grab repository configuration
+        id: repo-config
+        shell: bash
+        run: |
+          echo "config=$(yq '.' '.ci/repo-config.yaml' -o json -I=0)" >> "$GITHUB_OUTPUT"
+
+      - name: Get all added or modified files
+        id: added-modified-files
+        uses: tj-actions/changed-files@v45
+
+      - name: Get changed charts
+        id: changed-charts
+        uses: tj-actions/changed-files@v45
+        with:
+          matrix: true
+          path: charts
+          dir_names: true
+          dir_names_max_depth: 2
+
+      - name: Determine charts to lint
+        id: charts-to-lint
+        uses: actions/github-script@v7
+        with:
+          script: |
+            var changedCharts = ${{ steps.changed-charts.outputs.all_changed_files }};
+            var chartsToFilter = ${{ toJSON(fromJSON(steps.repo-config.outputs.config).excluded-charts-lint) }};
+            let filteredCharts = changedCharts.filter(item => chartsToFilter.indexOf(item) < 0);
+            core.setOutput("filteredCharts", filteredCharts);
+
+      - name: Determine charts to install
+        id: charts-to-install
+        uses: actions/github-script@v7
+        with:
+          script: |
+            var changedCharts = ${{ steps.changed-charts.outputs.all_changed_files }};
+            var chartsToFilter = ${{ toJSON(fromJSON(steps.repo-config.outputs.config).excluded-charts-install) }};
+            let filteredCharts = changedCharts.filter(item => chartsToFilter.indexOf(item) < 0);
+            core.setOutput("filteredCharts", filteredCharts);
 
   pre-commit-check:
-    uses: ./.github/workflows/pre-commit-check.yaml
+    name: Perform Pre-Commit check
+    runs-on: ubuntu-22.04
     needs:
-      - pr-metadata
-    with:
-      modifiedFiles: ${{ needs.pr-metadata.outputs.addedOrModifiedFiles }}
+      - prepare
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run against changes
+        uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --files ${{ needs.prepare.outputs.addedOrModifiedFiles }} --config .ci/pre-commit/config.yaml
 
   charts-lint:
+    name: Lint charts
     uses: ./.github/workflows/charts-lint.yaml
     needs:
-      - pr-metadata
+      - prepare
     with:
-      checkoutCommit: ${{ github.sha }}
-      chartsToLint: ${{ needs.pr-metadata.outputs.chartsToLint }}
-      isRenovatePR: ${{ needs.pr-metadata.outputs.isRenovatePR }}
+      charts: ${{ needs.prepare.outputs.chartsToLint }}
 
   charts-test:
+    name: Test charts
     uses: ./.github/workflows/charts-test.yaml
     needs:
-      - pr-metadata
+      - prepare
     with:
-      checkoutCommit: ${{ github.sha }}
-      chartsToTest: |-
-        ${{
-           (
-             (needs.pr-metadata.outputs.commonLibraryUpdated=='true') &&
-             '["library/common-test"]'
-           ) || needs.pr-metadata.outputs.chartsToInstall
-         }}
+      charts: ${{ needs.prepare.outputs.chartsToInstall }}
