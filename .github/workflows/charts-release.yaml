@@ -18,7 +18,7 @@ jobs:
     outputs:
       repoConfiguration: ${{ steps.repo-config.outputs.config }}
       libraryChartsToRelease: ${{ steps.changed-library-charts.outputs.all_changed_files }}
-      applicationChartsToRelease: ${{ steps.changed-charts.outputs.all_changed_files }}
+      otherChartsToRelease: ${{ steps.changed-charts.outputs.all_changed_files }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -75,13 +75,11 @@ jobs:
     needs:
       - prepare
       - release-library-charts
-    if: >-
+    if: |
       ${{
         always() &&
-        needs.prepare.outputs.applicationChartsToRelease != '[]' &&
-        (
-          contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-        )
+        !failure() && !cancelled() &&
+        needs.prepare.outputs.otherChartsToRelease != '[]'
       }}
     uses: ./.github/workflows/charts-release-steps.yaml
     permissions:
@@ -90,6 +88,6 @@ jobs:
       contents: write
       packages: write
     with:
-      charts: ${{ needs.prepare.outputs.applicationChartsToRelease }}
+      charts: ${{ needs.prepare.outputs.otherChartsToRelease }}
       excludedChartsRelease: ${{ toJSON(fromJSON(needs.prepare.outputs.repoConfiguration).excluded-charts-release) }}
       ghPagesBranch: gh-pages

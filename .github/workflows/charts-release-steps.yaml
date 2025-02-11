@@ -49,6 +49,14 @@ on:
         type: string
 
 jobs:
+  report-changes:
+    name: Report changes
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Report changes
+        run: |
+          echo "Charts to package: ${{ inputs.charts }}"
+
   package-charts:
     name: Package charts
     runs-on: ubuntu-22.04
