@@ -111,6 +111,20 @@ jobs:
             } else {
               let inputParsed = JSON.parse(input);
 
+              var changelogGrouped = inputParsed.reduce((result, currentValue) => {
+                (result[currentValue['kind']] = result[currentValue['kind']] || []).push(currentValue);
+                return result;
+              }, {});
+
+              for (const key in changelogGrouped) {
+                changelog = changelog + `\n### ${key[0].toUpperCase() + key.slice(1)}`;
+                let entries = changelogGrouped[key];
+
+                entries.forEach(function (entry) {
+                  changelog = changelog + `\n- ${entry.description.replace('\n', ' ')}`;
+                });
+                changelog = changelog + `\n`;
+              }
             }
             console.log(changelog);
 
