@@ -109,7 +109,7 @@ jobs:
             if (input === 'null') {
               changelog = changelog + "\nNo changelog provided.";
             } else {
-              let inputParsed = JSON.parse(input);
+              let inputParsed = JSON.parse(input.replace('\n', ' '));
 
               var changelogGrouped = inputParsed.reduce((result, currentValue) => {
                 (result[currentValue['kind']] = result[currentValue['kind']] || []).push(currentValue);
@@ -121,7 +121,7 @@ jobs:
                 let entries = changelogGrouped[key];
 
                 entries.forEach(function (entry) {
-                  changelog = changelog + `\n- ${entry.description.replace('\n', ' ')}`;
+                  changelog = changelog + `\n- ${entry.description}`;
                   if ('links' in entry) {
                     entry.links.forEach(function (link) {
                       changelog = changelog + `\n  - [${link.name}](${link.url})`;
