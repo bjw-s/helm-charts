@@ -1,5 +1,5 @@
 ---
-name: "Chart: Release"
+name: "Release chart (Reusable)"
 
 on:
   workflow_call:

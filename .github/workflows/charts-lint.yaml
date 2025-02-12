@@ -1,4 +1,4 @@
-name: "Charts: Lint"
+name: "Charts: Lint (Reusable)"
 
 on:
   workflow_call:

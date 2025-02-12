@@ -1,4 +1,4 @@
-name: "Charts: Test"
+name: "Charts: Test (Reusable)"
 
 on:
   workflow_call:
