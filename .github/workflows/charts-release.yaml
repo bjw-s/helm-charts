@@ -22,12 +22,12 @@ jobs:
     name: Prepare data required for workflow
     runs-on: ubuntu-22.04
     outputs:
-      repoConfiguration: ${{ steps.repo-config.outputs.config }}
-      libraryChartsToRelease: |-
-        ${{ github.event_name == 'workflow_dispatch' && steps.specified-charts.outputs.libraryChartsToRelease || steps.changed-library-charts.outputs.all_changed_files }}
-      otherChartsToRelease: |-
-        ${{ github.event_name == 'workflow_dispatch' && steps.specified-charts.outputs.otherChartsToRelease || steps.changed-charts.outputs.all_changed_files }}
+      libraryChartsToRelease: ${{ steps.filtered-charts.outputs.libraryChartsToRelease }}
+      otherChartsToRelease: ${{ steps.filtered-charts.outputs.otherChartsToRelease }}
     steps:
+      # ----------------------------
+      # Setup
+      # ----------------------------
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -69,7 +69,8 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            let input = '${{ github.event.inputs.charts }}';
+            const fs = require('fs');
+            let input = '${{ inputs.charts }}';
             let cwd = process.cwd();
 
             let tmpCharts = []
@@ -77,28 +78,43 @@ jobs:
               console.log("Empty charts input, scanning for charts in repository");
               const globber = await glob.create('charts/*/*', { implicitDescendants: false });
               for await (const file of globber.globGenerator()) {
-                relativePath = file.slice(`${cwd}/charts/`.length);
-                tmpCharts.push(relativePath);
+                if (fs.lstatSync(file).isDirectory()) {
+                  relativePath = file.slice(`${cwd}/charts/`.length);
+                  tmpCharts.push(relativePath);
+                }
               }
             } else {
-              const fs = require('fs');
               tmpCharts = JSON.parse(input);
               tmpCharts.forEach(function (chart) {
-                if (!fs.existsSync(`${cwd}/charts/${chart}`)) {
+                const fullPath = `${cwd}/charts/${chart}`;
+                if (!fs.existsSync(fullPath)) {
                   core.setFailed(`Chart ${chart} does not exist in repository`);
+                  process.exit(1);
+                }
+                if (!fs.lstatSync(fullPath).isDirectory()) {
+                  core.setFailed(`${chart} is not a valid directory`);
                   process.exit(1);
                 }
               });
             }
 
             let libraryCharts = tmpCharts.filter(chart => chart.startsWith('library/'));
-            let otherCharts = tmpCharts.filter(chart => !chart.startsWith('library/'));
-
-            console.log("Library charts:")
-            console.log(JSON.stringify(libraryCharts));
             core.setOutput('libraryChartsToRelease', JSON.stringify(libraryCharts));
-            console.log("Other charts:")
-            console.log(JSON.stringify(otherCharts));
+            let otherCharts = tmpCharts.filter(chart => !chart.startsWith('library/'));
+            core.setOutput('otherChartsToRelease', JSON.stringify(otherCharts));
+
+      - name: Filter out excluded charts
+        id: filtered-charts
+        uses: actions/github-script@v7
+        with:
+          script: |
+            let libraryChartsInput = ${{ github.event_name == 'workflow_dispatch' && steps.specified-charts.outputs.libraryChartsToRelease || steps.changed-library-charts.outputs.all_changed_files }};
+            let otherChartsInput = ${{ github.event_name == 'workflow_dispatch' && steps.specified-charts.outputs.otherChartsToRelease || steps.changed-charts.outputs.all_changed_files }};
+            let excludedFromRelease = ${{ steps.repo-config.outputs.config }}['excluded-charts-release'];
+
+            let libraryCharts = libraryChartsInput.filter(item => excludedFromRelease.indexOf(item) < 0);
+            core.setOutput('libraryChartsToRelease', JSON.stringify(libraryCharts));
+            let otherCharts = otherChartsInput.filter(item => excludedFromRelease.indexOf(item) < 0);
             core.setOutput('otherChartsToRelease', JSON.stringify(otherCharts));
 
   release-library-charts:
@@ -106,17 +122,18 @@ jobs:
     needs:
       - prepare
     if: ${{ needs.prepare.outputs.libraryChartsToRelease != '[]' && needs.prepare.outputs.libraryChartsToRelease != '' }}
-    uses: ./.github/workflows/charts-release-steps.yaml
-    permissions:
-      pages: write
-      id-token: write
-      contents: write
-      packages: write
+    strategy:
+      matrix:
+        chart: ${{ fromJSON(needs.prepare.outputs.libraryChartsToRelease) }}
+      fail-fast: false
+      max-parallel: 1
+    uses: ./.github/workflows/chart-release-steps.yaml
     with:
-      charts: ${{ needs.prepare.outputs.libraryChartsToRelease }}
-      excludedChartsRelease: ${{ toJSON(fromJSON(needs.prepare.outputs.repoConfiguration).excluded-charts-release) }}
-      ghPagesBranch: gh-pages
+      chart: ${{ matrix.chart }}
+      createGithubRelease: true
+      publishToGhPages: true
       publishToOciRegistry: false
+      deployGhPages: true
 
   release-other-charts:
     name: Release other charts
@@ -126,17 +143,18 @@ jobs:
     if: |-
       ${{
         !cancelled() &&
-        (needs.prepare.result == 'skipped' || needs.prepare.result == 'success') &&
-        (needs.release-library-charts.result == 'skipped' || needs.release-library-charts.result == 'success') &&
-        needs.prepare.outputs.otherChartsToRelease != '[]'
+        !contains(needs.*.result, 'failure') &&
+        (needs.prepare.outputs.otherChartsToRelease != '[]' && needs.prepare.outputs.otherChartsToRelease != '')
       }}
-    uses: ./.github/workflows/charts-release-steps.yaml
-    permissions:
-      pages: write
-      id-token: write
-      contents: write
-      packages: write
+    strategy:
+      matrix:
+        chart: ${{ fromJSON(needs.prepare.outputs.otherChartsToRelease) }}
+      fail-fast: false
+      max-parallel: 1
+    uses: ./.github/workflows/chart-release-steps.yaml
     with:
-      charts: ${{ needs.prepare.outputs.otherChartsToRelease }}
-      excludedChartsRelease: ${{ toJSON(fromJSON(needs.prepare.outputs.repoConfiguration).excluded-charts-release) }}
-      ghPagesBranch: gh-pages
+      chart: ${{ matrix.chart }}
+      createGithubRelease: true
+      publishToGhPages: true
+      publishToOciRegistry: true
+      deployGhPages: true
