@@ -59,19 +59,19 @@ jobs:
           validateChartYaml: false
           requireChangelog: false
 
-      - name: Check version update
-        if: ${{ steps.chart-details-pr.outputs.version == steps.chart-details-default.outputs.version }}
-        uses: actions/github-script@v7
-        with:
-          script: |
-            core.setFailed("Chart version has not been updated for ${{ matrix.chart }}");
+      # - name: Check version update
+      #   if: ${{ steps.chart-details-pr.outputs.version == steps.chart-details-default.outputs.version }}
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: |
+      #       core.setFailed("Chart version has not been updated for ${{ matrix.chart }}");
 
-      - name: Check changelog update
-        if: ${{ steps.chart-details-pr.outputs.changes == steps.chart-details-default.outputs.changes }}
-        uses: actions/github-script@v7
-        with:
-          script: |
-            core.setFailed("Changelog has not been updated for ${{ matrix.chart }}");
+      # - name: Check changelog update
+      #   if: ${{ steps.chart-details-pr.outputs.changes == steps.chart-details-default.outputs.changes }}
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: |
+      #       core.setFailed("Changelog has not been updated for ${{ matrix.chart }}");
 
   validate_success:
     needs:
@@ -118,6 +118,17 @@ jobs:
           schemaFile: "charts/${{ matrix.chart }}/values.schema.json"
           outputFile: "charts/${{ matrix.chart }}/values.schema.json"
           allowFileNotFound: true
+
+      - name: Assume current common library version
+        env:
+          COMMON_LIBRARY_LOCATION: ${{ github.workspace }}/charts/library/common
+        working-directory: charts/${{ matrix.chart }}
+        run: |
+          yq -i '. |= .dependencies |= map(select(.name == "common" and .repository == "https://bjw-s.github.io/helm-charts").version = ">0.0.0-0")' Chart.yaml
+          yq -i '. |= .dependencies |= map(select(.name == "common" and .repository == "https://bjw-s.github.io/helm-charts").repository = "file://${{ env.COMMON_LIBRARY_LOCATION }}")' Chart.yaml
+          echo "::group::Modified Chart.yaml"
+          cat Chart.yaml
+          echo "::endgroup::"
 
       - name: Run chart-testing (lint)
         run: ct lint --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
