@@ -78,6 +78,17 @@ jobs:
           outputFile: "charts/${{ matrix.chart }}/values.schema.json"
           allowFileNotFound: true
 
+      - name: Always assume in-repo common library
+        env:
+          COMMON_LIBRARY_LOCATION: ${{ github.workspace }}/charts/library/common
+        working-directory: charts/${{ matrix.chart }}
+        run: |
+          yq -i '. |= .dependencies |= map(select(.name == "common" and .repository == "https://bjw-s.github.io/helm-charts").version = ">0.0.0-0")' Chart.yaml
+          yq -i '. |= .dependencies |= map(select(.name == "common" and .repository == "https://bjw-s.github.io/helm-charts").repository = "file://${{ env.COMMON_LIBRARY_LOCATION }}")' Chart.yaml
+          echo "::group::Modified Chart.yaml"
+          cat Chart.yaml
+          echo "::endgroup::"
+
       - name: Run chart-testing (install)
         working-directory: "charts/${{ matrix.chart }}"
         run: |
@@ -90,20 +101,15 @@ jobs:
   install_success:
     needs:
       - install-chart
-    if: |
-      always()
+    if: ${{ !cancelled() }}
     name: Install successful
     runs-on: ubuntu-latest
     steps:
       - name: Check matrix status
         if: >-
           ${{
-              (
-                inputs.chartsToTest != '' && inputs.chartsToTest != '[]'
-              ) &&
-              (
-                contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-              )
+              (inputs.chartsToTest != '' && inputs.chartsToTest != '[]') &&
+              contains(needs.*.result, 'failure')
           }}
         run: exit 1
 
@@ -161,19 +167,14 @@ jobs:
   unittest_success:
     needs:
       - unittest-chart
-    if: |
-      always()
+    if: ${{ !cancelled() }}
     name: Unittest successful
     runs-on: ubuntu-latest
     steps:
       - name: Check matrix status
         if: >-
           ${{
-              (
-                inputs.chartsToTest != '' && inputs.chartsToTest != '[]'
-              ) &&
-              (
-                contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-              )
+              (inputs.chartsToTest != '' && inputs.chartsToTest != '[]') &&
+              contains(needs.*.result, 'failure')
           }}
         run: exit 1

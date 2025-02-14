@@ -18,6 +18,76 @@ on:
         type: string
 
 jobs:
+  validate-required-changes:
+    name: Validate required changes
+    strategy:
+      matrix:
+        chart: ${{ fromJSON(inputs.charts) }}
+      fail-fast: false
+    if: |
+      ${{
+        (inputs.charts != '[]' && inputs.charts != '') &&
+        github.event_name == 'pull_request'
+      }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout pull request branch
+        uses: actions/checkout@v4
+        with:
+          path: pull
+
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+        with:
+          ref: "${{ github.event.repository.default_branch }}"
+          path: default
+
+      - name: Get chart details for PR
+        id: chart-details-pr
+        uses: bjw-s/helm-charts-actions/get-chart-details@main
+        with:
+          path: pull/charts/${{ matrix.chart }}
+          validateChartYaml: true
+          requireChangelog: true
+
+      - name: Get chart details for default branch
+        id: chart-details-default
+        uses: bjw-s/helm-charts-actions/get-chart-details@main
+        with:
+          path: default/charts/${{ matrix.chart }}
+          allowChartToNotExist: true
+          validateChartYaml: false
+          requireChangelog: false
+
+      # - name: Check version update
+      #   if: ${{ steps.chart-details-pr.outputs.version == steps.chart-details-default.outputs.version }}
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: |
+      #       core.setFailed("Chart version has not been updated for ${{ matrix.chart }}");
+
+      # - name: Check changelog update
+      #   if: ${{ steps.chart-details-pr.outputs.changes == steps.chart-details-default.outputs.changes }}
+      #   uses: actions/github-script@v7
+      #   with:
+      #     script: |
+      #       core.setFailed("Changelog has not been updated for ${{ matrix.chart }}");
+
+  validate_success:
+    needs:
+      - validate-required-changes
+    if: ${{ !cancelled() }}
+    name: Validation successful
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check matrix status
+        if: >-
+          ${{
+              (inputs.chartsToLint != '' && inputs.chartsToLint != '[]') &&
+              contains(needs.*.result, 'failure')
+          }}
+        run: exit 1
+
   lint-chart:
     if: ${{ inputs.charts != '[]' && inputs.charts != '' }}
     name: Lint chart
@@ -25,6 +95,8 @@ jobs:
       matrix:
         chart: ${{ fromJSON(inputs.charts) }}
       fail-fast: false
+    needs:
+      - validate_success
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -47,25 +119,31 @@ jobs:
           outputFile: "charts/${{ matrix.chart }}/values.schema.json"
           allowFileNotFound: true
 
+      - name: Always assume in-repo common library
+        env:
+          COMMON_LIBRARY_LOCATION: ${{ github.workspace }}/charts/library/common
+        working-directory: charts/${{ matrix.chart }}
+        run: |
+          yq -i '. |= .dependencies |= map(select(.name == "common" and .repository == "https://bjw-s.github.io/helm-charts").version = ">0.0.0-0")' Chart.yaml
+          yq -i '. |= .dependencies |= map(select(.name == "common" and .repository == "https://bjw-s.github.io/helm-charts").repository = "file://${{ env.COMMON_LIBRARY_LOCATION }}")' Chart.yaml
+          echo "::group::Modified Chart.yaml"
+          cat Chart.yaml
+          echo "::endgroup::"
+
       - name: Run chart-testing (lint)
         run: ct lint --config .ci/ct/ct.yaml --charts "charts/${{ matrix.chart }}"
 
   lint_success:
     needs:
       - lint-chart
-    if: |
-      always()
+    if: ${{ !cancelled() }}
     name: Lint successful
     runs-on: ubuntu-latest
     steps:
       - name: Check matrix status
         if: >-
           ${{
-              (
-                inputs.chartsToLint != '' && inputs.chartsToLint != '[]'
-              ) &&
-              (
-                contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-              )
+              (inputs.chartsToLint != '' && inputs.chartsToLint != '[]') &&
+              contains(needs.*.result, 'failure')
           }}
         run: exit 1
