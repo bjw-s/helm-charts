@@ -18,6 +18,61 @@ on:
         type: string
 
 jobs:
+  validate-required-changes:
+    name: Validate required changes
+    strategy:
+      matrix:
+        chart: ${{ fromJSON(inputs.charts) }}
+      fail-fast: false
+    if: |
+      ${{
+        (inputs.charts != '[]' && inputs.charts != '') &&
+        github.event_name == 'pull_request'
+      }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout pull request branch
+        uses: actions/checkout@v4
+        with:
+          path: pull
+
+      - name: Checkout default branch
+        uses: actions/checkout@v4
+        with:
+          ref: "${{ github.event.repository.default_branch }}"
+          path: default
+
+      - name: Get chart details for PR
+        id: chart-details-pr
+        uses: bjw-s/helm-charts-actions/get-chart-details@main
+        with:
+          path: pull/charts/${{ inputs.chart }}
+          validateChartYaml: true
+          requireChangelog: true
+
+      - name: Get chart details for default branch
+        id: chart-details-default
+        uses: bjw-s/helm-charts-actions/get-chart-details@main
+        with:
+          path: default/charts/${{ inputs.chart }}
+          validateChartYaml: false
+          requireChangelog: false
+
+  validate_success:
+    needs:
+      - validate-required-changes
+    if: ${{ !cancelled() }}
+    name: Lint successful
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check matrix status
+        if: >-
+          ${{
+              (inputs.chartsToLint != '' && inputs.chartsToLint != '[]') &&
+              (!contains(needs.*.result, 'failure')
+          }}
+        run: exit 1
+
   lint-chart:
     if: ${{ inputs.charts != '[]' && inputs.charts != '' }}
     name: Lint chart
@@ -25,6 +80,8 @@ jobs:
       matrix:
         chart: ${{ fromJSON(inputs.charts) }}
       fail-fast: false
+    needs:
+      - validate_success
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -53,19 +110,14 @@ jobs:
   lint_success:
     needs:
       - lint-chart
-    if: |
-      always()
+    if: ${{ !cancelled() }}
     name: Lint successful
     runs-on: ubuntu-latest
     steps:
       - name: Check matrix status
         if: >-
           ${{
-              (
-                inputs.chartsToLint != '' && inputs.chartsToLint != '[]'
-              ) &&
-              (
-                contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-              )
+              (inputs.chartsToLint != '' && inputs.chartsToLint != '[]') &&
+              (!contains(needs.*.result, 'failure')
           }}
         run: exit 1
