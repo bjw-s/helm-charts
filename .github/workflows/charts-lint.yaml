@@ -46,7 +46,7 @@ jobs:
         id: chart-details-pr
         uses: bjw-s/helm-charts-actions/get-chart-details@main
         with:
-          path: pull/charts/${{ inputs.chart }}
+          path: pull/charts/${{ matrix.chart }}
           validateChartYaml: true
           requireChangelog: true
 
@@ -54,7 +54,7 @@ jobs:
         id: chart-details-default
         uses: bjw-s/helm-charts-actions/get-chart-details@main
         with:
-          path: default/charts/${{ inputs.chart }}
+          path: default/charts/${{ matrix.chart }}
           validateChartYaml: false
           requireChangelog: false
 

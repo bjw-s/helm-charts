@@ -90,20 +90,15 @@ jobs:
   install_success:
     needs:
       - install-chart
-    if: |
-      always()
+    if: ${{ !cancelled() }}
     name: Install successful
     runs-on: ubuntu-latest
     steps:
       - name: Check matrix status
         if: >-
           ${{
-              (
-                inputs.chartsToTest != '' && inputs.chartsToTest != '[]'
-              ) &&
-              (
-                contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-              )
+              (inputs.chartsToTest != '' && inputs.chartsToTest != '[]') &&
+              !contains(needs.*.result, 'failure')
           }}
         run: exit 1
 
@@ -161,19 +156,14 @@ jobs:
   unittest_success:
     needs:
       - unittest-chart
-    if: |
-      always()
+    if: ${{ !cancelled() }}
     name: Unittest successful
     runs-on: ubuntu-latest
     steps:
       - name: Check matrix status
         if: >-
           ${{
-              (
-                inputs.chartsToTest != '' && inputs.chartsToTest != '[]'
-              ) &&
-              (
-                contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
-              )
+              (inputs.chartsToTest != '' && inputs.chartsToTest != '[]') &&
+              !contains(needs.*.result, 'failure')
           }}
         run: exit 1
