@@ -119,7 +119,7 @@ jobs:
           outputFile: "charts/${{ matrix.chart }}/values.schema.json"
           allowFileNotFound: true
 
-      - name: Assume current common library version
+      - name: Always assume in-repo common library
         env:
           COMMON_LIBRARY_LOCATION: ${{ github.workspace }}/charts/library/common
         working-directory: charts/${{ matrix.chart }}
