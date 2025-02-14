@@ -55,21 +55,36 @@ jobs:
         uses: bjw-s/helm-charts-actions/get-chart-details@main
         with:
           path: default/charts/${{ matrix.chart }}
+          allowChartToNotExist: true
           validateChartYaml: false
           requireChangelog: false
+
+      - name: Check version update
+        if: ${{ steps.chart-details-pr.outputs.version == steps.chart-details-default.outputs.version }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.setFailed("Chart version has not been updated for ${{ matrix.chart }}");
+
+      - name: Check changelog update
+        if: ${{ steps.chart-details-pr.outputs.changes == steps.chart-details-default.outputs.changes }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.setFailed("Changelog has not been updated for ${{ matrix.chart }}");
 
   validate_success:
     needs:
       - validate-required-changes
     if: ${{ !cancelled() }}
-    name: Lint successful
+    name: Validation successful
     runs-on: ubuntu-latest
     steps:
       - name: Check matrix status
         if: >-
           ${{
               (inputs.chartsToLint != '' && inputs.chartsToLint != '[]') &&
-              !contains(needs.*.result, 'failure')
+              contains(needs.*.result, 'failure')
           }}
         run: exit 1
 
@@ -118,6 +133,6 @@ jobs:
         if: >-
           ${{
               (inputs.chartsToLint != '' && inputs.chartsToLint != '[]') &&
-              !contains(needs.*.result, 'failure')
+              contains(needs.*.result, 'failure')
           }}
         run: exit 1

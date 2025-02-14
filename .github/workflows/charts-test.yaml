@@ -98,7 +98,7 @@ jobs:
         if: >-
           ${{
               (inputs.chartsToTest != '' && inputs.chartsToTest != '[]') &&
-              !contains(needs.*.result, 'failure')
+              contains(needs.*.result, 'failure')
           }}
         run: exit 1
 
@@ -164,6 +164,6 @@ jobs:
         if: >-
           ${{
               (inputs.chartsToTest != '' && inputs.chartsToTest != '[]') &&
-              !contains(needs.*.result, 'failure')
+              contains(needs.*.result, 'failure')
           }}
         run: exit 1
