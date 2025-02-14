@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.7.1
+version: 3.7.2
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -15,10 +15,6 @@ maintainers:
 annotations:
   org.opencontainers.image.source: "https://github.com/bjw-s/helm-charts"
   artifacthub.io/changes: |-
-    - kind: fixed
+    - kind: added
       description: |-
-        Values schema is now dereferenced before packaging so it no longer relies on
-        internet connectivity to validate the schema.
-    - kind: fixed
-      description: |-
-        Add explicit namespace declaration to templates using Release.Namespace
+        The Apache 2.0 LICENSE file has been added to the chart.
