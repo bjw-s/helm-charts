@@ -37,7 +37,7 @@ on:
       helmVersion:
         description: >
           Helm version to use.
-        default: "3.11.2"
+        default: "latest"
         required: false
         type: string
 
