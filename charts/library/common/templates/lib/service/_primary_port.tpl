@@ -15,9 +15,9 @@ Return the primary port for a given Service object.
     {{- end -}}
   {{- end -}}
 
-  {{- /* Return the first port if none has been explicitly marked as primary */ -}}
+  {{- /* Return the first port (alphabetically) if none has been explicitly marked as primary */ -}}
   {{- if not $result -}}
-    {{- $firstPortKey := keys $enabledPorts | first -}}
+    {{- $firstPortKey := keys $enabledPorts | sortAlpha | first -}}
     {{- if $firstPortKey -}}
       {{- $result = get $enabledPorts $firstPortKey -}}
     {{- end -}}
