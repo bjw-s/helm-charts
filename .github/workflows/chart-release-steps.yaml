@@ -236,6 +236,7 @@ jobs:
           CHART_TAG: ${{ steps.chart-details.outputs.name }}:${{ inputs.steps.chart-details.outputs.version }}
         run: |
           helm push "${PACKAGE_FILE}" oci://${CHART_TAG_BASE} &> push-metadata.txt
+          cat push-metadata.txt
           CHART_DIGEST=$(awk '/Digest: /{print $2}' push-metadata.txt)
           cosign sign --yes "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}"
           cosign verify "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}" \
