@@ -15,6 +15,9 @@ maintainers:
 annotations:
   org.opencontainers.image.source: "https://github.com/bjw-s/helm-charts"
   artifacthub.io/changes: |-
-    - kind: added
+    - kind: fixed
       description: |-
         The Apache 2.0 LICENSE file has been added to the chart.
+    - kind: fixed
+      description: |-
+        Fixed non-deterministic selection of primary service and port.
