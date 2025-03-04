@@ -11,9 +11,13 @@ dependencies:
   - name: common
     repository: https://bjw-s.github.io/helm-charts
     version: 3.7.2
+sources:
+  - https://github.com/bjw-s/helm-charts
 annotations:
-  org.opencontainers.image.source: "https://github.com/bjw-s/helm-charts"
   artifacthub.io/changes: |-
-    - kind: added
+    - kind: fixed
       description: |-
         The Apache 2.0 LICENSE file has been added to the chart.
+    - kind: fixed
+      description: |-
+        Fixed non-deterministic selection of primary service and port.
