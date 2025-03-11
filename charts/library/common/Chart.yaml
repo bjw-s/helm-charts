@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.7.2
+version: 3.7.3
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -17,7 +17,4 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        The Apache 2.0 LICENSE file has been added to the chart.
-    - kind: fixed
-      description: |-
-        Fixed non-deterministic selection of primary service and port.
+        fixes rendering of backendRefs with RequestRedirects filters.

@@ -59,26 +59,34 @@ spec:
   {{- end }}
   rules:
   {{- range $routeObject.rules }}
-  - backendRefs:
-    {{- range .backendRefs }}
-      {{ $service := include "bjw-s.common.lib.service.getByIdentifier" (dict "rootContext" $rootContext "id" .name) | fromYaml -}}
-      {{ $servicePrimaryPort := dict -}}
-      {{ if $service -}}
-        {{ $servicePrimaryPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "serviceObject" $service) | fromYaml -}}
+    {{- $hasRequestRedirect := false -}}
+    {{- range .filters }}
+      {{- if eq .type "RequestRedirect" }}
+        {{- $hasRequestRedirect = true -}}
       {{- end }}
-    - group: {{ default "" .group | quote}}
-      kind: {{ default "Service" .kind }}
-      name: {{ default .name $service.name }}
-      namespace: {{ default $rootContext.Release.Namespace .namespace }}
-      port: {{ default .port $servicePrimaryPort.port }}
-      weight: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" .weight "default" 1) }}
+    {{- end }}
+    {{- if not $hasRequestRedirect }}
+    - backendRefs:
+      {{- range .backendRefs }}
+        {{ $service := include "bjw-s.common.lib.service.getByIdentifier" (dict "rootContext" $rootContext "id" .name) | fromYaml -}}
+        {{ $servicePrimaryPort := dict -}}
+        {{ if $service -}}
+          {{ $servicePrimaryPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "serviceObject" $service) | fromYaml -}}
+        {{- end }}
+      - group: {{ default "" .group | quote}}
+        kind: {{ default "Service" .kind }}
+        name: {{ default .name $service.name }}
+        namespace: {{ default $rootContext.Release.Namespace .namespace }}
+        port: {{ default .port $servicePrimaryPort.port }}
+        weight: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" .weight "default" 1) }}
+      {{- end }}
     {{- end }}
     {{- if or (eq $routeKind "HTTPRoute") (eq $routeKind "GRPCRoute") }}
       {{- with .matches }}
     matches:
         {{- toYaml . | nindent 6 }}
       {{- end }}
-        {{- with .filters }}
+      {{- with .filters }}
     filters:
         {{- toYaml . | nindent 6 }}
       {{- end }}
