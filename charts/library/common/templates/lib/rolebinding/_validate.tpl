@@ -10,7 +10,7 @@ Validate RoleBinding values
   {{- $roleRef := required "A roleRef is required" $roleBindingValues.roleRef -}}
 
   {{- if not (mustHas $type $typeList) -}}
-    {{- fail (printf "You selected: `%s`. Type must be one of:\n%s\n" $type ($typeList|toYaml)) -}}
+    {{- fail (printf "\nYou selected: `%s`. Type must be one of:\n%s\n" $type ($typeList|toYaml)) -}}
   {{- end -}}
 
   {{- if not (hasKey $roleRef "identifier") -}}
