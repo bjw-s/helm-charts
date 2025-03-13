@@ -15,7 +15,8 @@ Convert Route values to an object
       {{- $objectName = printf "%s-%s" $objectName $override -}}
     {{- end -}}
   {{- else -}}
-    {{- if ne $identifier (include "bjw-s.common.lib.route.primary" $rootContext) -}}
+    {{- $enabledRoutes := (include "bjw-s.common.lib.route.enabledRoutes" (dict "rootContext" $rootContext) | fromYaml ) }}
+    {{- if and (not $objectValues.primary) (gt (len $enabledRoutes) 1) -}}
       {{- if not (eq $objectName $identifier) -}}
         {{- $objectName = printf "%s-%s" $objectName $identifier -}}
       {{- end -}}

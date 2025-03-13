@@ -17,4 +17,7 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        TBD
+        Fixed name suffix for HTTPRoute
+    - kind: fixed
+      description: |-
+        Fixed incorrect default backendRefs values in HTTPRoute
