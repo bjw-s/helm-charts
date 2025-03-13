@@ -17,4 +17,10 @@ annotations:
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        fixes rendering of backendRefs with RequestRedirects filters.
+        Fixed rendering of backendRefs with RequestRedirects filters.
+    - kind: fixed
+      description: |-
+        Fixed name suffix for HTTPRoute
+    - kind: fixed
+      description: |-
+        Fixed incorrect default backendRefs values in HTTPRoute

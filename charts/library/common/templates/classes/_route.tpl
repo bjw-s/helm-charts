@@ -43,8 +43,8 @@ metadata:
 spec:
   parentRefs:
   {{- range $routeObject.parentRefs }}
-    - group: {{ default "gateway.networking.k8s.io" .group }}
-      kind: {{ default "Gateway" .kind }}
+    - group: {{ .group | default "gateway.networking.k8s.io" }}
+      kind: {{ .kind | default "Gateway" }}
       name: {{ required (printf "parentRef name is required for %v %v" $routeKind $routeObject.name) .name }}
       namespace: {{ required (printf "parentRef namespace is required for %v %v" $routeKind $routeObject.name) .namespace }}
       {{- if .sectionName }}
@@ -73,11 +73,11 @@ spec:
         {{ if $service -}}
           {{ $servicePrimaryPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "serviceObject" $service) | fromYaml -}}
         {{- end }}
-      - group: {{ default "" .group | quote}}
-        kind: {{ default "Service" .kind }}
-        name: {{ default .name $service.name }}
-        namespace: {{ default $rootContext.Release.Namespace .namespace }}
-        port: {{ default .port $servicePrimaryPort.port }}
+      - group: {{ .group | default "" | quote}}
+        kind: {{ .kind | default "Service" }}
+        name: {{ $service.name | default .name }}
+        namespace: {{ .namespace | default $rootContext.Release.Namespace }}
+        port: {{ .port | default $servicePrimaryPort.port }}
         weight: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" .weight "default" 1) }}
       {{- end }}
     {{- end }}

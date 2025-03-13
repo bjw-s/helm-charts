@@ -9,7 +9,7 @@ Validate Role values
   {{- $rules := $roleValues.rules -}}
 
   {{- if not (mustHas $type $typeList) -}}
-    {{- fail (printf "You selected: `%s`. Type must be one of:\n%s\n" $type ($typeList|toYaml)) -}}
+    {{- fail (printf "\nYou selected: `%s`. Type must be one of:\n%s\n" $type ($typeList|toYaml)) -}}
   {{- end -}}
   {{- if not $rules -}}
     {{- fail "Rules can't be empty" -}}
