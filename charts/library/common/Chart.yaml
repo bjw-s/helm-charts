@@ -12,8 +12,9 @@ home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
 maintainers:
   - name: bjw-s
     email: me@bjw-s.dev
+sources:
+  - https://github.com/bjw-s/helm-charts
 annotations:
-  org.opencontainers.image.source: "https://github.com/bjw-s/helm-charts"
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
