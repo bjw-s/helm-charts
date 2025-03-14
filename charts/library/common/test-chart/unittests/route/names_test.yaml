@@ -1,30 +1,12 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: route presence
+suite: route names
 templates:
   - common.yaml
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
-  - it: an HTTPRoute is not created by default
-    asserts:
-      - not: true
-        containsDocument:
-          kind: HTTPRoute
-          apiVersion: gateway.networking.k8s.io/v1alpha2
-          name: RELEASE-NAME
-
-  - it: an HTTPRoute is not created when disabled
-    set:
-      route.main.enabled: false
-    asserts:
-      - not: true
-        containsDocument:
-          kind: HTTPRoute
-          apiVersion: gateway.networking.k8s.io/v1alpha2
-          name: RELEASE-NAME
-
-  - it: an HTTPRoute is created when explicitly enabled
+  - it: default name
     set:
       route.main:
         enabled: true
@@ -38,7 +20,37 @@ tests:
       - exists:
           path: metadata.name
 
-  - it: multiple HTTPRoute are created when configured
+  - it: custom name suffix
+    set:
+      route.main:
+        enabled: true
+        parentRefs:
+          - name: test
+            namespace: test
+        nameOverride: http
+    documentSelector:
+      path: $[?(@.kind == "HTTPRoute")].metadata.name
+      value: RELEASE-NAME-http
+    asserts:
+      - exists:
+          path: metadata.name
+
+  - it: custom name suffix with template
+    set:
+      route.main:
+        enabled: true
+        parentRefs:
+          - name: test
+            namespace: test
+        nameOverride: "{{ .Chart.Name }}"
+    documentSelector:
+      path: $[?(@.kind == "HTTPRoute")].metadata.name
+      value: RELEASE-NAME-common-test
+    asserts:
+      - exists:
+          path: metadata.name
+
+  - it: multiple routes
     set:
       route:
         main:

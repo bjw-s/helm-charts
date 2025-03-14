@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.7.2
+version: 3.7.3
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -12,12 +12,13 @@ home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
 maintainers:
   - name: bjw-s
     email: me@bjw-s.dev
+sources:
+  - https://github.com/bjw-s/helm-charts
 annotations:
-  org.opencontainers.image.source: "https://github.com/bjw-s/helm-charts"
   artifacthub.io/changes: |-
     - kind: fixed
       description: |-
-        The Apache 2.0 LICENSE file has been added to the chart.
+        Fixed name suffix for HTTPRoute
     - kind: fixed
       description: |-
-        Fixed non-deterministic selection of primary service and port.
+        Fixed incorrect default backendRefs values in HTTPRoute

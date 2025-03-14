@@ -19,7 +19,10 @@ tests:
             rules: {}
     asserts:
       - failedTemplate:
-          errorMessage: "You selected: `InvalidRole`. Type must be one of:"
+          errorMessage: |
+            You selected: `InvalidRole`. Type must be one of:
+            - Role
+            - ClusterRole
 
   - it: role rules can't be empty
     set:
