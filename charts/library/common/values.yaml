@@ -6,15 +6,15 @@ global:
   fullnameOverride:
   # -- Propagate global metadata to Pod labels.
   propagateGlobalMetadataToPods: false
-  # -- Set additional global labels. Helm templates can be used.
+  # -- Set additional global labels (Template enabled).
   labels: {}
-  # -- Set additional global annotations. Helm templates can be used.
+  # -- Set additional global annotations (Template enabled).
   annotations: {}
 
 # -- Set default options for all controllers / pods here
 # Each of these options can be overridden on a Controller level
 defaultPodOptions:
-  # -- Defines affinity constraint rules. Helm templates can be used.
+  # -- Defines affinity constraint rules (Template enabled).
   # [[ref]](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity)
   affinity: {}
 
@@ -34,7 +34,7 @@ defaultPodOptions:
   # [[ref]](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#accessing-the-service)
   enableServiceLinks: false
 
-  # -- Allows specifying explicit hostname setting
+  # -- Allows specifying explicit hostname setting (Template enabled).
   hostname: ""
 
   # -- Use hostAliases to add custom entries to /etc/hosts - mapping IP addresses to hostnames.
@@ -149,7 +149,7 @@ controllers: {}
 #       schedule: "*/20 * * * *"
 #       # -- The deadline in seconds for starting the job if it misses its scheduled time for any reason
 #       startingDeadlineSeconds: 30
-#       # -- The number of succesful Jobs to keep
+#       # -- The number of successful Jobs to keep
 #       successfulJobsHistory: 1
 #       # -- The number of failed Jobs to keep
 #       failedJobsHistory: 1
@@ -265,7 +265,7 @@ controllers: {}
 #         # -- Override the working directory for the container
 #         workingDir:
 
-#         # -- Environment variables. Template enabled.
+#         # -- Environment variables (Template enabled).
 #         # Syntax options:
 #         # A) TZ: UTC
 #         # B) PASSWD: '{{ .Release.Name }}'
@@ -454,7 +454,7 @@ secrets:
   #   labels: {}
   #   # -- Annotations to add to the Secret
   #   annotations: {}
-  #   # -- Secret stringData content. Helm template enabled.
+  #   # -- Secret stringData content (Template enabled).
   #   stringData:
   #     {}
   #     # foo: bar
@@ -471,7 +471,7 @@ configMaps:
   #   labels: {}
   #   # -- Annotations to add to the configMap
   #   annotations: {}
-  #   # -- configMap data content. Helm template enabled.
+  #   # -- configMap data content (Template enabled).
   #   data:
   #     foo: bar
 
@@ -603,10 +603,10 @@ ingress:
   #   # -- Override the name suffix that is used for this ingress.
   #   nameOverride:
 
-  #   # -- Provide additional annotations which may be required. Helm templates can be used.
+  #   # -- Provide additional annotations which may be required (Template enabled).
   #   annotations: {}
 
-  #   # -- Provide additional labels which may be required. Helm templates can be used.
+  #   # -- Provide additional labels which may be required (Template enabled).
   #   labels: {}
 
   #   # -- Set the ingressClass that is used for this ingress.
@@ -617,11 +617,11 @@ ingress:
 
   #   ## Configure the hosts for the ingress
   #   hosts:
-  #     - # -- Host address. Helm template can be passed.
+  #     - # -- Host address (Template enabled).
   #       host: chart-example.local
   #       ## Configure the paths for the host
   #       paths:
-  #         - # -- Path.  Helm template can be passed.
+  #         - # -- Path (Template enabled).
   #           path: /
   #           pathType: Prefix
   #           service:
@@ -658,14 +658,13 @@ serviceMonitor:
   #   labels: {}
 
   #   # -- Configures a custom selector for the serviceMonitor, this takes precedence over
-  #   # specifying a service name.
-  #   # Helm templates can be used.
+  #   # specifying a service name (Template enabled).
   #   selector: {}
 
-  #   # -- Configures the target Service for the serviceMonitor. Helm templates can be used.
+  #   # -- Configures the target Service for the serviceMonitor (Template enabled).
   #   serviceName: '{{ include "bjw-s.common.lib.chart.names.fullname" $ }}'
 
-  #   # -- Configures the endpoints for the serviceMonitor. Helm templates can be used.
+  #   # -- Configures the endpoints for the serviceMonitor (Template enabled).
   #   # @default -- See values.yaml
   #   endpoints:
   #     - port: http
@@ -675,7 +674,7 @@ serviceMonitor:
   #       scrapeTimeout: 10s
 
   #   # -- Configures custom targetLabels for the serviceMonitor. (All collected
-  #   # meterics will have these labels, taking the value from the target service)
+  #   # metrics will have these labels, taking the value from the target service)
   #   # [[ref]](https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#servicemonitorspec/)
   #   targetLabels: []
 
@@ -715,7 +714,7 @@ route:
   #       # Name of the section within the target resource.
   #       sectionName:
 
-  #   # -- Host addresses. Helm template can be passed.
+  #   # -- Host addresses (Template enabled).
   #   hostnames: []
 
   #   # -- Configure rules for routing. Defaults to the primary service.
@@ -775,7 +774,7 @@ persistence:
   #   retain: false
 
   #   # -- Configure mounts to all controllers and containers. By default the persistence item
-  #   # will be mounted to `/<name_of_the_peristence_item>`.
+  #   # will be mounted to `/<name_of_the_persistence_item>`.
   #   # Example:
   #   # globalMounts:
   #   #   - path: /config
@@ -858,7 +857,7 @@ rbac:
   #   role1:
   #     # -- Force replace the name of the object.
   #     forceRename: <force name>
-  #     # -- Enables or disables the Role. Can be templated.
+  #     # -- Enables or disables the Role (Template enabled).
   #     enabled: true
   #     # -- Set to Role,ClusterRole
   #     type: Role
@@ -870,7 +869,7 @@ rbac:
   #   binding1:
   #     # -- Force replace the name of the object.
   #     forceRename: <force name>
-  #     # -- Enables or disables the Role. Can be templated.
+  #     # -- Enables or disables the Role (Template enabled).
   #     enabled: true
   #     # -- Set to RoleBinding,ClusterRoleBinding
   #     type: RoleBinding
