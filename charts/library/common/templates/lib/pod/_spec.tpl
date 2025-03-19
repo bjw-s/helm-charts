@@ -22,7 +22,7 @@ schedulerName: {{ . | trim }}
 securityContext: {{ . | nindent 2 }}
   {{- end -}}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "hostname")) }}
-hostname: {{ . | trim }}
+hostname: {{ tpl . $rootContext | trim }}
   {{- end }}
 hostIPC: {{ include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "hostIPC" "default" false) }}
 hostNetwork: {{ include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "hostNetwork" "default" false) }}
