@@ -1,6 +1,7 @@
 {{/*
 Convert PVC values to an object
 */}}
+{{/* TODO: v4 - Remove this template in favor of centralized valuesToObject */}}
 {{- define "bjw-s.common.lib.pvc.valuesToObject" -}}
   {{- $rootContext := .rootContext -}}
   {{- $identifier := .id -}}

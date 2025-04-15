@@ -1,0 +1,31 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: ingress - fields - defaultBackend
+templates:
+  - common.yaml
+values:
+  - ../_values/ingress_main_default_hosts.yaml
+  - ../_values/service_main_default.yaml
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: with defaultBackend should pass
+    set:
+      ingress.main:
+        defaultBackend:
+          resource:
+            apiGroup: k8s.example.com
+            kind: StorageBucket
+            name: static-assets
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.defaultBackend
+          value:
+            resource:
+              apiGroup: k8s.example.com
+              kind: StorageBucket
+              name: static-assets
+      - notExists:
+          path: spec.rules

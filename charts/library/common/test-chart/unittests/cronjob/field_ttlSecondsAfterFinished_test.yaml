@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: cronjob - fields - ttlSecondsAfterFinished
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  controllers.main.type: cronjob
+  controllers.main.cronjob.schedule: "*/20 * * * *"
+tests:
+  - it: default configuration should pass
+    documentSelector:
+      path: $[?(@.kind == "CronJob")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: spec.jobTemplate.spec.ttlSecondsAfterFinished
+
+  - it: custom configuration should pass
+    set:
+      controllers.main.cronjob.ttlSecondsAfterFinished: 3600
+    documentSelector:
+      path: $[?(@.kind == "CronJob")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.ttlSecondsAfterFinished
+          value: 3600

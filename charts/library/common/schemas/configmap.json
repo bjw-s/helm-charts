@@ -1,41 +1,45 @@
 {
   "instance": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "enabled": {
-        "type": "boolean",
-        "default": true
-      },
-      "includeInChecksum": {
-        "type": "boolean",
-        "default": true
-      },
-      "annotations": {
-        "$ref": "definitions.json#/annotations"
-      },
-      "labels": {
-        "$ref": "definitions.json#/labels"
-      },
-      "nameOverride": {
-        "type": "string"
-      },
-      "data": {
+    "allOf": [
+      { "$ref": "definitions.json#/resourceIdentifier" },
+      {
         "type": "object",
-        "additionalProperties": {
-          "type": "string"
-        }
-      },
-      "binaryData": {
-        "type": "object",
-        "additionalProperties": {
-          "type": "string"
-        }
+        "additionalProperties": false,
+        "properties": {
+          "prefix": {},
+          "suffix": {},
+          "enabled": {
+            "type": "boolean",
+            "default": true
+          },
+          "includeInChecksum": {
+            "type": "boolean",
+            "default": true
+          },
+          "annotations": {
+            "$ref": "definitions.json#/annotations"
+          },
+          "labels": {
+            "$ref": "definitions.json#/labels"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          },
+          "binaryData": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "oneOf": [
+            {"required": ["data"]},
+            {"required": ["binaryData"]}
+        ]
       }
-    },
-    "oneOf": [
-        {"required": ["data"]},
-        {"required": ["binaryData"]}
     ]
   }
 }

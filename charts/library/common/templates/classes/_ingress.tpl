@@ -23,13 +23,13 @@ metadata:
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   {{- with $annotations }}
   annotations:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   namespace: {{ $rootContext.Release.Namespace }}
@@ -72,7 +72,7 @@ spec:
                 {{ else if .service.identifier -}}
                   {{ $service = (include "bjw-s.common.lib.service.getByIdentifier" (dict "rootContext" $rootContext "id" .service.identifier) | fromYaml ) -}}
                   {{ if not $service -}}
-                    {{fail (printf "No service found with this identifier. (ingress: '%s', path: '%s', identifier: '%s')" $ingressObject.identifier .path .service.identifier)}}
+                    {{fail (printf "No enabled Service found with this identifier. (ingress: '%s', path: '%s', identifier: '%s')" $ingressObject.identifier .path .service.identifier)}}
                   {{ end -}}
                   {{ $serviceName = $service.name -}}
                 {{ end -}}

@@ -1,0 +1,132 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: ingress - fields - hosts - paths - service
+templates:
+  - common.yaml
+values:
+  - ../_values/ingress_main_default_hosts.yaml
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: default should pass
+    set:
+      service:
+        main:
+          controller: main
+          ports:
+            http:
+              port: &httpPort 8081
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].backend
+          value:
+            service:
+              name: RELEASE-NAME
+              port:
+                number: *httpPort
+
+  - it: custom service reference should pass
+    set:
+      ingress.main:
+        hosts:
+          - host: chart-test.local
+            paths:
+              - path: /
+                service:
+                  name: pathService
+                  port: 1234
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].backend
+          value:
+            service:
+              name: pathService
+              port:
+                number: 1234
+
+  - it: custom service reference with template should pass
+    set:
+      ingress.main:
+        hosts:
+          - host: chart-test.local
+            paths:
+              - path: /
+                service:
+                  name: "{{ .Release.Name | lower }}"
+                  port: 1234
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.rules[0].http.paths[0].backend
+          value:
+            service:
+              name: release-name
+              port:
+                number: 1234
+
+  - it: multiple hosts with port name references should pass
+    set:
+      service:
+        main:
+          controller: main
+          ports:
+            http:
+              port: &httpPort 8081
+            http2:
+              enabled: true
+              port: &http2Port 1880
+      ingress:
+        main:
+          className: "nginx"
+          hosts:
+            - host: http.chart-test.local
+              paths:
+                - path: /
+                  pathType: Prefix
+                  service:
+                    identifier: main
+                    port: http
+            - host: http2.chart-test.local
+              paths:
+                - path: /
+                  pathType: Prefix
+                  service:
+                    identifier: main
+                    port: http2
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      # First Ingress host
+      - equal:
+          path: spec.rules[0].host
+          value: http.chart-test.local
+      - equal:
+          path: spec.rules[0].http.paths[0].path
+          value: "/"
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.name
+          value: release-name
+      - equal:
+          path: spec.rules[0].http.paths[0].backend.service.port.number
+          value: *httpPort
+      # Second Ingress host
+      - equal:
+          path: spec.rules[1].host
+          value: http2.chart-test.local
+      - equal:
+          path: spec.rules[1].http.paths[0].path
+          value: "/"
+      - equal:
+          path: spec.rules[1].http.paths[0].backend.service.name
+          value: release-name
+      - equal:
+          path: spec.rules[1].http.paths[0].backend.service.port.number
+          value: *http2Port

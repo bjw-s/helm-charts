@@ -1,0 +1,65 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod - fields - volumes (configMap)
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  configMaps:
+    mySettings:
+      suffix: mySettings
+      data:
+        test: testvalue
+  persistence:
+    configmap:
+      type: configMap
+tests:
+  - it: configmap persistence type should pass
+    set:
+      persistence:
+        configmap:
+          name: mySettings
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - documentIndex: 0
+        equal:
+          path: spec.template.spec.volumes[0]
+          value:
+            name: configmap
+            configMap:
+              name: mySettings
+
+  - it: configmap persistence type with name template should pass
+    set:
+      persistence:
+        configmap:
+          name: '{{ include "bjw-s.common.lib.chart.names.fullname" $ | lower }}-config'
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[0]
+          value:
+            name: configmap
+            configMap:
+              name: release-name-config
+
+  - it: configmap persistence type with identifier reference should pass
+    set:
+      persistence:
+        configmap:
+          identifier: mySettings
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[0]
+          value:
+            name: configmap
+            configMap:
+              name: release-name-mysettings

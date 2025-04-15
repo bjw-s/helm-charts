@@ -1,0 +1,53 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: ingress - fields - hosts - host
+templates:
+  - common.yaml
+values:
+  - ../_values/ingress_main_default_hosts.yaml
+  - ../_values/service_main_default.yaml
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: chart-example.local
+
+  - it: custom host should pass
+    set:
+      ingress.main:
+        hosts:
+          - host: chart-test.local
+            paths:
+              - path: /test
+                service:
+                  identifier: main
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: chart-test.local
+
+  - it: host with template should pass
+    set:
+      ingress.main:
+        hosts:
+          - host: "{{ .Release.Name }}.hostname"
+            paths:
+              - path: /
+                service:
+                  identifier: main
+                  port: http
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.rules[0].host
+          value: RELEASE-NAME.hostname

@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: container image tag
+suite: container - fields - image
 templates:
   - common.yaml
 tests:
@@ -11,12 +11,11 @@ tests:
       controllers.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
         tag: latest
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].image
           value: ghcr.io/mendhak/http-https-echo:latest
 
@@ -27,12 +26,11 @@ tests:
       controllers.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
         tag: 1.23
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].image
           value: ghcr.io/mendhak/http-https-echo:1.23
 
@@ -43,12 +41,11 @@ tests:
       controllers.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo
         tag: "{{.Chart.Version}}"
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].image
           value: ghcr.io/mendhak/http-https-echo:1.0.0
 
@@ -61,12 +58,11 @@ tests:
             tag: 32
         containers:
           main: {} # needed to have at least a container enabled
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].image
           value: ghcr.io/mendhak/http-https-echo:32
 
@@ -78,11 +74,10 @@ tests:
       controllers.main.containers.main.image:
         repository: ghcr.io/mendhak/http-https-echo-override
         tag: 33
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].image
           value: ghcr.io/mendhak/http-https-echo-override:33

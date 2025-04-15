@@ -61,16 +61,24 @@ spec:
   {{- range $routeObject.rules }}
   - backendRefs:
     {{- range .backendRefs }}
-      {{ $service := include "bjw-s.common.lib.service.getByIdentifier" (dict "rootContext" $rootContext "id" .name) | fromYaml -}}
-      {{ $servicePrimaryPort := dict -}}
-      {{ if $service -}}
-        {{ $servicePrimaryPort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "serviceObject" $service) | fromYaml -}}
+      {{- $service := dict }}
+      {{- $serviceName := "" }}
+      {{- $defaultServicePort := dict }}
+      {{- if .name }}
+        {{- $serviceName = tpl .name $rootContext }}
+      {{- else if .identifier }}
+        {{- $service = (include "bjw-s.common.lib.service.getByIdentifier" (dict "rootContext" $rootContext "id" .identifier) | fromYaml ) }}
+        {{- if not $service }}
+          {{- fail (printf "No enabled Service found with this identifier. (route: '%s', identifier: '%s')" $routeObject.identifier .identifier) }}
+        {{- end }}
+        {{- $serviceName = $service.name }}
+        {{- $defaultServicePort = include "bjw-s.common.lib.service.primaryPort" (dict "rootContext" $rootContext "serviceObject" $service) | fromYaml }}
       {{- end }}
     - group: {{ .group | default "" | quote}}
       kind: {{ .kind | default "Service" }}
-      name: {{ $service.name | default .name }}
+      name: {{ $serviceName }}
       namespace: {{ .namespace | default $rootContext.Release.Namespace }}
-      port: {{ .port | default $servicePrimaryPort.port }}
+      port: {{ .port | default $defaultServicePort.port }}
       weight: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" .weight "default" 1) }}
     {{- end }}
     {{- if or (eq $routeKind "HTTPRoute") (eq $routeKind "GRPCRoute") }}

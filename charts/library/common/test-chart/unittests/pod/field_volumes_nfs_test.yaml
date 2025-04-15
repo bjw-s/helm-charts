@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod - fields - volumes (nfs)
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: nfs persistence type should pass
+    set:
+      persistence:
+        nfs:
+          type: nfs
+          server: 10.10.0.8
+          path: /tank/nas/library
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[0]
+          value:
+            name: nfs
+            nfs:
+              path: /tank/nas/library
+              server: 10.10.0.8

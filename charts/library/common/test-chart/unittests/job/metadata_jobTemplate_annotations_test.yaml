@@ -1,0 +1,23 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: job - jobTemplate - metadata - annotations
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  controllers.main:
+    type: job
+tests:
+  - it: jobTemplate metadata should pass
+    set:
+      controllers.main.pod.annotations:
+        test_annotation: test
+    documentSelector:
+      path: $[?(@.kind == "Job")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations
+          value:
+            test_annotation: test

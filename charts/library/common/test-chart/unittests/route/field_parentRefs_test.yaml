@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: route - fields - parentRefs
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: setting gateway should pass
+    set:
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+    documentSelector:
+      path: $[?(@.kind == "HTTPRoute")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.parentRefs[0].name
+          value: parentName
+      - equal:
+          path: spec.parentRefs[0].namespace
+          value: parentNamespace
+
+  - it: sectionName should be optional
+    set:
+      route:
+        main:
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+        second:
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+              sectionName: parentSection
+    asserts:
+      - documentSelector:
+          path: $[?(@.kind == "HTTPRoute")].metadata.name
+          value: release-name-main
+        notExists:
+          path: spec.parentRefs[0].sectionName
+      - documentSelector:
+          path: $[?(@.kind == "HTTPRoute")].metadata.name
+          value: release-name-second
+        equal:
+          path: spec.parentRefs[0].sectionName
+          value: parentSection

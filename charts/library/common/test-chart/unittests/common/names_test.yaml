@@ -1,0 +1,169 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: common - resource names
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+  - ../_values/service_main_default.yaml
+tests:
+  - it: name defaults to chart fullName
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name
+          any: true
+
+  - it: prefix
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service.main.prefix: http
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: http-release-name
+          any: true
+
+  - it: prefix with template
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service.main.prefix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: common-test-release-name
+          any: true
+
+  - it: suffix
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service.main.suffix: http
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-http
+          any: true
+
+  - it: suffix with template
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service.main.suffix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-common-test
+          any: true
+
+  - it: both prefix and suffix
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service.main.prefix: http
+      service.main.suffix: test
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: http-release-name-test
+          any: true
+
+  - it: multiple items
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service:
+        second:
+          controller: main
+          ports:
+            ui:
+              port: 8082
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-second
+          any: true
+
+  - it: multiple items with prefix
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service:
+        second:
+          controller: main
+          prefix: http
+          ports:
+            ui:
+              port: 8082
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: http-release-name-second
+          any: true
+
+  - it: multiple items with suffix
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service:
+        second:
+          controller: main
+          suffix: http
+          ports:
+            ui:
+              port: 8082
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-second-http
+          any: true
+
+  - it: multiple items with prefix and suffix
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service:
+        second:
+          controller: main
+          prefix: http
+          suffix: test
+          ports:
+            ui:
+              port: 8082
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: http-release-name-second-test
+          any: true

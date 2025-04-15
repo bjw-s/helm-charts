@@ -1,15 +1,15 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: pod affinity
+suite: pod - fields - affinity
 templates:
   - common.yaml
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
   - it: affinity is not present by default
-    documentSelector: &DeploymentSelector
+    documentSelector:
       path: $[?(@.kind == "Deployment")].metadata.name
-      value: RELEASE-NAME
+      value: release-name
     asserts:
       - notExists:
           path: spec.template.spec.affinity
@@ -27,7 +27,9 @@ tests:
                       values:
                         - antarctica-east1
                         - antarctica-west1
-    documentSelector: *DeploymentSelector
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
       - equal:
           path: spec.template.spec.affinity
@@ -68,7 +70,9 @@ tests:
                           values:
                             - asia-east1
                             - asia-west1
-    documentSelector: *DeploymentSelector
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
       - equal:
           path: spec.template.spec.affinity
@@ -96,9 +100,11 @@ tests:
                         - key: app
                           operator: In
                           values:
-                            - "{{ .Release.Name }}"
+                            - "{{ .Release.Name | lower }}"
                     topologyKey: kubernetes.io/hostname
-    documentSelector: *DeploymentSelector
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
       - equal:
           path: spec.template.spec.affinity
@@ -110,5 +116,5 @@ tests:
                       - key: app
                         operator: In
                         values:
-                          - RELEASE-NAME
+                          - release-name
                   topologyKey: kubernetes.io/hostname

@@ -1,18 +1,17 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: pod dnsConfig
+suite: pod - fields - dnsConfig
 templates:
   - common.yaml
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        notExists:
+      - notExists:
           path: spec.template.spec.dnsConfig
 
   - it: defaultPodOption should pass
@@ -22,12 +21,11 @@ tests:
           options:
             - name: ndots
               value: "1"
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.dnsConfig
           value:
             options:
@@ -48,12 +46,11 @@ tests:
               options:
                 - name: ndots
                   value: "5"
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.dnsConfig
           value:
             options:

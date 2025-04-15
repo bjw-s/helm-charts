@@ -1,0 +1,49 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: route - fields - rules - timeouts
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: timeouts should only be used for HTTPRoutes
+    set:
+      route:
+        main:
+          kind: HTTPRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+                - name: test
+                  namespace: test
+              timeouts:
+                backendRequest: 30s
+        grpc:
+          kind: GRPCRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+                - name: test
+                  namespace: test
+              matches:
+                - path:
+                    type: PathPrefix
+                    value: /test
+              timeouts:
+                backendRequest: 10s
+    asserts:
+      - documentSelector:
+          path: $[?(@.kind == "GRPCRoute")].metadata.name
+          value: release-name-grpc
+        notExists:
+          path: spec.rules[0].timeouts.backendRequest
+      - documentSelector:
+          path: $[?(@.kind == "HTTPRoute")].metadata.name
+          value: release-name-main
+        equal:
+          path: spec.rules[0].timeouts.backendRequest
+          value: 30s

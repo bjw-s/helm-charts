@@ -1,0 +1,57 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: networkPolicy - presence
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: main networkpolicy is disabled by default
+    asserts:
+      - not: true
+        containsDocument:
+          apiVersion: networking.k8s.io/v1
+          kind: NetworkPolicy
+          any: true
+
+  - it: main networkpolicy can be enabled
+    set:
+      networkpolicies.main:
+        controller: main
+        policyTypes:
+          - Ingress
+          - Egress
+        rules: {}
+    asserts:
+      - containsDocument:
+          apiVersion: networking.k8s.io/v1
+          kind: NetworkPolicy
+          name: release-name
+          any: true
+
+  - it: multiple networkpolicies can be enabled
+    set:
+      networkpolicies:
+        primary:
+          controller: main
+          policyTypes:
+            - Ingress
+            - Egress
+          rules: {}
+        secondary:
+          controller: main
+          policyTypes:
+            - Ingress
+            - Egress
+          rules: {}
+    asserts:
+      - containsDocument:
+          apiVersion: networking.k8s.io/v1
+          kind: NetworkPolicy
+          name: release-name-primary
+          any: true
+      - containsDocument:
+          apiVersion: networking.k8s.io/v1
+          kind: NetworkPolicy
+          name: release-name-secondary
+          any: true

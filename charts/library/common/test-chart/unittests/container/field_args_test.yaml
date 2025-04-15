@@ -1,29 +1,27 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: container args override
+suite: container - fields - args
 templates:
   - common.yaml
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        notExists:
+      - notExists:
           path: spec.template.spec.containers[0].args
 
   - it: single string should pass
     set:
       controllers.main.containers.main.args: sleep infinity
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].args
           value:
             - sleep infinity
@@ -33,12 +31,11 @@ tests:
       controllers.main.containers.main.args: |
         echo hello
         echo world
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].args
           value:
             - |-
@@ -48,12 +45,11 @@ tests:
   - it: single quoted string should pass
     set:
       controllers.main.containers.main.args: "sleep infinity"
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].args
           value:
             - sleep infinity
@@ -64,12 +60,11 @@ tests:
         - sleep
         - infinity
         - "test"
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].args
           value:
             - sleep
@@ -80,12 +75,11 @@ tests:
     set:
       controllers.main.defaultContainerOptions:
         args: value_of_args
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].args
           value:
             - value_of_args
@@ -97,12 +91,11 @@ tests:
       controllers.main.containers.main.args:
         - value 1
         - value 2
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].args
           value:
             - value 1

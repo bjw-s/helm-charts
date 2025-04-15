@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.7.3/charts/library/common/values.schema.json",
+  "$id": "https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.8.0/charts/library/common/values.schema.json",
   "type": "object",
   "properties": {
     "global": {
@@ -38,11 +38,10 @@
         "$ref": "schemas/controllers.json#/instance"
       }
     },
-    "enforceServiceAccountCreation": {
-      "type": "boolean"
-    },
     "serviceAccount": {
-      "$ref": "schemas/serviceAccount.json#/settings"
+      "additionalProperties": {
+        "$ref": "schemas/serviceAccount.json#/instance"
+      }
     },
     "configMaps": {
       "additionalProperties": {

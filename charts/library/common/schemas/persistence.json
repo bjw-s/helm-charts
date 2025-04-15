@@ -13,51 +13,55 @@
   },
 
   "persistentVolumeClaimItem": {
-    "type": "object",
-    "additionalProperties": false,
+    "allOf": [
+      { "$ref": "definitions.json#/resourceIdentifier" },
+      {
+        "type": "object",
+        "additionalProperties": false,
 
-    "properties": {
-      "type": {
-        "const": "persistentVolumeClaim"
-      },
-      "enabled": {
-        "type": "boolean",
-        "default": true
-      },
-      "accessMode": {
-        "type": "string"
-      },
-      "annotations": {
-        "$ref": "definitions.json#/annotations"
-      },
-      "dataSource": {
-        "$ref": "#/dataSourceReference"
-      },
-      "dataSourceRef": {
-        "$ref": "#/dataSourceReference"
-      },
-      "labels": {
-        "$ref": "definitions.json#/labels"
-      },
-      "nameOverride": {
-        "type": "string"
-      },
-      "retain": {
-        "type": "boolean"
-      },
-      "size": {
-        "type": "string"
-      },
-      "storageClass": {
-        "type": "string"
-      },
-      "volumeName": {
-        "type": "string"
-      },
-      "advancedMounts": {"$ref": "#/advancedMounts"},
-      "globalMounts": {"$ref": "#/globalMounts"}
-    },
-    "required": ["accessMode", "size"]
+        "properties": {
+          "type": {
+            "const": "persistentVolumeClaim"
+          },
+          "prefix": {},
+          "suffix": {},
+          "enabled": {
+            "type": "boolean",
+            "default": true
+          },
+          "accessMode": {
+            "type": "string"
+          },
+          "annotations": {
+            "$ref": "definitions.json#/annotations"
+          },
+          "dataSource": {
+            "$ref": "#/dataSourceReference"
+          },
+          "dataSourceRef": {
+            "$ref": "#/dataSourceReference"
+          },
+          "labels": {
+            "$ref": "definitions.json#/labels"
+          },
+          "retain": {
+            "type": "boolean"
+          },
+          "size": {
+            "type": "string"
+          },
+          "storageClass": {
+            "type": "string"
+          },
+          "volumeName": {
+            "type": "string"
+          },
+          "advancedMounts": {"$ref": "#/advancedMounts"},
+          "globalMounts": {"$ref": "#/globalMounts"}
+        },
+        "required": ["accessMode", "size"]
+      }
+    ]
   },
 
   "persistentVolumeClaimWithExistingClaimItem": {

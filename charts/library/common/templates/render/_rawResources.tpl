@@ -5,24 +5,12 @@ Renders other arbirtrary objects required by the chart.
   {{- $rootContext := $ -}}
 
   {{- /* Generate raw resources as required */ -}}
-  {{- range $key, $resource := .Values.rawResources -}}
-    {{- /* Enable by default, but allow override */ -}}
-    {{- $resourceEnabled := true -}}
-    {{- if hasKey $resource "enabled" -}}
-      {{- $resourceEnabled = $resource.enabled -}}
-    {{- end -}}
+  {{- $enabledRawResources := (include "bjw-s.common.lib.rawResource.enabledRawResources" (dict "rootContext" $rootContext) | fromYaml ) -}}
+  {{- range $identifier := keys $enabledRawResources -}}
+    {{- /* Generate object from the raw resource values */ -}}
+    {{- $rawResourceObject := (include "bjw-s.common.lib.rawResource.getByIdentifier" (dict "rootContext" $rootContext "id" $identifier) | fromYaml) -}}
 
-    {{- if $resourceEnabled -}}
-      {{- $resourceValues := (mustDeepCopy $resource) -}}
-
-      {{- /* Create object from the raw resource values */ -}}
-      {{- $resourceObject := (include "bjw-s.common.lib.valuesToObject" (dict "rootContext" $rootContext "id" $key "values" $resourceValues)) | fromYaml -}}
-
-      {{- /* Perform validations on the resource before rendering */ -}}
-      {{- include "bjw-s.common.lib.rawResource.validate" (dict "rootContext" $ "object" $resourceValues) -}}
-
-      {{- /* Include the raw resource class */ -}}
-      {{- include "bjw-s.common.class.rawResource" (dict "rootContext" $ "object" $resourceValues) | nindent 0 -}}
-    {{- end -}}
+    {{- /* Include the raw resource class */ -}}
+    {{- include "bjw-s.common.class.rawResource" (dict "rootContext" $rootContext "object" $rawResourceObject) | nindent 0 -}}
   {{- end -}}
 {{- end -}}

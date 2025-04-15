@@ -1,28 +1,27 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: pod replicas
+suite: pod - fields - replicas
 templates:
   - common.yaml
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.replicas
           value: 1
 
   - it: nil should pass
     set:
       controllers.main.replicas: null
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
       - documentIndex: 0
         notExists:
           path: spec.replicas
@@ -30,10 +29,10 @@ tests:
   - it: custom replicas should pass
     set:
       controllers.main.replicas: 3
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
       - documentIndex: 0
         equal:
           path: spec.replicas
