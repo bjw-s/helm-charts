@@ -20,20 +20,20 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
-      - name: "Generate Short Lived OAuth App Token (ghs_*)"
-        uses: actions/create-github-app-token@v1.10.4
+      - name: Generate Token
+        uses: actions/create-github-app-token@3ff1caaa28b64c9cc276ce0a02e2ff584f3900c5 # v2.0.2
         id: app-token
         with:
           app-id: "${{ secrets.BJWS_APP_ID }}"
           private-key: "${{ secrets.BJWS_APP_PRIVATE_KEY }}"
 
       - name: Checkout main branch
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           token: ${{ steps.app-token.outputs.token }}
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@8d9ed9ac5c53483de85588cdf95a591a75ab9f55 # v5.5.0
         with:
           python-version: 3.x
 
@@ -44,7 +44,7 @@ jobs:
         run: mkdocs build -f .ci/mkdocs/mkdocs.yml
 
       - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4.0.0
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4.0.0
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           github_token: ${{ steps.app-token.outputs.token }}
