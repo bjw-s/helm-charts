@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: pod security
+suite: pod - fields - hostUsers
 templates:
   - common.yaml
 values:
@@ -13,9 +13,9 @@ tests:
     capabilities:
       majorVersion: 1
       minorVersion: 28
-    documentSelector: &DeploymentSelector
+    documentSelector:
       path: $[?(@.kind == "Deployment")].metadata.name
-      value: RELEASE-NAME
+      value: release-name
     asserts:
       - notExists:
           path: spec.template.spec.hostUsers
@@ -27,13 +27,17 @@ tests:
     set:
       defaultPodOptions:
         hostUsers: false
-    documentSelector: *DeploymentSelector
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
       - notExists:
           path: spec.template.spec.hostUsers
 
   - it: should not be present by default for kubernetes >= 1.29
-    documentSelector: *DeploymentSelector
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
       - notExists:
           path: spec.template.spec.hostUsers
@@ -42,7 +46,9 @@ tests:
     set:
       defaultPodOptions:
         hostUsers: false
-    documentSelector: *DeploymentSelector
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
       - equal:
           path: spec.template.spec.hostUsers
@@ -52,7 +58,9 @@ tests:
     set:
       defaultPodOptions:
         hostUsers: true
-    documentSelector: *DeploymentSelector
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
       - equal:
           path: spec.template.spec.hostUsers

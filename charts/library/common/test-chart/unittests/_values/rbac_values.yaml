@@ -1,5 +1,5 @@
 serviceAccount:
-  create: true
+  default: {}
 
 rbac:
   roles:

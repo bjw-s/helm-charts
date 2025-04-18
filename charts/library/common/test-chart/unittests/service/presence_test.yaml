@@ -1,0 +1,64 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: service - presence
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: service is not present by default
+    asserts:
+      - not: true
+        containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name
+          any: true
+
+  - it: services are enabled by default
+    values:
+      - ../_values/service_main_default.yaml
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name
+          any: true
+
+  - it: service is not present when disabled
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service:
+        main:
+          enabled: false
+    asserts:
+      - not: true
+        containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name
+          any: true
+
+  - it: multiple services can be enabled
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service:
+        second:
+          primary: true
+          controller: main
+          ports:
+            ui:
+              port: 8082
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-second
+          any: true

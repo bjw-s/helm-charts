@@ -1,0 +1,33 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: networkPolicy - fields - rules
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: networkpolicy rules are passed through
+    set:
+      networkpolicies:
+        main:
+          controller: main
+          policyTypes:
+            - Ingress
+            - Egress
+          rules:
+            ingress:
+              - {}
+            egress:
+              - {}
+    documentSelector:
+      path: $[?(@.kind == "NetworkPolicy")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.ingress
+          value:
+            - {}
+      - equal:
+          path: spec.egress
+          value:
+            - {}

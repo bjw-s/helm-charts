@@ -1,0 +1,85 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: configmap - presence
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: configMap should not be rendered by default
+    asserts:
+      - not: true
+        containsDocument:
+          apiVersion: v1
+          kind: ConfigMap
+          name: release-name
+          any: true
+
+  - it: with disabled configMap
+    set:
+      configMaps:
+        config:
+          enabled: false
+          data:
+            test: test
+    asserts:
+      - not: true
+        containsDocument:
+          apiVersion: v1
+          kind: ConfigMap
+          name: release-name
+          any: true
+
+  - it: with multiple configMaps
+    set:
+      configMaps:
+        config:
+          data:
+            foo: bar
+        secondary:
+          data:
+            test: test
+    asserts:
+      - containsDocument:
+          apiVersion: v1
+          kind: ConfigMap
+          name: release-name-config
+          any: true
+      - containsDocument:
+          apiVersion: v1
+          kind: ConfigMap
+          name: release-name-secondary
+          any: true
+
+  - it: combined with configMapsFromFolder
+    set:
+      configMaps:
+        config:
+          data:
+            test: test
+      configMapsFromFolder:
+        enabled: true
+        basePath: ci/configMapsFolder
+        configMapsOverrides:
+          test_2:
+            fileAttributeOverrides:
+              helm.jpg:
+                binary: true
+              test_2.yaml:
+                escaped: true
+    asserts:
+      - containsDocument:
+          apiVersion: v1
+          kind: ConfigMap
+          name: release-name-config
+          any: true
+      - containsDocument:
+          apiVersion: v1
+          kind: ConfigMap
+          name: release-name-test_1
+          any: true
+      - containsDocument:
+          apiVersion: v1
+          kind: ConfigMap
+          name: release-name-test_2
+          any: true

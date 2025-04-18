@@ -1,92 +1,96 @@
 {
   "instance": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "enabled": {
-        "type": "boolean",
-        "default": true
-      },
-      "annotations": {
-        "$ref": "definitions.json#/annotations"
-      },
-      "labels": {
-        "$ref": "definitions.json#/labels"
-      },
-      "nameOverride": {
-        "type": "string"
-      },
-      "type": {
-        "type": "string"
-      },
-      "clusterIP": {
-        "type": "string"
-      },
-      "externalName": {
-        "type": "string"
-      },
-      "loadBalancerIP": {
-        "type": "string"
-      },
-      "loadBalancerSourceRanges": {
-        "type": "array",
-        "items": {"type": "string"}
-      },
-      "loadBalancerClass": {
-        "type": "string"
-      },
-      "internalTrafficPolicy": {
-        "type": "string",
-        "enum": ["Cluster", "Local"]
-      },
-      "externalTrafficPolicy": {
-        "type": "string",
-        "enum": ["Cluster", "Local"]
-      },
-      "allocateLoadBalancerNodePorts": {
-        "type": "boolean"
-      },
-      "sessionAffinity": {
-        "type": "string",
-        "enum": ["None", "ClientIP"]
-      },
-      "sessionAffinityConfig": {
-        "type": "object"
-      },
-      "externalIPs": {
-        "type": "array",
-        "items": {"type": "string"}
-      },
-      "publishNotReadyAddresses": {
-        "type": "boolean"
-      },
-      "ipFamilyPolicy": {
-        "type": "string",
-        "enum": ["SingleStack", "PreferDualStack", "RequireDualStack"]
-      },
-      "ipFamilies": {
-        "type": "array",
-        "items": {
-          "type": "string",
-          "enum": ["IPv4", "IPv6"]
-        }
-      },
-      "ports": {
+    "allOf": [
+      { "$ref": "definitions.json#/resourceIdentifier" },
+      {
         "type": "object",
-        "additionalProperties": {
-          "$ref": "#/servicePort"
-        }
-      },
-      "primary": {
-        "type": "boolean",
-        "default": false
-      },
-      "controller": {
-        "type": "string"
-      },
-      "extraSelectorLabels": {}
-    },
-    "required": ["controller"]
+        "additionalProperties": false,
+        "properties": {
+          "prefix": {},
+          "suffix": {},
+          "enabled": {
+            "type": "boolean",
+            "default": true
+          },
+          "annotations": {
+            "$ref": "definitions.json#/annotations"
+          },
+          "labels": {
+            "$ref": "definitions.json#/labels"
+          },
+          "type": {
+            "type": "string"
+          },
+          "clusterIP": {
+            "type": "string"
+          },
+          "externalName": {
+            "type": "string"
+          },
+          "loadBalancerIP": {
+            "type": "string"
+          },
+          "loadBalancerSourceRanges": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "loadBalancerClass": {
+            "type": "string"
+          },
+          "internalTrafficPolicy": {
+            "type": "string",
+            "enum": ["Cluster", "Local"]
+          },
+          "externalTrafficPolicy": {
+            "type": "string",
+            "enum": ["Cluster", "Local"]
+          },
+          "allocateLoadBalancerNodePorts": {
+            "type": "boolean"
+          },
+          "sessionAffinity": {
+            "type": "string",
+            "enum": ["None", "ClientIP"]
+          },
+          "sessionAffinityConfig": {
+            "type": "object"
+          },
+          "externalIPs": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "publishNotReadyAddresses": {
+            "type": "boolean"
+          },
+          "ipFamilyPolicy": {
+            "type": "string",
+            "enum": ["SingleStack", "PreferDualStack", "RequireDualStack"]
+          },
+          "ipFamilies": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["IPv4", "IPv6"]
+            }
+          },
+          "ports": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/servicePort"
+            }
+          },
+          "primary": {
+            "type": "boolean",
+            "default": false
+          },
+          "controller": {
+            "type": "string"
+          },
+          "extraSelectorLabels": {}
+        },
+        "required": ["controller"]
+      }
+    ]
   },
 
   "servicePort": {

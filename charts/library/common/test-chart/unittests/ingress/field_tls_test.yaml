@@ -1,0 +1,85 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: ingress - fields - tls
+templates:
+  - common.yaml
+values:
+  - ../_values/ingress_main_default_hosts.yaml
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: spec.tls
+
+  - it: tls enabled should pass
+    set:
+      ingress.main:
+        tls:
+          - secretName: test
+            hosts:
+              - hostname
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.tls[0]
+          value:
+            secretName: test
+            hosts:
+              - hostname
+
+  - it: tls enabled without secret should pass
+    set:
+      ingress.main:
+        tls:
+          - hosts:
+              - hostname
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.tls[0]
+          value:
+            hosts:
+              - hostname
+
+  - it: tls enabled with secret template should pass
+    set:
+      ingress.main:
+        tls:
+          - secretName: "{{ .Release.Name | lower }}-secret"
+            hosts:
+              - hostname
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.tls[0]
+          value:
+            secretName: release-name-secret
+            hosts:
+              - hostname
+
+  - it: tls enabled with secret template evaluate empty should pass
+    set:
+      ingress.main:
+        tls:
+          - secretName: '{{ "" }}'
+            hosts:
+              - hostname
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.tls[0]
+          value:
+            hosts:
+              - hostname

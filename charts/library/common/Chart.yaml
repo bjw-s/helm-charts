@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 3.7.3
+version: 4.0.0
 kubeVersion: ">=1.22.0-0"
 keywords:
   - common
@@ -16,9 +16,4 @@ sources:
   - https://github.com/bjw-s/helm-charts
 annotations:
   artifacthub.io/changes: |-
-    - kind: fixed
-      description: |-
-        Fixed name suffix for HTTPRoute
-    - kind: fixed
-      description: |-
-        Fixed incorrect default backendRefs values in HTTPRoute
+    []

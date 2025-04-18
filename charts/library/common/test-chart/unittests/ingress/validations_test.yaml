@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: ingress - validations
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: service reference to non-existing service should fail
+    set:
+      ingress.main.hosts:
+        - host: "chart-example.local"
+          paths:
+            - path: /
+              service:
+                identifier: main
+                port: 8081
+    asserts:
+      - failedTemplate:
+          errorMessage: "No enabled Service found with this identifier. (ingress: 'main', path: '/', identifier: 'main')"

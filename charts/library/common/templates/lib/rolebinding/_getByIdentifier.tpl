@@ -4,9 +4,10 @@ Return a RoleBinding Object by its Identifier.
 {{- define "bjw-s.common.lib.rbac.roleBinding.getByIdentifier" -}}
   {{- $rootContext := .rootContext -}}
   {{- $identifier := .id -}}
+  {{- $enabledRoleBindings := (include "bjw-s.common.lib.rbac.roleBinding.enabledRoleBindings" (dict "rootContext" $rootContext) | fromYaml ) }}
 
-  {{- $roleBindingValues := dig $identifier nil $rootContext.Values.rbac.bindings -}}
-  {{- if not (empty $roleBindingValues) -}}
-    {{- include "bjw-s.common.lib.valuesToObject" (dict "rootContext" $rootContext "id" $identifier "values" $roleBindingValues) -}}
+  {{- if (hasKey $enabledRoleBindings $identifier) -}}
+    {{- $objectValues := get $enabledRoleBindings $identifier -}}
+    {{- include "bjw-s.common.lib.valuesToObject" (dict "rootContext" $rootContext "id" $identifier "values" $objectValues "itemCount" (len $enabledRoleBindings)) -}}
   {{- end -}}
 {{- end -}}

@@ -1,0 +1,74 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: "ingress - metadata - labels"
+templates:
+  - common.yaml
+values:
+  - ../_values/ingress_main_default_hosts.yaml
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: default labels
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            helm.sh/chart: common-test-1.0.0
+
+  - it: custom labels
+    set:
+      ingress.main.labels:
+        test_label: test
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            helm.sh/chart: common-test-1.0.0
+            test_label: test
+
+  - it: custom labels mixed with global labels
+    set:
+      global.labels:
+        global_label: test
+      ingress.main.labels:
+        test_label: test
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            global_label: test
+            helm.sh/chart: common-test-1.0.0
+            test_label: test
+
+  - it: custom labels with templates
+    set:
+      ingress.main.labels:
+        template_label1: "{{ .Release.Name | lower }}"
+        template_label2: "{{ .Chart.Name | lower }}"
+    documentSelector:
+      path: $[?(@.kind == "Ingress")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: metadata.labels["template_label1"]
+          value: release-name
+      - equal:
+          path: metadata.labels["template_label2"]
+          value: common-test

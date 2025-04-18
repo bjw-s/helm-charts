@@ -1,6 +1,6 @@
 # common
 
-![Version: 3.7.3](https://img.shields.io/badge/Version-3.7.3-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
+![Version: 4.0.0](https://img.shields.io/badge/Version-4.0.0-informational?style=flat-square) ![Type: library](https://img.shields.io/badge/Type-library-informational?style=flat-square)
 
 Function library for Helm charts
 
@@ -27,7 +27,7 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 # Chart.yaml
 dependencies:
   - name: common
-    version: 3.7.3
+    version: 4.0.0
     repository: https://bjw-s.github.io/helm-charts/
 ```
 

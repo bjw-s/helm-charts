@@ -5,24 +5,13 @@ Renders the Secret objects required by the chart.
   {{- $rootContext := $ -}}
 
   {{- /* Generate named Secrets as required */ -}}
-  {{- range $key, $secret := .Values.secrets }}
-    {{- /* Enable Secret by default, but allow override */ -}}
-    {{- $secretEnabled := true -}}
-    {{- if hasKey $secret "enabled" -}}
-      {{- $secretEnabled = $secret.enabled -}}
-    {{- end -}}
+  {{- $enabledSecrets := (include "bjw-s.common.lib.secret.enabledSecrets" (dict "rootContext" $rootContext) | fromYaml ) -}}
 
-    {{- if $secretEnabled -}}
-      {{- $secretValues := (mustDeepCopy $secret) -}}
+  {{- range $identifier := keys $enabledSecrets -}}
+    {{- /* Generate object from the raw secret values */ -}}
+    {{- $secretObject := (include "bjw-s.common.lib.secret.getByIdentifier" (dict "rootContext" $rootContext "id" $identifier) | fromYaml) -}}
 
-      {{- /* Create object from the raw Secret values */ -}}
-      {{- $secretObject := (include "bjw-s.common.lib.valuesToObject" (dict "rootContext" $rootContext "id" $key "values" $secretValues)) | fromYaml -}}
-
-      {{- /* Perform validations on the Secret before rendering */ -}}
-      {{- include "bjw-s.common.lib.secret.validate" (dict "rootContext" $ "object" $secretObject) -}}
-
-      {{/* Include the Secret class */}}
-      {{- include "bjw-s.common.class.secret" (dict "rootContext" $ "object" $secretObject) | nindent 0 -}}
-    {{- end -}}
+    {{- /* Include the Secret class */ -}}
+    {{- include "bjw-s.common.class.secret" (dict "rootContext" $rootContext "object" $secretObject) | nindent 0 -}}
   {{- end -}}
 {{- end -}}

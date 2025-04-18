@@ -1,10 +1,5 @@
 ---
-suite: rbac validations
-
-set:
-  serviceAccount:
-    name: test-sa
-
+suite: rbac - validations
 templates:
   - common.yaml
 values:
@@ -45,3 +40,11 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: "If not using identifier roleRef must have a `name` key"
+
+  - it: serviceAccount reference to non-existing serviceAccount should fail
+    set:
+      rbac.bindings.defaultBinding.subjects:
+        - identifier: main
+    asserts:
+      - failedTemplate:
+          errorMessage: "No enabled ServiceAccount found with this identifier. (rolebinding: 'defaultBinding', identifier: 'main')"

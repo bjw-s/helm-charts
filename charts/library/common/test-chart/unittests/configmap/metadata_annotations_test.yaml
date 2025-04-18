@@ -1,0 +1,117 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: configmap - metadata - annotations
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: no annotations are set by default
+    set:
+      configMaps:
+        config:
+          data:
+            test: test
+    documentSelector:
+      path: $[?(@.kind == "ConfigMap")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: metadata.annotations
+
+  - it: custom annotations
+    set:
+      configMaps:
+        config:
+          data:
+            test: test
+          annotations:
+            test_annotation: test
+    documentSelector:
+      path: $[?(@.kind == "ConfigMap")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: metadata.annotations
+          value:
+            test_annotation: test
+
+  - it: custom annotations mixed with global annotations
+    set:
+      global.annotations:
+        global_annotation: test
+      configMaps:
+        config:
+          data:
+            test: test
+          annotations:
+            test_annotation: test
+    documentSelector:
+      path: $[?(@.kind == "ConfigMap")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: metadata.annotations
+          value:
+            global_annotation: test
+            test_annotation: test
+
+  - it: default metadata from folder should pass
+    set:
+      configMaps:
+        config:
+          data:
+            test: test
+      configMapsFromFolder:
+        enabled: true
+        basePath: ci/configMapsFolder
+        configMapsOverrides:
+          test_2:
+            fileAttributeOverrides:
+              helm.jpg:
+                binary: true
+              test_2.yaml:
+                escaped: true
+    asserts:
+      - documentSelector:
+          path: $[?(@.kind == "ConfigMap")].metadata.name
+          value: release-name-config
+        notExists:
+          path: metadata.annotations
+      - documentSelector:
+          path: $[?(@.kind == "ConfigMap")].metadata.name
+          value: release-name-test_1
+        notExists:
+          path: metadata.annotations
+      - documentSelector:
+          path: $[?(@.kind == "ConfigMap")].metadata.name
+          value: release-name-test_2
+        notExists:
+          path: metadata.annotations
+
+  - it: custom metadata from folder should pass
+    set:
+      configMaps:
+        config:
+          data:
+            test: test
+      configMapsFromFolder:
+        enabled: true
+        basePath: ci/configMapsFolder
+        configMapsOverrides:
+          test_2:
+            annotations:
+              test: test_annotation
+            fileAttributeOverrides:
+              helm.jpg:
+                binary: true
+              test_2.yaml:
+                escaped: true
+    asserts:
+      - documentSelector:
+          path: $[?(@.kind == "ConfigMap")].metadata.name
+          value: release-name-test_2
+        equal:
+          path: metadata.annotations
+          value:
+            test: test_annotation

@@ -1,0 +1,26 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: job - jobTemplate - metadata - labels
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  controllers.main:
+    type: job
+tests:
+  - it: jobTemplate metadata should pass
+    set:
+      controllers.main.pod.labels:
+        test_label: test
+    documentSelector:
+      path: $[?(@.kind == "Job")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.metadata.labels
+          value:
+            app.kubernetes.io/component: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            test_label: test

@@ -1,0 +1,29 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: job - fields - backoffLimit
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  controllers.main.type: job
+tests:
+  - it: default configuration should pass
+    documentSelector:
+      path: $[?(@.kind == "Job")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.backoffLimit
+          value: 6
+
+  - it: custom configuration should pass
+    set:
+      controllers.main.job.backoffLimit: 3
+    documentSelector:
+      path: $[?(@.kind == "Job")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.backoffLimit
+          value: 3

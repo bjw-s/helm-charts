@@ -1,0 +1,44 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pvc - fields - storageclass
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  persistence.config:
+    accessMode: ReadWriteOnce
+    size: 1Gi
+
+tests:
+  - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "PersistentVolumeClaim")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: spec.storageClassName
+
+  - it: custom should pass
+    set:
+      persistence.config:
+        storageClass: custom
+    documentSelector:
+      path: $[?(@.kind == "PersistentVolumeClaim")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.storageClassName
+          value: custom
+
+  - it: empty should pass
+    set:
+      persistence.config:
+        storageClass: "-"
+    documentSelector:
+      path: $[?(@.kind == "PersistentVolumeClaim")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.storageClassName
+          value: ""

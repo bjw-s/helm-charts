@@ -1,4 +1,19 @@
 {
+  "resourceIdentifier": {
+    "type": "object",
+    "properties": {
+      "prefix": {
+        "type": "string",
+        "description": "Prefix to prepend to the resource name",
+        "default": ""
+      },
+      "suffix": {
+        "type": "string",
+        "description": "Suffix to append to the resource name. Defaults to the resource identifier if there are multiple items, otherwise it defaults to empty."
+      }
+    }
+  },
+
   "annotations": {
     "type": ["object", "null"],
     "additionalProperties": {
