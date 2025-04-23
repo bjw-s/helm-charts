@@ -99,7 +99,7 @@ persistence:
 rawResources:
   unsupportedPDB:
     enabled: true
-    nameOverride: pdb
+    forceRename: pdb
     apiVersion: policy/v1
     kind: PodDisruptionBudget
     spec:
