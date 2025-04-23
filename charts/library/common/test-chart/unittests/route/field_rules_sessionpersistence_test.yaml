@@ -1,12 +1,12 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: route - fields - rules - matches
+suite: sessionpersistence - fields - rules - sessionPersistence
 templates:
   - common.yaml
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
-  - it: path matches should only be used for HTTPRoutes and GRPCRoutes
+  - it: sessionpersistence should only be used for HTTPRoutes and GRPCRoutes
     set:
       route:
         main:
@@ -20,10 +20,8 @@ tests:
                   namespace: test
                   kind: Service
                   weight: 1
-              matches:
-                - path:
-                    type: PathPrefix
-                    value: /test
+              sessionPersistence:
+                sessionName: test
         grpc:
           kind: GRPCRoute
           parentRefs:
@@ -35,10 +33,8 @@ tests:
                   namespace: test
                   kind: Service
                   weight: 1
-              matches:
-                - path:
-                    type: PathPrefix
-                    value: /test
+              sessionPersistence:
+                sessionName: test
         tcp:
           kind: TCPRoute
           parentRefs:
@@ -50,10 +46,14 @@ tests:
                   namespace: test
                   kind: Service
                   weight: 1
-              matches:
-                - path:
-                    type: PathPrefix
-                    value: /test
+              sessionPersistence:
+                sessionName: test
+              filters:
+                - type: URLRewrite
+                  urlRewrite:
+                    path:
+                      type: ReplacePrefixMatch
+                      replacePrefixMatch: ""
         tls:
           kind: TLSRoute
           parentRefs:
@@ -65,10 +65,8 @@ tests:
                   namespace: test
                   kind: Service
                   weight: 1
-              matches:
-                - path:
-                    type: PathPrefix
-                    value: /test
+              sessionPersistence:
+                sessionName: test
         udp:
           kind: UDPRoute
           parentRefs:
@@ -80,41 +78,41 @@ tests:
                   namespace: test
                   kind: Service
                   weight: 1
-              matches:
-                - path:
-                    type: PathPrefix
-                    value: /test
+              sessionPersistence:
+                sessionName: test
+              filters:
+                - type: URLRewrite
+                  urlRewrite:
+                    path:
+                      type: ReplacePrefixMatch
+                      replacePrefixMatch: ""
     asserts:
       - documentSelector:
           path: $[?(@.kind == "GRPCRoute")].metadata.name
           value: release-name-grpc
         equal:
-          path: spec.rules[0].matches
+          path: spec.rules[0].sessionPersistence
           value:
-            - path:
-                type: PathPrefix
-                value: /test
+            sessionName: test
       - documentSelector:
           path: $[?(@.kind == "HTTPRoute")].metadata.name
           value: release-name-main
         equal:
-          path: spec.rules[0].matches
+          path: spec.rules[0].sessionPersistence
           value:
-            - path:
-                type: PathPrefix
-                value: /test
+            sessionName: test
       - documentSelector:
           path: $[?(@.kind == "TCPRoute")].metadata.name
           value: release-name-tcp
         notExists:
-          path: spec.rules[0].matches
+          path: spec.rules[0].sessionPersistence
       - documentSelector:
           path: $[?(@.kind == "TLSRoute")].metadata.name
           value: release-name-tls
         notExists:
-          path: spec.rules[0].matches
+          path: spec.rules[0].sessionPersistence
       - documentSelector:
           path: $[?(@.kind == "UDPRoute")].metadata.name
           value: release-name-udp
         notExists:
-          path: spec.rules[0].matches
+          path: spec.rules[0].sessionPersistence

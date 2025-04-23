@@ -93,6 +93,10 @@ spec:
     filters:
         {{- toYaml . | nindent 6 }}
       {{- end }}
+        {{- with .sessionPersistence }}
+    sessionPersistence:
+        {{- toYaml . | nindent 6 }}
+      {{- end }}
     {{- end }}
     {{- if (eq $routeKind "HTTPRoute") }}
       {{- with .timeouts }}

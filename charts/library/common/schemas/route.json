@@ -123,6 +123,10 @@
                   "type": "array",
                   "items": {}
                 },
+                "sessionPersistence": {
+                  "description": "SessionPersistence defines the desired state of SessionPersistence",
+                  "type": "object"
+                },
                 "timeouts": {
                   "type": "object"
                 }
