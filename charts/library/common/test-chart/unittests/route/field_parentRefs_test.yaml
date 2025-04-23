@@ -47,3 +47,21 @@ tests:
         equal:
           path: spec.parentRefs[0].sectionName
           value: parentSection
+
+  - it: should be possible to configure port on the parentRefs
+    set:
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+            port: 443
+    documentSelector:
+      path: $[?(@.kind == "HTTPRoute")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.parentRefs[0].name
+          value: parentName
+      - equal:
+          path: spec.parentRefs[0].port
+          value: 443

@@ -51,6 +51,9 @@
                 },
                 "sectionName": {
                   "type": "string"
+                },
+                "port": {
+                  "type": "integer"
                 }
               },
               "required": ["name"]

@@ -50,6 +50,9 @@ spec:
       {{- if .sectionName }}
       sectionName: {{ .sectionName | quote }}
       {{- end }}
+      {{- if .port }}
+      port: {{ .port }}
+      {{- end }}
   {{- end }}
   {{- if and (ne $routeKind "TCPRoute") (ne $routeKind "UDPRoute") $routeObject.hostnames }}
   hostnames:
