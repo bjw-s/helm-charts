@@ -1,0 +1,189 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: route - metadata - name
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  route.main:
+    parentRefs:
+      - name: test
+        namespace: test
+tests:
+  - it: name defaults to chart fullName
+    asserts:
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: release-name
+          any: true
+
+  - it: forceRename
+    set:
+      route.main.forceRename: forceRename
+    asserts:
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: forcerename
+          any: true
+
+  - it: forceRename with template
+    set:
+      route.main.forceRename: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: common-test
+          any: true
+
+  - it: prefix
+    set:
+      route.main.prefix: prefix
+    asserts:
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: prefix-release-name
+          any: true
+
+  - it: prefix with template
+    set:
+      route.main.prefix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: common-test-release-name
+          any: true
+
+  - it: suffix
+    set:
+      route.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: release-name-suffix
+          any: true
+
+  - it: suffix with template
+    set:
+      route.main.suffix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: release-name-common-test
+          any: true
+
+  - it: both prefix and suffix
+    set:
+      route.main.prefix: prefix
+      route.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: prefix-release-name-suffix
+          any: true
+
+  - it: prefix, suffix and forceRename (illegal combination)
+    set:
+      route.main.forceRename: forceRename
+      route.main.prefix: prefix
+      route.main.suffix: suffix
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"
+
+  - it: multiple items
+    set:
+      route.second:
+        parentRefs:
+          - name: test
+            namespace: test
+    asserts:
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: release-name-second
+          any: true
+
+  - it: multiple items with prefix
+    set:
+      route.second:
+        prefix: prefix
+        parentRefs:
+          - name: test
+            namespace: test
+    asserts:
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: prefix-release-name-second
+          any: true
+
+  - it: multiple items with suffix
+    set:
+      route.second:
+        suffix: suffix
+        parentRefs:
+          - name: test
+            namespace: test
+    asserts:
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix and suffix
+    set:
+      route.second:
+        prefix: prefix
+        suffix: suffix
+        parentRefs:
+          - name: test
+            namespace: test
+    asserts:
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: HTTPRoute
+          apiVersion: gateway.networking.k8s.io/v1alpha2
+          name: prefix-release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix, suffix and forceRename (illegal combination)
+    set:
+      route.second:
+        forceRename: forceRename
+        prefix: prefix
+        suffix: suffix
+        parentRefs:
+          - name: test
+            namespace: test
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"

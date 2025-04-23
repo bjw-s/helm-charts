@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: common - resource names
+suite: service - metadata - name
 templates:
   - common.yaml
 values:
@@ -15,21 +15,37 @@ tests:
           name: release-name
           any: true
 
-  - it: prefix
-    values:
-      - ../_values/service_main_default.yaml
+  - it: forceRename
     set:
-      service.main.prefix: http
+      service.main.forceRename: forceRename
     asserts:
       - containsDocument:
           kind: Service
           apiVersion: v1
-          name: http-release-name
+          name: forcerename
+          any: true
+
+  - it: forceRename with template
+    set:
+      service.main.forceRename: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: common-test
+          any: true
+
+  - it: prefix
+    set:
+      service.main.prefix: prefix
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: prefix-release-name
           any: true
 
   - it: prefix with template
-    values:
-      - ../_values/service_main_default.yaml
     set:
       service.main.prefix: "{{ .Chart.Name }}"
     asserts:
@@ -40,20 +56,16 @@ tests:
           any: true
 
   - it: suffix
-    values:
-      - ../_values/service_main_default.yaml
     set:
-      service.main.suffix: http
+      service.main.suffix: suffix
     asserts:
       - containsDocument:
           kind: Service
           apiVersion: v1
-          name: release-name-http
+          name: release-name-suffix
           any: true
 
   - it: suffix with template
-    values:
-      - ../_values/service_main_default.yaml
     set:
       service.main.suffix: "{{ .Chart.Name }}"
     asserts:
@@ -64,21 +76,26 @@ tests:
           any: true
 
   - it: both prefix and suffix
-    values:
-      - ../_values/service_main_default.yaml
     set:
-      service.main.prefix: http
-      service.main.suffix: test
+      service.main.prefix: prefix
+      service.main.suffix: suffix
     asserts:
       - containsDocument:
           kind: Service
           apiVersion: v1
-          name: http-release-name-test
+          name: prefix-release-name-suffix
           any: true
 
+  - it: prefix, suffix and forceRename (illegal combination)
+    set:
+      service.main.forceRename: forceRename
+      service.main.prefix: prefix
+      service.main.suffix: suffix
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"
+
   - it: multiple items
-    values:
-      - ../_values/service_main_default.yaml
     set:
       service:
         second:
@@ -99,13 +116,11 @@ tests:
           any: true
 
   - it: multiple items with prefix
-    values:
-      - ../_values/service_main_default.yaml
     set:
       service:
         second:
           controller: main
-          prefix: http
+          prefix: prefix
           ports:
             ui:
               port: 8082
@@ -118,17 +133,15 @@ tests:
       - containsDocument:
           kind: Service
           apiVersion: v1
-          name: http-release-name-second
+          name: prefix-release-name-second
           any: true
 
   - it: multiple items with suffix
-    values:
-      - ../_values/service_main_default.yaml
     set:
       service:
         second:
           controller: main
-          suffix: http
+          suffix: suffix
           ports:
             ui:
               port: 8082
@@ -141,18 +154,16 @@ tests:
       - containsDocument:
           kind: Service
           apiVersion: v1
-          name: release-name-second-http
+          name: release-name-second-suffix
           any: true
 
   - it: multiple items with prefix and suffix
-    values:
-      - ../_values/service_main_default.yaml
     set:
       service:
         second:
           controller: main
-          prefix: http
-          suffix: test
+          prefix: prefix
+          suffix: suffix
           ports:
             ui:
               port: 8082
@@ -165,5 +176,20 @@ tests:
       - containsDocument:
           kind: Service
           apiVersion: v1
-          name: http-release-name-second-test
+          name: prefix-release-name-second-suffix
           any: true
+
+  - it: multiple items with prefix, suffix and forceRename (illegal combination)
+    set:
+      service:
+        second:
+          controller: main
+          forceRename: forceRename
+          prefix: prefix
+          suffix: suffix
+          ports:
+            ui:
+              port: 8082
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"

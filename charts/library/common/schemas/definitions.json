@@ -2,15 +2,25 @@
   "resourceIdentifier": {
     "type": "object",
     "properties": {
+      "forceRename": {
+        "type": "string",
+        "description": "Override the default resource name. This field is mutually exclusive with the prefix and suffix fields."
+      },
       "prefix": {
         "type": "string",
-        "description": "Prefix to prepend to the resource name",
+        "description": "Prefix to prepend to the resource name. This field is mutually exclusive with the forceRename field.",
         "default": ""
       },
       "suffix": {
         "type": "string",
-        "description": "Suffix to append to the resource name. Defaults to the resource identifier if there are multiple items, otherwise it defaults to empty."
+        "description": "Suffix to append to the resource name. Defaults to the resource identifier if there are multiple items, otherwise it defaults to empty. This field is mutually exclusive with the forceRename field."
       }
+    },
+    "not" : {
+      "anyOf" : [
+        {"required" : ["forceRename", "suffix"]},
+        {"required" : ["forceRename", "prefix"]}
+      ]
     }
   },
 

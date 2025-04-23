@@ -7,6 +7,7 @@
         "additionalProperties": false,
 
         "properties": {
+          "forceRename": {},
           "prefix": {},
           "suffix": {},
           "enabled": {

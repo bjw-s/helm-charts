@@ -1,65 +1,70 @@
 {
   "instance": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "enabled": {
-        "type": "boolean",
-        "default": true
-      },
-      "annotations": {
-        "$ref": "definitions.json#/annotations"
-      },
-      "labels": {
-        "$ref": "definitions.json#/labels"
-      },
-      "nameOverride": {
-        "type": "string"
-      },
-      "endpoints": {
-        "type": "array",
-        "items": {
-          "type": "object"
-        }
-      },
-      "selector": {
+    "allOf": [
+      { "$ref": "definitions.json#/resourceIdentifier" },
+      {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "matchLabels": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "string"
-            }
+          "forceRename": {},
+          "prefix": {},
+          "suffix": {},
+          "enabled": {
+            "type": "boolean",
+            "default": true
           },
-          "matchExpressions": {
+          "annotations": {
+            "$ref": "definitions.json#/annotations"
+          },
+          "labels": {
+            "$ref": "definitions.json#/labels"
+          },
+          "endpoints": {
             "type": "array",
             "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "key": {"type": "string"},
-                "operator": {"type": "string"},
-                "values": {
-                  "type": "array",
-                  "items": {"type": "string"}
+              "type": "object"
+            }
+          },
+          "selector": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "matchLabels": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "matchExpressions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "key": {"type": "string"},
+                    "operator": {"type": "string"},
+                    "values": {
+                      "type": "array",
+                      "items": {"type": "string"}
+                    }
+                  }
                 }
               }
             }
+          },
+          "serviceName": {
+            "type": "string"
+          },
+          "targetLabels": {
+            "type": "array"
           }
+        },
+        "oneOf": [{"required": ["serviceName"]}, {"required": ["selector"]}],
+        "dependencies": {
+          "selector": {"not": {"required": ["serviceName"]}},
+          "serviceName": {"not": {"required": ["selector"]}}
         }
-      },
-      "serviceName": {
-        "type": "string"
-      },
-      "targetLabels": {
-        "type": "array"
       }
-    },
-    "oneOf": [{"required": ["serviceName"]}, {"required": ["selector"]}],
-    "dependencies": {
-      "selector": {"not": {"required": ["serviceName"]}},
-      "serviceName": {"not": {"required": ["selector"]}}
-    }
+    ]
   }
 }

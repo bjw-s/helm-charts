@@ -1,32 +1,34 @@
 {
   "instance": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "enabled": {
-        "type": "boolean",
-        "default": true
-      },
-      "apiVersion": {
-        "type": "string"
-      },
-      "kind": {
-        "type": "string"
-      },
-      "annotations": {
-        "$ref": "definitions.json#/annotations"
-      },
-      "labels": {
-        "$ref": "definitions.json#/labels"
-      },
-      "nameOverride": {
-        "type": "string"
-      },
-      "forceRename": {
-        "type": "string"
-      },
-      "spec": {}
-    },
-    "required": ["apiVersion", "kind", "spec"]
+    "allOf": [
+      { "$ref": "definitions.json#/resourceIdentifier" },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "forceRename": {},
+          "prefix": {},
+          "suffix": {},
+          "enabled": {
+            "type": "boolean",
+            "default": true
+          },
+          "apiVersion": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "annotations": {
+            "$ref": "definitions.json#/annotations"
+          },
+          "labels": {
+            "$ref": "definitions.json#/labels"
+          },
+          "spec": {}
+        },
+        "required": ["apiVersion", "kind", "spec"]
+      }
+    ]
   }
 }
