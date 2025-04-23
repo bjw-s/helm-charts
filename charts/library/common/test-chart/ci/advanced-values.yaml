@@ -72,15 +72,13 @@ ingress:
 
 configMaps:
   config:
-    enabled: true
     data:
       test: value 1
 
 persistence:
   data:
     type: configMap
-    name: |-
-      {{- (include "bjw-s.common.lib.chart.names.fullname" $) -}}-config
+    identifier: config
     advancedMounts:
       main: # the controller with the "main" identifier
         main: # the container with the "main" identifier
