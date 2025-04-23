@@ -16,4 +16,18 @@ sources:
   - https://github.com/bjw-s/helm-charts
 annotations:
   artifacthub.io/changes: |-
-    []
+    - kind: removed
+      description: |-
+        Individual `valuesToObject` functions have been removed in favor of a centralized `bjw-s.common.lib.valuesToObject` function.
+    - kind: fixed
+      description: |-
+        Fixed empty backendRefs in HTTPRoute leading to invalid spec
+    - kind: added
+      description: |-
+        Added support for setting `parentRefs[].port` in HTTPRoute
+    - kind: added
+      description: |-
+        Added support for setting `sessionPersistence` in HTTPRoute
+    - kind: changed
+      description: |-
+        Standardized resource name logic for all resources
