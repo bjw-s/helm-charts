@@ -6,10 +6,7 @@ using the common library.
   {{- $rootContext := .rootContext -}}
   {{- $cronjobObject := .object -}}
 
-  {{- $timeZone := "" -}}
-  {{- if ge (int $rootContext.Capabilities.KubeVersion.Minor) 27 }}
-    {{- $timeZone = dig "cronjob" "timeZone" "" $cronjobObject -}}
-  {{- end -}}
+  {{- $timeZone := dig "cronjob" "timeZone" "" $cronjobObject -}}
 
   {{- $labels := merge
     (dict "app.kubernetes.io/component" $cronjobObject.identifier)

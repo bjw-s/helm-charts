@@ -4,7 +4,7 @@ name: common
 description: Function library for Helm charts
 type: library
 version: 4.0.0
-kubeVersion: ">=1.22.0-0"
+kubeVersion: ">=1.28.0-0"
 keywords:
   - common
   - library
@@ -31,3 +31,6 @@ annotations:
     - kind: changed
       description: |-
         Standardized resource name logic for all resources
+    - kind: changed
+      description: |-
+        Increased the minimum supported Kubernetes version to 1.28.0

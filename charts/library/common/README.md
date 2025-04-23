@@ -4,9 +4,13 @@
 
 Function library for Helm charts
 
+## Source Code
+
+* <https://github.com/bjw-s/helm-charts>
+
 ## Requirements
 
-Kubernetes: `>=1.22.0-0`
+Kubernetes: `>=1.28.0-0`
 
 ## Dependencies
 
