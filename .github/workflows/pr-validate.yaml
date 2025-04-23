@@ -18,14 +18,12 @@ jobs:
     runs-on: ubuntu-22.04
     outputs:
       repoConfiguration: ${{ steps.repo-config.outputs.config }}
-      addedOrModifiedFiles: ${{ steps.added-modified-files.outputs.all_changed_files }}
+      addedOrModifiedFiles: ${{ steps.added-modified-files.outputs.changed_files }}
       chartsToLint: ${{ steps.charts-to-lint.outputs.filteredCharts }}
       chartsToInstall: ${{ steps.charts-to-install.outputs.filteredCharts }}
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          fetch-depth: 0
 
       - name: Grab repository configuration
         id: repo-config
@@ -35,36 +33,47 @@ jobs:
 
       - name: Get all added or modified files
         id: added-modified-files
-        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46.0.5
+        uses: bjw-s-labs/action-changed-files@b1144fc772fca235a50902c7bb6cc431cc7d8e27 # v0.3.2
 
-      - name: Get changed charts
+      - name: Get all added or modified charts
         id: changed-charts
-        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46.0.5
+        uses: bjw-s-labs/action-changed-files@b1144fc772fca235a50902c7bb6cc431cc7d8e27 # v0.3.2
         with:
-          matrix: true
           path: charts
-          dir_names: true
-          dir_names_max_depth: 2
+          include_only_directories: true
+          max_depth: 2
 
       - name: Determine charts to lint
         id: charts-to-lint
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          CHANGED_CHARTS: ${{ steps.changed-charts.outputs.changed_files }}
+          REPO_SETTINGS: ${{ steps.repo-config.outputs.config }}
         with:
           script: |
-            var changedCharts = ${{ steps.changed-charts.outputs.all_changed_files }};
-            var chartsToFilter = ${{ toJSON(fromJSON(steps.repo-config.outputs.config).excluded-charts-lint) }};
+            const { CHANGED_CHARTS, REPO_SETTINGS } = process.env;
+            const changedCharts = JSON.parse(CHANGED_CHARTS);
+            const repoSettings = JSON.parse(REPO_SETTINGS);
+            const chartsToFilter = repoSettings['excluded-charts-lint'];
             let filteredCharts = changedCharts.filter(item => chartsToFilter.indexOf(item) < 0);
             core.setOutput("filteredCharts", filteredCharts);
+            console.log('charts to lint:', JSON.stringify(filteredCharts, null, 2));
 
       - name: Determine charts to install
         id: charts-to-install
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          CHANGED_CHARTS: ${{ steps.changed-charts.outputs.changed_files }}
+          REPO_SETTINGS: ${{ steps.repo-config.outputs.config }}
         with:
           script: |
-            var changedCharts = ${{ steps.changed-charts.outputs.all_changed_files }};
-            var chartsToFilter = ${{ toJSON(fromJSON(steps.repo-config.outputs.config).excluded-charts-install) }};
+            const { CHANGED_CHARTS, REPO_SETTINGS } = process.env;
+            const changedCharts = JSON.parse(CHANGED_CHARTS);
+            const repoSettings = JSON.parse(REPO_SETTINGS);
+            const chartsToFilter = repoSettings['excluded-charts-install'];
             let filteredCharts = changedCharts.filter(item => chartsToFilter.indexOf(item) < 0);
             core.setOutput("filteredCharts", filteredCharts);
+            console.log('charts to install:', JSON.stringify(filteredCharts, null, 2));
 
   pre-commit-check:
     name: Perform Pre-Commit check
@@ -78,7 +87,7 @@ jobs:
       - name: Run against changes
         uses: pre-commit/action@2c7b3805fd2a0fd8c1884dcaebf91fc102a13ecd # v3.0.1
         with:
-          extra_args: --files ${{ needs.prepare.outputs.addedOrModifiedFiles }} --config .ci/pre-commit/config.yaml
+          extra_args: --files ${{ join(fromJSON(needs.prepare.outputs.addedOrModifiedFiles), ' ') }} --config .ci/pre-commit/config.yaml
 
   charts-lint:
     name: Lint charts
