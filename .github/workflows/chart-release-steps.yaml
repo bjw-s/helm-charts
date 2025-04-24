@@ -41,6 +41,9 @@ on:
         required: false
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   release-chart:
     name: Release chart

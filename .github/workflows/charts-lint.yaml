@@ -17,6 +17,9 @@ on:
         required: false
         type: string
 
+permissions:
+  contents: read
+
 jobs:
   validate-required-changes:
     name: Validate required changes
