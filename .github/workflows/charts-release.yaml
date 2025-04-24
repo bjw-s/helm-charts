@@ -113,12 +113,17 @@ jobs:
           REPO_SETTINGS: ${{ steps.repo-config.outputs.config }}
         with:
           script: |
-            const { SPECIFIED_LIBRARY_CHARTS, CHANGED_LIBRARY_CHARTS, SPECIFIED_CHARTS, CHANGED_CHARTS, REPO_SETTINGS } = process.env;
+            const SPECIFIED_LIBRARY_CHARTS = process.env.SPECIFIED_LIBRARY_CHARTS ?? '[]';
+            const CHANGED_LIBRARY_CHARTS = process.env.CHANGED_LIBRARY_CHARTS ?? '[]';
+            const SPECIFIED_CHARTS = process.env.SPECIFIED_CHARTS ?? '[]';
+            const CHANGED_CHARTS = process.env.CHANGED_CHARTS ?? '[]';
+            const REPO_SETTINGS = process.env.REPO_SETTINGS ?? '{}';
+
             const eventName = '${{ github.event_name }}';
             const repoSettings = JSON.parse(REPO_SETTINGS);
 
-            const libraryChartsInput = JSON.parse(eventName as string === 'workflow_dispatch' ? SPECIFIED_LIBRARY_CHARTS : CHANGED_LIBRARY_CHARTS);
-            const otherChartsInput = JSON.parse(eventName as string === 'workflow_dispatch' ? SPECIFIED_CHARTS : CHANGED_CHARTS);
+            const libraryChartsInput = JSON.parse(eventName === 'workflow_dispatch' ? SPECIFIED_LIBRARY_CHARTS : CHANGED_LIBRARY_CHARTS);
+            const otherChartsInput = JSON.parse(eventName === 'workflow_dispatch' ? SPECIFIED_CHARTS : CHANGED_CHARTS);
             const excludedFromRelease = repoSettings['excluded-charts-release'];
 
             const libraryCharts = libraryChartsInput.filter(item => excludedFromRelease.indexOf(item) < 0);
