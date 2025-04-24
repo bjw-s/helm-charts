@@ -1,0 +1,85 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod - fields - resources
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+capabilities:
+  majorVersion: 1
+  minorVersion: 32
+tests:
+  - it: should not be present by default for kubernetes < 1.32
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    capabilities:
+      majorVersion: 1
+      minorVersion: 31
+    asserts:
+      - notExists:
+          path: spec.resources
+
+  - it: should not be present even if specified for kubernetes < 1.32
+    capabilities:
+      majorVersion: 1
+      minorVersion: 31
+    set:
+      controllers:
+        main:
+          pod:
+            resources:
+              limits:
+                memory: 128Mi
+    asserts:
+      - notExists:
+          path: spec.resources
+
+  - it: should not be present by default for kubernetes >= 1.32
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: spec.resources
+
+  - it: defaultPodOption should pass
+    set:
+      defaultPodOptions:
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.resources
+          value:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+
+  - it: defaultPodOption with pod override should pass
+    set:
+      defaultPodOptions:
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+      controllers:
+        main:
+          pod:
+            resources:
+              limits:
+                memory: 256Mi
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.resources
+          value:
+            limits:
+              memory: 256Mi
