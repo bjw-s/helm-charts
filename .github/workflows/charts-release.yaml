@@ -17,6 +17,9 @@ on:
     paths:
       - "charts/**"
 
+permissions:
+  contents: read
+
 jobs:
   prepare:
     name: Prepare data required for workflow
@@ -127,6 +130,11 @@ jobs:
         chart: ${{ fromJSON(needs.prepare.outputs.libraryChartsToRelease) }}
       fail-fast: false
       max-parallel: 1
+    permissions:
+      pages: write
+      id-token: write
+      contents: write
+      packages: write
     uses: ./.github/workflows/chart-release-steps.yaml
     with:
       chart: ${{ matrix.chart }}
@@ -151,6 +159,11 @@ jobs:
         chart: ${{ fromJSON(needs.prepare.outputs.otherChartsToRelease) }}
       fail-fast: false
       max-parallel: 1
+    permissions:
+      pages: write
+      id-token: write
+      contents: write
+      packages: write
     uses: ./.github/workflows/chart-release-steps.yaml
     with:
       chart: ${{ matrix.chart }}
