@@ -14,7 +14,9 @@ Renders the serviceAccount object required by the chart.
     {{- include "bjw-s.common.lib.serviceAccount.validate" (dict "rootContext" $rootContext "object" $serviceAccountObject) -}}
 
     {{- /* Create a service account secret */ -}}
-    {{- $_ := set $rootContext.Values.secrets (printf "%s-sa-token" $serviceAccountObject.identifier) (dict "suffix" (printf "%s-sa-token" $serviceAccountObject.identifier) "annotations" (dict "kubernetes.io/service-account.name" $serviceAccountObject.name) "type" "kubernetes.io/service-account-token") -}}
+    {{- if $serviceAccountObject.staticToken -}}
+      {{- $_ := set $rootContext.Values.secrets (printf "%s-sa-token" $serviceAccountObject.identifier) (dict "suffix" (printf "%s-sa-token" $serviceAccountObject.identifier) "annotations" (dict "kubernetes.io/service-account.name" $serviceAccountObject.name) "type" "kubernetes.io/service-account-token") -}}
+    {{- end -}}
 
     {{- /* Include the ServiceAccount class */ -}}
     {{- include "bjw-s.common.class.serviceAccount" (dict "rootContext" $rootContext "object" $serviceAccountObject) | nindent 0 -}}

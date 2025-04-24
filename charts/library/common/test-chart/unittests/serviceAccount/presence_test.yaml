@@ -24,25 +24,6 @@ tests:
           apiVersion: v1
           name: release-name
           any: true
-      - documentSelector:
-          path: $[?(@.kind == "ServiceAccount")].metadata.name
-          value: release-name
-        equal:
-          path: secrets
-          value:
-            - name: release-name-main-sa-token
-      - containsDocument:
-          kind: Secret
-          apiVersion: v1
-          name: release-name-main-sa-token
-          any: true
-      - documentSelector:
-          path: $[?(@.kind == "Secret")].metadata.name
-          value: release-name-main-sa-token
-        equal:
-          path: metadata.annotations
-          value:
-            kubernetes.io/service-account.name: release-name
 
   - it: serviceAccounts can be disabled
     set:
@@ -65,34 +46,11 @@ tests:
         mySA2:
           enabled: false
     asserts:
-      - documentSelector:
-          path: $[?(@.kind == "ServiceAccount")].metadata.name
-          value: release-name-myaccount
-        equal:
-          path: secrets
-          value:
-            - name: release-name-myaccount-sa-token
-      - documentSelector:
-          path: $[?(@.kind == "Secret")].metadata.name
-          value: release-name-myaccount-sa-token
-        equal:
-          path: metadata.annotations
-          value:
-            kubernetes.io/service-account.name: release-name-myaccount
-      - documentSelector:
-          path: $[?(@.kind == "ServiceAccount")].metadata.name
-          value: release-name-mysa
-        equal:
-          path: secrets
-          value:
-            - name: release-name-mysa-sa-token
-      - documentSelector:
-          path: $[?(@.kind == "Secret")].metadata.name
-          value: release-name-mysa-sa-token
-        equal:
-          path: metadata.annotations
-          value:
-            kubernetes.io/service-account.name: release-name-mysa
+      - containsDocument:
+          kind: ServiceAccount
+          apiVersion: v1
+          name: release-name-myaccount
+          any: true
       - not: true
         containsDocument:
           apiVersion: v1

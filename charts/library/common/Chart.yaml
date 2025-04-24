@@ -34,3 +34,6 @@ annotations:
     - kind: changed
       description: |-
         Increased the minimum supported Kubernetes version to 1.28.0
+    - kind: changed
+      description: |-
+        ServiceAccounts no longer create a static token by default. This is now controlled by the `staticToken` field in the `serviceAccount` object.
