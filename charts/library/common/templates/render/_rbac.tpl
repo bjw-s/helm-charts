@@ -35,9 +35,6 @@ Renders RBAC RoleBinding objects required by the chart.
     {{- /* Generate object from the raw role values */ -}}
     {{- $roleBindingObject := (include "bjw-s.common.lib.rbac.roleBinding.getByIdentifier" (dict "rootContext" $rootContext "id" $identifier) | fromYaml) -}}
 
-    {{- /* Perform validations on the RoleBinding before rendering */ -}}
-    {{- include "bjw-s.common.lib.rbac.roleBinding.validate" (dict "rootContext" $rootContext "object" $roleBindingObject) -}}
-
     {{/* Include the RoleBinding class */}}
     {{- include "bjw-s.common.class.rbac.roleBinding" (dict "rootContext" $rootContext "object" $roleBindingObject) | nindent 0 -}}
   {{- end -}}

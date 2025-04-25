@@ -31,6 +31,9 @@ annotations:
     - kind: added
       description: |-
         Added support for setting `resources` on the Pod Level in Kubernetes >= 1.32
+    - kind: added
+      description: |-
+        Added explicit JSON schema for `rbac` root key
     - kind: changed
       description: |-
         Standardized resource name logic for all resources
