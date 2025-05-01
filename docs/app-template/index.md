@@ -15,13 +15,13 @@ In order to use this template chart, you would deploy it as you would any other 
 By setting the desired values, the common library chart will render the desired resources.
 
 Be sure to check out the [common library docs](../common-library/index.md)
-and its [`values.yaml`](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common/values.yaml) for
+and its [`values.yaml`](https://github.com/bjw-s-labs/helm-charts/tree/main/charts/library/common/values.yaml) for
 more information about the available configuration options.
 
 #### Examples
 
 This is an example `values.yaml` file that would deploy the [vaultwarden](https://github.com/dani-garcia/vaultwarden)
-application. For more deployment examples, check out the [`examples` folder](https://github.com/bjw-s/helm-charts/tree/main/examples/).
+application. For more deployment examples, check out the [`examples` folder](https://github.com/bjw-s-labs/helm-charts/tree/main/examples/).
 
 ```yaml linenums="1"
 --8<--
@@ -38,7 +38,7 @@ The main changes from v2.x to v3.x are the removal of the default `main` objects
 !!! warning
 
     **IMPORTANT** The introduction of the json schema adds additional validations and restrictions on the contents of your chart values.
-    Things may have been missed during the initial schema creation, so if you run in to any unexpected validation errors please [raise an issue](https://github.com/bjw-s/helm-charts/issues/new?assignees=bjw-s&labels=bug&projects=&template=bug-report.md&title=)
+    Things may have been missed during the initial schema creation, so if you run in to any unexpected validation errors please [raise an issue](https://github.com/bjw-s-labs/helm-charts/issues/new?assignees=bjw-s&labels=bug&projects=&template=bug-report.md&title=)
 
 Given the following real-life example values.yaml for app-template v2:
 
@@ -96,7 +96,7 @@ The values for app-template v3.x would become this:
 
 ```yaml
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.2.0/charts/library/common/values.schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/common-3.2.0/charts/library/common/values.schema.json
 defaultPodOptions:
   enableServiceLinks: true
   securityContext:
@@ -162,7 +162,7 @@ persistence:
 +++ new
 @@ -1,42 +1,55 @@
 ---
-+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s/helm-charts/common-3.2.0/charts/library/common/values.schema.json
++# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/common-3.2.0/charts/library/common/values.schema.json
  defaultPodOptions:
 +  enableServiceLinks: true
    securityContext:
@@ -247,7 +247,7 @@ This is not meant as an exhaustive list of changes, but rather a "most common" e
 !!! info
 
     Some items (Ingress, ports, persistence items, etc) now default to being enabled by default. However, this is not always the case for some of the `items due to overrides in the default `values.yaml`.
-    [More background](https://github.com/bjw-s/helm-charts/issues/205)
+    [More background](https://github.com/bjw-s-labs/helm-charts/issues/205)
 
 Given the following real-life example values.yaml for app-template v1:
 
@@ -371,4 +371,4 @@ This is not meant as an exhaustive list of changes, but rather a "most common" e
 ## Source code
 
 The source code for the app template chart can be found
-[here](https://github.com/bjw-s/helm-charts/tree/main/charts/other/app-template).
+[here](https://github.com/bjw-s-labs/helm-charts/tree/main/charts/other/app-template).

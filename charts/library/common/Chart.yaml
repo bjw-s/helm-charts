@@ -8,12 +8,12 @@ kubeVersion: ">=1.22.0-0"
 keywords:
   - common
   - library
-home: https://github.com/bjw-s/helm-charts/tree/main/charts/library/common
+home: https://github.com/bjw-s-labs/helm-charts/tree/main/charts/library/common
 maintainers:
   - name: bjw-s
     email: me@bjw-s.dev
 sources:
-  - https://github.com/bjw-s/helm-charts
+  - https://github.com/bjw-s-labs/helm-charts
 annotations:
   artifacthub.io/changes: |-
     - kind: fixed
