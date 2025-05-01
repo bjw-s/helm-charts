@@ -18,7 +18,7 @@ permissions:
 jobs:
   prepare:
     name: Prepare data required for workflow
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     outputs:
       repoConfiguration: ${{ steps.repo-config.outputs.config }}
       addedOrModifiedFiles: ${{ steps.added-modified-files.outputs.all_changed_files }}
@@ -71,7 +71,7 @@ jobs:
 
   pre-commit-check:
     name: Perform Pre-Commit check
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs:
       - prepare
     steps:
