@@ -78,7 +78,7 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      - name: Deploy changes to GitHub Pages
+      - name: Deploy to GitHub Pages
         uses: ./src/.github/actions/publish-folder-to-pages
         with:
           path: gh-pages/

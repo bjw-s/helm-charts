@@ -1,14 +1,19 @@
 {{/*
-Return a controller by its identifier.
+Return a controller object by its Identifier.
 */}}
 {{- define "bjw-s.common.lib.controller.getByIdentifier" -}}
   {{- $rootContext := .rootContext -}}
   {{- $identifier := .id -}}
+  {{- $enabledControllers := (include "bjw-s.common.lib.controller.enabledControllers" (dict "rootContext" $rootContext) | fromYaml ) }}
 
-  {{- $enabledControllers := include "bjw-s.common.lib.controller.enabledControllers" (dict "rootContext" $rootContext) | fromYaml -}}
-  {{- $controllerValues := get $enabledControllers $identifier -}}
+  {{- if (hasKey $enabledControllers $identifier) -}}
+    {{- $objectValues := get $enabledControllers $identifier -}}
 
-  {{- if not (empty $controllerValues) -}}
-    {{- include "bjw-s.common.lib.controller.valuesToObject" (dict "rootContext" $rootContext "id" $identifier "values" $controllerValues) -}}
+    {{- /* Default the controller type to Deployment */ -}}
+    {{- if empty (dig "type" nil $objectValues) -}}
+      {{- $_ := set $objectValues "type" "deployment" -}}
+    {{- end -}}
+
+    {{- include "bjw-s.common.lib.valuesToObject" (dict "rootContext" $rootContext "id" $identifier "values" $objectValues "itemCount" (len $enabledControllers)) -}}
   {{- end -}}
 {{- end -}}

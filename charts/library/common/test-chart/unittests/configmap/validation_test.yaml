@@ -1,0 +1,20 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: configmap - validations
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: default configuration from folder with binary files should fail
+    set:
+      configMaps:
+        config:
+          data:
+            test: test
+      configMapsFromFolder:
+        enabled: true
+        basePath: ci/configMapsFolder
+    asserts:
+      - failedTemplate:
+          errorMessage: "There was an error loading ConfigMap: test_2. If it was automatically generated from a folder verify that files are properly flagged as `binary` or `escaped`"

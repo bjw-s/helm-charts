@@ -5,6 +5,12 @@ Convert Cronjob values to an object
   {{- $rootContext := .rootContext -}}
   {{- $identifier := .id -}}
   {{- $objectValues := .values -}}
+  {{- $itemCount := .itemCount -}}
+
+  {{- $objectName := (include "bjw-s.common.lib.determineResourceNameFromValues" (dict "rootContext" $rootContext "id" $identifier "values" $objectValues "itemCount" $itemCount)) -}}
+
+  {{- $_ := set $objectValues "name" $objectName -}}
+  {{- $_ := set $objectValues "identifier" $identifier -}}
 
   {{- if not (hasKey $objectValues "pod") -}}
     {{- $_ := set $objectValues "pod" dict -}}
@@ -13,6 +19,5 @@ Convert Cronjob values to an object
   {{- $restartPolicy := default "Never" $objectValues.pod.restartPolicy -}}
   {{- $_ := set $objectValues.pod "restartPolicy" $restartPolicy -}}
 
-  {{- /* Return the CronJob object */ -}}
   {{- $objectValues | toYaml -}}
 {{- end -}}

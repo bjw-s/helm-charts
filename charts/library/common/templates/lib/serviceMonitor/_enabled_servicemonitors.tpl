@@ -1,20 +1,20 @@
 {{/*
-Return the enabled ServiceMonitors.
+Return the enabled serviceMonitors.
 */}}
 {{- define "bjw-s.common.lib.serviceMonitor.enabledServiceMonitors" -}}
   {{- $rootContext := .rootContext -}}
   {{- $enabledServiceMonitors := dict -}}
 
-  {{- range $name, $serviceMonitor := $rootContext.Values.serviceMonitor -}}
+  {{- range $identifier, $serviceMonitor := $rootContext.Values.serviceMonitor -}}
     {{- if kindIs "map" $serviceMonitor -}}
-      {{- /* Enable by default, but allow override */ -}}
+      {{- /* Enable Service by default, but allow override */ -}}
       {{- $serviceMonitorEnabled := true -}}
       {{- if hasKey $serviceMonitor "enabled" -}}
         {{- $serviceMonitorEnabled = $serviceMonitor.enabled -}}
       {{- end -}}
 
       {{- if $serviceMonitorEnabled -}}
-        {{- $_ := set $enabledServiceMonitors $name . -}}
+        {{- $_ := set $enabledServiceMonitors $identifier . -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}

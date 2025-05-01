@@ -1,0 +1,201 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: networkPolicy - metadata - name
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  networkpolicies.main:
+    controller: main
+    policyTypes:
+      - Ingress
+      - Egress
+    rules: {}
+tests:
+  - it: name defaults to chart fullName
+    asserts:
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: release-name
+          any: true
+
+  - it: forceRename
+    set:
+      networkpolicies.main.forceRename: forceRename
+    asserts:
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: forcerename
+          any: true
+
+  - it: forceRename with template
+    set:
+      networkpolicies.main.forceRename: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: common-test
+          any: true
+
+  - it: prefix
+    set:
+      networkpolicies.main.prefix: prefix
+    asserts:
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: prefix-release-name
+          any: true
+
+  - it: prefix with template
+    set:
+      networkpolicies.main.prefix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: common-test-release-name
+          any: true
+
+  - it: suffix
+    set:
+      networkpolicies.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: release-name-suffix
+          any: true
+
+  - it: suffix with template
+    set:
+      networkpolicies.main.suffix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: release-name-common-test
+          any: true
+
+  - it: both prefix and suffix
+    set:
+      networkpolicies.main.prefix: prefix
+      networkpolicies.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: prefix-release-name-suffix
+          any: true
+
+  - it: prefix, suffix and forceRename (illegal combination)
+    set:
+      networkpolicies.main.forceRename: forceRename
+      networkpolicies.main.prefix: prefix
+      networkpolicies.main.suffix: suffix
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"
+
+  - it: multiple items
+    set:
+      networkpolicies.second:
+        controller: main
+        policyTypes:
+          - Ingress
+          - Egress
+        rules: {}
+    asserts:
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: release-name-second
+          any: true
+
+  - it: multiple items with prefix
+    set:
+      networkpolicies.second:
+        prefix: prefix
+        controller: main
+        policyTypes:
+          - Ingress
+          - Egress
+        rules: {}
+    asserts:
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: prefix-release-name-second
+          any: true
+
+  - it: multiple items with suffix
+    set:
+      networkpolicies.second:
+        suffix: suffix
+        controller: main
+        policyTypes:
+          - Ingress
+          - Egress
+        rules: {}
+    asserts:
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix and suffix
+    set:
+      networkpolicies.second:
+        prefix: prefix
+        suffix: suffix
+        controller: main
+        policyTypes:
+          - Ingress
+          - Egress
+        rules: {}
+    asserts:
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: NetworkPolicy
+          apiVersion: networking.k8s.io/v1
+          name: prefix-release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix, suffix and forceRename (illegal combination)
+    set:
+      networkpolicies.second:
+        forceRename: forceRename
+        prefix: prefix
+        suffix: suffix
+        controller: main
+        policyTypes:
+          - Ingress
+          - Egress
+        rules: {}
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"

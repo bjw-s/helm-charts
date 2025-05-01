@@ -1,211 +1,146 @@
 {
   "instance": {
-    "type": "object",
-    "additionalProperties": false,
-    "properties": {
-      "enabled": {
-        "type": "boolean",
-        "default": true
-      },
-      "type": {
-        "type": "string",
-        "enum": [
-          "deployment",
-          "statefulset",
-          "daemonset",
-          "cronjob",
-          "job"
-        ],
-        "default": "deployment"
-      },
-      "annotations": {
-        "$ref": "definitions.json#/annotations"
-      },
-      "labels": {
-        "$ref": "definitions.json#/labels"
-      },
-      "nameOverride": {
-        "type": "string"
-      },
-      "pod": {
-        "$ref": "pod.json#/options"
-      },
-      "replicas": {
-        "type": [
-          "integer",
-          "null"
-        ],
-        "default": 1
-      },
-      "revisionHistoryLimit": {
-        "type": "integer"
-      },
-      "rollingUpdate": {
-        "type": "object"
-      },
-      "strategy": {
-        "type": "string"
-      },
-      "cronjob": {
-        "$ref": "#/cronjob"
-      },
-      "job": {
-        "$ref": "#/job"
-      },
-      "statefulset": {
-        "$ref": "#/statefulset"
-      },
-      "applyDefaultContainerOptionsToInitContainers": {
-        "type": "boolean",
-        "default": true
-      },
-      "defaultContainerOptionsStrategy": {
-        "type": "string",
-        "default": "overwrite",
-        "enum": [
-          "overwrite",
-          "merge"
-        ]
-      },
-      "defaultContainerOptions": {
+    "allOf": [
+      { "$ref": "definitions.json#/resourceIdentifier" },
+      {
         "type": "object",
         "additionalProperties": false,
         "properties": {
-          "args": {
-            "$ref": "containers.json#/args"
+          "forceRename": {},
+          "prefix": {},
+          "suffix": {},
+          "enabled": {
+            "type": "boolean",
+            "default": true
           },
-          "command": {
-            "$ref": "containers.json#/command"
+          "type": {
+            "type": "string",
+            "enum": [
+              "deployment",
+              "statefulset",
+              "daemonset",
+              "cronjob",
+              "job"
+            ],
+            "default": "deployment"
           },
-          "env": {
-            "$ref": "containers.json#/env"
+          "annotations": {
+            "$ref": "definitions.json#/annotations"
           },
-          "envFrom": {
-            "$ref": "containers.json#/envFrom"
+          "labels": {
+            "$ref": "definitions.json#/labels"
           },
-          "image": {
-            "$ref": "containers.json#/image"
+          "pod": {
+            "$ref": "pod.json#/options"
           },
-          "resources": {
-            "$ref": "k8s-api.json#/core.v1.ResourceRequirements"
+          "replicas": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "default": 1
           },
-          "securityContext": {
-            "$ref": "k8s-api.json#/core.v1.ContainerSecurityContext"
-          }
-        }
-      },
-      "initContainers": {
-        "type": "object",
-        "additionalProperties": {
-          "$ref": "containers.json#/container"
-        }
-      },
-      "containers": {
-        "type": "object",
-        "additionalProperties": {
-          "$ref": "containers.json#/container"
-        }
-      },
-      "serviceAccount": {
-        "type": "object",
-        "properties": {
-          "name": {
+          "revisionHistoryLimit": {
+            "type": "integer"
+          },
+          "rollingUpdate": {
+            "type": "object"
+          },
+          "strategy": {
             "type": "string"
           },
-          "identifier": {
-            "type": "string"
-          }
-        }
-      }
-    },
-    "allOf": [
-      {
-        "if": {
-          "properties": {
-            "type": {
-              "const": "deployment"
-            }
-          }
-        },
-        "then": {
-          "not": {
-            "anyOf": [
-              {
-                "required": [
-                  "statefulset"
-                ]
-              },
-              {
-                "required": [
-                  "cronjob"
-                ]
-              },
-              {
-                "required": [
-                  "job"
-                ]
-              },
-              {
-                "required": [
-                  "daemonset"
-                ]
-              }
+          "cronjob": {
+            "$ref": "#/cronjob"
+          },
+          "job": {
+            "$ref": "#/job"
+          },
+          "statefulset": {
+            "$ref": "#/statefulset"
+          },
+          "applyDefaultContainerOptionsToInitContainers": {
+            "type": "boolean",
+            "default": true
+          },
+          "defaultContainerOptionsStrategy": {
+            "type": "string",
+            "default": "overwrite",
+            "enum": [
+              "overwrite",
+              "merge"
             ]
-          }
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "type": {
-              "const": "statefulset"
+          },
+          "defaultContainerOptions": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "args": {
+                "$ref": "containers.json#/args"
+              },
+              "command": {
+                "$ref": "containers.json#/command"
+              },
+              "env": {
+                "$ref": "containers.json#/env"
+              },
+              "envFrom": {
+                "$ref": "containers.json#/envFrom"
+              },
+              "image": {
+                "$ref": "containers.json#/image"
+              },
+              "resources": {
+                "$ref": "k8s-api.json#/core.v1.ResourceRequirements"
+              },
+              "securityContext": {
+                "$ref": "k8s-api.json#/core.v1.ContainerSecurityContext"
+              }
             }
           },
-          "required": [
-            "type"
-          ]
-        },
-        "then": {
-          "not": {
-            "anyOf": [
-              {
-                "required": [
-                  "cronjob"
-                ]
-              },
-              {
-                "required": [
-                  "job"
-                ]
-              },
-              {
-                "required": [
-                  "daemonset"
-                ]
-              }
-            ]
-          }
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "type": {
-              "const": "cronjob"
+          "initContainers": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "containers.json#/container"
             }
           },
-          "required": [
-            "type"
-          ]
+          "containers": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "containers.json#/container"
+            }
+          },
+          "serviceAccount": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "identifier": {
+                "type": "string"
+              }
+            }
+          }
         },
-        "then": {
-          "allOf": [
-            {
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "deployment"
+                }
+              }
+            },
+            "then": {
               "not": {
                 "anyOf": [
                   {
                     "required": [
                       "statefulset"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "cronjob"
                     ]
                   },
                   {
@@ -220,50 +155,121 @@
                   }
                 ]
               }
-            },
-            {
-              "required": [
-                "cronjob"
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "if": {
-          "properties": {
-            "type": {
-              "const": "job"
             }
           },
-          "required": [
-            "type"
-          ]
-        },
-        "then": {
-          "not": {
-            "anyOf": [
-              {
-                "required": [
-                  "statefulset"
-                ]
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "statefulset"
+                }
               },
-              {
-                "required": [
-                  "cronjob"
-                ]
-              },
-              {
-                "required": [
-                  "daemonset"
+              "required": [
+                "type"
+              ]
+            },
+            "then": {
+              "not": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "cronjob"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "job"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "daemonset"
+                    ]
+                  }
                 ]
               }
-            ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "cronjob"
+                }
+              },
+              "required": [
+                "type"
+              ]
+            },
+            "then": {
+              "allOf": [
+                {
+                  "not": {
+                    "anyOf": [
+                      {
+                        "required": [
+                          "statefulset"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "job"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "daemonset"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "required": [
+                    "cronjob"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "job"
+                }
+              },
+              "required": [
+                "type"
+              ]
+            },
+            "then": {
+              "not": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "statefulset"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "cronjob"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "daemonset"
+                    ]
+                  }
+                ]
+              }
+            }
           }
-        }
+        ]
       }
     ]
   },
+
   "statefulset": {
     "type": "object",
     "additionalProperties": false,
@@ -301,6 +307,7 @@
       }
     }
   },
+
   "statefulset.volumeClaimTemplate": {
     "type": "object",
     "additionalProperties": false,
@@ -348,6 +355,7 @@
       "size"
     ]
   },
+
   "cronjob": {
     "type": "object",
     "additionalProperties": false,
@@ -396,6 +404,7 @@
       "schedule"
     ]
   },
+
   "job": {
     "type": "object",
     "additionalProperties": false,

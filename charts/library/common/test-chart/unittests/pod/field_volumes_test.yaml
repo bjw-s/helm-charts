@@ -1,0 +1,106 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod - fields - volumes
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: no persistence should pass
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: spec.template.spec.volumes
+
+  - it: default should pass
+    set:
+      persistence:
+        config:
+          accessMode: ReadWriteOnce
+          size: 1Gi
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes
+          value:
+            - name: config
+              persistentVolumeClaim:
+                claimName: release-name
+
+  - it: advanced mount config should pass
+    set:
+      controllers:
+        main:
+          containers:
+            second-container:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+        second:
+          containers:
+            first-container:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+      persistence:
+        config:
+          existingClaim: test
+          advancedMounts:
+            main:
+              main:
+                - path: /config
+                  readOnly: false
+        data:
+          type: configMap
+          name: myConfigMap
+          globalMounts:
+            - path: /globalTest
+          advancedMounts:
+            main:
+              main:
+                - path: /data/config.yaml
+                  readOnly: false
+                  subPath: config.yaml
+              second-container:
+                - path: /appdata/config
+                  readOnly: true
+            second:
+              first-container:
+                - path: /second-pod/config.yaml
+                  readOnly: false
+                  subPath: config.yaml
+        no-mounts:
+          existingClaim: test
+
+    asserts:
+      - documentSelector:
+          path: $[?(@.kind == "Deployment")].metadata.name
+          value: release-name-main
+        equal:
+          path: spec.template.spec.volumes
+          value:
+            - name: config
+              persistentVolumeClaim:
+                claimName: test
+            - configMap:
+                name: myConfigMap
+              name: data
+            - name: no-mounts
+              persistentVolumeClaim:
+                claimName: test
+      - documentSelector:
+          path: $[?(@.kind == "Deployment")].metadata.name
+          value: release-name-second
+        equal:
+          path: spec.template.spec.volumes
+          value:
+            - configMap:
+                name: myConfigMap
+              name: data
+            - name: no-mounts
+              persistentVolumeClaim:
+                claimName: test

@@ -1,10 +1,5 @@
 ---
-suite: rbac validations
-
-set:
-  serviceAccount:
-    name: test-sa
-
+suite: rbac - validations
 templates:
   - common.yaml
 values:
@@ -19,10 +14,17 @@ tests:
             rules: {}
     asserts:
       - failedTemplate:
-          errorMessage: |
-            You selected: `InvalidRole`. Type must be one of:
-            - Role
-            - ClusterRole
+          errorPattern: "values don't meet the specifications of the schema"
+
+  - it: rolebinding type must be valid
+    set:
+      rbac:
+        bindings:
+          invalidRole:
+            type: InvalidRole
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"
 
   - it: role rules can't be empty
     set:
@@ -44,4 +46,12 @@ tests:
             roleRef: {}
     asserts:
       - failedTemplate:
-          errorMessage: "If not using identifier roleRef must have a `name` key"
+          errorPattern: "values don't meet the specifications of the schema"
+
+  - it: serviceAccount reference to non-existing serviceAccount should fail
+    set:
+      rbac.bindings.defaultBinding.subjects:
+        - identifier: main
+    asserts:
+      - failedTemplate:
+          errorMessage: "No enabled ServiceAccount found with this identifier. (rolebinding: 'defaultBinding', identifier: 'main')"

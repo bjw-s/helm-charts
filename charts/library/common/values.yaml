@@ -408,37 +408,12 @@ controllers: {}
 #     # Each initContainer should have its own key
 #     initContainers: {}
 
-# -- If true forces the controllers to use the `default` ServiceAccount for the namespace if one is not explicitly defined.
-# This feature flag will be removed on future versions where this will be the default behavior.
-enforceServiceAccountCreation: false
-
 serviceAccount:
-  # -- Specifies whether a service account should be created
-  # The identifier for this ServiceAccount will be `default`
-  create: false
-
-  # -- Annotations to add to the service account
-  annotations: {}
-
-  # -- Labels to add to the service account
-  labels: {}
-
-  # -- The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
-  # -- Additional Service Accounts to create
-  # Each extra service account admit the same keys as the main service account
-  extraServiceAccounts: {}
-  #   serviceAccount2:
-  #     create: true
-  #     annotations:
-  #       test: test
-  #   serviceAccount3:
-  #     create: true
-  #     name: custom-service-account
-  #     labels:
-  #       test: test
+  {}
+  # default:
+  #   enabled: false
+  #   annotations: {}
+  #   labels: {}
 
 # -- Use this to populate secrets with the values you specify.
 # Be aware that these values are not encrypted by default, and could therefore visible

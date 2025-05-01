@@ -1,0 +1,60 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pvc - fields - datasourceRef
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  persistence.config:
+    accessMode: ReadWriteOnce
+    size: 1Gi
+
+tests:
+  - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "PersistentVolumeClaim")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: spec.dataSourceRef
+
+  - it: with dataSourceRef should pass
+    set:
+      persistence.config:
+        dataSourceRef:
+          apiGroup: snapshot.storage.k8s.io
+          kind: VolumeSnapshot
+          name: MySnapshot
+    documentSelector:
+      path: $[?(@.kind == "PersistentVolumeClaim")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.dataSourceRef
+          value:
+            apiGroup: snapshot.storage.k8s.io
+            kind: VolumeSnapshot
+            name: MySnapshot
+      - notExists:
+          path: spec.dataSource
+
+  - it: templated dataSourceRef name should pass
+    set:
+      persistence.config:
+        dataSourceRef:
+          apiGroup: snapshot.storage.k8s.io
+          kind: VolumeSnapshot
+          name: "{{ .Release.Name }}-config"
+    documentSelector:
+      path: $[?(@.kind == "PersistentVolumeClaim")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.dataSourceRef
+          value:
+            apiGroup: snapshot.storage.k8s.io
+            kind: VolumeSnapshot
+            name: RELEASE-NAME-config
+      - notExists:
+          path: spec.dataSource

@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: service - fields - allocateLoadBalancerNodePorts
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+  - ../_values/service_main_default.yaml
+tests:
+  - it: allocateLoadBalancerNodePorts can be set to true
+    set:
+      service:
+        main:
+          type: LoadBalancer
+          allocateLoadBalancerNodePorts: true
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.allocateLoadBalancerNodePorts
+          value: true
+
+  - it: allocateLoadBalancerNodePorts can be set to false
+    set:
+      service:
+        main:
+          type: LoadBalancer
+          allocateLoadBalancerNodePorts: false
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.allocateLoadBalancerNodePorts
+          value: false

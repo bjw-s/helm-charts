@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: statefulset - fields - revisionHistoryLimit
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  controllers.main.type: statefulset
+tests:
+  - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "StatefulSet")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.revisionHistoryLimit
+          value: 3
+
+  - it: custom revisionHistoryLimit
+    set:
+      controllers.main:
+        revisionHistoryLimit: 8
+    documentSelector:
+      path: $[?(@.kind == "StatefulSet")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.revisionHistoryLimit
+          value: 8
+
+  - it: explicit revisionHistoryLimit 0 should pass
+    set:
+      controllers.main:
+        revisionHistoryLimit: 0
+    documentSelector:
+      path: $[?(@.kind == "StatefulSet")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.revisionHistoryLimit
+          value: 0

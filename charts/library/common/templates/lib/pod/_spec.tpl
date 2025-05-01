@@ -48,6 +48,11 @@ imagePullSecrets: {{ . | nindent 2 }}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "terminationGracePeriodSeconds")) }}
 terminationGracePeriodSeconds: {{ . | trim }}
   {{- end -}}
+  {{- if ge ($rootContext.Capabilities.KubeVersion.Minor | int) 32 }}
+    {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "resources")) }}
+resources: {{ . | nindent 2 }}
+    {{- end -}}
+  {{- end -}}
   {{- with (include "bjw-s.common.lib.pod.getOption" (dict "ctx" $ctx "option" "restartPolicy")) }}
 restartPolicy: {{ . | trim }}
   {{- end -}}

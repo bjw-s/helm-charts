@@ -1,0 +1,43 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: route - validations
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: service reference to non-existing service should fail
+    set:
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        rules:
+          - backendRefs:
+              - identifier: main
+                port: 8080
+    asserts:
+      - failedTemplate:
+          errorMessage: "No enabled Service found with this identifier. (route: 'main', identifier: 'main')"
+
+  - it: backend refs with redirect filter should fail
+    set:
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        rules:
+          - backendRefs:
+              - group: test
+                name: pathService
+                port: 1234
+                namespace: serviceNamespace
+                weight: 123
+            filters:
+              - type: RequestRedirect
+                requestRedirect:
+                  scheme: https
+                  statusCode: 301
+    asserts:
+      - failedTemplate:
+          errorMessage: "backend refs and request redirect filters cannot co-exist."

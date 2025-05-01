@@ -5,7 +5,7 @@ Return the primary service object for a controller
   {{- $rootContext := .rootContext -}}
   {{- $controllerIdentifier := .controllerIdentifier -}}
 
-  {{- $identifier := "" -}}
+  {{- $serviceIdentifier := "" -}}
   {{- $result := dict -}}
 
   {{- /* Loop over all enabled services */ -}}
@@ -13,27 +13,29 @@ Return the primary service object for a controller
   {{- if $enabledServices -}}
     {{- /* We are only interested in services for the specified controller */ -}}
     {{- $enabledServicesForController := dict -}}
-    {{- range $name, $service := $enabledServices -}}
-      {{- if eq $service.controller $controllerIdentifier -}}
-        {{- $_ := set $enabledServicesForController $name $service -}}
+    {{- range $identifier, $serviceObject := $enabledServices -}}
+      {{- if eq $serviceObject.controller $controllerIdentifier -}}
+        {{- $_ := set $enabledServicesForController $identifier $serviceObject -}}
       {{- end -}}
     {{- end -}}
 
-    {{- range $name, $service := $enabledServicesForController -}}
+    {{- range $identifier, $serviceObject := $enabledServicesForController -}}
       {{- /* Determine the Service that has been marked as primary */ -}}
-      {{- if $service.primary -}}
-        {{- $identifier = $name -}}
-        {{- $result = $service -}}
+      {{- if $serviceObject.primary -}}
+        {{- $serviceIdentifier = $identifier -}}
+        {{- $result = $serviceObject -}}
       {{- end -}}
 
       {{- /* Return the first Service (alphabetically) if none has been explicitly marked as primary */ -}}
       {{- if not $result -}}
         {{- $firstServiceKey := keys $enabledServicesForController | sortAlpha | first -}}
         {{- $result = get $enabledServicesForController $firstServiceKey -}}
-        {{- $identifier = $result.identifier -}}
+        {{- $serviceIdentifier = $identifier -}}
       {{- end -}}
     {{- end -}}
 
-    {{- include "bjw-s.common.lib.service.valuesToObject" (dict "rootContext" $rootContext "id" $identifier "values" $result) -}}
+    {{- if not (empty $serviceIdentifier) -}}
+      {{- include "bjw-s.common.lib.service.getByIdentifier" (dict "rootContext" $rootContext "id" $serviceIdentifier) -}}
+    {{- end -}}
   {{- end -}}
 {{- end -}}

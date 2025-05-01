@@ -6,10 +6,7 @@ using the common library.
   {{- $rootContext := .rootContext -}}
   {{- $cronjobObject := .object -}}
 
-  {{- $timeZone := "" -}}
-  {{- if ge (int $rootContext.Capabilities.KubeVersion.Minor) 27 }}
-    {{- $timeZone = dig "cronjob" "timeZone" "" $cronjobObject -}}
-  {{- end -}}
+  {{- $timeZone := dig "cronjob" "timeZone" "" $cronjobObject -}}
 
   {{- $labels := merge
     (dict "app.kubernetes.io/component" $cronjobObject.identifier)
@@ -30,13 +27,13 @@ metadata:
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   {{- with $annotations }}
   annotations:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   namespace: {{ $rootContext.Release.Namespace }}

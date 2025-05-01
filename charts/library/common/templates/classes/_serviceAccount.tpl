@@ -22,16 +22,18 @@ metadata:
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   {{- with $annotations }}
   annotations:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   namespace: {{ $rootContext.Release.Namespace }}
+{{- if $serviceAccountObject.staticToken }}
 secrets:
   - name: {{ get (include "bjw-s.common.lib.secret.getByIdentifier" (dict "rootContext" $rootContext "id" (printf "%s-sa-token" $serviceAccountObject.identifier) ) | fromYaml) "name"}}
+{{- end }}
 {{- end -}}

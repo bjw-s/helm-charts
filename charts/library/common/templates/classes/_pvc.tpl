@@ -20,7 +20,6 @@ within the common library.
       $annotations
     -}}
   {{- end -}}
-
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -29,13 +28,13 @@ metadata:
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   {{- with $annotations }}
   annotations:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   namespace: {{ $rootContext.Release.Namespace }}

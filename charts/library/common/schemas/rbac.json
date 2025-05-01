@@ -1,0 +1,118 @@
+{
+  "role": {
+    "allOf": [
+      { "$ref": "definitions.json#/resourceIdentifier" },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "forceRename": {},
+          "prefix": {},
+          "suffix": {},
+          "enabled": {
+            "type": "boolean",
+            "default": true
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "Role",
+              "ClusterRole"
+            ],
+            "default": "Role"
+          },
+          "annotations": {
+            "$ref": "definitions.json#/annotations"
+          },
+          "labels": {
+            "$ref": "definitions.json#/labels"
+          },
+          "rules": {
+            "type": "array"
+          }
+        },
+        "required": ["type", "rules"]
+      }
+    ]
+  },
+
+  "roleBinding": {
+    "allOf": [
+      { "$ref": "definitions.json#/resourceIdentifier" },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "forceRename": {},
+          "prefix": {},
+          "suffix": {},
+          "enabled": {
+            "type": "boolean",
+            "default": true
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "RoleBinding",
+              "ClusterRoleBinding"
+            ],
+            "default": "RoleBinding"
+          },
+          "annotations": {
+            "$ref": "definitions.json#/annotations"
+          },
+          "labels": {
+            "$ref": "definitions.json#/labels"
+          },
+          "roleRef": {
+            "type": "object",
+            "properties": {
+              "identifier": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "Role",
+                  "ClusterRole"
+                ]
+              }
+            },
+            "oneOf": [
+              {"required": ["identifier"]},
+              {"required": ["name", "kind"]}
+            ]
+          },
+          "subjects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string"
+                },
+                "namespace": {
+                  "type": "string"
+                }
+              },
+              "oneOf": [
+                {"required": ["identifier"]},
+                {"required": ["name", "kind", "namespace"]}
+              ]
+            }
+          }
+        },
+        "required": ["type", "roleRef", "subjects"]
+      }
+    ]
+  }
+}

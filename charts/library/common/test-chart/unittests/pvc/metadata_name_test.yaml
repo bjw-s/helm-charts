@@ -1,0 +1,189 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pvc - metadata - name
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  persistence.main:
+    type: persistentVolumeClaim
+    accessMode: ReadWriteOnce
+    size: 1Gi
+tests:
+  - it: name defaults to chart fullName
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: release-name
+          any: true
+
+  - it: forceRename
+    set:
+      persistence.main.forceRename: forceRename
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: forcerename
+          any: true
+
+  - it: forceRename with template
+    set:
+      persistence.main.forceRename: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: common-test
+          any: true
+
+  - it: prefix
+    set:
+      persistence.main.prefix: prefix
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: prefix-release-name
+          any: true
+
+  - it: prefix with template
+    set:
+      persistence.main.prefix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: common-test-release-name
+          any: true
+
+  - it: suffix
+    set:
+      persistence.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: release-name-suffix
+          any: true
+
+  - it: suffix with template
+    set:
+      persistence.main.suffix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: release-name-common-test
+          any: true
+
+  - it: both prefix and suffix
+    set:
+      persistence.main.prefix: prefix
+      persistence.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: prefix-release-name-suffix
+          any: true
+
+  - it: prefix, suffix and forceRename (illegal combination)
+    set:
+      persistence.main.forceRename: forceRename
+      persistence.main.prefix: prefix
+      persistence.main.suffix: suffix
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"
+
+  - it: multiple items
+    set:
+      persistence.second:
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 1Gi
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: release-name-second
+          any: true
+
+  - it: multiple items with prefix
+    set:
+      persistence.second:
+        prefix: prefix
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 1Gi
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: prefix-release-name-second
+          any: true
+
+  - it: multiple items with suffix
+    set:
+      persistence.second:
+        suffix: suffix
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 1Gi
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix and suffix
+    set:
+      persistence.second:
+        prefix: prefix
+        suffix: suffix
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 1Gi
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: prefix-release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix, suffix and forceRename (illegal combination)
+    set:
+      persistence.second:
+        forceRename: forceRename
+        prefix: prefix
+        suffix: suffix
+        type: persistentVolumeClaim
+        accessMode: ReadWriteOnce
+        size: 1Gi
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"

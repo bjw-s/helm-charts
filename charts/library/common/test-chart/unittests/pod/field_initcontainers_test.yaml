@@ -1,0 +1,107 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod - fields - initContainers
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: with custom env vars dict should pass
+    set:
+      controllers.main.initContainers:
+        init1:
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+            tag: latest
+          env:
+            int: 1
+            float: 1.5
+            string: value_of_env
+            template: "{{ .Release.Name | lower }}-admin"
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.initContainers[0].env[0]
+          value:
+            name: float
+            value: "1.5"
+      - equal:
+          path: spec.template.spec.initContainers[0].env[1]
+          value:
+            name: int
+            value: "1"
+      - equal:
+          path: spec.template.spec.initContainers[0].env[2]
+          value:
+            name: string
+            value: value_of_env
+      - equal:
+          path: spec.template.spec.initContainers[0].env[3]
+          value:
+            name: template
+            value: release-name-admin
+
+  - it: disabled should pass
+    set:
+      controllers.main.initContainers:
+        init1:
+          enabled: false
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+            tag: test
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: spec.template.spec.initContainers
+
+  - it: with dependsOn
+    set:
+      controllers.main.initContainers:
+        init1:
+          dependsOn: init2
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+            tag: latest
+        init2:
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+            tag: latest
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - lengthEqual:
+          path: spec.template.spec.initContainers
+          count: 2
+      - equal:
+          path: spec.template.spec.initContainers[0].name
+          value: init2
+      - equal:
+          path: spec.template.spec.initContainers[1].name
+          value: init1
+
+  - it: with custom restartPolicy (sidecar)
+    set:
+      controllers.main.initContainers:
+        test:
+          image:
+            repository: ghcr.io/mendhak/http-https-echo
+            tag: latest
+          restartPolicy: Always
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - lengthEqual:
+          path: spec.template.spec.initContainers
+          count: 1
+      - equal:
+          path: spec.template.spec.initContainers[0].name
+          value: test
+      - equal:
+          path: spec.template.spec.initContainers[0].restartPolicy
+          value: Always

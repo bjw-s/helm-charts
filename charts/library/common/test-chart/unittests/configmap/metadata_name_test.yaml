@@ -1,0 +1,183 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: configmap - metadata - name
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  configMaps.main:
+    data:
+      test: test
+tests:
+  - it: name defaults to chart fullName
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: release-name
+          any: true
+
+  - it: forceRename
+    set:
+      configMaps.main.forceRename: forceRename
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: forcerename
+          any: true
+
+  - it: forceRename with template
+    set:
+      configMaps.main.forceRename: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: common-test
+          any: true
+
+  - it: prefix
+    set:
+      configMaps.main.prefix: prefix
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: prefix-release-name
+          any: true
+
+  - it: prefix with template
+    set:
+      configMaps.main.prefix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: common-test-release-name
+          any: true
+
+  - it: suffix
+    set:
+      configMaps.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: release-name-suffix
+          any: true
+
+  - it: suffix with template
+    set:
+      configMaps.main.suffix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: release-name-common-test
+          any: true
+
+  - it: both prefix and suffix
+    set:
+      configMaps.main.prefix: prefix
+      configMaps.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: prefix-release-name-suffix
+          any: true
+
+  - it: prefix, suffix and forceRename (illegal combination)
+    set:
+      configMaps.main.forceRename: forceRename
+      configMaps.main.prefix: prefix
+      configMaps.main.suffix: suffix
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"
+
+  - it: multiple items
+    set:
+      configMaps.second:
+        data:
+          test: test
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: release-name-second
+          any: true
+
+  - it: multiple items with prefix
+    set:
+      configMaps.second:
+        prefix: prefix
+        data:
+          test: test
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: prefix-release-name-second
+          any: true
+
+  - it: multiple items with suffix
+    set:
+      configMaps.second:
+        suffix: suffix
+        data:
+          test: test
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix and suffix
+    set:
+      configMaps.second:
+        prefix: prefix
+        suffix: suffix
+        data:
+          test: test
+    asserts:
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: ConfigMap
+          apiVersion: v1
+          name: prefix-release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix, suffix and forceRename (illegal combination)
+    set:
+      configMaps.second:
+        forceRename: forceRename
+        prefix: prefix
+        suffix: suffix
+        data:
+          test: test
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"
