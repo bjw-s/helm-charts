@@ -1,6 +1,0 @@
----
-{{/* Make sure all variables are set properly */}}
-{{- include "k8s-ycl.init" . }}
-
-{{/* Render the templates */}}
-{{- include "bjw-s.common.loader.all" . }}
