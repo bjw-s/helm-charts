@@ -13,7 +13,7 @@ entries:
     created: "2025-03-14T10:46:08.010704548Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.7.3
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -26,7 +26,7 @@ entries:
     sources:
     - https://github.com/bjw-s/helm-charts
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.7.3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.7.3.tgz
     version: 3.7.3
   - annotations:
       artifacthub.io/changes: |-
@@ -40,7 +40,7 @@ entries:
     created: "2025-03-14T10:46:08.006330783Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.7.2
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -53,7 +53,7 @@ entries:
     sources:
     - https://github.com/bjw-s/helm-charts
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.7.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.7.2.tgz
     version: 3.7.2
   - annotations:
       artifacthub.io/changes: |-
@@ -66,7 +66,7 @@ entries:
             Updated library version to 3.7.1.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
       org.opencontainers.image.source: https://github.com/bjw-s/helm-charts
@@ -74,7 +74,7 @@ entries:
     created: "2025-03-14T10:46:08.002606032Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.7.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -85,7 +85,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.7.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.7.1.tgz
     version: 3.7.1
   - annotations:
       artifacthub.io/changes: |-
@@ -94,14 +94,14 @@ entries:
             Updated library version to 3.7.0.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.997714274Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.7.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -112,7 +112,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.7.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.7.0.tgz
     version: 3.7.0
   - annotations:
       artifacthub.io/changes: |-
@@ -121,14 +121,14 @@ entries:
             Updated library version to 3.6.1.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.995037529Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.6.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -139,7 +139,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.6.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.6.1.tgz
     version: 3.6.1
   - annotations:
       artifacthub.io/changes: |-
@@ -148,14 +148,14 @@ entries:
             Updated library version to 3.6.0.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.991661316Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.6.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -166,7 +166,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.6.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.6.0.tgz
     version: 3.6.0
   - annotations:
       artifacthub.io/changes: |-
@@ -175,14 +175,14 @@ entries:
             Updated library version to 3.5.1.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.989081141Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.5.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -193,7 +193,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.5.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.5.1.tgz
     version: 3.5.1
   - annotations:
       artifacthub.io/changes: |-
@@ -202,14 +202,14 @@ entries:
             Updated library version to 3.5.0.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.985804057Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.5.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -220,7 +220,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.5.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.5.0.tgz
     version: 3.5.0
   - annotations:
       artifacthub.io/changes: |-
@@ -229,14 +229,14 @@ entries:
             Updated library version to 3.4.0.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.983225224Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.4.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -247,7 +247,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.4.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.4.0.tgz
     version: 3.4.0
   - annotations:
       artifacthub.io/changes: |-
@@ -256,14 +256,14 @@ entries:
             Updated library version to 3.3.2.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.980739044Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.3.2
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -274,7 +274,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.3.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.3.2.tgz
     version: 3.3.2
   - annotations:
       artifacthub.io/changes: |-
@@ -283,14 +283,14 @@ entries:
             Updated library version to 3.3.1.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.977470414Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.3.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -301,7 +301,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.3.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.3.1.tgz
     version: 3.3.1
   - annotations:
       artifacthub.io/changes: |-
@@ -310,14 +310,14 @@ entries:
             Updated library version to 3.3.0.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.974991457Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.3.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -328,7 +328,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.3.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.3.0.tgz
     version: 3.3.0
   - annotations:
       artifacthub.io/changes: |-
@@ -337,14 +337,14 @@ entries:
             Updated library version to 3.2.1.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.97257641Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.2.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -355,7 +355,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.2.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.2.1.tgz
     version: 3.2.1
   - annotations:
       artifacthub.io/changes: |-
@@ -364,14 +364,14 @@ entries:
             Updated library version to 3.2.0.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.969478839Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.2.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -382,7 +382,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.2.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.2.0.tgz
     version: 3.2.0
   - annotations:
       artifacthub.io/changes: |-
@@ -391,14 +391,14 @@ entries:
             Updated library version to 3.1.0.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.967092135Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.1.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -409,7 +409,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.1.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.1.0.tgz
     version: 3.1.0
   - annotations:
       artifacthub.io/changes: |-
@@ -418,14 +418,14 @@ entries:
             Updated library version to 3.0.4.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.964669113Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.0.4
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -436,7 +436,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.0.4.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.0.4.tgz
     version: 3.0.4
   - annotations:
       artifacthub.io/changes: |-
@@ -445,14 +445,14 @@ entries:
             Updated library version to 3.0.3.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.961614031Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.0.3
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -463,7 +463,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.0.3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.0.3.tgz
     version: 3.0.3
   - annotations:
       artifacthub.io/changes: |-
@@ -472,14 +472,14 @@ entries:
             Updated library version to 3.0.2.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.959427009Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.0.2
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -490,7 +490,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.0.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.0.2.tgz
     version: 3.0.2
   - annotations:
       artifacthub.io/changes: |-
@@ -499,14 +499,14 @@ entries:
             Updated library version to 3.0.1.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.957220622Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.0.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -517,7 +517,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.0.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.0.1.tgz
     version: 3.0.1
   - annotations:
       artifacthub.io/changes: |-
@@ -526,14 +526,14 @@ entries:
             Updated library version to 3.0.0.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.954911703Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.0.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -544,7 +544,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.0.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.0.0.tgz
     version: 3.0.0
   - annotations:
       artifacthub.io/changes: |-
@@ -553,14 +553,14 @@ entries:
             Updated library version to 3.0.0-beta3.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.951825537Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.0.0-beta3
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -571,7 +571,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.0.0-beta3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.0.0-beta3.tgz
     version: 3.0.0-beta3
   - annotations:
       artifacthub.io/changes: |-
@@ -580,14 +580,14 @@ entries:
             Updated library version to 3.0.0-beta2.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.949584625Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.0.0-beta2
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -598,7 +598,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.0.0-beta2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.0.0-beta2.tgz
     version: 3.0.0-beta2
   - annotations:
       artifacthub.io/changes: |-
@@ -607,14 +607,14 @@ entries:
             Updated library version to 3.0.0-beta1.
           links:
             - name: Upgrade instructions from v2.x
-              url: https://bjw-s.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
+              url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/#from-2xx-to-30x
             - name: Common library chart definition
               url: https://github.com/bjw-s/helm-charts/blob/main/charts/library/common/Chart.yaml
     apiVersion: v2
     created: "2025-03-14T10:46:07.947547733Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.0.0-beta1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -625,7 +625,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-3.0.0-beta1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-3.0.0-beta1.tgz
     version: 3.0.0-beta1
   - annotations:
       artifacthub.io/changes: |-
@@ -641,7 +641,7 @@ entries:
     created: "2025-03-14T10:46:07.945554744Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.6.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -652,7 +652,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.6.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.6.0.tgz
     version: 2.6.0
   - annotations:
       artifacthub.io/changes: |-
@@ -668,7 +668,7 @@ entries:
     created: "2025-03-14T10:46:07.942677601Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.5.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -679,7 +679,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.5.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.5.0.tgz
     version: 2.5.0
   - annotations:
       artifacthub.io/changes: |-
@@ -695,7 +695,7 @@ entries:
     created: "2025-03-14T10:46:07.940641371Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.4.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -706,7 +706,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.4.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.4.0.tgz
     version: 2.4.0
   - annotations:
       artifacthub.io/changes: |-
@@ -722,7 +722,7 @@ entries:
     created: "2025-03-14T10:46:07.93867477Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.3.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -733,7 +733,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.3.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.3.0.tgz
     version: 2.3.0
   - annotations:
       artifacthub.io/changes: |-
@@ -749,7 +749,7 @@ entries:
     created: "2025-03-14T10:46:07.936685949Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.2.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -760,7 +760,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.2.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.2.0.tgz
     version: 2.2.0
   - annotations:
       artifacthub.io/changes: |-
@@ -776,7 +776,7 @@ entries:
     created: "2025-03-14T10:46:07.933832173Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.1.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -787,7 +787,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.1.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.1.1.tgz
     version: 2.1.1
   - annotations:
       artifacthub.io/changes: |-
@@ -803,7 +803,7 @@ entries:
     created: "2025-03-14T10:46:07.931911168Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.1.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -814,7 +814,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.1.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.1.0.tgz
     version: 2.1.0
   - annotations:
       artifacthub.io/changes: |-
@@ -830,7 +830,7 @@ entries:
     created: "2025-03-14T10:46:07.930006553Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.0.3
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -841,7 +841,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.0.3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.0.3.tgz
     version: 2.0.3
   - annotations:
       artifacthub.io/changes: |-
@@ -857,7 +857,7 @@ entries:
     created: "2025-03-14T10:46:07.928143827Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.0.2
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -868,7 +868,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.0.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.0.2.tgz
     version: 2.0.2
   - annotations:
       artifacthub.io/changes: |-
@@ -884,7 +884,7 @@ entries:
     created: "2025-03-14T10:46:07.926221429Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.0.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -895,7 +895,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.0.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.0.1.tgz
     version: 2.0.1
   - annotations:
       artifacthub.io/changes: |-
@@ -911,7 +911,7 @@ entries:
     created: "2025-03-14T10:46:07.923160426Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.0.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -922,7 +922,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.0.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.0.0.tgz
     version: 2.0.0
   - annotations:
       artifacthub.io/changes: |-
@@ -936,7 +936,7 @@ entries:
     created: "2025-03-14T10:46:07.921099971Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.0.0-beta.3
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -947,7 +947,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.0.0-beta.3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.0.0-beta.3.tgz
     version: 2.0.0-beta.3
   - annotations:
       artifacthub.io/changes: |-
@@ -961,7 +961,7 @@ entries:
     created: "2025-03-14T10:46:07.91919212Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.0.0-beta.2
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -972,7 +972,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.0.0-beta.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.0.0-beta.2.tgz
     version: 2.0.0-beta.2
   - annotations:
       artifacthub.io/changes: |-
@@ -986,7 +986,7 @@ entries:
     created: "2025-03-14T10:46:07.915552819Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.0.0-beta.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -997,7 +997,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-2.0.0-beta.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-2.0.0-beta.1.tgz
     version: 2.0.0-beta.1
   - annotations:
       artifacthub.io/changes: |-
@@ -1011,7 +1011,7 @@ entries:
     created: "2025-03-14T10:46:07.912128067Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.5.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1022,7 +1022,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.5.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.5.1.tgz
     version: 1.5.1
   - annotations:
       artifacthub.io/changes: |-
@@ -1036,7 +1036,7 @@ entries:
     created: "2025-03-14T10:46:07.910214466Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.5.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1047,7 +1047,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.5.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.5.0.tgz
     version: 1.5.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1061,7 +1061,7 @@ entries:
     created: "2025-03-14T10:46:07.908308288Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.4.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1072,7 +1072,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.4.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.4.0.tgz
     version: 1.4.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1086,7 +1086,7 @@ entries:
     created: "2025-03-14T10:46:07.906383556Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.3.2
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1097,7 +1097,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.3.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.3.2.tgz
     version: 1.3.2
   - annotations:
       artifacthub.io/changes: |-
@@ -1111,7 +1111,7 @@ entries:
     created: "2025-03-14T10:46:07.904445459Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.3.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1122,7 +1122,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.3.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.3.1.tgz
     version: 1.3.1
   - annotations:
       artifacthub.io/changes: |-
@@ -1136,7 +1136,7 @@ entries:
     created: "2025-03-14T10:46:07.901158157Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.3.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1147,7 +1147,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.3.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.3.0.tgz
     version: 1.3.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1161,7 +1161,7 @@ entries:
     created: "2025-03-14T10:46:07.897768491Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.2.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1172,7 +1172,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.2.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.2.1.tgz
     version: 1.2.1
   - annotations:
       artifacthub.io/changes: |-
@@ -1186,7 +1186,7 @@ entries:
     created: "2025-03-14T10:46:07.894211934Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.2.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1197,7 +1197,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.2.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.2.0.tgz
     version: 1.2.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1211,7 +1211,7 @@ entries:
     created: "2025-03-14T10:46:07.89048612Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.1.3
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1222,7 +1222,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.1.3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.1.3.tgz
     version: 1.1.3
   - annotations:
       artifacthub.io/changes: |-
@@ -1236,7 +1236,7 @@ entries:
     created: "2025-03-14T10:46:07.8868206Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.1.2
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1247,7 +1247,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.1.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.1.2.tgz
     version: 1.1.2
   - annotations:
       artifacthub.io/changes: |-
@@ -1261,7 +1261,7 @@ entries:
     created: "2025-03-14T10:46:07.882397856Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.1.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1272,7 +1272,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.1.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.1.1.tgz
     version: 1.1.1
   - annotations:
       artifacthub.io/changes: |-
@@ -1286,7 +1286,7 @@ entries:
     created: "2025-03-14T10:46:07.878913062Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.1.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1297,7 +1297,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.1.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.1.0.tgz
     version: 1.1.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1311,7 +1311,7 @@ entries:
     created: "2025-03-14T10:46:07.875382163Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.0.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1322,7 +1322,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.0.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.0.1.tgz
     version: 1.0.1
   - annotations:
       artifacthub.io/changes: |-
@@ -1336,7 +1336,7 @@ entries:
     created: "2025-03-14T10:46:07.871795098Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.0.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1347,7 +1347,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-1.0.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-1.0.0.tgz
     version: 1.0.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1361,7 +1361,7 @@ entries:
     created: "2025-03-14T10:46:07.86822776Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 0.2.2
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1371,7 +1371,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-0.2.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-0.2.2.tgz
     version: 0.2.2
   - annotations:
       artifacthub.io/changes: |-
@@ -1385,7 +1385,7 @@ entries:
     created: "2025-03-14T10:46:07.865183946Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 0.2.1
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1395,7 +1395,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-0.2.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-0.2.1.tgz
     version: 0.2.1
   - annotations:
       artifacthub.io/changes: |-
@@ -1409,7 +1409,7 @@ entries:
     created: "2025-03-14T10:46:07.863341859Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 0.2.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1419,7 +1419,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-0.2.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-0.2.0.tgz
     version: 0.2.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1429,7 +1429,7 @@ entries:
     created: "2025-03-14T10:46:07.861562798Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 0.1.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1439,7 +1439,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-0.1.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-0.1.1.tgz
     version: 0.1.1
   - annotations:
       artifacthub.io/changes: |-
@@ -1449,7 +1449,7 @@ entries:
     created: "2025-03-14T10:46:07.85977931Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 0.1.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -1459,7 +1459,7 @@ entries:
       name: bjw-s
     name: app-template
     urls:
-    - https://bjw-s.github.io/helm-charts/other/app-template-0.1.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/app-template-0.1.0.tgz
     version: 0.1.0
   common:
   - annotations:
@@ -1487,7 +1487,7 @@ entries:
     - https://github.com/bjw-s/helm-charts
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.7.3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.7.3.tgz
     version: 3.7.3
   - annotations:
       artifacthub.io/changes: |-
@@ -1513,7 +1513,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.7.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.7.2.tgz
     version: 3.7.2
   - annotations:
       artifacthub.io/changes: |-
@@ -1540,7 +1540,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.7.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.7.1.tgz
     version: 3.7.1
   - annotations:
       artifacthub.io/changes: |-
@@ -1580,7 +1580,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.7.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.7.0.tgz
     version: 3.7.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1608,7 +1608,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.6.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.6.1.tgz
     version: 3.6.1
   - annotations:
       artifacthub.io/changes: |-
@@ -1633,7 +1633,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.6.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.6.0.tgz
     version: 3.6.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1655,7 +1655,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.5.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.5.1.tgz
     version: 3.5.1
   - annotations:
       artifacthub.io/changes: |-
@@ -1686,7 +1686,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.5.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.5.0.tgz
     version: 3.5.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1698,7 +1698,7 @@ entries:
             Added support for setting `defaultContainerOptions`.
           links:
             - name: Documentation
-              url: https://bjw-s.github.io/helm-charts/docs/common-library/howto/default-container-options
+              url: https://bjw-s-labs.github.io/helm-charts/docs/common-library/howto/default-container-options
         - kind: added
           description: |-
             Added support for `loadBalancerClass`.
@@ -1720,7 +1720,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.4.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.4.0.tgz
     version: 3.4.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1754,7 +1754,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.3.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.3.2.tgz
     version: 3.3.2
   - annotations:
       artifacthub.io/changes: |-
@@ -1788,7 +1788,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.3.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.3.1.tgz
     version: 3.3.1
   - annotations:
       artifacthub.io/changes: |-
@@ -1822,7 +1822,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.3.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.3.0.tgz
     version: 3.3.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1856,7 +1856,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.2.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.2.1.tgz
     version: 3.2.1
   - annotations:
       artifacthub.io/changes: |-
@@ -1890,7 +1890,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.2.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.2.0.tgz
     version: 3.2.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1918,7 +1918,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.1.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.1.0.tgz
     version: 3.1.0
   - annotations:
       artifacthub.io/changes: |-
@@ -1940,7 +1940,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.0.4.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.0.4.tgz
     version: 3.0.4
   - annotations:
       artifacthub.io/changes: |-
@@ -1965,7 +1965,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.0.3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.0.3.tgz
     version: 3.0.3
   - annotations:
       artifacthub.io/changes: |-
@@ -2008,7 +2008,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.0.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.0.2.tgz
     version: 3.0.2
   - annotations:
       artifacthub.io/changes: |-
@@ -2048,7 +2048,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.0.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.0.1.tgz
     version: 3.0.1
   - annotations:
       artifacthub.io/changes: |-
@@ -2088,7 +2088,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.0.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.0.0.tgz
     version: 3.0.0
   - annotations:
       artifacthub.io/changes: |-
@@ -2122,7 +2122,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.0.0-beta4.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.0.0-beta4.tgz
     version: 3.0.0-beta4
   - annotations:
       artifacthub.io/changes: |-
@@ -2153,7 +2153,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.0.0-beta3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.0.0-beta3.tgz
     version: 3.0.0-beta3
   - annotations:
       artifacthub.io/changes: |-
@@ -2184,7 +2184,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.0.0-beta2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.0.0-beta2.tgz
     version: 3.0.0-beta2
   - annotations:
       artifacthub.io/changes: |-
@@ -2215,7 +2215,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-3.0.0-beta1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-3.0.0-beta1.tgz
     version: 3.0.0-beta1
   - annotations:
       artifacthub.io/changes: |-
@@ -2240,7 +2240,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.6.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.6.0.tgz
     version: 2.6.0
   - annotations:
       artifacthub.io/changes: |-
@@ -2277,7 +2277,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.5.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.5.0.tgz
     version: 2.5.0
   - annotations:
       artifacthub.io/changes: |-
@@ -2325,7 +2325,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.4.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.4.0.tgz
     version: 2.4.0
   - annotations:
       artifacthub.io/changes: |-
@@ -2362,7 +2362,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.3.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.3.0.tgz
     version: 2.3.0
   - annotations:
       artifacthub.io/changes: |-
@@ -2386,7 +2386,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.2.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.2.0.tgz
     version: 2.2.0
   - annotations:
       artifacthub.io/changes: |-
@@ -2431,7 +2431,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.1.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.1.1.tgz
     version: 2.1.1
   - annotations:
       artifacthub.io/changes: |-
@@ -2476,7 +2476,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.1.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.1.0.tgz
     version: 2.1.0
   - annotations:
       artifacthub.io/changes: |-
@@ -2498,7 +2498,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.0.3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.0.3.tgz
     version: 2.0.3
   - annotations:
       artifacthub.io/changes: |-
@@ -2523,7 +2523,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.0.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.0.2.tgz
     version: 2.0.2
   - annotations:
       artifacthub.io/changes: |-
@@ -2551,7 +2551,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.0.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.0.1.tgz
     version: 2.0.1
   - annotations:
       artifacthub.io/changes: |-
@@ -2582,7 +2582,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.0.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.0.0.tgz
     version: 2.0.0
   - annotations:
       artifacthub.io/changes: |-
@@ -2611,7 +2611,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.0.0-beta.3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.0.0-beta.3.tgz
     version: 2.0.0-beta.3
   - annotations:
       artifacthub.io/changes: |-
@@ -2639,7 +2639,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.0.0-beta.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.0.0-beta.2.tgz
     version: 2.0.0-beta.2
   - annotations:
       artifacthub.io/changes: |-
@@ -2660,7 +2660,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-2.0.0-beta.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-2.0.0-beta.1.tgz
     version: 2.0.0-beta.1
   - annotations:
       artifacthub.io/changes: |-
@@ -2687,7 +2687,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.5.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.5.1.tgz
     version: 1.5.1
   - annotations:
       artifacthub.io/changes: |-
@@ -2718,7 +2718,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.5.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.5.0.tgz
     version: 1.5.0
   - annotations:
       artifacthub.io/changes: |-
@@ -2750,7 +2750,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.4.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.4.0.tgz
     version: 1.4.0
   - annotations:
       artifacthub.io/changes: |-
@@ -2775,7 +2775,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.3.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.3.2.tgz
     version: 1.3.2
   - annotations:
       artifacthub.io/changes: |-
@@ -2796,7 +2796,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.3.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.3.1.tgz
     version: 1.3.1
   - annotations:
       artifacthub.io/changes: |-
@@ -2822,7 +2822,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.3.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.3.0.tgz
     version: 1.3.0
   - annotations:
       artifacthub.io/changes: |-
@@ -2852,7 +2852,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.2.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.2.1.tgz
     version: 1.2.1
   - annotations:
       artifacthub.io/changes: |-
@@ -2881,7 +2881,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.2.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.2.0.tgz
     version: 1.2.0
   - annotations:
       artifacthub.io/changes: |-
@@ -2922,7 +2922,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.1.3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.1.3.tgz
     version: 1.1.3
   - annotations:
       artifacthub.io/changes: |-
@@ -2963,7 +2963,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.1.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.1.2.tgz
     version: 1.1.2
   - annotations:
       artifacthub.io/changes: |-
@@ -3004,7 +3004,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.1.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.1.1.tgz
     version: 1.1.1
   - annotations:
       artifacthub.io/changes: |-
@@ -3045,7 +3045,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.1.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.1.0.tgz
     version: 1.1.0
   - annotations:
       artifacthub.io/changes: |-
@@ -3088,7 +3088,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.0.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.0.1.tgz
     version: 1.0.1
   - annotations:
       artifacthub.io/changes: |-
@@ -3131,7 +3131,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-1.0.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-1.0.0.tgz
     version: 1.0.0
   - annotations:
       artifacthub.io/changes: |-
@@ -3154,7 +3154,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-0.2.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-0.2.2.tgz
     version: 0.2.2
   - annotations:
       artifacthub.io/changes: |-
@@ -3187,7 +3187,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-0.2.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-0.2.1.tgz
     version: 0.2.1
   - annotations:
       artifacthub.io/changes: |-
@@ -3218,7 +3218,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-0.2.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-0.2.0.tgz
     version: 0.2.0
   - annotations:
       artifacthub.io/changes: |-
@@ -3239,7 +3239,7 @@ entries:
     name: common
     type: library
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-0.1.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-0.1.0.tgz
     version: 0.1.0
   common-chart:
   - annotations:
@@ -3250,7 +3250,7 @@ entries:
     created: "2025-03-14T10:46:08.012455856Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 0.1.0
     description: A common powered chart template. This can be useful for small projects
       that don't have their own chart.
@@ -3260,7 +3260,7 @@ entries:
       name: bjw-s
     name: common-chart
     urls:
-    - https://bjw-s.github.io/helm-charts/other/common-chart-0.1.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/other/common-chart-0.1.0.tgz
     version: 0.1.0
   common-test:
   - apiVersion: v2
@@ -3277,7 +3277,7 @@ entries:
       name: bjw-s
     name: common-test
     urls:
-    - https://bjw-s.github.io/helm-charts/library/common-test-1.0.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/library/common-test-1.0.0.tgz
     version: 1.0.0
   k8s-ycl:
   - annotations:
@@ -3293,7 +3293,7 @@ entries:
     created: "2025-03-14T10:46:07.740542181Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.6.1
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 49dc4cdbcd9393b18e23b4da65eb6171afb9db3b42bbf19dd5e81e16098cbfac
@@ -3311,7 +3311,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.3.3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.3.3.tgz
     version: 1.3.3
   - annotations:
       artifacthub.io/changes: |-
@@ -3326,7 +3326,7 @@ entries:
     created: "2025-03-14T10:46:07.738116133Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.3.2
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: bb9db2ba09db1e0dff938c7c70f1bfca9749948075488a28bd9b2fbae515f09f
@@ -3344,7 +3344,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.3.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.3.2.tgz
     version: 1.3.2
   - annotations:
       artifacthub.io/changes: |-
@@ -3359,7 +3359,7 @@ entries:
     created: "2025-03-14T10:46:07.735862868Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.3.1
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: e19d1550d7f7005fa35425109689072664b98eef979a31d7b1ab02122b7ba53d
@@ -3377,7 +3377,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.3.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.3.1.tgz
     version: 1.3.1
   - annotations:
       artifacthub.io/changes: |-
@@ -3392,7 +3392,7 @@ entries:
     created: "2025-03-14T10:46:07.732854003Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.2.0
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 3b4f81ea284e62c51835bbabef4448468345feb271c2cef9b469d6497713331b
@@ -3410,7 +3410,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.3.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.3.0.tgz
     version: 1.3.0
   - annotations:
       artifacthub.io/changes: |-
@@ -3425,7 +3425,7 @@ entries:
     created: "2025-03-14T10:46:07.730651643Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.1.0
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 19c5a003696e7ad0fc7d6a0166c1621669843609f87a2d115ca0e3513fcba8b8
@@ -3443,7 +3443,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.2.7.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.2.7.tgz
     version: 1.2.7
   - annotations:
       artifacthub.io/changes: |-
@@ -3458,7 +3458,7 @@ entries:
     created: "2025-03-14T10:46:07.728447278Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.0.4
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 1ba04bca7641269c278773b87f56614ab7591022a95cd1e944a3b6a97aed2aa8
@@ -3476,7 +3476,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.2.6.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.2.6.tgz
     version: 1.2.6
   - annotations:
       artifacthub.io/changes: |-
@@ -3491,7 +3491,7 @@ entries:
     created: "2025-03-14T10:46:07.725503633Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.0.3
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 1d20a8cc83b19ee2aa917c449ffcc8003348771bbed566d905db74d3d6e4571c
@@ -3509,7 +3509,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.2.5.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.2.5.tgz
     version: 1.2.5
   - annotations:
       artifacthub.io/changes: |-
@@ -3524,7 +3524,7 @@ entries:
     created: "2025-03-14T10:46:07.72331544Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 3.0.2
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: ec3b972231860571d9e04e88b8225730eff813759020a706bcf5d567a8dfd31a
@@ -3542,7 +3542,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.2.4.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.2.4.tgz
     version: 1.2.4
   - annotations:
       artifacthub.io/changes: |-
@@ -3557,7 +3557,7 @@ entries:
     created: "2025-03-14T10:46:07.721099754Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.6.0
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 80f20f046b095e6c30cf2530f24eb36d93c23378664cab7863679576a58cf13e
@@ -3575,7 +3575,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.2.3.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.2.3.tgz
     version: 1.2.3
   - annotations:
       artifacthub.io/changes: |-
@@ -3590,7 +3590,7 @@ entries:
     created: "2025-03-14T10:46:07.718161853Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.5.0
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 0dd00f7b7bd925f49fc18b3b03ee728b356b3009e0d895c9098353139b997c0a
@@ -3608,7 +3608,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.2.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.2.2.tgz
     version: 1.2.2
   - annotations:
       artifacthub.io/changes: |-
@@ -3623,7 +3623,7 @@ entries:
     created: "2025-03-14T10:46:07.715915391Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.5.0
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 6f80840f37f4420b63cf936a1d786781f4b28ab644f66ae84c0a7c1a3a8acbc1
@@ -3641,7 +3641,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.2.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.2.1.tgz
     version: 1.2.1
   - annotations:
       artifacthub.io/changes: |-
@@ -3659,7 +3659,7 @@ entries:
     created: "2025-03-14T10:46:07.713776329Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.4.0
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 41ed2c69d7ef0f17a89e7e143ad6d3c0aff148bba82c664f913a5fc19c670256
@@ -3677,7 +3677,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.2.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.2.0.tgz
     version: 1.2.0
   - annotations:
       artifacthub.io/changes: |-
@@ -3692,7 +3692,7 @@ entries:
     created: "2025-03-14T10:46:07.711671049Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.3.0
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 72abdf27151c25d942254647c312306b42add183370a742ae9ae488b0114ee7b
@@ -3710,7 +3710,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.1.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.1.0.tgz
     version: 1.1.0
   - annotations:
       artifacthub.io/changes: |-
@@ -3725,7 +3725,7 @@ entries:
     created: "2025-03-14T10:46:07.708716449Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.0.3
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 9a7238d384133f084feabdb4da8f18f559a3470ce0228812a380706ddd46a108
@@ -3743,7 +3743,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.0.2.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.0.2.tgz
     version: 1.0.2
   - annotations:
       artifacthub.io/changes: |-
@@ -3758,7 +3758,7 @@ entries:
     created: "2025-03-14T10:46:07.70669165Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.0.3
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: bdb8ecd8e8df41cf399be6eed3c8db0ee0e7e56508d3fbf1fff89a429caeb3fe
@@ -3776,7 +3776,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.0.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.0.1.tgz
     version: 1.0.1
   - annotations:
       artifacthub.io/changes: |-
@@ -3791,7 +3791,7 @@ entries:
     created: "2025-03-14T10:46:07.704148424Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 2.0.3
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 75b88ffdb892d00a07504d95e3de68008b7890306587bfdd6aa2b9ba3d18c11c
@@ -3809,7 +3809,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-1.0.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-1.0.0.tgz
     version: 1.0.0
   - annotations:
       artifacthub.io/changes: |-
@@ -3824,7 +3824,7 @@ entries:
     created: "2025-03-14T10:46:07.701848231Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.5.1
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 52356533535fcf4a86d669702ed72254b05b5b5c28a03e8fe177c471fad3d286
@@ -3842,7 +3842,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-0.2.1.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-0.2.1.tgz
     version: 0.2.1
   - annotations:
       artifacthub.io/changes: |-
@@ -3860,7 +3860,7 @@ entries:
     created: "2025-03-14T10:46:07.698920462Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.5.1
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: b0c6993d0c59f32ee7f0e2628121bc307091bdc714a406fbe77e3b15bb77902c
@@ -3878,7 +3878,7 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-0.2.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-0.2.0.tgz
     version: 0.2.0
   - annotations:
       artifacthub.io/changes: |-
@@ -3893,7 +3893,7 @@ entries:
     created: "2025-03-14T10:46:07.696917554Z"
     dependencies:
     - name: common
-      repository: https://bjw-s.github.io/helm-charts
+      repository: https://bjw-s-labs.github.io/helm-charts
       version: 1.5.1
     description: Kubernetes admission controller to remove CPU limits from Pods.
     digest: 2214d072159bf5918f7fd95ba0c4e22bc62da6d4263c73b72df20bd8e79fceb5
@@ -3911,6 +3911,6 @@ entries:
     sources:
     - https://github.com/bjw-s/k8s-ycl
     urls:
-    - https://bjw-s.github.io/helm-charts/apps/k8s-ycl-0.1.0.tgz
+    - https://bjw-s-labs.github.io/helm-charts/apps/k8s-ycl-0.1.0.tgz
     version: 0.1.0
 generated: "2025-03-14T10:46:07.694683214Z"
