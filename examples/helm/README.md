@@ -5,7 +5,7 @@
 Makre sure the Helm repository is installed as follows:
 
 ```console
-helm repo add bjw-s https://bjw-s.github.io/helm-charts
+helm repo add bjw-s https://bjw-s-labs.github.io/helm-charts
 helm repo update
 ```
 

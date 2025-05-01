@@ -40,4 +40,4 @@ dependency on what I call the `common` library.
 ## Source code
 
 The source code for the common library chart can be found
-[here](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common).
+[here](https://github.com/bjw-s-labs/helm-charts/tree/main/charts/library/common).
