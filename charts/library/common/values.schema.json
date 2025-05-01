@@ -8,26 +8,31 @@
       "type": "object",
       "properties": {
         "nameOverride": {
+          "description": "Override the chart name",
           "type": [
             "string",
             "null"
           ]
         },
         "fullnameOverride": {
+          "description": "Override the chart fullname definition",
           "type": [
             "string",
             "null"
           ]
         },
         "propagateGlobalMetadataToPods": {
+          "description": "Propagate global metadata to Pod labels",
           "type": "boolean",
           "default": false
         },
         "labels": {
+          "description": "Set additional global labels. Helm templates can be used.",
           "type": "object",
           "$ref": "schemas/definitions.json#/labels"
         },
         "annotations": {
+          "description": "Set additional global annotations. Helm templates can be used.",
           "type": "object",
           "$ref": "schemas/definitions.json#/annotations"
         }
