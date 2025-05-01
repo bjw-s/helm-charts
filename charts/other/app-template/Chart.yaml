@@ -9,10 +9,10 @@ maintainers:
     email: me@bjw-s.dev
 dependencies:
   - name: common
-    repository: https://bjw-s.github.io/helm-charts
+    repository: https://bjw-s-labs.github.io/helm-charts
     version: 3.7.3
 sources:
-  - https://github.com/bjw-s/helm-charts
+  - https://github.com/bjw-s-labs/helm-charts
 annotations:
   artifacthub.io/changes: |-
     - kind: fixed

@@ -28,10 +28,10 @@ Include this chart as a dependency in your `Chart.yaml` e.g.
 dependencies:
   - name: common
     version: 3.7.3
-    repository: https://bjw-s.github.io/helm-charts/
+    repository: https://bjw-s-labs.github.io/helm-charts/
 ```
 
-For more information, take a look at the [Docs](http://bjw-s.github.io/helm-charts/docs/common-library/introduction/).
+For more information, take a look at the [Docs](http://bjw-s-labs.github.io/helm-charts/docs/common-library/introduction/).
 
 ## Configuration
 
@@ -39,14 +39,14 @@ Read through the [values.yaml](./values.yaml) file. It has several commented out
 
 ## Values
 
-**Important**: When deploying an application Helm chart you can add more values from the common library chart [here](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common/values.yaml)
+**Important**: When deploying an application Helm chart you can add more values from the common library chart [here](https://github.com/bjw-s-labs/helm-charts/tree/main/charts/library/common/values.yaml)
 
-These values will be validated by a JSON schema which can be found [here](https://github.com/bjw-s/helm-charts/tree/main/charts/library/common/values.schema.json)
+These values will be validated by a JSON schema which can be found [here](https://github.com/bjw-s-labs/helm-charts/tree/main/charts/library/common/values.schema.json)
 
 ## Support
 
-- See the [Docs](http://bjw-s.github.io/helm-charts/docs/)
-- Open an [issue](https://github.com/bjw-s/helm-charts/issues/new/choose)
+- See the [Docs](http://bjw-s-labs.github.io/helm-charts/docs/)
+- Open an [issue](https://github.com/bjw-s-labs/helm-charts/issues/new/choose)
 - Join the home-operations [Discord](https://discord.gg/home-operations) community
 
 ----------------------------------------------
