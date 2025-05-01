@@ -182,11 +182,11 @@ jobs:
         shell: bash
         working-directory: gh-pages
         run: |
-          helm repo index . --url https://bjw-s.github.io/helm-charts/
+          helm repo index . --url https://bjw-s-labs.github.io/helm-charts/
 
       - name: Commit Changes
         if: ${{ inputs.publishToGhPages }}
-        uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5.1.0
+        uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5.2.0
         with:
           commit_message: "feat: Add Chart package ${{ steps.chart-folder.outputs.chart_folder }}/${{ steps.chart-details.outputs.name }}-${{ steps.chart-details.outputs.version }}"
           repository: gh-pages
