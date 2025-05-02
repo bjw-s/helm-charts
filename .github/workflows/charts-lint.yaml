@@ -47,7 +47,7 @@ jobs:
 
       - name: Get chart details for PR
         id: chart-details-pr
-        uses: bjw-s-labs/helm-charts-actions/get-chart-details@2025.2.0
+        uses: bjw-s-labs/helm-charts-actions/get-chart-details@591cde3b4648e4228e8097a39b1276c6b8824655
         with:
           path: pull/charts/${{ matrix.chart }}
           validateChartYaml: true
@@ -55,7 +55,7 @@ jobs:
 
       - name: Get chart details for default branch
         id: chart-details-default
-        uses: bjw-s-labs/helm-charts-actions/get-chart-details@2025.2.0
+        uses: bjw-s-labs/helm-charts-actions/get-chart-details@591cde3b4648e4228e8097a39b1276c6b8824655
         with:
           path: default/charts/${{ matrix.chart }}
           allowChartToNotExist: true
