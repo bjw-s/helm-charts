@@ -1,0 +1,9 @@
+---
+owners:
+  - name: bjw-s
+    email: me@bjw-s.dev
+ignore:
+  - name: common
+  - name: common-chart
+  - name: common-test
+  - name: k8s-ycl
