@@ -145,7 +145,7 @@ jobs:
           helm: "${{ inputs.helmVersion }}"
 
       - name: Dereference JSON schema
-        uses: bjw-s-labs/helm-charts-actions/dereference-json-schema@0650ac557e715e21879e179ff838059211815171
+        uses: bjw-s-labs/helm-charts-actions/dereference-json-schema@81bce5cb97399bdd6d208392497ed1718317ef00
         with:
           schemaFile: "charts/${{ matrix.chart }}/values.schema.json"
           outputFile: "charts/${{ matrix.chart }}/values.schema.json"
