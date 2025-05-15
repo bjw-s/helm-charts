@@ -40,7 +40,7 @@ runs:
 
     - name: Upload gh-pages artifact
       id: upload-artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: ${{ inputs.artifactName }}
         path: ${{ runner.temp }}/artifact.tar
@@ -49,13 +49,13 @@ runs:
 
     - name: Deploy to GitHub Pages
       id: deploy-gh-pages
-      uses: actions/deploy-pages@v4
+      uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
       with:
         artifact_name: ${{ inputs.artifactName }}
 
     - name: Clean up artifact
       if: ${{ inputs.deleteArtifactAfterPublish == 'true' }}
-      uses: joernott/rm-artifact@v1
+      uses: joernott/rm-artifact@ddae76700af6756a6dbb164be87d62d25d85febd # v1.0.4
       with:
         name: ${{ inputs.artifactName }}
         useGlob: false
