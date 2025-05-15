@@ -63,6 +63,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           path: src
+          persist-credentials: false
 
       - name: Install Helm
         uses: azure/setup-helm@b9e51907a09c216f16ebe8536097933489208112 # v4.3.0
@@ -100,9 +101,11 @@ jobs:
       - name: Format changelog
         id: format-changelog
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          INPUTS_CHANGES: ${{ steps.chart-details.outputs.changes }}
         with:
           script: |
-            let input = '${{ steps.chart-details.outputs.changes }}';
+            let input = process.env.INPUTS_CHANGES ?? '';
             let changelog = "## Changelog:";
             let inputParsed = JSON.parse(input);
 
@@ -131,7 +134,7 @@ jobs:
       # Package Helm chart
       # ----------------------------
       - name: Dereference JSON schema before packaging
-        uses: bjw-s-labs/helm-charts-actions/dereference-json-schema@8ff98e7d2182b542346645356680e2896a68fa2a
+        uses: bjw-s-labs/helm-charts-actions/dereference-json-schema@5f5c177be4f535e18c145dcbddcf819aab199b47
         with:
           schemaFile: "src/charts/${{ inputs.chart }}/values.schema.json"
           outputFile: "src/charts/${{ inputs.chart }}/values.schema.json"
@@ -157,6 +160,7 @@ jobs:
         with:
           path: gh-pages
           ref: gh-pages
+          persist-credentials: false
 
       - name: Copy package to gh-pages structure
         id: copy-package
@@ -237,6 +241,7 @@ jobs:
           CHART_VERSION: ${{ steps.chart-details.outputs.version }}
           CHART_TAG_BASE: ghcr.io/bjw-s-labs/helm
           CHART_TAG: ${{ steps.chart-details.outputs.name }}:${{ steps.chart-details.outputs.version }}
+          GITHUB_REF: ${{ github.ref }}
         run: |
           helm push "${PACKAGE_FILE}" oci://${CHART_TAG_BASE} &> push-metadata.txt
           cat push-metadata.txt
@@ -244,4 +249,4 @@ jobs:
           cosign sign --yes "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}"
           cosign verify "${CHART_TAG_BASE}/${CHART_TAG}@${CHART_DIGEST}" \
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-            --certificate-identity "https://github.com/${{ github.repository }}/.github/workflows/chart-release-steps.yaml@${{ github.ref }}"
+            --certificate-identity "https://github.com/${{ github.repository }}/.github/workflows/chart-release-steps.yaml@${GITHUB_REF}"

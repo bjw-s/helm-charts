@@ -39,6 +39,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Validate prerequisite folders
         working-directory: "charts/${{ matrix.chart }}"
@@ -75,7 +77,7 @@ jobs:
           kubectl taint --all=true nodes node.cloudprovider.kubernetes.io/uninitialized- || true
 
       - name: Dereference JSON schema
-        uses: bjw-s/helm-charts-actions/dereference-json-schema@main
+        uses: bjw-s-labs/helm-charts-actions/dereference-json-schema@5f5c177be4f535e18c145dcbddcf819aab199b47
         with:
           schemaFile: "charts/${{ matrix.chart }}/values.schema.json"
           outputFile: "charts/${{ matrix.chart }}/values.schema.json"
@@ -87,7 +89,7 @@ jobs:
         working-directory: charts/${{ matrix.chart }}
         run: |
           yq -i '. |= .dependencies |= map(select(.name == "common" and .repository == "https://bjw-s-labs.github.io/helm-charts").version = ">0.0.0-0")' Chart.yaml
-          yq -i '. |= .dependencies |= map(select(.name == "common" and .repository == "https://bjw-s-labs.github.io/helm-charts").repository = "file://${{ env.COMMON_LIBRARY_LOCATION }}")' Chart.yaml
+          yq -i '. |= .dependencies |= map(select(.name == "common" and .repository == "https://bjw-s-labs.github.io/helm-charts").repository = "file://${COMMON_LIBRARY_LOCATION}")' Chart.yaml
           echo "::group::Modified Chart.yaml"
           cat Chart.yaml
           echo "::endgroup::"
@@ -99,7 +101,7 @@ jobs:
             cd "test-chart"
           fi
 
-          ct install --config "$GITHUB_WORKSPACE/.ci/ct/ct.yaml" --charts .
+          ct install --config "${GITHUB_WORKSPACE}/.ci/ct/ct.yaml" --charts .
 
   install_success:
     needs:
@@ -127,6 +129,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       - name: Validate prerequisite folders
         working-directory: "charts/${{ matrix.chart }}"
@@ -145,7 +149,7 @@ jobs:
           helm: "${{ inputs.helmVersion }}"
 
       - name: Dereference JSON schema
-        uses: bjw-s-labs/helm-charts-actions/dereference-json-schema@8ff98e7d2182b542346645356680e2896a68fa2a
+        uses: bjw-s-labs/helm-charts-actions/dereference-json-schema@5f5c177be4f535e18c145dcbddcf819aab199b47
         with:
           schemaFile: "charts/${{ matrix.chart }}/values.schema.json"
           outputFile: "charts/${{ matrix.chart }}/values.schema.json"
@@ -153,13 +157,15 @@ jobs:
 
       - name: Run tests
         working-directory: "charts/${{ matrix.chart }}"
+        env:
+          MATRIX_CHART: ${{ matrix.chart }}
         run: |
           if [[ -d "test-chart" ]]; then
             cd "test-chart"
           fi
 
           if [[ ! -d "unittests" ]]; then
-            echo "No unit tests found for chart ${{ matrix.chart }}"
+            echo "No unit tests found for chart ${MATRIX_CHART}"
             exit 0
           fi
 
