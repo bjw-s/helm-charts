@@ -34,7 +34,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          fetch-depth: 0
+          persist-credentials: false
 
       - name: Grab repository configuration
         id: repo-config
@@ -45,35 +45,35 @@ jobs:
       - name: Get changed library charts
         id: changed-library-charts
         if: ${{ github.event_name != 'workflow_dispatch' }}
-        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46.0.5
+        uses: bjw-s-labs/action-changed-files@b1144fc772fca235a50902c7bb6cc431cc7d8e27 # v0.3.2
         with:
-          matrix: true
           path: charts
-          dir_names: true
-          dir_names_max_depth: 2
-          files: |
+          include_only_directories: true
+          max_depth: 2
+          patterns: |
             library/**
 
-      - name: Get changed charts
+      - name: Get changed library charts
         id: changed-charts
         if: ${{ github.event_name != 'workflow_dispatch' }}
-        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46.0.5
+        uses: bjw-s-labs/action-changed-files@b1144fc772fca235a50902c7bb6cc431cc7d8e27 # v0.3.2
         with:
-          matrix: true
           path: charts
-          dir_names: true
-          dir_names_max_depth: 2
-          files_ignore: |
-            library/**
+          include_only_directories: true
+          max_depth: 2
+          patterns: |
+            !library/**
 
       - name: Get specified charts
         id: specified-charts
         if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          INPUTS_CHARTS: ${{ inputs.charts }}
         with:
           script: |
             const fs = require('fs');
-            let input = '${{ inputs.charts }}';
+            let input = process.env.INPUTS_CHARTS ?? '[]';
             let cwd = process.cwd();
 
             let tmpCharts = []
@@ -109,16 +109,33 @@ jobs:
       - name: Filter out excluded charts
         id: filtered-charts
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        env:
+          SPECIFIED_LIBRARY_CHARTS: ${{ steps.specified-charts.outputs.libraryChartsToRelease }}
+          CHANGED_LIBRARY_CHARTS: ${{ steps.changed-library-charts.outputs.changed_files }}
+          SPECIFIED_CHARTS: ${{ steps.specified-charts.outputs.otherChartsToRelease }}
+          CHANGED_CHARTS: ${{ steps.changed-charts.outputs.changed_files }}
+          REPO_SETTINGS: ${{ steps.repo-config.outputs.config }}
         with:
           script: |
-            let libraryChartsInput = ${{ github.event_name == 'workflow_dispatch' && steps.specified-charts.outputs.libraryChartsToRelease || steps.changed-library-charts.outputs.all_changed_files }};
-            let otherChartsInput = ${{ github.event_name == 'workflow_dispatch' && steps.specified-charts.outputs.otherChartsToRelease || steps.changed-charts.outputs.all_changed_files }};
-            let excludedFromRelease = ${{ steps.repo-config.outputs.config }}['excluded-charts-release'];
+            const SPECIFIED_LIBRARY_CHARTS = process.env.SPECIFIED_LIBRARY_CHARTS ?? '[]';
+            const CHANGED_LIBRARY_CHARTS = process.env.CHANGED_LIBRARY_CHARTS ?? '[]';
+            const SPECIFIED_CHARTS = process.env.SPECIFIED_CHARTS ?? '[]';
+            const CHANGED_CHARTS = process.env.CHANGED_CHARTS ?? '[]';
+            const REPO_SETTINGS = process.env.REPO_SETTINGS ?? '{}';
 
-            let libraryCharts = libraryChartsInput.filter(item => excludedFromRelease.indexOf(item) < 0);
+            const eventName = '${{ github.event_name }}';
+            const repoSettings = JSON.parse(REPO_SETTINGS);
+
+            const libraryChartsInput = JSON.parse(eventName === 'workflow_dispatch' ? SPECIFIED_LIBRARY_CHARTS : CHANGED_LIBRARY_CHARTS);
+            const otherChartsInput = JSON.parse(eventName === 'workflow_dispatch' ? SPECIFIED_CHARTS : CHANGED_CHARTS);
+            const excludedFromRelease = repoSettings['excluded-charts-release'];
+
+            const libraryCharts = libraryChartsInput.filter(item => excludedFromRelease.indexOf(item) < 0);
             core.setOutput('libraryChartsToRelease', JSON.stringify(libraryCharts));
-            let otherCharts = otherChartsInput.filter(item => excludedFromRelease.indexOf(item) < 0);
+            console.log('Library charts to release:', JSON.stringify(libraryCharts, null, 2));
+            const otherCharts = otherChartsInput.filter(item => excludedFromRelease.indexOf(item) < 0);
             core.setOutput('otherChartsToRelease', JSON.stringify(otherCharts));
+            console.log('Other charts to release:', JSON.stringify(otherCharts, null, 2));
 
   release-library-charts:
     name: Release library charts
