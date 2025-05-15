@@ -2,22 +2,24 @@
 apiVersion: v2
 description: A common powered chart template. This can be useful for small projects that don't have their own chart.
 name: app-template
-version: 3.7.3
-kubeVersion: ">=1.22.0-0"
+version: 4.0.0
+kubeVersion: ">=1.28.0-0"
 maintainers:
   - name: bjw-s
     email: me@bjw-s.dev
 dependencies:
   - name: common
     repository: https://bjw-s-labs.github.io/helm-charts
-    version: 3.7.3
+    version: 4.0.0
 sources:
   - https://github.com/bjw-s-labs/helm-charts
 annotations:
   artifacthub.io/changes: |-
-    - kind: fixed
+    - kind: changed
       description: |-
-        Fixed name suffix for HTTPRoute
-    - kind: fixed
-      description: |-
-        Fixed incorrect default backendRefs values in HTTPRoute
+        Upgraded the common library to v4.0.0
+      links:
+        - name: Upgrade notes
+          url: https://bjw-s-labs.github.io/helm-charts/docs/app-template/upgrade-instructions/
+        - name: Detailed release notes
+          url: https://github.com/bjw-s-labs/helm-charts/releases/tag/common-4.0.0

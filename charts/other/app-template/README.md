@@ -1,27 +1,36 @@
 # app-template
 
-![Version: 3.7.3](https://img.shields.io/badge/Version-3.7.3-informational?style=flat-square)
+![Version: 4.0.0](https://img.shields.io/badge/Version-4.0.0-informational?style=flat-square)
 
 A common powered chart template. This can be useful for small projects that don't have their own chart.
 
 ## Requirements
 
-Kubernetes: `>=1.22.0-0`
+Kubernetes: `>=1.28.0-0`
 
 ## Dependencies
 
 | Repository | Name | Version |
 |------------|------|---------|
-| https://bjw-s-labs.github.io/helm-charts | common | 3.7.3 |
+| https://bjw-s-labs.github.io/helm-charts | common | 4.0.0 |
 
 ## Installing the Chart
 
+### Helm repository
+
 ```bash
 # Add the repository
-helm repo add bjw-s https://bjw-s-labs.github.io/helm-charts/
+helm repo add bjw-s {{template "custom.helm.url"}}
 
 # Install the chart
 helm install bjw-s app-template -f values.yaml
+```
+
+### OCI
+
+```bash
+# Install the chart
+helm install oci://ghcr.io/bjw-s/helm/app-template -f values.yaml
 ```
 
 ## Configuration

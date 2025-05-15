@@ -100,7 +100,6 @@ The values for app-template v3.x would become this:
 
 ```yaml
 ---
-# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/common-3.2.0/charts/library/common/values.schema.json
 defaultPodOptions:
   enableServiceLinks: true
   securityContext:
@@ -166,7 +165,6 @@ persistence:
 +++ new
 @@ -1,42 +1,55 @@
 ---
-+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/common-3.2.0/charts/library/common/values.schema.json
  defaultPodOptions:
 +  enableServiceLinks: true
    securityContext:
