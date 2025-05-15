@@ -6,7 +6,7 @@ Function library for Helm charts
 
 ## Source Code
 
-* <https://github.com/bjw-s/helm-charts>
+* <https://github.com/bjw-s-labs/helm-charts>
 
 ## Requirements
 
