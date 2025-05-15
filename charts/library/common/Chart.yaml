@@ -37,6 +37,9 @@ annotations:
     - kind: added
       description: |-
         Allow configuring the merge strategy for `defaultPodOptions`
+    - kind: added
+      description: |-
+        Added support for setting `subPathExpr` on globalMounts and advancedMounts persistence items
     - kind: changed
       description: |-
         Standardized resource name logic for all resources

@@ -335,6 +335,9 @@
       "subPath": {
         "type": "string"
       },
+      "subPathExpr": {
+        "type": "string"
+      },
       "mountPropagation": {
         "type": "string"
       }

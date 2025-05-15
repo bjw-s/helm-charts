@@ -81,20 +81,22 @@ volumeMounts used by the container.
 
         {{- /* Use the specified subPath if provided */ -}}
         {{- with .subPath -}}
-          {{- $subPath := . -}}
-          {{- $_ := set $volumeMount "subPath" $subPath -}}
+          {{- $_ := set $volumeMount "subPath" . -}}
+        {{- end -}}
+
+        {{- /* Use the specified subPathExpr if provided */ -}}
+        {{- with .subPathExpr -}}
+          {{- $_ := set $volumeMount "subPathExpr" . -}}
         {{- end -}}
 
         {{- /* Use the specified readOnly setting if provided */ -}}
         {{- with .readOnly -}}
-          {{- $readOnly := . -}}
-          {{- $_ := set $volumeMount "readOnly" $readOnly -}}
+          {{- $_ := set $volumeMount "readOnly" . -}}
         {{- end -}}
 
         {{- /* Use the specified mountPropagation setting if provided */ -}}
         {{- with .mountPropagation -}}
-          {{- $mountPropagation := . -}}
-          {{- $_ := set $volumeMount "mountPropagation" $mountPropagation -}}
+          {{- $_ := set $volumeMount "mountPropagation" . -}}
         {{- end -}}
 
         {{- $enabledVolumeMounts = append $enabledVolumeMounts $volumeMount -}}

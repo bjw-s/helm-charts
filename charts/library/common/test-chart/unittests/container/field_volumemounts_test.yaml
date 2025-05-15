@@ -154,6 +154,25 @@ tests:
             mountPath: /config
             subPath: mySubPath
 
+  - it: mount with subPathExpr should pass
+    set:
+      persistence:
+        config:
+          existingClaim: myClaim
+          globalMounts:
+            - path: /config
+              subPathExpr: $(POD_NAME)
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: config
+            mountPath: /config
+            subPathExpr: $(POD_NAME)
+
   - it: hostPath with custom mountPath should pass
     set:
       persistence:
