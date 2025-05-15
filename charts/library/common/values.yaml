@@ -11,6 +11,12 @@ global:
   # -- Set additional global annotations. Helm templates can be used.
   annotations: {}
 
+# -- Set the strategy for the default pod options. Defaults to
+#    overwrite: If pod-level options are set, use those instead of the defaults.
+#    merge: If pod-level options are set, merge them with the defaults
+# @default -- overwrite
+defaultPodOptionsStrategy: overwrite
+
 # -- Set default options for all controllers / pods here
 # Each of these options can be overridden on a Controller level
 defaultPodOptions:

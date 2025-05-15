@@ -38,6 +38,15 @@
         }
       }
     },
+    "defaultPodOptionsStrategy": {
+      "description": "Set the strategy for the default pod options.\noverwrite: If pod-level options are set, use those instead of the defaults.\nmerge: If pod-level options are set, merge them with the defaults.",
+      "type": "string",
+      "default": "overwrite",
+      "enum": [
+        "overwrite",
+        "merge"
+      ]
+    },
     "defaultPodOptions": {
       "description": "Define defaults for pod-level configuration options",
       "type": "object",

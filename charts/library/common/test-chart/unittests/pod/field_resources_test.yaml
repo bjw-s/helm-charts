@@ -61,7 +61,7 @@ tests:
               cpu: 100m
               memory: 128Mi
 
-  - it: defaultPodOption with pod override should pass
+  - it: defaultPodOption with pod override should overwrite by default
     set:
       defaultPodOptions:
         resources:
@@ -82,4 +82,29 @@ tests:
           path: spec.template.spec.resources
           value:
             limits:
+              memory: 256Mi
+
+  - it: defaultPodOption with pod override can be merged
+    set:
+      defaultPodOptionsStrategy: merge
+      defaultPodOptions:
+        resources:
+          limits:
+            cpu: 100m
+            memory: 128Mi
+      controllers:
+        main:
+          pod:
+            resources:
+              limits:
+                memory: 256Mi
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.resources
+          value:
+            limits:
+              cpu: 100m
               memory: 256Mi

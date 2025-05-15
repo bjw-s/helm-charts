@@ -34,6 +34,9 @@ annotations:
     - kind: added
       description: |-
         Added explicit JSON schema for `rbac` root key
+    - kind: added
+      description: |-
+        Allow configuring the merge strategy for `defaultPodOptions`
     - kind: changed
       description: |-
         Standardized resource name logic for all resources
