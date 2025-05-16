@@ -42,7 +42,6 @@ tests:
       - failedTemplate:
           errorMessage: "controller field is required because automatic controller detection is not possible. (service: main)"
 
-
   - it: no ports enabled should fail
     values:
       - ../_values/service_main_default.yaml

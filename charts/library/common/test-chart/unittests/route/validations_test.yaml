@@ -41,3 +41,40 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: "backend refs and request redirect filters cannot co-exist."
+
+  - it: automatic service determination should fail when no service is enabled
+    set:
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        rules:
+          - backendRefs:
+              - port: 8080
+    asserts:
+      - failedTemplate:
+          errorMessage: "Either name or identifier is required because automatic Service detection is not possible. (route: main)"
+
+  - it: automatic service determination should fail when >1 service is enabled
+    set:
+      service:
+        main:
+          controller: main
+          ports:
+            ui:
+              port: 8082
+        second:
+          controller: main
+          ports:
+            ui:
+              port: 8082
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        rules:
+          - backendRefs:
+              - port: 8080
+    asserts:
+      - failedTemplate:
+          errorMessage: "Either name or identifier is required because automatic Service detection is not possible. (route: main)"

@@ -1,0 +1,54 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: service - fields - selector
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+  - ../_values/service_main_default.yaml
+tests:
+  - it: selector is configured by default
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.selector
+          value:
+            app.kubernetes.io/controller: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+
+  - it: additional selector labels can be configured
+    set:
+      service:
+        main:
+          extraSelectorLabels:
+            extraLabel: extraValue
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.selector
+          value:
+            app.kubernetes.io/controller: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            extraLabel: extraValue
+
+  - it: selector can determine default controller automatically
+    set:
+      service:
+        main:
+          controller: ""
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.selector
+          value:
+            app.kubernetes.io/controller: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
