@@ -30,10 +30,12 @@ jobs:
         chart: ${{ fromJSON(inputs.charts) }}
         k8s_version:
           [
+            "v1.28.15",
             "v1.29.13",
             "v1.30.11",
             "v1.31.7",
             "v1.32.3",
+            "v1.33.0",
           ]
       fail-fast: false
     steps:
