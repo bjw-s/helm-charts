@@ -3,7 +3,7 @@ apiVersion: v2
 name: common
 description: Function library for Helm charts
 type: library
-version: 4.0.0
+version: 4.0.1
 kubeVersion: ">=1.28.0-0"
 keywords:
   - common
@@ -46,6 +46,9 @@ annotations:
     - kind: added
       description: |-
         Added support for automatically determining the target service for Ingress paths if there is only one enabled Service
+    - kind: added
+      description: |-
+        Added support for automatically determining the target service for Route backends if there is only one enabled Service
     - kind: changed
       description: |-
         **Breaking**: Standardized resource name logic for all resources. This may cause changes in the generated resource names.

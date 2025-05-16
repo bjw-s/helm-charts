@@ -60,6 +60,30 @@ tests:
             port: 8080
             weight: 1
 
+  - it: automatic service and port reference should pass
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        rules:
+          - backendRefs: [{}]
+    documentSelector:
+      path: $[?(@.kind == "HTTPRoute")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0]
+          value:
+            group: ""
+            kind: Service
+            name: release-name
+            namespace: NAMESPACE
+            port: 8081
+            weight: 1
+
   - it: custom service reference should pass
     set:
       route.main:
