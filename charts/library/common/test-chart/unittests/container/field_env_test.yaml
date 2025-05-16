@@ -1,30 +1,28 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: container env values
+suite: container - fields - env
 templates:
   - common.yaml
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        notExists:
+      - notExists:
           path: spec.template.spec.containers[0].env
 
   - it: KeyValue string should pass
     set:
       controllers.main.containers.main.env:
         string: value_of_env
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[0]
           value:
             name: string
@@ -34,12 +32,11 @@ tests:
     set:
       controllers.main.containers.main.env:
         string: 4.2
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[0]
           value:
             name: string
@@ -49,12 +46,11 @@ tests:
     set:
       controllers.main.containers.main.env:
         string: 1
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[0]
           value:
             name: string
@@ -65,12 +61,11 @@ tests:
       controllers.main.containers.main.env:
         - name: STATIC_ENV_FROM_LIST
           value: STATIC_ENV_VALUE_FROM_LIST
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[0]
           value:
             name: STATIC_ENV_FROM_LIST
@@ -83,12 +78,11 @@ tests:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[0]
           value:
             name: DYNAMIC_ENV_FROM_LIST
@@ -102,12 +96,11 @@ tests:
         - name: DYNAMIC_ENV_FROM_LIST
           fieldRef:
             fieldPath: spec.nodeName
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[0]
           value:
             name: DYNAMIC_ENV_FROM_LIST
@@ -121,12 +114,11 @@ tests:
         DYNAMIC_ENV:
           fieldRef:
             fieldPath: spec.nodeName
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[0]
           value:
             name: DYNAMIC_ENV
@@ -143,18 +135,16 @@ tests:
             secretKeyRef:
               name: "{{ .Release.Name }}-secret"
               key: "{{ .Release.Name }}-key"
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[0]
           value:
             name: DYNAMIC_ENV
             value: RELEASE-NAME-admin
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[1]
           value:
             name: TEMPLATE_ENV
@@ -171,20 +161,18 @@ tests:
           valueFrom:
             fieldRef:
               fieldPath: spec.nodeName
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[0]
           value:
             name: DYNAMIC_ENV
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[1]
           value:
             name: STATIC_ENV
@@ -207,32 +195,28 @@ tests:
           dependsOn:
             - DYNAMIC_ENV
             - ORDERED_ENV
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[0]
           value:
             name: STATIC_ENV
             value: "1"
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[1]
           value:
             name: DYNAMIC_ENV
             valueFrom:
               fieldRef:
                 fieldPath: spec.nodeName
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[2]
           value:
             name: ORDERED_ENV
             value: "true"
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[3]
           value:
             name: DEPENDENT_ENV
@@ -243,12 +227,11 @@ tests:
       controllers.main.defaultContainerOptions:
         env:
           string: value_of_env
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[0]
           value:
             name: string
@@ -261,12 +244,11 @@ tests:
           string: value_of_env
       controllers.main.containers.main.env:
         someThingElse: value_of_env
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].env[0]
           value:
             name: someThingElse

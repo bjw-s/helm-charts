@@ -1,7 +1,7 @@
 {{/*
 Return the enabled NetworkPolicies.
 */}}
-{{- define "bjw-s.common.lib.networkPolicy.enabledNetworkPolicies" -}}
+{{- define "bjw-s.common.lib.networkpolicy.enabledNetworkPolicies" -}}
   {{- $rootContext := .rootContext -}}
   {{- $enabledNetworkPolicies := dict -}}
 

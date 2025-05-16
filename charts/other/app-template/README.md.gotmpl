@@ -20,12 +20,21 @@ https://bjw-s-labs.github.io/helm-charts/
 
 ## Installing the Chart
 
+### Helm repository
+
 ```bash
 # Add the repository
 helm repo add bjw-s {{template "custom.helm.url"}}
 
 # Install the chart
 helm install bjw-s app-template -f values.yaml
+```
+
+### OCI
+
+```bash
+# Install the chart
+helm install oci://ghcr.io/bjw-s/helm/app-template -f values.yaml
 ```
 
 ## Configuration

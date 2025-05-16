@@ -1,0 +1,61 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: service - metadata - labels
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+  - ../_values/service_main_default.yaml
+tests:
+  - it: default labels
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: release-name
+            helm.sh/chart: common-test-1.0.0
+
+  - it: custom labels
+    set:
+      service.main.labels:
+        test_label: test
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: release-name
+            helm.sh/chart: common-test-1.0.0
+            test_label: test
+
+  - it: custom labels mixed with global labels
+    set:
+      global.labels:
+        global_label: test
+      service.main.labels:
+        test_label: test
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            app.kubernetes.io/service: release-name
+            global_label: test
+            helm.sh/chart: common-test-1.0.0
+            test_label: test

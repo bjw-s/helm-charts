@@ -1,0 +1,213 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: serviceMonitor - metadata - name
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  serviceMonitor.main:
+    serviceName: "{{ .Release.Name }}"
+    endpoints:
+      - port: http
+        scheme: http
+        path: /metrics
+        interval: 1m
+        scrapeTimeout: 10s
+tests:
+  - it: name defaults to chart fullName
+    asserts:
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: release-name
+          any: true
+
+  - it: forceRename
+    set:
+      serviceMonitor.main.forceRename: forceRename
+    asserts:
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: forcerename
+          any: true
+
+  - it: forceRename with template
+    set:
+      serviceMonitor.main.forceRename: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: common-test
+          any: true
+
+  - it: prefix
+    set:
+      serviceMonitor.main.prefix: prefix
+    asserts:
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: prefix-release-name
+          any: true
+
+  - it: prefix with template
+    set:
+      serviceMonitor.main.prefix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: common-test-release-name
+          any: true
+
+  - it: suffix
+    set:
+      serviceMonitor.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: release-name-suffix
+          any: true
+
+  - it: suffix with template
+    set:
+      serviceMonitor.main.suffix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: release-name-common-test
+          any: true
+
+  - it: both prefix and suffix
+    set:
+      serviceMonitor.main.prefix: prefix
+      serviceMonitor.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: prefix-release-name-suffix
+          any: true
+
+  - it: prefix, suffix and forceRename (illegal combination)
+    set:
+      serviceMonitor.main.forceRename: forceRename
+      serviceMonitor.main.prefix: prefix
+      serviceMonitor.main.suffix: suffix
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"
+
+  - it: multiple items
+    set:
+      serviceMonitor.second:
+        serviceName: "{{ .Release.Name }}"
+        endpoints:
+          - port: http
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 10s
+    asserts:
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: release-name-second
+          any: true
+
+  - it: multiple items with prefix
+    set:
+      serviceMonitor.second:
+        prefix: prefix
+        serviceName: "{{ .Release.Name }}"
+        endpoints:
+          - port: http
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 10s
+    asserts:
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: prefix-release-name-second
+          any: true
+
+  - it: multiple items with suffix
+    set:
+      serviceMonitor.second:
+        suffix: suffix
+        serviceName: "{{ .Release.Name }}"
+        endpoints:
+          - port: http
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 10s
+    asserts:
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix and suffix
+    set:
+      serviceMonitor.second:
+        prefix: prefix
+        suffix: suffix
+        serviceName: "{{ .Release.Name }}"
+        endpoints:
+          - port: http
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 10s
+    asserts:
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: ServiceMonitor
+          apiVersion: monitoring.coreos.com/v1
+          name: prefix-release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix, suffix and forceRename (illegal combination)
+    set:
+      serviceMonitor.second:
+        forceRename: forceRename
+        prefix: prefix
+        suffix: suffix
+        serviceName: "{{ .Release.Name }}"
+        endpoints:
+          - port: http
+            scheme: http
+            path: /metrics
+            interval: 1m
+            scrapeTimeout: 10s
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"

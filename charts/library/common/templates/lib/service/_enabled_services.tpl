@@ -14,6 +14,8 @@ Return the enabled services.
       {{- end -}}
 
       {{- if $serviceEnabled -}}
+
+
         {{- $_ := set $enabledServices $name . -}}
       {{- end -}}
     {{- end -}}

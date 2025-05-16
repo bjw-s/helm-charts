@@ -25,16 +25,21 @@ kind: {{ . }}
 metadata:
   name: {{ $roleObject.name }}
   {{- with $labels }}
-  labels: {{- toYaml . | nindent 4 -}}
+  labels:
+    {{- range $key, $value := . }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+    {{- end }}
   {{- end }}
   {{- with $annotations }}
-  annotations: {{- toYaml . | nindent 4 -}}
+  annotations:
+    {{- range $key, $value := . }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+    {{- end }}
   {{- end }}
-  {{ if eq $roleObject.type "Role" -}}
+  {{- if eq $roleObject.type "Role" }}
   namespace: {{ $rootContext.Release.Namespace }}
-  {{- end -}}
-{{ with $rules }}
+  {{- end }}
+{{- with $rules }}
 rules: {{- tpl . $rootContext | nindent 2 }}
 {{- end }}
-
 {{- end -}}

@@ -5,6 +5,15 @@ Validate Service values
   {{- $rootContext := .rootContext -}}
   {{- $serviceObject := .object -}}
 
+  {{- $enabledControllers := (include "bjw-s.common.lib.controller.enabledControllers" (dict "rootContext" $rootContext) | fromYaml ) -}}
+
+  {{/* Verify automatic controller detection */}}
+  {{- if not (eq 1 (len $enabledControllers)) -}}
+    {{- if or (not (has "controller" (keys $serviceObject))) (empty (get $serviceObject "controller")) -}}
+      {{- fail (printf "controller field is required because automatic controller detection is not possible. (service: %s)" $serviceObject.identifier ) -}}
+    {{- end -}}
+  {{- end -}}
+
   {{- if empty (get $serviceObject "controller") -}}
     {{- fail (printf "controller field is required for Service. (service: %s)" $serviceObject.identifier) -}}
   {{- end -}}
@@ -29,13 +38,13 @@ Validate Service values
     {{- $enabledPorts := include "bjw-s.common.lib.service.enabledPorts" (dict "rootContext" $rootContext "serviceObject" $serviceObject) | fromYaml }}
     {{- /* Validate at least one port is enabled */ -}}
     {{- if not $enabledPorts -}}
-      {{- fail (printf "no ports are enabled for Service with key \"%s\"" $serviceObject.identifier) -}}
+      {{- fail (printf "No ports are enabled for Service with this identifier. (service: '%s')" $serviceObject.identifier) -}}
     {{- end -}}
 
     {{- range $name, $port := $enabledPorts -}}
       {{- /* Validate a port number is configured */ -}}
       {{- if not $port.port -}}
-        {{- fail (printf "no port number is configured for port \"%s\" under Service with key \"%s\"" $name $serviceObject.identifier) -}}
+        {{- fail (printf "No port number is configured for this port. (port: '%s', service: '%s')" $name $serviceObject.identifier) -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}

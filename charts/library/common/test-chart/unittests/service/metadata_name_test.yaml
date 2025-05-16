@@ -1,0 +1,195 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: service - metadata - name
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+  - ../_values/service_main_default.yaml
+tests:
+  - it: name defaults to chart fullName
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name
+          any: true
+
+  - it: forceRename
+    set:
+      service.main.forceRename: forceRename
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: forcerename
+          any: true
+
+  - it: forceRename with template
+    set:
+      service.main.forceRename: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: common-test
+          any: true
+
+  - it: prefix
+    set:
+      service.main.prefix: prefix
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: prefix-release-name
+          any: true
+
+  - it: prefix with template
+    set:
+      service.main.prefix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: common-test-release-name
+          any: true
+
+  - it: suffix
+    set:
+      service.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-suffix
+          any: true
+
+  - it: suffix with template
+    set:
+      service.main.suffix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-common-test
+          any: true
+
+  - it: both prefix and suffix
+    set:
+      service.main.prefix: prefix
+      service.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: prefix-release-name-suffix
+          any: true
+
+  - it: prefix, suffix and forceRename (illegal combination)
+    set:
+      service.main.forceRename: forceRename
+      service.main.prefix: prefix
+      service.main.suffix: suffix
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"
+
+  - it: multiple items
+    set:
+      service:
+        second:
+          controller: main
+          ports:
+            ui:
+              port: 8082
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-second
+          any: true
+
+  - it: multiple items with prefix
+    set:
+      service:
+        second:
+          controller: main
+          prefix: prefix
+          ports:
+            ui:
+              port: 8082
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: prefix-release-name-second
+          any: true
+
+  - it: multiple items with suffix
+    set:
+      service:
+        second:
+          controller: main
+          suffix: suffix
+          ports:
+            ui:
+              port: 8082
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix and suffix
+    set:
+      service:
+        second:
+          controller: main
+          prefix: prefix
+          suffix: suffix
+          ports:
+            ui:
+              port: 8082
+    asserts:
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: Service
+          apiVersion: v1
+          name: prefix-release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix, suffix and forceRename (illegal combination)
+    set:
+      service:
+        second:
+          controller: main
+          forceRename: forceRename
+          prefix: prefix
+          suffix: suffix
+          ports:
+            ui:
+              port: 8082
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"

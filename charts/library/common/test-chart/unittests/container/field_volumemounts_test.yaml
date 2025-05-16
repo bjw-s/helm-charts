@@ -1,0 +1,295 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: container - fields - volumeMounts
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: no persistence should pass
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].volumeMounts
+
+  - it: default should pass
+    set:
+      persistence:
+        config:
+          accessMode: ReadWriteOnce
+          size: 1Gi
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: config
+            mountPath: /config
+
+  - it: advanced mount config should pass
+    set:
+      controllers:
+        main:
+          containers:
+            second-container:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+        second:
+          containers:
+            first-container:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+      persistence:
+        data:
+          type: configMap
+          name: myConfigMap
+          globalMounts:
+            - path: /globalTest
+          advancedMounts:
+            main:
+              main:
+                - path: /data/config.yaml
+                  readOnly: false
+                  mountPropagation: HostToContainer
+                  subPath: config.yaml
+              second-container:
+                - path: /appdata/config
+                  readOnly: true
+            second:
+              first-container:
+                - path: /second-pod/config.yaml
+                  readOnly: false
+                  subPath: config.yaml
+    asserts:
+      - documentSelector:
+          path: $[?(@.kind == "Deployment")].metadata.name
+          value: release-name-main
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts
+          value:
+            - mountPath: /globalTest
+              name: data
+            - mountPath: /data/config.yaml
+              name: data
+              subPath: config.yaml
+              mountPropagation: HostToContainer
+      - documentSelector:
+          path: $[?(@.kind == "Deployment")].metadata.name
+          value: release-name-main
+        equal:
+          path: spec.template.spec.containers[1].volumeMounts
+          value:
+            - mountPath: /globalTest
+              name: data
+            - mountPath: /appdata/config
+              name: data
+              readOnly: true
+      - documentSelector:
+          path: $[?(@.kind == "Deployment")].metadata.name
+          value: release-name-second
+        equal:
+          path: spec.template.spec.containers[0].volumeMounts
+          value:
+            - mountPath: /globalTest
+              name: data
+            - mountPath: /second-pod/config.yaml
+              name: data
+              subPath: config.yaml
+
+  - it: emptyDir should pass
+    set:
+      persistence:
+        cache:
+          type: emptyDir
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: cache
+            mountPath: /cache
+
+  - it: custom mountPath should pass
+    set:
+      persistence:
+        config:
+          accessMode: ReadWriteMany
+          size: 1G
+          globalMounts:
+            - path: /custom
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: config
+            mountPath: /custom
+
+  - it: mount with subPath should pass
+    set:
+      persistence:
+        config:
+          existingClaim: myClaim
+          globalMounts:
+            - path: /config
+              subPath: "mySubPath"
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: config
+            mountPath: /config
+            subPath: mySubPath
+
+  - it: mount with subPathExpr should pass
+    set:
+      persistence:
+        config:
+          existingClaim: myClaim
+          globalMounts:
+            - path: /config
+              subPathExpr: $(POD_NAME)
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: config
+            mountPath: /config
+            subPathExpr: $(POD_NAME)
+
+  - it: hostPath with custom mountPath should pass
+    set:
+      persistence:
+        config:
+          type: hostPath
+          hostPath: /tmp
+          globalMounts:
+            - path: /data
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: config
+            mountPath: /data
+
+  - it: hostPath mount with subPath should pass
+    set:
+      persistence:
+        config:
+          type: hostPath
+          hostPath: /dev
+          globalMounts:
+            - subPath: mySubPath
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: config
+            mountPath: /dev
+            subPath: mySubPath
+
+  - it: volumeClaimTemplates with default mounts should pass
+    set:
+      controllers.main:
+        type: statefulset
+        statefulset:
+          volumeClaimTemplates:
+            - name: "storage"
+              accessMode: "ReadWriteOnce"
+              size: "10Gi"
+              storageClass: "storage"
+    documentSelector:
+      path: $[?(@.kind == "StatefulSet")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: storage
+            mountPath: /storage
+
+  - it: volumeClaimTemplates with globalMounts should pass
+    set:
+      controllers.main:
+        type: statefulset
+        statefulset:
+          volumeClaimTemplates:
+            - name: "storage"
+              accessMode: "ReadWriteOnce"
+              size: "10Gi"
+              storageClass: "storage"
+              globalMounts:
+                - path: /tmp/storage
+                - path: /tmp/secondMountPoint
+    documentSelector:
+      path: $[?(@.kind == "StatefulSet")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+          value:
+            name: storage
+            mountPath: /tmp/storage
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[1]
+          value:
+            name: storage
+            mountPath: /tmp/secondMountPoint
+
+  - it: volumeClaimTemplates with advancedMounts should pass
+    set:
+      controllers.main:
+        type: statefulset
+        statefulset:
+          volumeClaimTemplates:
+            - name: "storage"
+              accessMode: "ReadWriteOnce"
+              size: "10Gi"
+              storageClass: "storage"
+              advancedMounts:
+                second-container:
+                  - path: /tmp/storage
+                  - path: /tmp/secondMountPoint
+        containers:
+          second-container:
+            image:
+              repository: ghcr.io/mendhak/http-https-echo
+              tag: 31
+    documentSelector:
+      path: $[?(@.kind == "StatefulSet")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].volumeMounts
+      - equal:
+          path: spec.template.spec.containers[1].volumeMounts[0]
+          value:
+            name: storage
+            mountPath: /tmp/storage
+      - equal:
+          path: spec.template.spec.containers[1].volumeMounts[1]
+          value:
+            name: storage
+            mountPath: /tmp/secondMountPoint

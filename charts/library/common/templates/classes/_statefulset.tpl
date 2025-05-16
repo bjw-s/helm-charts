@@ -7,7 +7,7 @@ within the common library.
   {{- $statefulsetObject := .object -}}
 
   {{- $labels := merge
-    (dict "app.kubernetes.io/component" $statefulsetObject.identifier)
+    (dict "app.kubernetes.io/controller" $statefulsetObject.identifier)
     ($statefulsetObject.labels | default dict)
     (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
   -}}
@@ -23,13 +23,13 @@ metadata:
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   {{- with $annotations }}
   annotations:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   namespace: {{ $rootContext.Release.Namespace }}
@@ -45,7 +45,7 @@ spec:
     {{- end }}
   selector:
     matchLabels:
-      app.kubernetes.io/component: {{ $statefulsetObject.identifier }}
+      app.kubernetes.io/controller: {{ $statefulsetObject.identifier }}
       {{- include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | nindent 6 }}
   serviceName: {{ include "bjw-s.common.lib.chart.names.fullname" $rootContext }}
   {{- with (dig "statefulset" "persistentVolumeClaimRetentionPolicy" nil $statefulsetObject) }}

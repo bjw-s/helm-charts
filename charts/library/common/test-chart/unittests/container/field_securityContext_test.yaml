@@ -1,18 +1,17 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: container securityContext
+suite: container - fields - securityContext
 templates:
   - common.yaml
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        notExists:
+      - notExists:
           path: spec.template.spec.containers[0].securityContext
 
   - it: defaultContainerOption should pass
@@ -23,12 +22,11 @@ tests:
             securityContext:
               runAsUser: 1000
               runAsGroup: 1000
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].securityContext
           value:
             runAsUser: 1000
@@ -47,12 +45,11 @@ tests:
               securityContext:
                 runAsUser: 568
                 runAsGroup: 568
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].securityContext
           value:
             runAsUser: 568

@@ -1,0 +1,118 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: route - fields - rules - sessionPersistence
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: sessionpersistence should only be used for HTTPRoutes and GRPCRoutes
+    set:
+      route:
+        main:
+          kind: HTTPRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+                - name: test
+                  namespace: test
+                  kind: Service
+                  weight: 1
+              sessionPersistence:
+                sessionName: test
+        grpc:
+          kind: GRPCRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+                - name: test
+                  namespace: test
+                  kind: Service
+                  weight: 1
+              sessionPersistence:
+                sessionName: test
+        tcp:
+          kind: TCPRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+                - name: test
+                  namespace: test
+                  kind: Service
+                  weight: 1
+              sessionPersistence:
+                sessionName: test
+              filters:
+                - type: URLRewrite
+                  urlRewrite:
+                    path:
+                      type: ReplacePrefixMatch
+                      replacePrefixMatch: ""
+        tls:
+          kind: TLSRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+                - name: test
+                  namespace: test
+                  kind: Service
+                  weight: 1
+              sessionPersistence:
+                sessionName: test
+        udp:
+          kind: UDPRoute
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+          rules:
+            - backendRefs:
+                - name: test
+                  namespace: test
+                  kind: Service
+                  weight: 1
+              sessionPersistence:
+                sessionName: test
+              filters:
+                - type: URLRewrite
+                  urlRewrite:
+                    path:
+                      type: ReplacePrefixMatch
+                      replacePrefixMatch: ""
+    asserts:
+      - documentSelector:
+          path: $[?(@.kind == "GRPCRoute")].metadata.name
+          value: release-name-grpc
+        equal:
+          path: spec.rules[0].sessionPersistence
+          value:
+            sessionName: test
+      - documentSelector:
+          path: $[?(@.kind == "HTTPRoute")].metadata.name
+          value: release-name-main
+        equal:
+          path: spec.rules[0].sessionPersistence
+          value:
+            sessionName: test
+      - documentSelector:
+          path: $[?(@.kind == "TCPRoute")].metadata.name
+          value: release-name-tcp
+        notExists:
+          path: spec.rules[0].sessionPersistence
+      - documentSelector:
+          path: $[?(@.kind == "TLSRoute")].metadata.name
+          value: release-name-tls
+        notExists:
+          path: spec.rules[0].sessionPersistence
+      - documentSelector:
+          path: $[?(@.kind == "UDPRoute")].metadata.name
+          value: release-name-udp
+        notExists:
+          path: spec.rules[0].sessionPersistence

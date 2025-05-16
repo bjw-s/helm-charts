@@ -1,138 +1,56 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: controller types
+suite: controller - types
 templates:
   - common.yaml
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
-  - it: default should pass
+  - it: should default to Deployment
     asserts:
-      - documentIndex: &deploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *deploymentDoc
-        equal:
-          path: metadata.name
-          value: RELEASE-NAME
-      - documentIndex: *deploymentDoc
-        equal:
-          path: metadata.labels['app.kubernetes.io/component']
-          value: main
-
-  - it: additional controllers should pass
-    set:
-      controllers:
-        second:
-          containers:
-            main:
-              image:
-                repository: ghcr.io/mendhak/http-https-echo
-                tag: 31
-    asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &firstDeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *firstDeploymentDoc
-        equal:
-          path: metadata.name
-          value: RELEASE-NAME-main
-      - documentIndex: *firstDeploymentDoc
-        equal:
-          path: metadata.labels['app.kubernetes.io/component']
-          value: main
-      - documentIndex: &secondDeploymentDoc 1
-        isKind:
-          of: Deployment
-      - documentIndex: *secondDeploymentDoc
-        equal:
-          path: metadata.name
-          value: RELEASE-NAME-second
-      - documentIndex: *secondDeploymentDoc
-        equal:
-          path: metadata.labels['app.kubernetes.io/component']
-          value: second
-
-  - it: additional controllers with nameOverride should pass
-    set:
-      controllers:
-        main:
-          nameOverride: "{{ .Release.Name }}"
-        second:
-          nameOverride: testOverride
-          containers:
-            main:
-              image:
-                repository: ghcr.io/mendhak/http-https-echo
-                tag: 31
-    asserts:
-      - hasDocuments:
-          count: 2
-      - documentIndex: &firstDeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *firstDeploymentDoc
-        equal:
-          path: metadata.name
-          value: RELEASE-NAME
-      - documentIndex: *firstDeploymentDoc
-        equal:
-          path: metadata.labels['app.kubernetes.io/component']
-          value: main
-      - documentIndex: &secondDeploymentDoc 1
-        isKind:
-          of: Deployment
-      - documentIndex: *secondDeploymentDoc
-        equal:
-          path: metadata.name
-          value: RELEASE-NAME-testOverride
-      - documentIndex: *secondDeploymentDoc
-        equal:
-          path: metadata.labels['app.kubernetes.io/component']
-          value: second
+      - containsDocument:
+          apiVersion: apps/v1
+          kind: Deployment
+          name: release-name
+          any: true
 
   - it: daemonset should pass
     set:
       controllers.main.type: daemonset
     asserts:
-      - documentIndex: &ControllerDoc 0
-        isKind:
-          of: DaemonSet
-      - documentIndex: *ControllerDoc
-        equal:
-          path: metadata.name
-          value: RELEASE-NAME
+      - containsDocument:
+          apiVersion: apps/v1
+          kind: DaemonSet
+          name: release-name
+          any: true
 
   - it: statefulset should pass
     set:
       controllers.main.type: statefulset
     asserts:
-      - documentIndex: &ControllerDoc 0
-        isKind:
-          of: StatefulSet
-      - documentIndex: *ControllerDoc
-        equal:
-          path: metadata.name
-          value: RELEASE-NAME
+      - containsDocument:
+          apiVersion: apps/v1
+          kind: StatefulSet
+          name: release-name
+          any: true
 
   - it: cronjob should pass
     set:
       controllers.main.type: cronjob
       controllers.main.cronjob.schedule: "*/20 * * * *"
     asserts:
-      - documentIndex: &ControllerDoc 0
-        isKind:
-          of: CronJob
-      - documentIndex: *ControllerDoc
-        equal:
-          path: metadata.name
-          value: RELEASE-NAME
+      - containsDocument:
+          apiVersion: batch/v1
+          kind: CronJob
+          name: release-name
+          any: true
 
-  - it: disabled should pass
+  - it: job should pass
     set:
-      controllers.main.enabled: false
+      controllers.main.type: job
     asserts:
-      - hasDocuments:
-          count: 0
+      - containsDocument:
+          apiVersion: batch/v1
+          kind: Job
+          name: release-name
+          any: true

@@ -64,6 +64,8 @@ nav:
   - index.md
   - Common Library:
       - common-library/index.md
+      - Generated Resources:
+          - common-library/resources/names.md
       - Storage:
           - Permissions: common-library/storage/permissions.md
           - Global options: common-library/storage/globalOptions.md
@@ -78,8 +80,10 @@ nav:
       - How To...:
           - common-library/howto/index.md
           - Default container options: common-library/howto/default-container-options.md
+          - Default Pod options: common-library/howto/default-pod-options.md
   - App Template:
       - app-template/index.md
+      - Upgrade instructions: app-template/upgrade-instructions.md
       - How To...:
           - app-template/howto/index.md
           - Helm templates: app-template/howto/helm-templates.md

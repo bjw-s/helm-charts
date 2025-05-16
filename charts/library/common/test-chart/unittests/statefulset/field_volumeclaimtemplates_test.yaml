@@ -1,0 +1,85 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: statefulset - fields - volumeClaimTemplates
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  controllers.main:
+    type: statefulset
+tests:
+  - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "StatefulSet")].metadata.name
+      value: release-name
+    asserts:
+      - notExists:
+          path: spec.volumeClaimTemplates
+
+  - it: volumeClaimTemplates should pass
+    set:
+      controllers.main:
+        statefulset:
+          volumeClaimTemplates:
+            - name: "storage"
+              size: "10Gi"
+              accessMode: "ReadWriteOnce"
+    documentSelector:
+      path: $[?(@.kind == "StatefulSet")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.volumeClaimTemplates[0]
+          value:
+            metadata:
+              name: storage
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 10Gi
+
+  - it: volumeClaimTemplates with dataSource should pass
+    set:
+      controllers.main:
+        statefulset:
+          volumeClaimTemplates:
+            - name: "storage"
+              size: "10Gi"
+              accessMode: "ReadWriteOnce"
+              dataSource:
+                apiGroup: snapshot.storage.k8s.io
+                kind: VolumeSnapshot
+                name: MySnapshot
+    documentSelector:
+      path: $[?(@.kind == "StatefulSet")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.volumeClaimTemplates[0].spec.dataSource
+          value:
+            apiGroup: snapshot.storage.k8s.io
+            kind: VolumeSnapshot
+            name: MySnapshot
+
+  - it: volumeClaimTemplates with templated dataSource name should pass
+    set:
+      controllers.main:
+        statefulset:
+          volumeClaimTemplates:
+            - name: "storage"
+              size: "10Gi"
+              accessMode: "ReadWriteOnce"
+              dataSource:
+                apiGroup: snapshot.storage.k8s.io
+                kind: VolumeSnapshot
+                name: "{{ .Release.Name }}-config"
+    documentSelector:
+      path: $[?(@.kind == "StatefulSet")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.volumeClaimTemplates[0].spec.dataSource.name
+          value: RELEASE-NAME-config

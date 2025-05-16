@@ -1,25 +1,26 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: "pod metadata: annotations"
+suite: "pod - metadata - annotations"
 templates:
   - common.yaml
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default pod annotations
-    documentSelector: &DeploymentSelector
+    documentSelector:
       path: $[?(@.kind == "Deployment")].metadata.name
-      value: RELEASE-NAME
+      value: release-name
     asserts:
       - notExists:
           path: spec.template.metadata.annotations
 
   - it: pod annotations from defaultPodOptions should be included
     set:
-      defaultPodOptions:
-        annotations:
-          defaultPodOptionsAnnotation: test
-    documentSelector: *DeploymentSelector
+      defaultPodOptions.annotations:
+        defaultPodOptionsAnnotation: test
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
       - isSubset:
           path: spec.template.metadata.annotations
@@ -28,12 +29,11 @@ tests:
 
   - it: pod annotations from pod options should be included
     set:
-      controllers:
-        main:
-          pod:
-            annotations:
-              podOptionsAnnotation: test
-    documentSelector: *DeploymentSelector
+      controllers.main.pod.annotations:
+        podOptionsAnnotation: test
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
       - isSubset:
           path: spec.template.metadata.annotations
@@ -42,10 +42,11 @@ tests:
 
   - it: pod annotations from global annotations should not be included by default
     set:
-      global:
-        annotations:
-          globalAnnotation: test
-    documentSelector: *DeploymentSelector
+      global.annotations:
+        globalAnnotation: test
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
       - isNotSubset:
           path: spec.template.metadata.annotations
@@ -58,9 +59,102 @@ tests:
         propagateGlobalMetadataToPods: true
         annotations:
           globalAnnotation: test
-    documentSelector: *DeploymentSelector
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
       - isSubset:
           path: spec.template.metadata.annotations
           content:
             globalAnnotation: test
+
+  - it: configMap checksum should be included in pod annotations
+    set:
+      configMaps:
+        config:
+          enabled: true
+          data:
+            test: value 1
+        test_default_enabled:
+          data:
+            test: value 1
+        test_not_in_checksum:
+          includeInChecksum: false
+          data:
+            test: value 1
+        test_disabled:
+          enabled: false
+          data:
+            test: value 1
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations
+          value:
+            checksum/configMaps: 66d23d7a53c4e2a523ba85a969696b4ebb78ec5d79ab9c12c210c1569f48511b
+
+  - it: configMap checksum from folder should be included in pod annotations
+    set:
+      configMaps:
+        config:
+          enabled: true
+          data:
+            test: value 1
+        test_default_enabled:
+          data:
+            test: value 1
+        test_not_in_checksum:
+          includeInChecksum: false
+          data:
+            test: value 1
+        test_disabled:
+          enabled: false
+          data:
+            test: value 1
+      configMapsFromFolder:
+        enabled: true
+        basePath: ci/configMapsFolder
+        configMapsOverrides:
+          test_2:
+            fileAttributeOverrides:
+              helm.jpg:
+                binary: true
+              test_2.yaml:
+                escaped: true
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations
+          value:
+            checksum/configMaps: e83a24569d0b4f2ccc44aec36d4e9a1c44a29bcc92eefdffe14fb1ce81dff054
+
+  - it: secret checksum should be included in pod annotations
+    set:
+      secrets:
+        secret_1:
+          stringData:
+            test: value 1
+        secret_2: # default enabled
+          stringData:
+            test_1: value 1
+            test_2: value 2
+        test_not_in_checksum:
+          includeInChecksum: false
+          stringData:
+            test: value 1
+        test_disabled:
+          enabled: false
+          stringData:
+            test: value 1
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations
+          value:
+            checksum/secrets: cd4e5076088172611ca1c43c659a275232d9eeb887acc20575ac141038b9aacb

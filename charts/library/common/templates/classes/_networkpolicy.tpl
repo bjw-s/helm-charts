@@ -20,7 +20,7 @@ within the common library.
   {{- else -}}
     {{- $podSelector = dict "matchLabels" (merge
       ($networkPolicyObject.extraSelectorLabels | default dict)
-      (dict "app.kubernetes.io/component" $networkPolicyObject.controller)
+      (dict "app.kubernetes.io/controller" $networkPolicyObject.controller)
       (include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | fromYaml)
     ) -}}
   {{- end -}}
@@ -32,13 +32,13 @@ metadata:
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   {{- with $annotations }}
   annotations:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   namespace: {{ $rootContext.Release.Namespace }}

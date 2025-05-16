@@ -1,0 +1,28 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: cronjob - jobTemplate - metadata - labels
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  controllers.main:
+    type: cronjob
+    cronjob:
+      schedule: "*/20 * * * *"
+tests:
+  - it: jobTemplate metadata should pass
+    set:
+      controllers.main.pod.labels:
+        test_label: test
+    documentSelector:
+      path: $[?(@.kind == "CronJob")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.metadata.labels
+          value:
+            app.kubernetes.io/controller: main
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/name: RELEASE-NAME
+            test_label: test

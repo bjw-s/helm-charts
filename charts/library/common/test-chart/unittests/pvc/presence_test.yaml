@@ -1,0 +1,52 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pvc - presence
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: pvc is enabled by default
+    set:
+      persistence.test:
+        type: persistentVolumeClaim
+        suffix: test
+        accessMode: ReadWriteOnce
+        size: 1Gi
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: release-name-test
+          any: true
+
+  - it: pvc can be explicitly enabled
+    set:
+      persistence.test:
+        type: persistentVolumeClaim
+        enabled: true
+        suffix: test
+        accessMode: ReadWriteOnce
+        size: 1Gi
+    asserts:
+      - containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: release-name-test
+          any: true
+
+  - it: pvc can be disabled
+    set:
+      persistence.test:
+        type: persistentVolumeClaim
+        enabled: false
+        suffix: test
+        accessMode: ReadWriteOnce
+        size: 1Gi
+    asserts:
+      - not: true
+        containsDocument:
+          kind: PersistentVolumeClaim
+          apiVersion: v1
+          name: release-name-test
+          any: true

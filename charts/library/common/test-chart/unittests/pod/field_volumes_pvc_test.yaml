@@ -1,0 +1,75 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod - fields - volumes (pvc)
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: default should pass
+    set:
+      persistence:
+        config:
+          accessMode: ReadWriteOnce
+          size: 1Gi
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[0]
+          value:
+            name: config
+            persistentVolumeClaim:
+              claimName: release-name
+
+  - it: with existingClaim should pass
+    set:
+      persistence:
+        existingClaim:
+          existingClaim: myClaim
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[0]
+          value:
+            name: existingClaim
+            persistentVolumeClaim:
+              claimName: myClaim
+
+  - it: disabled suffix should pass
+    set:
+      persistence:
+        claimWithoutSuffix:
+          accessMode: ReadWriteMany
+          size: 1G
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[0]
+          value:
+            name: claimWithoutSuffix
+            persistentVolumeClaim:
+              claimName: release-name
+
+  - it: custom suffix should pass
+    set:
+      persistence:
+        claimWithNameOverride:
+          suffix: suffix
+          accessMode: ReadWriteMany
+          size: 1G
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[0]
+          value:
+            name: claimWithNameOverride
+            persistentVolumeClaim:
+              claimName: release-name-suffix

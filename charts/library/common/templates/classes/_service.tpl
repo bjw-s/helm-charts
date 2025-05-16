@@ -25,13 +25,13 @@ metadata:
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   {{- with $annotations }}
   annotations:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   namespace: {{ $rootContext.Release.Namespace }}
@@ -114,7 +114,7 @@ spec:
       {{- end -}}
   {{- with (merge
     ($serviceObject.extraSelectorLabels | default dict)
-    (dict "app.kubernetes.io/component" $serviceObject.controller)
+    (dict "app.kubernetes.io/controller" $serviceObject.controller)
     (include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | fromYaml)
   ) }}
   selector: {{- toYaml . | nindent 4 }}

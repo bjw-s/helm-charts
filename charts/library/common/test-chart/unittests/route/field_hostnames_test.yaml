@@ -1,0 +1,68 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: route - fields - hostnames
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: hostnames shouldn't be used for TCPRoutes and UDPRoutes
+    set:
+      route:
+        main:
+          kind: TCPRoute
+          hostnames:
+            - chart-test.local
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+        udp:
+          kind: UDPRoute
+          hostnames:
+            - chart-test.local
+          parentRefs:
+            - name: parentName
+              namespace: parentNamespace
+    asserts:
+      - documentSelector:
+          path: $[?(@.kind == "TCPRoute")].metadata.name
+          value: release-name-main
+        notExists:
+          path: spec.hostnames
+      - documentSelector:
+          path: $[?(@.kind == "UDPRoute")].metadata.name
+          value: release-name-udp
+        notExists:
+          path: spec.hostnames
+
+  - it: hostname can be configured
+    set:
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        hostnames:
+          - chart-test.local
+    documentSelector:
+      path: $[?(@.kind == "HTTPRoute")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.hostnames[0]
+          value: chart-test.local
+
+  - it: hostnames support Helm templates
+    set:
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        hostnames:
+          - "{{ .Release.Name }}.local"
+    documentSelector:
+      path: $[?(@.kind == "HTTPRoute")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.hostnames[0]
+          value: RELEASE-NAME.local

@@ -1,0 +1,195 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: rawResource - metadata - name
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  rawResources.main:
+    apiVersion: v1
+    kind: Endpoint
+    spec:
+      test: test
+tests:
+  - it: name defaults to chart fullName
+    asserts:
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: release-name
+          any: true
+
+  - it: forceRename
+    set:
+      rawResources.main.forceRename: forceRename
+    asserts:
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: forcerename
+          any: true
+
+  - it: forceRename with template
+    set:
+      rawResources.main.forceRename: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: common-test
+          any: true
+
+  - it: prefix
+    set:
+      rawResources.main.prefix: prefix
+    asserts:
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: prefix-release-name
+          any: true
+
+  - it: prefix with template
+    set:
+      rawResources.main.prefix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: common-test-release-name
+          any: true
+
+  - it: suffix
+    set:
+      rawResources.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: release-name-suffix
+          any: true
+
+  - it: suffix with template
+    set:
+      rawResources.main.suffix: "{{ .Chart.Name }}"
+    asserts:
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: release-name-common-test
+          any: true
+
+  - it: both prefix and suffix
+    set:
+      rawResources.main.prefix: prefix
+      rawResources.main.suffix: suffix
+    asserts:
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: prefix-release-name-suffix
+          any: true
+
+  - it: prefix, suffix and forceRename (illegal combination)
+    set:
+      rawResources.main.forceRename: forceRename
+      rawResources.main.prefix: prefix
+      rawResources.main.suffix: suffix
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"
+
+  - it: multiple items
+    set:
+      rawResources.second:
+        apiVersion: v1
+        kind: Endpoint
+        spec:
+          test: test
+    asserts:
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: release-name-second
+          any: true
+
+  - it: multiple items with prefix
+    set:
+      rawResources.second:
+        prefix: prefix
+        apiVersion: v1
+        kind: Endpoint
+        spec:
+          test: test
+    asserts:
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: prefix-release-name-second
+          any: true
+
+  - it: multiple items with suffix
+    set:
+      rawResources.second:
+        suffix: suffix
+        apiVersion: v1
+        kind: Endpoint
+        spec:
+          test: test
+    asserts:
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix and suffix
+    set:
+      rawResources.second:
+        prefix: prefix
+        suffix: suffix
+        apiVersion: v1
+        kind: Endpoint
+        spec:
+          test: test
+    asserts:
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: release-name-main
+          any: true
+      - containsDocument:
+          kind: Endpoint
+          apiVersion: v1
+          name: prefix-release-name-second-suffix
+          any: true
+
+  - it: multiple items with prefix, suffix and forceRename (illegal combination)
+    set:
+      rawResources.second:
+        forceRename: forceRename
+        prefix: prefix
+        suffix: suffix
+        apiVersion: v1
+        kind: Endpoint
+        spec:
+          test: test
+    asserts:
+      - failedTemplate:
+          errorPattern: "values don't meet the specifications of the schema"

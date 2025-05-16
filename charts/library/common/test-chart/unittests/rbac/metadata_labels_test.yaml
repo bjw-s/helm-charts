@@ -1,0 +1,57 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: rbac - metadata - labels
+templates:
+  - common.yaml
+values:
+  - ../_values/rbac_values.yaml
+tests:
+  - it: default labels
+    documentSelector:
+      path: $[?(@.kind == "Role")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            helm.sh/chart: common-test-1.0.0
+
+  - it: custom labels
+    set:
+      rbac.roles.defaultRole.labels:
+        test_label: test
+    documentSelector:
+      path: $[?(@.kind == "Role")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            helm.sh/chart: common-test-1.0.0
+            test_label: test
+
+  - it: custom labels mixed with global labels
+    set:
+      global.labels:
+        global_label: test
+      rbac.roles.defaultRole.labels:
+        test_label: test
+    documentSelector:
+      path: $[?(@.kind == "Role")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: metadata.labels
+          value:
+            app.kubernetes.io/instance: RELEASE-NAME
+            app.kubernetes.io/managed-by: Helm
+            app.kubernetes.io/name: RELEASE-NAME
+            global_label: test
+            helm.sh/chart: common-test-1.0.0
+            test_label: test

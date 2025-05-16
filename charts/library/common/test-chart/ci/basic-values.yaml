@@ -1,5 +1,5 @@
 ---
-# yaml-language-server: $schema=../../common/values.schema.json
+# yaml-language-server: $schema=../../../common/values.schema.json
 controllers:
   main:
     containers:
@@ -23,16 +23,12 @@ ingress:
       - host: "test.local"
         paths:
           - path: /
-            service:
-              identifier: main
-              port: http
     tls:
       - hosts:
           - "test.local"
 
 service:
   main:
-    controller: main
     ports:
       http:
         port: 8080

@@ -7,7 +7,7 @@ within the common library.
   {{- $daemonsetObject := .object -}}
 
   {{- $labels := merge
-    (dict "app.kubernetes.io/component" $daemonsetObject.identifier)
+    (dict "app.kubernetes.io/controller" $daemonsetObject.identifier)
     ($daemonsetObject.labels | default dict)
     (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
   -}}
@@ -23,13 +23,13 @@ metadata:
   {{- with $labels }}
   labels:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   {{- with $annotations }}
   annotations:
     {{- range $key, $value := . }}
-    {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
     {{- end }}
   {{- end }}
   namespace: {{ $rootContext.Release.Namespace }}
@@ -37,7 +37,7 @@ spec:
   revisionHistoryLimit: {{ include "bjw-s.common.lib.defaultKeepNonNullValue" (dict "value" $daemonsetObject.revisionHistoryLimit "default" 3) }}
   selector:
     matchLabels:
-      app.kubernetes.io/component: {{ $daemonsetObject.identifier }}
+      app.kubernetes.io/controller: {{ $daemonsetObject.identifier }}
       {{- include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | nindent 6 }}
   template:
     metadata:

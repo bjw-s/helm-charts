@@ -7,7 +7,7 @@ vars:
 
 includes:
   charts: .taskfiles/charts.yaml
-  precommit: .taskfiles/precommit.yaml
+  docs: .taskfiles/docs.yaml
 
 tasks:
   default:

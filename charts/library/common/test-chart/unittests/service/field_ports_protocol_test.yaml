@@ -1,0 +1,84 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: service - fields - ports - protocol
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+  - ../_values/service_main_default.yaml
+tests:
+  - it: protocol should default to TCP
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.ports[0].protocol
+          value: TCP
+
+  - it: protocol can be explicitly set to TCP
+    set:
+      service.main.ports.http.protocol: TCP
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.ports[0].protocol
+          value: TCP
+
+  - it: protocol can be explicitly set to UDP
+    set:
+      service.main.ports.http.protocol: UDP
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.ports[0].protocol
+          value: UDP
+
+  - it: protocol can be explicitly set to HTTP
+    set:
+      service.main.ports.http.protocol: HTTP
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.ports[0].protocol
+          value: TCP
+      - notExists:
+          path: metadata.annotations
+
+  - it: protocol can be explicitly set to HTTPS
+    set:
+      service.main.ports.http.protocol: HTTPS
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.ports[0].protocol
+          value: TCP
+
+  - it: mixed protocols can be configured on the same port number
+    set:
+      service.main.ports.udptest:
+        port: 8081
+        protocol: UDP
+    documentSelector:
+      path: $[?(@.kind == "Service")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.ports
+          value:
+            - name: http
+              port: 8081
+              protocol: TCP
+              targetPort: 8081
+            - name: udptest
+              port: 8081
+              protocol: UDP
+              targetPort: 8081

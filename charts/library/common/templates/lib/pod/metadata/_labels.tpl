@@ -7,7 +7,7 @@ Returns the value for labels
 
   {{- /* Default labels */ -}}
   {{- $labels := merge
-    (dict "app.kubernetes.io/component" $controllerObject.identifier)
+    (dict "app.kubernetes.io/controller" $controllerObject.identifier)
   -}}
 
   {{- /* Include global labels if specified */ -}}

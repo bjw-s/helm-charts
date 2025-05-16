@@ -1,48 +1,45 @@
 {
   "instance": {
-    "type": "object",
-    "additionalProperties": false,
-
-    "properties": {
-      "enabled": {
-        "type": "boolean",
-        "default": true
-      },
-
-      "annotations": {
-        "$ref": "definitions.json#/annotations"
-      },
-
-      "className": {
-        "type": "string"
-      },
-
-      "defaultBackend": {
-        "$ref": "k8s-api.json#/networking.v1.ingressBackend"
-      },
-
-      "hosts": {
-        "type": "array",
-        "items": {
-          "$ref": "#/hostEntry"
-        }
-      },
-
-      "labels": {
-        "$ref": "definitions.json#/labels"
-      },
-
-      "nameOverride": {
-        "type": "string"
-      },
-
-      "tls": {
-        "type": "array",
-        "items": {
-          "$ref": "#/tlsEntry"
+    "allOf": [
+      { "$ref": "definitions.json#/resourceIdentifier" },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "forceRename": {},
+          "prefix": {},
+          "suffix": {},
+          "enabled": {
+            "type": "boolean",
+            "default": true
+          },
+          "annotations": {
+            "$ref": "definitions.json#/annotations"
+          },
+          "className": {
+            "type": "string"
+          },
+          "defaultBackend": {
+            "$ref": "k8s-api.json#/networking.v1.ingressBackend"
+          },
+          "hosts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/hostEntry"
+            }
+          },
+          "labels": {
+            "$ref": "definitions.json#/labels"
+          },
+          "tls": {
+            "type": "array",
+            "items": {
+              "$ref": "#/tlsEntry"
+            }
+          }
         }
       }
-    }
+    ]
   },
 
   "hostEntry": {
@@ -70,7 +67,7 @@
               ]
             }
           },
-          "required": ["path", "service"]
+          "required": ["path"]
         },
         "title": "paths",
         "type": "array"
@@ -119,7 +116,6 @@
       "port": {
         "type": ["string", "integer"]
       }
-    },
-    "required": ["identifier"]
+    }
   }
 }

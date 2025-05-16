@@ -6,8 +6,9 @@ Returns the value for the specified field
   {{- $controllerObject := .ctx.controllerObject -}}
   {{- $option := .option -}}
   {{- $default := default "" .default -}}
-
   {{- $value := $default -}}
+
+  {{- $defaultPodOptionsStrategy := dig "defaultPodOptionsStrategy" "overwrite" $rootContext.Values -}}
 
   {{- /* Set to the default if it is set */ -}}
   {{- $defaultOption := dig $option nil (default dict $rootContext.Values.defaultPodOptions) -}}
@@ -19,8 +20,15 @@ Returns the value for the specified field
 
   {{- /* See if a pod-specific override is needed */ -}}
   {{- $podOption := dig $option nil (default dict $controllerObject.pod) -}}
+
   {{- if kindIs "bool" $podOption -}}
     {{- $value = $podOption -}}
+  {{- else if kindIs "map" $podOption -}}
+    {{- if eq "merge" $defaultPodOptionsStrategy -}}
+      {{- $value = merge $podOption $value -}}
+    {{- else if eq "overwrite" $defaultPodOptionsStrategy -}}
+      {{- $value = $podOption -}}
+    {{- end -}}
   {{- else if not (empty $podOption) -}}
     {{- $value = $podOption -}}
   {{- end -}}

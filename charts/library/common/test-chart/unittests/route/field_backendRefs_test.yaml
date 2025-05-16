@@ -1,0 +1,114 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: route - fields - backendRefs
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+tests:
+  - it: backendRefs can be configured by passing in a service name
+    set:
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        rules:
+          - backendRefs:
+              - group: ""
+                kind: Service
+                name: RELEASE-NAME
+                namespace: NAMESPACE
+                port: 8080
+                weight: 1
+    documentSelector:
+      path: $[?(@.kind == "HTTPRoute")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0]
+          value:
+            group: ""
+            kind: Service
+            name: RELEASE-NAME
+            namespace: NAMESPACE
+            port: 8080
+            weight: 1
+
+  - it: backendRefs can be configured by passing in a service identifier
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        rules:
+          - backendRefs:
+              - identifier: main
+                port: 8080
+    documentSelector:
+      path: $[?(@.kind == "HTTPRoute")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0]
+          value:
+            group: ""
+            kind: Service
+            name: release-name
+            namespace: NAMESPACE
+            port: 8080
+            weight: 1
+
+  - it: custom service reference should pass
+    set:
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        rules:
+          - backendRefs:
+              - group: test
+                name: pathService
+                port: 1234
+                namespace: serviceNamespace
+                weight: 123
+    documentSelector:
+      path: $[?(@.kind == "HTTPRoute")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0]
+          value:
+            group: test
+            kind: Service
+            name: pathService
+            namespace: serviceNamespace
+            port: 1234
+            weight: 123
+
+  - it: custom service with filter should pass
+    set:
+      route.main:
+        parentRefs:
+          - name: parentName
+            namespace: parentNamespace
+        rules:
+          - filters:
+              - type: RequestRedirect
+                requestRedirect:
+                  scheme: https
+                  statusCode: 301
+    documentSelector:
+      path: $[?(@.kind == "HTTPRoute")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.rules[0].filters[0]
+          value:
+            type: RequestRedirect
+            requestRedirect:
+              scheme: https
+              statusCode: 301
+      - notExists:
+          path: spec.rules[0].backendRefs[0]

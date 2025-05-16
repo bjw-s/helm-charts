@@ -1,6 +1,6 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: Service validations
+suite: service - validations
 templates:
   - common.yaml
 values:
@@ -14,3 +14,44 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: "No enabled controller found with this identifier. (service: 'main', controller: 'other')"
+
+  - it: automatic controller determination should fail when no controller is enabled
+    set:
+      controllers:
+        main:
+          enabled: false
+      service:
+        main: {}
+    asserts:
+      - failedTemplate:
+          errorMessage: "controller field is required because automatic controller detection is not possible. (service: main)"
+
+  - it: automatic controller determination should fail when >1 controller is enabled
+    set:
+      controllers:
+        second:
+          containers:
+            main:
+              image:
+                repository: ghcr.io/mendhak/http-https-echo
+                tag: 31
+
+      service:
+        main: {}
+    asserts:
+      - failedTemplate:
+          errorMessage: "controller field is required because automatic controller detection is not possible. (service: main)"
+
+
+  - it: no ports enabled should fail
+    values:
+      - ../_values/service_main_default.yaml
+    set:
+      service:
+        main:
+          ports:
+            http:
+              enabled: false
+    asserts:
+      - failedTemplate:
+          errorMessage: "No ports are enabled for Service with this identifier. (service: 'main')"

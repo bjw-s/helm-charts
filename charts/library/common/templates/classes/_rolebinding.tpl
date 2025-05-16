@@ -18,6 +18,9 @@ This template serves as a blueprint for generating RoleBinding objects in Kubern
     {{- range $subject := . -}}
       {{- if hasKey . "identifier" -}}
         {{- $subject := include "bjw-s.common.lib.serviceAccount.getByIdentifier" (dict "rootContext" $rootContext "id" .identifier) | fromYaml -}}
+        {{- if not $subject }}
+          {{- fail (printf "No enabled ServiceAccount found with this identifier. (rolebinding: '%s', identifier: '%s')" $roleBindingObject.identifier .identifier) -}}
+        {{- end -}}
         {{- $subject = pick $subject "name" -}}
         {{- $_ := set $subject "kind" "ServiceAccount" -}}
         {{- $_ := set $subject "namespace" $rootContext.Release.Namespace -}}
@@ -38,7 +41,6 @@ This template serves as a blueprint for generating RoleBinding objects in Kubern
       {{- $_ := set $role "name" .name -}}
       {{- $_ := set $role "type" .kind -}}
     {{- end -}}
-
   {{- end -}}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -48,10 +50,16 @@ kind: {{ . }}
 metadata:
   name: {{ $roleBindingObject.name }}
   {{- with $labels }}
-  labels: {{- toYaml . | nindent 4 -}}
+  labels:
+    {{- range $key, $value := . }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+    {{- end }}
   {{- end }}
   {{- with $annotations }}
-  annotations: {{- toYaml . | nindent 4 -}}
+  annotations:
+    {{- range $key, $value := . }}
+      {{- printf "%s: %s" $key (tpl $value $rootContext | toYaml ) | nindent 4 }}
+    {{- end }}
   {{- end }}
   {{ if eq $roleBindingObject.type "RoleBinding" -}}
   namespace: {{ $rootContext.Release.Namespace }}

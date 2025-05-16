@@ -1,18 +1,17 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: pod hostNetwork
+suite: pod - fields - hostNetwork
 templates:
   - common.yaml
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.hostNetwork
           value: false
 
@@ -20,12 +19,11 @@ tests:
     set:
       defaultPodOptions:
         hostNetwork: false
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.hostNetwork
           value: false
 
@@ -33,10 +31,10 @@ tests:
     set:
       defaultPodOptions:
         hostNetwork: true
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
       - documentIndex: 0
         equal:
           path: spec.template.spec.hostNetwork

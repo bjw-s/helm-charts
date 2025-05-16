@@ -67,6 +67,9 @@
       "priorityClassName": {
         "type": "string"
       },
+      "resources": {
+        "$ref": "k8s-api.json#/core.v1.ResourceRequirements"
+      },
       "restartPolicy": {
         "type": "string"
       },

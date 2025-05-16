@@ -1,29 +1,27 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: container command override
+suite: container - fields - command
 templates:
   - common.yaml
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        notExists:
+      - notExists:
           path: spec.template.spec.containers[0].command
 
   - it: single string should pass
     set:
       controllers.main.containers.main.command: /bin/sh
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].command
           value:
             - /bin/sh
@@ -33,12 +31,11 @@ tests:
       controllers.main.containers.main.command: |
         /bin/sh
         -c
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].command
           value:
             - |-
@@ -48,12 +45,11 @@ tests:
   - it: single quoted string should pass
     set:
       controllers.main.containers.main.command: "/bin/sh"
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].command
           value:
             - /bin/sh
@@ -63,12 +59,11 @@ tests:
       controllers.main.containers.main.command:
         - /bin/sh
         - "-c"
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: 0
-        isKind:
-          of: Deployment
-      - documentIndex: 0
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].command
           value:
             - /bin/sh
@@ -78,12 +73,11 @@ tests:
     set:
       controllers.main.defaultContainerOptions:
         command: value_of_command
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].command
           value:
             - value_of_command
@@ -95,12 +89,11 @@ tests:
       controllers.main.containers.main.command:
         - value 1
         - value 2
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].command
           value:
             - value 1

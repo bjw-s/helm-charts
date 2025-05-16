@@ -45,6 +45,10 @@ Specify if the volume should be mounted read-only
 
 Specifies a sub-path inside the referenced volume instead of its root.
 
+### subPathExpr
+
+Use the `subPathExpr` field to construct `subPath` directory names from downward API environment variables. See the [Kubernetes documentation](https://kubernetes.io/docs/concepts/storage/volumes/#using-subpath-expanded-environment) for more information.
+
 ## advancedMounts
 
 Explicitly configure mounts for specific controllers and containers.
@@ -86,3 +90,7 @@ Specify if the volume should be mounted read-only
 ### subPath
 
 Specifies a sub-path inside the referenced volume instead of its root.
+
+### subPathExpr
+
+Use the `subPathExpr` field to construct `subPath` directory names from downward API environment variables. See the [Kubernetes documentation](https://kubernetes.io/docs/concepts/storage/volumes/#using-subpath-expanded-environment) for more information.

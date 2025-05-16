@@ -1,0 +1,41 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
+suite: pod - fields - volumes (hostPath)
+templates:
+  - common.yaml
+values:
+  - ../_values/controllers_main_default_container.yaml
+set:
+  persistence:
+    hostpathmounts:
+      type: hostPath
+      hostPath: "/tmp1"
+tests:
+  - it: hostPath should pass
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[0]
+          value:
+            name: hostpathmounts
+            hostPath:
+              path: /tmp1
+
+  - it: hostPath with type should pass
+    set:
+      persistence:
+        hostpathmounts:
+          hostPathType: "Directory"
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
+    asserts:
+      - equal:
+          path: spec.template.spec.volumes[0]
+          value:
+            name: hostpathmounts
+            hostPath:
+              path: /tmp1
+              type: Directory

@@ -1,18 +1,17 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/helm-unittest/helm-unittest/main/schema/helm-testsuite.json
-suite: container envFrom values
+suite: container - fields - envFrom
 templates:
   - common.yaml
 values:
   - ../_values/controllers_main_default_container.yaml
 tests:
   - it: default should pass
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        notExists:
+      - notExists:
           path: spec.template.spec.containers[0].envFrom
 
   - it: explicit envFrom should pass
@@ -23,19 +22,17 @@ tests:
           prefix: test
         - configMapRef:
             name: myCustomConfig
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].envFrom[0]
           value:
             secretRef:
               name: myCustomSecret
             prefix: test
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].envFrom[1]
           value:
             configMapRef:
@@ -50,19 +47,17 @@ tests:
             prefix: test
           - configMapRef:
               name: myCustomConfig
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].envFrom[0]
           value:
             secretRef:
               name: myCustomSecret
             prefix: test
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].envFrom[1]
           value:
             configMapRef:
@@ -81,19 +76,17 @@ tests:
         - secretRef:
             name: myCustomSecretOverride
           prefix: test
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].envFrom[0]
           value:
             secretRef:
               name: myCustomSecretOverride
             prefix: test
-      - documentIndex: *DeploymentDoc
-        notExists:
+      - notExists:
           path: spec.template.spec.containers[0].envFrom[1]
 
   - it: envFrom configmap identifier reference should pass
@@ -107,23 +100,21 @@ tests:
         config:
           data:
             test: test
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 1
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].envFrom[0]
           value:
             configMapRef:
-              name: RELEASE-NAME-config
+              name: release-name
             prefix: test
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].envFrom[1]
           value:
             configMapRef:
-              name: RELEASE-NAME-config
+              name: release-name
 
   - it: envFrom Secret identifier reference should pass
     set:
@@ -137,23 +128,21 @@ tests:
         secret:
           stringData:
             test: test
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].envFrom[0]
           value:
             secretRef:
-              name: RELEASE-NAME-secret
+              name: release-name
             prefix: test
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].envFrom[1]
           value:
             secretRef:
-              name: RELEASE-NAME-secret
+              name: release-name
             prefix: test
 
   - it: envFrom with templated name reference should pass
@@ -165,30 +154,26 @@ tests:
         - secret: "{{ .Release.Name }}-secret"
         - secretRef:
             name: "{{ .Release.Name }}-secret2"
+    documentSelector:
+      path: $[?(@.kind == "Deployment")].metadata.name
+      value: release-name
     asserts:
-      - documentIndex: &DeploymentDoc 0
-        isKind:
-          of: Deployment
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].envFrom[0]
           value:
             configMapRef:
               name: RELEASE-NAME-config
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].envFrom[1]
           value:
             configMapRef:
               name: RELEASE-NAME-config2
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].envFrom[2]
           value:
             secretRef:
               name: RELEASE-NAME-secret
-      - documentIndex: *DeploymentDoc
-        equal:
+      - equal:
           path: spec.template.spec.containers[0].envFrom[3]
           value:
             secretRef:
