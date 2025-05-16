@@ -67,7 +67,7 @@
               ]
             }
           },
-          "required": ["path", "service"]
+          "required": ["path"]
         },
         "title": "paths",
         "type": "array"
@@ -116,7 +116,6 @@
       "port": {
         "type": ["string", "integer"]
       }
-    },
-    "required": ["identifier"]
+    }
   }
 }

@@ -18,3 +18,38 @@ tests:
     asserts:
       - failedTemplate:
           errorMessage: "No enabled Service found with this identifier. (ingress: 'main', path: '/', identifier: 'main')"
+
+  - it: automatic service determination should fail when no service is enabled
+    set:
+      ingress.main.hosts:
+        - host: "chart-example.local"
+          paths:
+            - path: /
+              service:
+                port: 8081
+    asserts:
+      - failedTemplate:
+          errorMessage: "Either service.name or service.identifier is required because automatic Service detection is not possible. (ingress: main, host: chart-example.local, path: /)"
+
+  - it: automatic service determination should fail when >1 service is enabled
+    set:
+      service:
+        main:
+          controller: main
+          ports:
+            ui:
+              port: 8082
+        second:
+          controller: main
+          ports:
+            ui:
+              port: 8082
+      ingress.main.hosts:
+        - host: "chart-example.local"
+          paths:
+            - path: /
+              service:
+                port: 8081
+    asserts:
+      - failedTemplate:
+          errorMessage: "Either service.name or service.identifier is required because automatic Service detection is not possible. (ingress: main, host: chart-example.local, path: /)"

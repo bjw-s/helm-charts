@@ -2,7 +2,7 @@
 
 ## From 3.x.x to 4.0.x
 
-Migrating from v3.x to v4.x introduces breaking changes in two main areas. Additionally, the minimum required Kubernetes version has been increased to version **1.28.x**.
+Migrating from v3.x to v4.x introduces a number of breaking changes. Additionally, the minimum required Kubernetes version has been increased to version **1.28.x**.
 
 #### Resource names
 
@@ -39,6 +39,10 @@ controllers:
     serviceAccount:
       identifier: myServiceAccount
 ```
+
+#### Controller labels
+
+The hardcoded `app.kubernetes.io/component` label that is used to target specific controllers has been renamed to `app.kubernetes.io/controller`.
 
 ## From 2.x.x to 3.0.x
 

@@ -5,6 +5,15 @@ Validate Service values
   {{- $rootContext := .rootContext -}}
   {{- $serviceObject := .object -}}
 
+  {{- $enabledControllers := (include "bjw-s.common.lib.controller.enabledControllers" (dict "rootContext" $rootContext) | fromYaml ) -}}
+
+  {{/* Verify automatic controller detection */}}
+  {{- if not (eq 1 (len $enabledControllers)) -}}
+    {{- if or (not (has "controller" (keys $serviceObject))) (empty (get $serviceObject "controller")) -}}
+      {{- fail (printf "controller field is required because automatic controller detection is not possible. (service: %s)" $serviceObject.identifier ) -}}
+    {{- end -}}
+  {{- end -}}
+
   {{- if empty (get $serviceObject "controller") -}}
     {{- fail (printf "controller field is required for Service. (service: %s)" $serviceObject.identifier) -}}
   {{- end -}}

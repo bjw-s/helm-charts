@@ -9,7 +9,7 @@ using the common library.
   {{- $timeZone := dig "cronjob" "timeZone" "" $cronjobObject -}}
 
   {{- $labels := merge
-    (dict "app.kubernetes.io/component" $cronjobObject.identifier)
+    (dict "app.kubernetes.io/controller" $cronjobObject.identifier)
     ($cronjobObject.labels | default dict)
     (include "bjw-s.common.lib.metadata.allLabels" $rootContext | fromYaml)
   -}}

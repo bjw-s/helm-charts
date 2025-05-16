@@ -114,7 +114,7 @@ spec:
       {{- end -}}
   {{- with (merge
     ($serviceObject.extraSelectorLabels | default dict)
-    (dict "app.kubernetes.io/component" $serviceObject.controller)
+    (dict "app.kubernetes.io/controller" $serviceObject.controller)
     (include "bjw-s.common.lib.metadata.selectorLabels" $rootContext | fromYaml)
   ) }}
   selector: {{- toYaml . | nindent 4 }}

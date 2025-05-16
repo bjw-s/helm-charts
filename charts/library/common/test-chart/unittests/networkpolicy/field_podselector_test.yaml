@@ -23,7 +23,7 @@ tests:
           path: spec.podSelector
           value:
             matchLabels:
-              app.kubernetes.io/component: main
+              app.kubernetes.io/controller: main
               app.kubernetes.io/instance: RELEASE-NAME
               app.kubernetes.io/name: RELEASE-NAME
 

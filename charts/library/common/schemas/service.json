@@ -89,7 +89,7 @@
           },
           "extraSelectorLabels": {}
         },
-        "required": ["controller"]
+        "required": []
       }
     ]
   },

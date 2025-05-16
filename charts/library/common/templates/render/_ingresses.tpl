@@ -10,6 +10,9 @@ Renders the Ingress objects required by the chart.
     {{- /* Generate object from the raw persistence values */ -}}
     {{- $ingressObject := (include "bjw-s.common.lib.ingress.getByIdentifier" (dict "rootContext" $rootContext "id" $identifier) | fromYaml) -}}
 
+    {{- /* Perform validations on the Ingress before rendering */ -}}
+    {{- include "bjw-s.common.lib.ingress.validate" (dict "rootContext" $rootContext "object" $ingressObject) -}}
+
     {{- /* Include the ingress class */ -}}
     {{- include "bjw-s.common.class.ingress" (dict "rootContext" $ "object" $ingressObject) | nindent 0 -}}
   {{- end -}}
