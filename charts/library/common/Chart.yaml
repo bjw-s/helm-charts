@@ -19,3 +19,6 @@ annotations:
     - kind: added
       description: |-
         Added support for configuring the `serviceName` field for StatefulSets.
+    - kind: fixed
+      description: |-
+        Fixed a bug where probes were not being configured correctly for Services that autodetect their controller.
