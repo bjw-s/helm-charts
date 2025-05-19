@@ -16,9 +16,12 @@ sources:
   - https://github.com/bjw-s-labs/helm-charts
 annotations:
   artifacthub.io/changes: |-
-    - kind: added
-      description: |-
-        Added support for configuring the `serviceName` field for StatefulSets.
     - kind: fixed
       description: |-
         Fixed a bug where probes were not being configured correctly for Services that autodetect their controller.
+    - kind: added
+      description: |-
+        Added support for configuring the `serviceName` field for StatefulSets.
+    - kind: added
+      description: |-
+        Added support for automatically selecting the ServiceAccount when only one is defined.
