@@ -47,7 +47,7 @@ controllers:
 The hardcoded `app.kubernetes.io/component` label that is used to target specific controllers has been renamed to `app.kubernetes.io/controller`.
 
 !!! info
-    Because controller labels are considered is an immutable field, this means existing Deployments / StatefulSets / etc will have to be recreated.
+    Because controller labels are considered immutable by Kubernetes existing Deployments / StatefulSets / etc will have to be recreated.
 
 ## From 2.x.x to 3.0.x
 
